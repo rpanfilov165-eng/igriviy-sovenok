@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>🦉 Игривый совёнок — развивающие игры и пособия</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Уютный мир развивающих игр, пособий и знаний для детей">
+<meta name="theme-color" content="#673AB7">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
+body { background:linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 100%); color:#3E2723; min-height:100vh; padding-bottom:60px; }
+a { color:#673AB7; text-decoration:none; }
+header { background:linear-gradient(135deg,#5D4037 0%,#795548 100%); color:#FFF8E1; padding:12px 20px; box-shadow:0 4px 12px rgba(0,0,0,.2); position:sticky; top:0; z-index:100; }
+.header-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.logo { font-size:22px; font-weight:bold; display:flex; align-items:center; gap:8px; cursor:pointer; }
+.logo-owl { font-size:36px; animation:blink 3s infinite; }
+@keyframes blink { 0%,90%,100%{transform:scale(1)} 95%{transform:scale(1.15)} }
+.user-info { background:rgba(255,255,255,.15); padding:6px 12px; border-radius:20px; font-size:12px; }
+.user-info a { color:#FFC107; font-weight:bold; }
+nav { display:flex; flex-wrap:wrap; gap:5px; }
+nav button, nav a { background:#FFC107; color:#3E2723; border:none; padding:7px 12px; border-radius:18px; cursor:pointer; font-size:12px; font-weight:bold; transition:.2s; text-decoration:none; display:inline-block; position:relative; }
+nav button:hover, nav a:hover { background:#FFD54F; transform:translateY(-2px); }
+.cart-btn { background:#E53935 !important; color:#fff !important; }
+.cart-count { position:absolute; top:-5px; right:-5px; background:#FFC107; color:#3E2723; border-radius:50%; width:20px; height:20px; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:bold; }
+.admin-link { background:#673AB7 !important; color:#fff !important; }
+.container { max-width:1200px; margin:20px auto; padding:0 15px; }
+.section { background:#fff; padding:22px; margin-bottom:18px; border-radius:18px; box-shadow:0 4px 12px rgba(93,64,55,.15); border:3px solid #FFE0B2; }
+.section h2 { color:#5D4037; margin-bottom:12px; padding-bottom:8px; border-bottom:3px dashed #FFC107; display:flex; align-items:center; gap:8px; font-size:20px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:15px; }
+.card { background:linear-gradient(135deg,#FFF8E1,#fff); border:2px solid #FFE0B2; border-radius:14px; padding:12px; transition:.2s; position:relative; }
+.card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(93,64,55,.2); border-color:#FFC107; }
+.card img, .card video { width:100%; height:140px; object-fit:cover; border-radius:10px; margin-bottom:8px; background:#FFE0B2; cursor:pointer; }
+.card h3 { color:#5D4037; font-size:15px; margin-bottom:5px; }
+.card p { font-size:12px; color:#6D4C41; margin-bottom:5px; }
+.price { color:#D84315; font-weight:bold; font-size:18px; }
+.badge-free { position:absolute; top:8px; right:8px; background:#4CAF50; color:#fff; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; }
+.badge-paid { position:absolute; top:8px; right:8px; background:#FF9800; color:#fff; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; }
+.badge-cat { display:inline-block; background:#FFE0B2; color:#5D4037; padding:2px 8px; border-radius:8px; font-size:10px; margin-top:4px; }
+.card-actions { display:flex; gap:5px; margin-top:8px; flex-wrap:wrap; }
+.btn { background:#FFC107; color:#3E2723; border:none; padding:7px 12px; border-radius:14px; cursor:pointer; font-weight:bold; font-size:12px; transition:.2s; text-decoration:none; display:inline-block; }
+.btn:hover { background:#FFD54F; }
+.btn-del { background:#E53935; color:#fff; }
+.btn-purple { background:#673AB7; color:#fff; }
+.btn-small { padding:5px 9px; font-size:11px; }
+.btn-fav { background:#fff; border:2px solid #E53935; color:#E53935; }
+.btn-fav.active { background:#E53935; color:#fff; }
+.rating { color:#FFC107; font-size:14px; margin:4px 0; }
+.rating-star { cursor:pointer; }
+.filters, .sort-box { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center; }
+.filters button { background:#FFF8E1; border:2px solid #FFE0B2; padding:6px 12px; border-radius:16px; cursor:pointer; font-size:12px; }
+.filters button.active { background:#FFC107; border-color:#FFC107; }
+.sort-box select, .search-box { padding:8px 10px; border:2px solid #FFE0B2; border-radius:10px; font-size:13px; background:#fff; }
+.search-box { width:100%; margin-bottom:12px; }
+.modal { display:none; position:fixed; inset:0; background:rgba(62,39,35,.7); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.modal.active { display:flex; }
+.modal-content { background:#FFF8E1; padding:25px; border-radius:18px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; border:3px solid #FFC107; }
+.modal-content h2 { color:#5D4037; margin-bottom:15px; }
+.modal-content input, .modal-content textarea, .modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:13px; background:#fff; }
+.modal-content textarea { min-height:70px; resize:vertical; }
+.modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:bold; color:#5D4037; font-size:13px; }
+.modal-content label input { width:auto; }
+.modal-actions { display:flex; justify-content:flex-end; margin-top:12px; gap:6px; flex-wrap:wrap; }
+.close-btn { background:#BCAAA4 !important; color:#fff !important; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; }
+.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:15px; border-radius:14px; text-align:center; }
+.stat-box .num { font-size:26px; font-weight:bold; }
+.stat-box .lbl { font-size:11px; opacity:.9; }
+footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; position:fixed; bottom:0; left:0; right:0; font-size:12px; z-index:50; }
+.page { display:none; }
+.page.active { display:block; }
+.welcome { text-align:center; padding:25px; }
+.welcome h1 { color:#5D4037; font-size:28px; margin-bottom:8px; }
+.big-owl { font-size:80px; display:block; margin:15px 0; animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+.cart-item { display:flex; gap:12px; padding:12px; border:2px solid #FFE0B2; border-radius:10px; margin-bottom:8px; background:#FFF8E1; align-items:center; }
+.cart-item img { width:70px; height:70px; object-fit:cover; border-radius:8px; }
+.cart-item-info { flex:1; }
+.qty-control { display:flex; align-items:center; gap:6px; }
+.qty-control button { width:28px; height:28px; border:none; background:#FFC107; border-radius:50%; cursor:pointer; font-weight:bold; }
+.cart-total { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:18px; border-radius:14px; margin-top:12px; text-align:center; }
+.cart-total .sum { font-size:28px; font-weight:bold; margin:8px 0; }
+.order-card { background:#FFF8E1; border:2px solid #FFE0B2; border-radius:10px; padding:12px; margin-bottom:10px; }
+.order-status { display:inline-block; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:bold; color:#fff; }
+.status-new { background:#2196F3; }
+.status-paid { background:#4CAF50; }
+.status-sent { background:#FF9800; }
+.status-done { background:#9C27B0; }
+.status-cancel { background:#9E9E9E; }
+.requisites-box { background:#E8F5E9; border:2px dashed #4CAF50; padding:12px; border-radius:10px; margin:12px 0; }
+.empty-state { text-align:center; padding:30px; color:#8D6E63; }
+.empty-state .big-icon { font-size:50px; display:block; margin-bottom:10px; }
+.install-banner { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:12px 18px; border-radius:14px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.install-banner button { background:#FFC107; color:#3E2723; border:none; padding:8px 14px; border-radius:12px; font-weight:bold; cursor:pointer; }
+.blog-card { background:#FFF8E1; padding:15px; border-radius:12px; margin-bottom:10px; border-left:4px solid #FFC107; }
+.faq-item { background:#FFF8E1; padding:12px; border-radius:10px; margin-bottom:8px; cursor:pointer; }
+.faq-item summary { font-weight:bold; color:#5D4037; }
+.faq-item p { margin-top:8px; font-size:13px; color:#6D4C41; }
+.contact-form input, .contact-form textarea { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; }
+.toast { position:fixed; bottom:80px; right:20px; background:#4CAF50; color:#fff; padding:10px 18px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,.2); z-index:9999; animation:slideIn .3s; }
+@keyframes slideIn { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+@media (max-width:600px) {
+  .header-inner { flex-direction:column; }
+  .cart-item { flex-direction:column; text-align:center; }
+  nav button, nav a { font-size:11px; padding:6px 10px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="showSection('home')">
+      <span class="logo-owl">🦉</span>
+      <span>Игривый совёнок</span>
+    </div>
+    <div class="user-info" id="userInfo">👤 Гость | <a href="login.html">Войти</a></div>
+    <nav>
+      <button onclick="showSection('home')">🏠 Главная</button>
+      <button onclick="showSection('catalogs')">📚 Каталоги</button>
+      <button onclick="showSection('products')">🛍 Товары</button>
+      <button onclick="showSection('favorites')">❤️ Избранное</button>
+      <button onclick="showSection('videos')">🎬 Видео</button>
+      <button onclick="showSection('games')">🎮 Пособия</button>
+      <button onclick="showSection('blog')">📝 Блог</button>
+      <button onclick="showSection('faq')">❓ FAQ</button>
+      <button onclick="showSection('contacts')">📞 Контакты</button>
+      <button onclick="showSection('orders')">📦 Заказы</button>
+      <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>
+      <a href="admin-login.html" class="admin-link">🔐 Админ</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+
+  <div id="installBanner" class="install-banner" style="display:none">
+    <span>📱 Установите «Игривый совёнок» на телефон как приложение!</span>
+    <button onclick="installApp()">Установить</button>
+  </div>
+
+  <!-- ГЛАВНАЯ -->
+  <div id="home" class="page active">
+    <div class="section welcome">
+      <span class="big-owl">🦉</span>
+      <h1>Добро пожаловать в «Игривый совёнок»!</h1>
+      <p>Уютный мир игр, пособий и знаний для маленьких совят и их родителей 🌙✨</p>
+      <p style="margin-top:10px"><a href="login.html" class="btn btn-purple">🔑 Войти / Регистрация</a></p>
+    </div>
+    <div class="section">
+      <h2>📊 Статистика</h2>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="section">
+      <h2>🌟 Популярные товары</h2>
+      <div class="grid" id="popularGrid"></div>
+    </div>
+    <div class="section">
+      <h2>⭐ Отзывы</h2>
+      <div id="reviews"></div>
+      <button class="btn" onclick="openReviewModal()">✍️ Оставить отзыв</button>
+    </div>
+  </div>
+
+  <div id="catalogs" class="page">
+    <div class="section">
+      <h2>📚 Каталоги</h2>
+      <input class="search-box" placeholder="🔍 Поиск каталога..." oninput="renderCatalogs(this.value)">
+      <div class="grid" id="catalogsGrid"></div>
+    </div>
+  </div>
+
+  <div id="products" class="page">
+    <div class="section">
+      <h2>🛍 Товары</h2>
+      <div class="filters">
+        <button class="active" onclick="filterProducts('all',this)">Все</button>
+        <button onclick="filterProducts('free',this)">🎁 Бесплатные</button>
+        <button onclick="filterProducts('paid',this)">💰 Платные</button>
+      </div>
+      <div class="sort-box">
+        <select onchange="sortProducts(this.value)">
+          <option value="default">Сортировка</option>
+          <option value="price-asc">Цена ↑</option>
+          <option value="price-desc">Цена ↓</option>
+          <option value="name">По названию</option>
+          <option value="rating">По рейтингу</option>
+        </select>
+        <input class="search-box" style="flex:1;margin:0" placeholder="🔍 Поиск..." oninput="renderProducts(this.value)">
+      </div>
+      <div class="grid" id="productsGrid"></div>
+    </div>
+  </div>
+
+  <div id="favorites" class="page">
+    <div class="section">
+      <h2>❤️ Избранное</h2>
+      <div class="grid" id="favoritesGrid"></div>
+    </div>
+  </div>
+
+  <div id="videos" class="page">
+    <div class="section">
+      <h2>🎬 Видео-материалы</h2>
+      <div class="grid" id="videosGrid"></div>
+    </div>
+  </div>
+
+  <div id="games" class="page">
+    <div class="section">
+      <h2>🎮 Игровые пособия</h2>
+      <div class="grid" id="gamesGrid"></div>
+    </div>
+  </div>
+
+  <div id="blog" class="page">
+    <div class="section">
+      <h2>📝 Блог «Игривого совёнка»</h2>
+      <div id="blogList"></div>
+    </div>
+  </div>
+
+  <div id="faq" class="page">
+    <div class="section">
+      <h2>❓ Часто задаваемые вопросы</h2>
+      <div id="faqList"></div>
+    </div>
+  </div>
+
+  <div id="contacts" class="page">
+    <div class="section">
+      <h2>📞 Контакты</h2>
+      <p style="margin-bottom:10px">📧 Email: <b>info@owl-site.ru</b></p>
+      <p style="margin-bottom:10px">📱 Телефон: <b>+7 (800) 555-35-35</b></p>
+      <p style="margin-bottom:10px">🏙 Адрес: <b>г. Москва, ул. Совиная, д. 7</b></p>
+      <p style="margin-bottom:15px">🕐 Режим работы: <b>Пн-Вс 9:00-21:00</b></p>
+      <h3 style="color:#5D4037;margin:15px 0 10px">✉️ Напишите нам:</h3>
+      <div class="contact-form">
+        <input id="c_name" placeholder="Ваше имя">
+        <input id="c_email" type="email" placeholder="Email">
+        <textarea id="c_msg" placeholder="Сообщение"></textarea>
+        <button class="btn btn-purple" onclick="sendContact()">Отправить 🦉</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="orders" class="page">
+    <div class="section">
+      <h2>📦 Мои заказы</h2>
+      <div id="ordersList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- КОРЗИНА -->
+<div class="modal" id="cartModal">
+  <div class="modal-content" style="max-width:650px">
+    <h2>🛒 Ваша корзина</h2>
+    <div id="cartItems"></div>
+    <div id="cartTotal"></div>
+    <div class="modal-actions">
+      <button class="btn close-btn" onclick="closeModal('cartModal')">Продолжить</button>
+      <button class="btn btn-purple" id="checkoutBtn" onclick="openCheckout()">Оформить заказ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ОФОРМЛЕНИЕ ЗАКАЗА -->
+<div class="modal" id="checkoutModal">
+  <div class="modal-content">
+    <h2>📝 Оформление заказа</h2>
+    <div class="requisites-box" id="payRequisites"></div>
+    <input id="co_name" placeholder="👤 Ваше имя" required>
+    <input id="co_email" type="email" placeholder="📧 Email" required>
+    <input id="co_phone" placeholder="📱 Телефон" required>
+    <input id="co_city" placeholder="🏙 Город" required>
+    <textarea id="co_address" placeholder="📮 Адрес доставки" required></textarea>
+    <select id="co_delivery">
+      <option value="Почта России (300₽)">Почта России (300₽)</option>
+      <option value="СДЭК (400₽)">СДЭК (400₽)</option>
+      <option value="Самовывоз (бесплатно)">Самовывоз (бесплатно)</option>
+    </select>
+    <select id="co_payment">
+      <option value="Перевод на карту">Перевод на карту</option>
+      <option value="СБП">СБП</option>
+      <option value="При получении">При получении</option>
+    </select>
+    <input id="co_promo" placeholder="🎟 Промокод (если есть)">
+    <textarea id="co_comment" placeholder="💬 Комментарий"></textarea>
+    <div id="checkoutSummary" style="background:#FFF8E1;padding:12px;border-radius:10px;margin:12px 0"></div>
+    <div class="modal-actions">
+      <button class="btn close-btn" onclick="closeModal('checkoutModal')">Отмена</button>
+      <button class="btn btn-purple" onclick="submitOrder()">✅ Подтвердить</button>
+    </div>
+  </div>
+</div>
+
+<!-- МОДАЛКА ТОВАРА -->
+<div class="modal" id="productModal">
+  <div class="modal-content" id="productModalContent"></div>
+</div>
+
+<!-- ФОРМЫ -->
+<div class="modal" id="formModal">
+  <div class="modal-content" id="formContent"></div>
+</div>
+
+<footer>
+  <p>🦉 © 2026 «Игривый совёнок» | <a href="login.html" style="color:#FFC107">Вход</a> | <a href="admin-login.html" style="color:#FFC107">Админ</a> | <a href="#home" onclick="showSection('home');return false;" style="color:#FFC107">Наверх ↑</a></p>
+</footer>
+
+<script>
+const DB = {
+  get(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } },
+  set(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+};
+
+let catalogs = DB.get('catalogs', [
+  {id:1, name:'Развивающие игры', desc:'Игры для малышей от 2 лет'},
+  {id:2, name:'Учебные пособия', desc:'Математика, чтение, письмо'},
+  {id:3, name:'Творчество', desc:'Рисование, лепка, аппликация'}
+]);
+let products = DB.get('products', [
+  {id:1, name:'Азбука-раскраска', price:0, free:true, catalogId:2, img:'https://via.placeholder.com/220x150/FFC107/5D4037?text=🦉Азбука', desc:'Учим буквы играя', rating:4.5, stock:10},
+  {id:2, name:'Набор цифр', price:350, free:false, catalogId:1, img:'https://via.placeholder.com/220x150/673AB7/fff?text=🔢Цифры', desc:'Яркие цифры для счёта', rating:5, stock:5},
+  {id:3, name:'Логическая мозаика', price:590, free:false, catalogId:1, img:'https://via.placeholder.com/220x150/795548/fff?text=🧩Мозаика', desc:'Развиваем логику', rating:4, stock:8},
+  {id:4, name:'Пальчиковые краски', price:290, free:false, catalogId:3, img:'https://via.placeholder.com/220x150/E53935/fff?text=🎨Краски', desc:'Безопасные краски', rating:4.8, stock:12}
+]);
+let videos = DB.get('videos', [{id:1, name:'Уроки для совят', url:'https://www.w3schools.com/html/mov_bbb.mp4', desc:'Весёлое обучение'}]);
+let games = DB.get('games', [{id:1, name:'Математическое лото', desc:'Пособие для изучения математики', img:'https://via.placeholder.com/220x150/795548/fff?text=🎮Лото'}]);
+let news = DB.get('news', [{id:1, title:'Открытие «Игривого совёнка»', date:'2026-10-19', text:'Мы рады представить наш уютный портал!'}]);
+let reviews = DB.get('reviews', [{id:1, author:'Мария', text:'Моему ребёнку очень нравится! 🦉'}]);
+let blog = DB.get('blog', [
+  {id:1, title:'Как выбрать развивающие игры по возрасту', date:'2026-10-15', text:'В этой статье мы расскажем, как подобрать игры для вашего малыша...'},
+  {id:2, title:'10 советов по развитию логики у детей', date:'2026-10-10', text:'Логика — основа мышления. Вот 10 простых упражнений...'}
+]);
+let faq = DB.get('faq', [
+  {q:'Как сделать заказ?', a:'Добавьте товары в корзину и нажмите «Оформить заказ». Заполните данные и выберите способ оплаты.'},
+  {q:'Какие способы оплаты?', a:'Перевод на карту, СБП или оплата при получении. Реквизиты показываются при оформлении.'},
+  {q:'Как быстро доставляют?', a:'Почта России — 5-10 дней, СДЭК — 2-5 дней, самовывоз — в день заказа.'},
+  {q:'Можно ли вернуть товар?', a:'Да, в течение 14 дней с момента получения, если товар не был в использовании.'}
+]);
+let orders = DB.get('orders', []);
+let cart = DB.get('cart', []);
+let favorites = DB.get('favorites', []);
+let settings = DB.get('settings', {
+  requisites:{cardNumber:'2200 1234 5678 9012',cardHolder:'ИВАНОВ ИВАН',bank:'Сбербанк',sbp:'+7 900 123-45-67'},
+  promos:[{code:'OWL10',discount:10,type:'percent'}]
+});
+
+let currentProductFilter='all', currentSort='default', currentSearch='';
+
+function saveAll(){
+  DB.set('catalogs',catalogs); DB.set('products',products);
+  DB.set('videos',videos); DB.set('games',games);
+  DB.set('news',news); DB.set('reviews',reviews);
+  DB.set('blog',blog); DB.set('faq',faq);
+  DB.set('orders',orders); DB.set('cart',cart);
+  DB.set('favorites',favorites); DB.set('settings',settings);
+}
+
+function showSection(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  renderAll();
+  window.scrollTo(0,0);
+}
+
+function updateUserInfo(){
+  const current = DB.get('currentUser', null);
+  const el = document.getElementById('userInfo');
+  el.innerHTML = current
+    ? `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`
+    : `👤 Гость | <a href="login.html">Войти</a>`;
+}
+function doLogout(){
+  localStorage.removeItem('currentUser');
+  updateUserInfo();
+  showSection('home');
+  showToast('Вы вышли 🦉');
+}
+
+// === КОРЗИНА ===
+function addToCart(productId){
+  const p = products.find(x=>x.id==productId);
+  if(!p) return;
+  if(p.free){ showToast('Бесплатные товары не добавляются в корзину 🎁'); return; }
+  const existing = cart.find(c=>c.productId==productId);
+  if(existing) existing.qty++;
+  else cart.push({productId, qty:1});
+  saveAll(); updateCartCount();
+  showToast(`«${p.name}» в корзине 🛒`);
+}
+function removeFromCart(productId){
+  cart = cart.filter(c=>c.productId!=productId);
+  saveAll(); updateCartCount(); renderCart();
+}
+function changeQty(productId, delta){
+  const item = cart.find(c=>c.productId==productId);
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty<=0) cart = cart.filter(c=>c.productId!=productId);
+  saveAll(); updateCartCount(); renderCart();
+}
+function updateCartCount(){
+  const count = cart.reduce((s,c)=>s+c.qty, 0);
+  document.getElementById('cartCount').textContent = count;
+}
+function getCartTotal(){
+  return cart.reduce((s,c)=>{
+    const p = products.find(x=>x.id==c.productId);
+    return s + (p ? p.price * c.qty : 0);
+  }, 0);
+}
+function openCart(){
+  openModal('cartModal');
+  renderCart();
+}
+function renderCart(){
+  const items = document.getElementById('cartItems');
+  const total = document.getElementById('cartTotal');
+  const btn = document.getElementById('checkoutBtn');
+  if(cart.length===0){
+    items.innerHTML = '<div class="empty-state"><span class="big-icon">🛒</span><p>Корзина пуста</p></div>';
+    total.innerHTML = '';
+    btn.style.display = 'none';
+    return;
+  }
+  btn.style.display = 'inline-block';
+  items.innerHTML = cart.map(c=>{
+    const p = products.find(x=>x.id==c.productId);
+    if(!p) return '';
+    return `<div class="cart-item">
+      <img src="${p.img||''}" alt="">
+      <div class="cart-item-info">
+        <h4>${p.name}</h4>
+        <p style="color:#D84315;font-weight:bold">${p.price} ₽ × ${c.qty} = <b>${p.price*c.qty} ₽</b></p>
+      </div>
+      <div class="qty-control">
+        <button onclick="changeQty(${p.id},-1)">−</button>
+        <span><b>${c.qty}</b></span>
+        <button onclick="changeQty(${p.id},1)">+</button>
+        <button class="btn btn-del btn-small" onclick="removeFromCart(${p.id})">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+  total.innerHTML = `<div class="cart-total"><div>Итого:</div><div class="sum">${getCartTotal()} ₽</div></div>`;
+}
+
+// === ИЗБРАННОЕ ===
+function toggleFavorite(productId){
+  const idx = favorites.indexOf(productId);
+  if(idx>=0) favorites.splice(idx,1);
+  else favorites.push(productId);
+  saveAll(); renderAll();
+}
+function renderFavorites(){
+  const g = document.getElementById('favoritesGrid');
+  if(!g) return;
+  const favProducts = products.filter(p=>favorites.includes(p.id));
+  g.innerHTML = favProducts.length ? favProducts.map(p=>renderProductCard(p)).join('')
+    : '<div class="empty-state"><span class="big-icon">❤️</span><p>В избранном пусто</p></div>';
+}
+
+// === РЕЙТИНГ ===
+function rateProduct(productId, rating){
+  const p = products.find(x=>x.id==productId);
+  if(!p) return;
+  p.rating = ((p.rating||0) + rating) / 2;
+  saveAll(); renderAll();
+  showToast('Спасибо за оценку! 🦉');
+}
+function renderStars(rating, productId){
+  let html = '<div class="rating">';
+  for(let i=1;i<=5;i++){
+    html += `<span class="rating-star" onclick="rateProduct(${productId},${i})">${i<=Math.round(rating)?'★':'☆'}</span>`;
+  }
+  html += ` <span style="color:#8D6E63;font-size:11px">(${rating.toFixed(1)})</span></div>`;
+  return html;
+}
+
+function renderProductCard(p){
+  const cat = catalogs.find(c=>c.id==p.catalogId);
+  const badge = p.free ? '<span class="badge-free">🎁 Бесплатно</span>' : '<span class="badge-paid">💰 Платно</span>';
+  const priceHtml = p.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : `<p class="price">${p.price} ₽</p>`;
+  const isFav = favorites.includes(p.id);
+  return `<div class="card">
+    ${badge}
+    <img src="${p.img||''}" alt="" onclick="openProductModal(${p.id})">
+    <h3 onclick="openProductModal(${p.id})" style="cursor:pointer">${p.name}</h3>
+    <p>${p.desc||''}</p>
+    ${renderStars(p.rating||0, p.id)}
+    ${priceHtml}
+    <p style="font-size:11px;color:${p.stock>0?'#4CAF50':'#E53935'}">${p.stock>0?'В наличии: '+p.stock+' шт.':'Нет в наличии'}</p>
+    <span class="badge-cat">${cat?cat.name:'—'}</span>
+    <div class="card-actions">
+      ${!p.free && p.stock>0 ? `<button class="btn btn-small" onclick="addToCart(${p.id})">🛒 В корзину</button>` : ''}
+      <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${p.id})">${isFav?'❤️':'♡'}</button>
+    </div>
+  </div>`;
+}
+
+function openProductModal(id){
+  const p = products.find(x=>x.id==id);
+  if(!p) return;
+  const cat = catalogs.find(c=>c.id==p.catalogId);
+  document.getElementById('productModalContent').innerHTML = `
+    <h2>${p.name}</h2>
+    <img src="${p.img||''}" style="width:100%;border-radius:12px;margin-bottom:12px">
+    <p>${p.desc||''}</p>
+    ${renderStars(p.rating||0, p.id)}
+    <p><b>Каталог:</b> ${cat?cat.name:'—'}</p>
+    <p><b>Наличие:</b> ${p.stock>0?p.stock+' шт.':'нет'}</p>
+    ${p.free ? '<p class="price" style="color:#4CAF50;font-size:26px;margin:12px 0">Бесплатно! 🎁</p>' : `<p class="price" style="font-size:26px;margin:12px 0">${p.price} ₽</p>`}
+    <div class="modal-actions">
+      <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
+      ${!p.free && p.stock>0 ? `<button class="btn btn-purple" onclick="addToCart(${p.id});closeModal('productModal')">🛒 В корзину</button>` : ''}
+    </div>`;
+  openModal('productModal');
+}
+
+function renderProducts(q=''){
+  currentSearch = q;
+  const g=document.getElementById('productsGrid'); if(!g) return;
+  let f = products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase()));
+  if(currentProductFilter==='free') f = f.filter(p=>p.free);
+  if(currentProductFilter==='paid') f = f.filter(p=>!p.free);
+  if(currentSort==='price-asc') f.sort((a,b)=>a.price-b.price);
+  if(currentSort==='price-desc') f.sort((a,b)=>b.price-a.price);
+  if(currentSort==='name') f.sort((a,b)=>a.name.localeCompare(b.name));
+  if(currentSort==='rating') f.sort((a,b)=>(b.rating||0)-(a.rating||0));
+  g.innerHTML = f.map(p=>renderProductCard(p)).join('') || '<div class="empty-state"><span class="big-icon">🛍</span><p>Товары не найдены</p></div>';
+}
+function filterProducts(type, btn){
+  currentProductFilter = type;
+  document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(currentSearch);
+}
+function sortProducts(val){ currentSort = val; renderProducts(currentSearch); }
+
+function renderCatalogs(q=''){
+  const g=document.getElementById('catalogsGrid'); if(!g) return;
+  const f=catalogs.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+  g.innerHTML = f.map(c=>`<div class="card"><h3>📚 ${c.name}</h3><p>${c.desc}</p><span class="badge-cat">${products.filter(p=>p.catalogId==c.id).length} товаров</span></div>`).join('') || '<p>Нет каталогов</p>';
+}
+function renderVideos(){
+  const g=document.getElementById('videosGrid'); if(!g) return;
+  g.innerHTML = videos.map(v=>`<div class="card"><video src="${v.url}" controls></video><h3>${v.name}</h3><p>${v.desc||''}</p></div>`).join('') || '<p>Нет видео</p>';
+}
+function renderGames(){
+  const g=document.getElementById('gamesGrid'); if(!g) return;
+  g.innerHTML = games.map(gm=>`<div class="card"><img src="${gm.img||''}" alt=""><h3>${gm.name}</h3><p>${gm.desc||''}</p></div>`).join('') || '<p>Нет пособий</p>';
+}
+function renderBlog(){
+  const l=document.getElementById('blogList'); if(!l) return;
+  l.innerHTML = blog.map(b=>`<div class="blog-card"><h3>📝 ${b.title}</h3><p style="color:#8D6E63;font-size:11px">${b.date}</p><p>${b.text}</p></div>`).join('') || '<p>Нет статей</p>';
+}
+function renderFaq(){
+  const l=document.getElementById('faqList'); if(!l) return;
+  l.innerHTML = faq.map(f=>`<details class="faq-item"><summary>❓ ${f.q}</summary><p>${f.a}</p></details>`).join('');
+}
+function renderReviews(){
+  const l=document.getElementById('reviews'); if(!l) return;
+  l.innerHTML = reviews.map(r=>`<div class="card"><b>🦉 ${r.author}</b><p>${r.text}</p></div>`).join('') || '<p>Нет отзывов</p>';
+}
+function renderPopular(){
+  const g=document.getElementById('popularGrid'); if(!g) return;
+  const pop = [...products].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4);
+  g.innerHTML = pop.map(p=>renderProductCard(p)).join('');
+}
+function renderOrders(){
+  const l=document.getElementById('ordersList'); if(!l) return;
+  const current = DB.get('currentUser', null);
+  if(!current){
+    l.innerHTML = `<div class="empty-state"><span class="big-icon">🔐</span><p>Войдите, чтобы видеть заказы</p><a href="login.html" class="btn btn-purple">Войти</a></div>`;
+    return;
+  }
+  const myOrders = orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);
+  if(myOrders.length===0){
+    l.innerHTML = '<div class="empty-state"><span class="big-icon">📦</span><p>У вас нет заказов</p><button class="btn btn-purple" onclick="showSection(\'products\')">К товарам</button></div>';
+    return;
+  }
+  const statusMap = {new:{t:'Новый',c:'status-new'},paid:{t:'Оплачен',c:'status-paid'},sent:{t:'Отправлен',c:'status-sent'},done:{t:'Доставлен',c:'status-done'},cancel:{t:'Отменён',c:'status-cancel'}};
+  l.innerHTML = myOrders.map(o=>{
+    const st = statusMap[o.status] || statusMap.new;
+    const itemsHtml = o.items.map(i=>{
+      const p = products.find(x=>x.id==i.productId);
+      return p ? `<li>${p.name} × ${i.qty} = ${p.price*i.qty}₽</li>` : '';
+    }).join('');
+    return `<div class="order-card">
+      <h4>Заказ #${o.id} <span class="order-status ${st.c}">${st.t}</span></h4>
+      <p style="font-size:11px;color:#8D6E63">📅 ${o.date}</p>
+      <ul style="margin:8px 0;padding-left:18px;font-size:12px">${itemsHtml}</ul>
+      <p><b>Итого:</b> <span style="color:#D84315;font-size:16px;font-weight:bold">${o.total} ₽</span></p>
+      <p style="font-size:12px">🚚 ${o.delivery} | 💳 ${o.payment}</p>
+    </div>`;
+  }).join('');
+}
+function renderStats(){
+  const s=document.getElementById('stats'); if(!s) return;
+  s.innerHTML = `
+    <div class="stat-box"><div class="num">${catalogs.length}</div><div class="lbl">📚 Каталогов</div></div>
+    <div class="stat-box"><div class="num">${products.length}</div><div class="lbl">🛍 Товаров</div></div>
+    <div class="stat-box"><div class="num">${products.filter(p=>p.free).length}</div><div class="lbl">🎁 Бесплатных</div></div>
+    <div class="stat-box"><div class="num">${videos.length}</div><div class="lbl">🎬 Видео</div></div>
+    <div class="stat-box"><div class="num">${blog.length}</div><div class="lbl">📝 Статей</div></div>
+    <div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ В избранном</div></div>`;
+}
+
+// === ОФОРМЛЕНИЕ ЗАКАЗА ===
+function openCheckout(){
+  const current = DB.get('currentUser', null);
+  if(!current){
+    if(confirm('Войдите для оформления. Перейти?')) window.location.href='login.html';
+    return;
+  }
+  if(cart.length===0){ alert('Корзина пуста 🦉'); return; }
+  const req = settings.requisites;
+  const reqBox = document.getElementById('payRequisites');
+  if(req.cardNumber){
+    reqBox.innerHTML = `<h4 style="color:#2E7D32">💳 Реквизиты для оплаты:</h4>
+      <p><b>Карта:</b> ${req.cardNumber}</p>
+      <p><b>Получатель:</b> ${req.cardHolder||'—'}</p>
+      <p><b>Банк:</b> ${req.bank||'—'}</p>
+      ${req.sbp?`<p><b>СБП:</b> ${req.sbp}</p>`:''}`;
+  } else reqBox.innerHTML = '<p>Реквизиты будут после оформления</p>';
+  document.getElementById('co_name').value = current.name || '';
+  document.getElementById('co_email').value = current.email || '';
+  const sum = getCartTotal();
+  const itemsHtml = cart.map(c=>{
+    const p = products.find(x=>x.id==c.productId);
+    return p ? `<li>${p.name} × ${c.qty} = ${p.price*c.qty}₽</li>` : '';
+  }).join('');
+  document.getElementById('checkoutSummary').innerHTML = `<h4>📋 Ваш заказ:</h4><ul style="padding-left:18px;margin:8px 0;font-size:12px">${itemsHtml}</ul><p><b>Итого: <span style="color:#D84315">${sum} ₽</span></b></p>`;
+  closeModal('cartModal');
+  openModal('checkoutModal');
+}
+function submitOrder(){
+  const current = DB.get('currentUser', null);
+  if(!current) return;
+  const name = document.getElementById('co_name').value.trim();
+  const email = document.getElementById('co_email').value.trim();
+  const phone = document.getElementById('co_phone').value.trim();
+  const city = document.getElementById('co_city').value.trim();
+  const address = document.getElementById('co_address').value.trim();
+  const delivery = document.getElementById('co_delivery').value;
+  const payment = document.getElementById('co_payment').value;
+  const promo = document.getElementById('co_promo').value.trim();
+  const comment = document.getElementById('co_comment').value.trim();
+  if(!name||!email||!phone||!city||!address){ alert('Заполните все поля 🦉'); return; }
+  let total = getCartTotal();
+  if(promo){
+    const p = settings.promos.find(pr=>pr.code.toLowerCase()===promo.toLowerCase());
+    if(p){
+      if(p.type==='percent') total = Math.round(total * (1 - p.discount/100));
+      else total = Math.max(0, total - p.discount);
+    }
+  }
+  const order = {
+    id: Date.now(), userId: current.id, userName: current.name, userEmail: current.email,
+    items: cart.map(c=>({productId:c.productId, qty:c.qty})),
+    total, name, email, phone, city, address, delivery, payment, comment, status:'new',
+    date: new Date().toLocaleString('ru-RU')
+  };
+  orders.push(order);
+  cart.forEach(c=>{
+    const p = products.find(x=>x.id==c.productId);
+    if(p) p.stock = Math.max(0, (p.stock||0) - c.qty);
+  });
+  cart = [];
+  saveAll(); updateCartCount();
+  closeModal('checkoutModal');
+  alert(`✅ Заказ #${order.id} оформлен!\nСумма: ${total} ₽\n\nОплатите по реквизитам 🦉`);
+  showSection('orders');
+}
+
+function openReviewModal(){
+  const current = DB.get('currentUser', null);
+  document.getElementById('formContent').innerHTML = `
+    <h2>✍️ Оставить отзыв</h2>
+    <input id="f_author" placeholder="Ваше имя" value="${current?current.name:''}">
+    <textarea id="f_text" placeholder="Ваш отзыв"></textarea>
+    <div class="modal-actions">
+      <button class="btn close-btn" onclick="closeModal('formModal')">Отмена</button>
+      <button class="btn btn-purple" onclick="saveReview()">Отправить 🦉</button>
+    </div>`;
+  openModal('formModal');
+}
+function saveReview(){
+  const author=document.getElementById('f_author').value.trim();
+  const text=document.getElementById('f_text').value.trim();
+  if(!author||!text) return alert('Заполните поля');
+  reviews.push({id:Date.now(),author,text});
+  saveAll(); closeModal('formModal'); renderReviews();
+}
+function sendContact(){
+  const name = document.getElementById('c_name').value.trim();
+  const email = document.getElementById('c_email').value.trim();
+  const msg = document.getElementById('c_msg').value.trim();
+  if(!name||!email||!msg) return alert('Заполните все поля');
+  const contacts = DB.get('contacts', []);
+  contacts.push({id:Date.now(), name, email, msg, date:new Date().toLocaleString('ru-RU')});
+  DB.set('contacts', contacts);
+  document.getElementById('c_name').value='';
+  document.getElementById('c_email').value='';
+  document.getElementById('c_msg').value='';
+  showToast('Сообщение отправлено! 🦉');
+}
+
+function openModal(id){ document.getElementById(id).classList.add('active'); }
+function closeModal(id){ document.getElementById(id).classList.remove('active'); }
+function showToast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2500);
+}
+
+function renderAll(){
+  renderCatalogs(); renderProducts(currentSearch); renderVideos(); renderGames();
+  renderBlog(); renderFaq(); renderReviews(); renderStats(); renderPopular();
+  renderFavorites(); renderOrders(); updateUserInfo(); updateCartCount();
+}
+
+// === PWA ===
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBanner').style.display = 'flex';
+});
+function installApp(){
+  if(!deferredPrompt) {
+    alert('Чтобы установить приложение:\n\n📱 На Android: меню Chrome → «Добавить на главный экран»\n🍎 На iPhone: меню Safari → «На экран «Домой»');
+    return;
+  }
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(()=>{
+    deferredPrompt = null;
+    document.getElementById('installBanner').style.display = 'none';
+  });
+}
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+
+renderAll();
+</script>
+</body>
+</html>

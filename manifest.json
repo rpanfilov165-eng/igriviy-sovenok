@@ -1,0 +1,27 @@
+{
+  "name": "Игривый совёнок",
+  "short_name": "Совёнок",
+  "description": "Развивающие игры и пособия для детей 🦉",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#FFF8E1",
+  "theme_color": "#673AB7",
+  "orientation": "portrait-primary",
+  "lang": "ru-RU",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23673AB7' rx='40'/><text y='.9em' x='20' font-size='170'>🦉</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23673AB7' rx='100'/><text y='.9em' x='50' font-size='450'>🦉</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "kids", "shopping"],
+  "screenshots": []
+}

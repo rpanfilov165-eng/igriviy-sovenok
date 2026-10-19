@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>🔐 Админ — Игривый совёнок</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#673AB7">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
+body { background:linear-gradient(135deg,#311B92 0%,#4527A0 50%,#512DA8 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+.login-wrap { background:#FFF8E1; border-radius:22px; padding:30px; max-width:900px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.3); border:3px solid #FFC107; text-align:center; }
+.owl-big { font-size:70px; display:block; margin-bottom:8px; animation:float 3s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
+.subtitle { color:#673AB7; margin-bottom:20px; font-size:13px; font-weight:bold; }
+.form-group { margin-bottom:12px; text-align:left; }
+.form-group label { display:block; color:#5D4037; font-weight:bold; margin-bottom:4px; font-size:12px; }
+.form-group input, .form-group select, .form-group textarea { width:100%; padding:10px; border:2px solid #FFE0B2; border-radius:10px; font-size:13px; background:#fff; }
+.form-group textarea { min-height:60px; resize:vertical; }
+.btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:12px; border-radius:14px; font-size:15px; font-weight:bold; cursor:pointer; margin-top:8px; }
+.back-link { display:inline-block; margin-top:15px; color:#673AB7; text-decoration:none; font-weight:bold; font-size:13px; }
+.msg { padding:8px; border-radius:8px; margin-bottom:12px; font-size:13px; display:none; }
+.msg.error { background:#FFEBEE; color:#C62828; display:block; }
+.msg.success { background:#E8F5E9; color:#2E7D32; display:block; }
+.hint { background:#E8EAF6; padding:10px; border-radius:10px; font-size:12px; color:#512DA8; margin-bottom:12px; text-align:left; }
+.admin-panel { display:none; background:#fff; padding:18px; border-radius:14px; margin-top:12px; text-align:left; max-height:75vh; overflow-y:auto; }
+.admin-panel h3 { color:#5D4037; margin-bottom:10px; border-bottom:2px dashed #FFC107; padding-bottom:5px; font-size:16px; }
+.admin-tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
+.admin-tabs button { background:#FFE0B2; border:none; padding:7px 10px; border-radius:9px; cursor:pointer; font-weight:bold; color:#5D4037; font-size:11px; }
+.admin-tabs button.active { background:#673AB7; color:#fff; }
+.admin-section { display:none; }
+.admin-section.active { display:block; }
+table { width:100%; border-collapse:collapse; margin-top:8px; font-size:11px; }
+table th, table td { padding:5px; text-align:left; border-bottom:1px solid #FFE0B2; }
+table th { background:#673AB7; color:#fff; }
+.btn { background:#FFC107; color:#3E2723; border:none; padding:5px 10px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:11px; margin:2px; }
+.btn-del { background:#E53935; color:#fff; }
+.btn-edit { background:#43A047; color:#fff; }
+.btn-purple { background:#673AB7; color:#fff; }
+.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.form-modal.active { display:flex; }
+.form-modal-content { background:#FFF8E1; padding:22px; border-radius:18px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; border:3px solid #FFC107; }
+.form-modal-content h2 { color:#5D4037; margin-bottom:12px; font-size:18px; }
+.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:9px; margin:5px 0; border:2px solid #FFE0B2; border-radius:9px; font-size:12px; }
+.form-modal-content label { display:flex; align-items:center; gap:5px; margin:7px 0; font-weight:bold; color:#5D4037; font-size:12px; }
+.form-modal-content label input { width:auto; }
+.nav-links { margin-top:12px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.nav-links a { background:#FFC107; color:#3E2723; padding:7px 12px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="login-wrap">
+  <span class="owl-big">🦉</span>
+  <h1>Админ-панель</h1>
+  <p class="subtitle">Игривый совёнок — управление 🔐</p>
+  <div id="msgBox" class="msg"></div>
+
+  <div id="loginBlock">
+    <div class="hint">
+      💡 <b>Временные данные:</b><br>
+      Логин: <b>admin</b> | Пароль: <b>777</b><br>
+      <span style="font-size:10px">(при первом входе установите новый пароль)</span>
+    </div>
+    <form onsubmit="doLogin(event)">
+      <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
+      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required></div>
+      <button type="submit" class="btn-submit">Войти 🦉</button>
+    </form>
+  </div>
+
+  <div id="changePassBlock" style="display:none">
+    <h3 style="color:#5D4037;margin-bottom:12px">🔑 Установите новый пароль</h3>
+    <form onsubmit="changePassword(event)">
+      <div class="form-group"><label>Новый пароль</label><input type="password" id="newPass" required minlength="4"></div>
+      <div class="form-group"><label>Повторите пароль</label><input type="password" id="newPass2" required minlength="4"></div>
+      <button type="submit" class="btn-submit">Сохранить ✨</button>
+    </form>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>⚙️ Управление сайтом 🦉</h3>
+    <div class="admin-tabs">
+      <button class="active" onclick="showTab('aCatalogs',this)">Каталоги</button>
+      <button onclick="showTab('aProducts',this)">Товары</button>
+      <button onclick="showTab('aVideos',this)">Видео</button>
+      <button onclick="showTab('aGames',this)">Пособия</button>
+      <button onclick="showTab('aNews',this)">Новости</button>
+      <button onclick="showTab('aBlog',this)">Блог</button>
+      <button onclick="showTab('aFaq',this)">FAQ</button>
+      <button onclick="showTab('aReviews',this)">Отзывы</button>
+      <button onclick="showTab('aOrders',this)">Заказы</button>
+      <button onclick="showTab('aUsers',this)">Покупатели</button>
+      <button onclick="showTab('aContacts',this)">Сообщения</button>
+      <button onclick="showTab('aRequisites',this)">💳 Реквизиты</button>
+      <button onclick="showTab('aPromos',this)">🎟 Промокоды</button>
+      <button onclick="showTab('aSettings',this)">Настройки</button>
+    </div>
+
+    <div id="aCatalogs" class="admin-section active">
+      <button class="btn" onclick="openCatalogModal()">+ Каталог</button>
+      <table><thead><tr><th>Название</th><th>Описание</th><th>Действия</th></tr></thead><tbody id="adminCatalogs"></tbody></table>
+    </div>
+    <div id="aProducts" class="admin-section">
+      <button class="btn" onclick="openProductModal()">+ Товар</button>
+      <table><thead><tr><th>Название</th><th>Тип</th><th>Цена</th><th>Остаток</th><th>Действия</th></tr></thead><tbody id="adminProducts"></tbody></table>
+    </div>
+    <div id="aVideos" class="admin-section">
+      <button class="btn" onclick="openVideoModal()">+ Видео</button>
+      <table><thead><tr><th>Название</th><th>URL</th><th>Действия</th></tr></thead><tbody id="adminVideos"></tbody></table>
+    </div>
+    <div id="aGames" class="admin-section">
+      <button class="btn" onclick="openGameModal()">+ Пособие</button>
+      <table><thead><tr><th>Название</th><th>Описание</th><th>Действия</th></tr></thead><tbody id="adminGames"></tbody></table>
+    </div>
+    <div id="aNews" class="admin-section">
+      <button class="btn" onclick="openNewsModal()">+ Новость</button>
+      <table><thead><tr><th>Заголовок</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminNews"></tbody></table>
+    </div>
+    <div id="aBlog" class="admin-section">
+      <button class="btn" onclick="openBlogModal()">+ Статья</button>
+      <table><thead><tr><th>Заголовок</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminBlog"></tbody></table>
+    </div>
+    <div id="aFaq" class="admin-section">
+      <button class="btn" onclick="openFaqModal()">+ Вопрос</button>
+      <table><thead><tr><th>Вопрос</th><th>Ответ</th><th>Действия</th></tr></thead><tbody id="adminFaq"></tbody></table>
+    </div>
+    <div id="aReviews" class="admin-section">
+      <table><thead><tr><th>Автор</th><th>Отзыв</th><th>Действия</th></tr></thead><tbody id="adminReviews"></tbody></table>
+    </div>
+    <div id="aOrders" class="admin-section">
+      <table><thead><tr><th>#</th><th>Клиент</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminOrders"></tbody></table>
+    </div>
+    <div id="aUsers" class="admin-section">
+      <table><thead><tr><th>Имя</th><th>Email</th><th>Телефон</th><th>Город</th><th>Действия</th></tr></thead><tbody id="adminUsers"></tbody></table>
+    </div>
+    <div id="aContacts" class="admin-section">
+      <table><thead><tr><th>Имя</th><th>Email</th><th>Сообщение</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminContacts"></tbody></table>
+    </div>
+    <div id="aRequisites" class="admin-section">
+      <h4 style="color:#5D4037;margin-bottom:8px">💳 Реквизиты для приёма платежей</h4>
+      <div class="form-group"><label>Номер карты</label><input id="req_card" placeholder="2200 0000 0000 0000"></div>
+      <div class="form-group"><label>ФИО получателя</label><input id="req_holder" placeholder="ИВАНОВ ИВАН ИВАНОВИЧ"></div>
+      <div class="form-group"><label>Банк</label><input id="req_bank" placeholder="Сбербанк"></div>
+      <div class="form-group"><label>Номер для СБП</label><input id="req_sbp" placeholder="+7..."></div>
+      <button class="btn btn-purple" onclick="saveRequisites()">💾 Сохранить</button>
+    </div>
+    <div id="aPromos" class="admin-section">
+      <button class="btn" onclick="openPromoModal()">+ Промокод</button>
+      <table><thead><tr><th>Код</th><th>Скидка</th><th>Тип</th><th>Действия</th></tr></thead><tbody id="adminPromos"></tbody></table>
+    </div>
+    <div id="aSettings" class="admin-section">
+      <h4 style="color:#5D4037;margin-bottom:8px">🔑 Сменить пароль</h4>
+      <div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div>
+      <div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div>
+      <button class="btn btn-purple" onclick="adminChangePass()">Сохранить</button>
+      <hr style="margin:15px 0;border-color:#FFE0B2">
+      <button class="btn" onclick="exportData()">📤 Экспорт (JSON)</button>
+      <button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сбросить</button>
+      <button class="btn btn-del" onclick="logout()">🚪 Выйти</button>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="index.html">🏠 На сайт</a>
+    <a href="login.html">👤 Покупатель</a>
+  </div>
+</div>
+
+<div class="form-modal" id="formModal">
+  <div class="form-modal-content" id="formContent"></div>
+</div>
+
+<script>
+const DB = {
+  get(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } },
+  set(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+};
+
+let admin = DB.get('admin', {login:'admin', password:'777', firstLogin:true});
+let catalogs = DB.get('catalogs', [{id:1,name:'Развивающие игры',desc:'Игры для малышей'},{id:2,name:'Учебные пособия',desc:'Математика, чтение'}]);
+let products = DB.get('products', [{id:1,name:'Азбука-раскраска',price:0,free:true,catalogId:2,img:'',desc:'Учим буквы',rating:4.5,stock:10}]);
+let videos = DB.get('videos', []);
+let games = DB.get('games', []);
+let news = DB.get('news', []);
+let blog = DB.get('blog', []);
+let faq = DB.get('faq', []);
+let reviews = DB.get('reviews', []);
+let users = DB.get('users', []);
+let orders = DB.get('orders', []);
+let contacts = DB.get('contacts', []);
+let settings = DB.get('settings', {
+  requisites:{cardNumber:'',cardHolder:'',bank:'',sbp:''},
+  promos:[{code:'OWL10',discount:10,type:'percent'}]
+});
+
+function saveAll(){
+  DB.set('catalogs',catalogs); DB.set('products',products);
+  DB.set('videos',videos); DB.set('games',games);
+  DB.set('news',news); DB.set('blog',blog); DB.set('faq',faq);
+  DB.set('reviews',reviews); DB.set('admin',admin);
+  DB.set('users',users); DB.set('orders',orders);
+  DB.set('contacts',contacts); DB.set('settings',settings);
+}
+
+function showMsg(text, type='error'){
+  const box = document.getElementById('msgBox');
+  box.textContent = text;
+  box.className = 'msg ' + type;
+}
+
+function doLogin(e){
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if(u===admin.login && p===admin.password){
+    sessionStorage.setItem('isAdmin','1');
+    if(admin.firstLogin){
+      document.getElementById('loginBlock').style.display = 'none';
+      document.getElementById('changePassBlock').style.display = 'block';
+    } else showAdminPanel();
+  } else showMsg('Неверный логин или пароль 🦉');
+}
+function changePassword(e){
+  e.preventDefault();
+  const p1 = document.getElementById('newPass').value;
+  const p2 = document.getElementById('newPass2').value;
+  if(p1!==p2) return showMsg('Пароли не совпадают');
+  if(p1.length<4) return showMsg('Минимум 4 символа');
+  admin.password = p1;
+  admin.firstLogin = false;
+  saveAll();
+  showAdminPanel();
+}
+function logout(){ sessionStorage.removeItem('isAdmin'); location.reload(); }
+function showAdminPanel(){
+  document.getElementById('loginBlock').style.display = 'none';
+  document.getElementById('changePassBlock').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  renderAdmin();
+}
+
+function showTab(id, btn){
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.admin-tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function renderAdmin(){
+  document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>`<tr><td>${c.name}</td><td>${c.desc}</td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'🎁':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminNews').innerHTML = news.map(n=>`<tr><td>${n.title}</td><td>${n.date}</td><td><button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️</button><button class="btn btn-del" onclick="delNews(${n.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminBlog').innerHTML = blog.map(b=>`<tr><td>${b.title}</td><td>${b.date}</td><td><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminFaq').innerHTML = faq.map((f,i)=>`<tr><td>${f.q}</td><td>${f.a}</td><td><button class="btn btn-edit" onclick="openFaqModal(${i})">✏️</button><button class="btn btn-del" onclick="delFaq(${i})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminReviews').innerHTML = reviews.map(r=>`<tr><td>${r.author}</td><td>${r.text}</td><td><button class="btn btn-del" onclick="delReview(${r.id})">🗑</button></td></tr>`).join('');
+  const statusMap = {new:'🆕',paid:'✅',sent:'🚚',done:'📦',cancel:'❌'};
+  document.getElementById('adminOrders').innerHTML = orders.map(o=>`<tr><td>#${o.id}</td><td>${o.userName}</td><td>${o.total}₽</td><td>
+    <select onchange="changeOrderStatus(${o.id},this.value)" style="padding:3px;border-radius:6px">
+      <option value="new" ${o.status==='new'?'selected':''}>🆕 Новый</option>
+      <option value="paid" ${o.status==='paid'?'selected':''}>✅ Оплачен</option>
+      <option value="sent" ${o.status==='sent'?'selected':''}>🚚 Отправлен</option>
+      <option value="done" ${o.status==='done'?'selected':''}>📦 Доставлен</option>
+      <option value="cancel" ${o.status==='cancel'?'selected':''}>❌ Отменён</option>
+    </select></td><td style="font-size:10px">${o.date}</td><td><button class="btn btn-del" onclick="delOrder(${o.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет заказов</td></tr>';
+  document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td><button class="btn btn-del" onclick="delUser(${u.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет покупателей</td></tr>';
+  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
+  const req = settings.requisites;
+  document.getElementById('req_card').value = req.cardNumber || '';
+  document.getElementById('req_holder').value = req.cardHolder || '';
+  document.getElementById('req_bank').value = req.bank || '';
+  document.getElementById('req_sbp').value = req.sbp || '';
+  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'%':'₽'}</td><td><button class="btn btn-del" onclick="delPromo(${i})">🗑</button></td></tr>`).join('');
+}
+
+function saveRequisites(){
+  settings.requisites = {
+    cardNumber: document.getElementById('req_card').value.trim(),
+    cardHolder: document.getElementById('req_holder').value.trim(),
+    bank: document.getElementById('req_bank').value.trim(),
+    sbp: document.getElementById('req_sbp').value.trim()
+  };
+  saveAll();
+  alert('✅ Реквизиты сохранены! 🦉');
+}
+function changeOrderStatus(id, status){
+  const o = orders.find(x=>x.id==id);
+  if(o){ o.status = status; saveAll(); }
+}
+function delOrder(id){ if(!confirm('Удалить?'))return; orders=orders.filter(o=>o.id!=id); saveAll(); renderAdmin(); }
+function delUser(id){ if(!confirm('Удалить?'))return; users=users.filter(u=>u.id!=id); saveAll(); renderAdmin(); }
+function delContact(id){ if(!confirm('Удалить?'))return; contacts=contacts.filter(c=>c.id!=id); saveAll(); renderAdmin(); }
+
+function openPromoModal(){
+  document.getElementById('formContent').innerHTML = `
+    <h2>🎟 Новый промокод</h2>
+    <input id="p_code" placeholder="Код (OWL20)">
+    <input id="p_discount" type="number" placeholder="Размер скидки">
+    <select id="p_type"><option value="percent">Процент (%)</option><option value="fixed">Фикс. сумма (₽)</option></select>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="savePromo()">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function savePromo(){
+  const code = document.getElementById('p_code').value.trim().toUpperCase();
+  const discount = +document.getElementById('p_discount').value;
+  const type = document.getElementById('p_type').value;
+  if(!code||!discount) return alert('Заполните поля');
+  settings.promos.push({code, discount, type});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delPromo(i){ if(!confirm('Удалить?'))return; settings.promos.splice(i,1); saveAll(); renderAdmin(); }
+
+function openForm(){ document.getElementById('formModal').classList.add('active'); }
+function closeForm(){ document.getElementById('formModal').classList.remove('active'); }
+
+function openCatalogModal(id){
+  const c = id ? catalogs.find(x=>x.id==id) : {name:'',desc:''};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Каталог</h2>
+    <input id="f_name" placeholder="Название" value="${c.name}">
+    <textarea id="f_desc" placeholder="Описание">${c.desc}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveCatalog(${id||0})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveCatalog(id){
+  const name=document.getElementById('f_name').value.trim();
+  const desc=document.getElementById('f_desc').value.trim();
+  if(!name) return alert('Введите название');
+  if(id){ const c=catalogs.find(x=>x.id==id); c.name=name; c.desc=desc; }
+  else catalogs.push({id:Date.now(),name,desc});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delCatalog(id){ if(!confirm('Удалить?'))return; catalogs=catalogs.filter(c=>c.id!=id); saveAll(); renderAdmin(); }
+
+function openProductModal(id){
+  const p = id ? products.find(x=>x.id==id) : {name:'',price:0,free:true,catalogId:catalogs[0]?.id||0,img:'',desc:'',stock:0};
+  const opts = catalogs.map(c=>`<option value="${c.id}" ${c.id==p.catalogId?'selected':''}>${c.name}</option>`).join('');
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Товар</h2>
+    <input id="f_name" placeholder="Название" value="${p.name}">
+    <label><input type="checkbox" id="f_free" ${p.free?'checked':''}> 🎁 Бесплатный</label>
+    <input id="f_price" type="number" placeholder="Цена" value="${p.price}" ${p.free?'disabled':''}>
+    <input id="f_stock" type="number" placeholder="Остаток" value="${p.stock||0}">
+    <select id="f_cat">${opts}</select>
+    <input id="f_img" placeholder="URL изображения" value="${p.img||''}">
+    <textarea id="f_desc" placeholder="Описание">${p.desc||''}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveProduct(${id||0})">Сохранить</button>
+    </div>`;
+  document.getElementById('f_free').addEventListener('change',function(){
+    document.getElementById('f_price').disabled = this.checked;
+    if(this.checked) document.getElementById('f_price').value = 0;
+  });
+  openForm();
+}
+function saveProduct(id){
+  const name=document.getElementById('f_name').value.trim();
+  const free=document.getElementById('f_free').checked;
+  const price=free?0:+document.getElementById('f_price').value;
+  const stock=+document.getElementById('f_stock').value;
+  const catalogId=+document.getElementById('f_cat').value;
+  const img=document.getElementById('f_img').value.trim();
+  const desc=document.getElementById('f_desc').value.trim();
+  if(!name) return alert('Введите название');
+  if(id){ const p=products.find(x=>x.id==id); Object.assign(p,{name,price,free,stock,catalogId,img,desc}); }
+  else products.push({id:Date.now(),name,price,free,stock,catalogId,img,desc,rating:0});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delProduct(id){ if(!confirm('Удалить?'))return; products=products.filter(p=>p.id!=id); saveAll(); renderAdmin(); }
+
+function openVideoModal(id){
+  const v = id ? videos.find(x=>x.id==id) : {name:'',url:'',desc:''};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Видео</h2>
+    <input id="f_name" placeholder="Название" value="${v.name}">
+    <input id="f_url" placeholder="URL видео" value="${v.url}">
+    <textarea id="f_desc" placeholder="Описание">${v.desc||''}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveVideo(${id||0})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveVideo(id){
+  const name=document.getElementById('f_name').value.trim();
+  const url=document.getElementById('f_url').value.trim();
+  const desc=document.getElementById('f_desc').value.trim();
+  if(!name||!url) return alert('Заполните поля');
+  if(id){ const v=videos.find(x=>x.id==id); Object.assign(v,{name,url,desc}); }
+  else videos.push({id:Date.now(),name,url,desc});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delVideo(id){ if(!confirm('Удалить?'))return; videos=videos.filter(v=>v.id!=id); saveAll(); renderAdmin(); }
+
+function openGameModal(id){
+  const g = id ? games.find(x=>x.id==id) : {name:'',desc:'',img:''};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Пособие</h2>
+    <input id="f_name" placeholder="Название" value="${g.name}">
+    <input id="f_img" placeholder="URL изображения" value="${g.img||''}">
+    <textarea id="f_desc" placeholder="Описание">${g.desc||''}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveGame(${id||0})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveGame(id){
+  const name=document.getElementById('f_name').value.trim();
+  const img=document.getElementById('f_img').value.trim();
+  const desc=document.getElementById('f_desc').value.trim();
+  if(!name) return alert('Введите название');
+  if(id){ const g=games.find(x=>x.id==id); Object.assign(g,{name,img,desc}); }
+  else games.push({id:Date.now(),name,img,desc});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delGame(id){ if(!confirm('Удалить?'))return; games=games.filter(g=>g.id!=id); saveAll(); renderAdmin(); }
+
+function openNewsModal(id){
+  const n = id ? news.find(x=>x.id==id) : {title:'',text:'',date:new Date().toISOString().slice(0,10)};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Новость</h2>
+    <input id="f_title" placeholder="Заголовок" value="${n.title}">
+    <input id="f_date" type="date" value="${n.date}">
+    <textarea id="f_text" placeholder="Текст">${n.text||''}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveNews(${id||0})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveNews(id){
+  const title=document.getElementById('f_title').value.trim();
+  const date=document.getElementById('f_date').value;
+  const text=document.getElementById('f_text').value.trim();
+  if(!title) return alert('Введите заголовок');
+  if(id){ const n=news.find(x=>x.id==id); Object.assign(n,{title,date,text}); }
+  else news.push({id:Date.now(),title,date,text});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delNews(id){ if(!confirm('Удалить?'))return; news=news.filter(n=>n.id!=id); saveAll(); renderAdmin(); }
+
+function openBlogModal(id){
+  const b = id ? blog.find(x=>x.id==id) : {title:'',text:'',date:new Date().toISOString().slice(0,10)};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️':'➕'} Статья блога</h2>
+    <input id="f_title" placeholder="Заголовок" value="${b.title}">
+    <input id="f_date" type="date" value="${b.date}">
+    <textarea id="f_text" placeholder="Текст статьи">${b.text||''}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveBlog(${id||0})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveBlog(id){
+  const title=document.getElementById('f_title').value.trim();
+  const date=document.getElementById('f_date').value;
+  const text=document.getElementById('f_text').value.trim();
+  if(!title) return alert('Введите заголовок');
+  if(id){ const b=blog.find(x=>x.id==id); Object.assign(b,{title,date,text}); }
+  else blog.push({id:Date.now(),title,date,text});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delBlog(id){ if(!confirm('Удалить?'))return; blog=blog.filter(b=>b.id!=id); saveAll(); renderAdmin(); }
+
+function openFaqModal(idx){
+  const f = idx!==undefined ? faq[idx] : {q:'',a:''};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${idx!==undefined?'✏️':'➕'} FAQ</h2>
+    <input id="f_q" placeholder="Вопрос" value="${f.q}">
+    <textarea id="f_a" placeholder="Ответ">${f.a}</textarea>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveFaq(${idx!==undefined?idx:-1})">Сохранить</button>
+    </div>`;
+  openForm();
+}
+function saveFaq(idx){
+  const q=document.getElementById('f_q').value.trim();
+  const a=document.getElementById('f_a').value.trim();
+  if(!q||!a) return alert('Заполните поля');
+  if(idx>=0) faq[idx] = {q,a};
+  else faq.push({q,a});
+  saveAll(); closeForm(); renderAdmin();
+}
+function delFaq(i){ if(!confirm('Удалить?'))return; faq.splice(i,1); saveAll(); renderAdmin(); }
+
+function delReview(id){ if(!confirm('Удалить?'))return; reviews=reviews.filter(r=>r.id!=id); saveAll(); renderAdmin(); }
+
+function adminChangePass(){
+  const old=document.getElementById('setOldPass').value;
+  const nw=document.getElementById('setNewPass').value;
+  if(old!==admin.password) return alert('Неверный текущий пароль');
+  if(nw.length<4) return alert('Минимум 4 символа');
+  admin.password=nw; saveAll();
+  alert('Пароль изменён 🦉');
+}
+function exportData(){
+  const data = {catalogs,products,videos,games,news,blog,faq,reviews,users,orders,contacts,settings};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'owl-backup.json';
+  a.click();
+}
+
+if(sessionStorage.getItem('isAdmin')=='1' && !admin.firstLogin){
+  showAdminPanel();
+}
+</script>
+</body>
+</html>
