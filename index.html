@@ -7,6 +7,40 @@
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+  <style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
+:root {
+  --headerColor1:#5D4037; --headerColor2:#795548;
+  --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E;
+  --card:rgba(255,255,255,0.85); --border:rgba(255,255,255,0.5);
+}
+
+/* === ФОН С КАРТИНКОЙ === */
+body { 
+  background: url('https://i.ibb.co/ВСТАВЬТЕ_СЮДА_ВАШУ_ССЫЛКУ/fon.png') center/cover fixed !important;
+  color:var(--text); 
+  min-height:100vh; 
+  padding-bottom:70px; 
+  position:relative; 
+  overflow-x:hidden; 
+}
+
+body::before { 
+  content:''; 
+  position:fixed; 
+  inset:0; 
+  background:rgba(255,255,255,0.82); 
+  z-index:-1; 
+  pointer-events:none; 
+}
+
+body::after { 
+  content:''; 
+  position:fixed; 
+  inset:0; 
+  z-index:0; 
+  pointer-events:none; 
+}
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
 :root {
   --headerColor1:#5D4037; --headerColor2:#795548;
