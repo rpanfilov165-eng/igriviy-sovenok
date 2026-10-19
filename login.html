@@ -6,12 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#673AB7">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
 body { background:linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 50%,#FFCC80 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
 .login-wrap { background:#fff; border-radius:22px; padding:35px; max-width:420px; width:100%; box-shadow:0 10px 40px rgba(93,64,55,.2); border:3px solid #FFC107; text-align:center; }
-.owl-big { font-size:70px; display:block; margin-bottom:8px; animation:float 3s ease-in-out infinite; }
+.owl-big { width:120px; height:120px; display:block; margin:0 auto 15px; animation:float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
 .subtitle { color:#8D6E63; margin-bottom:20px; font-size:13px; }
@@ -35,7 +36,7 @@ h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
 </head>
 <body>
 <div class="login-wrap">
-  <span class="owl-big">🦉</span>
+  <img src="logo.png" class="owl-big" alt="Игривый совёнок">
   <h1>Игривый совёнок</h1>
   <p class="subtitle">Вход для покупателей ✨</p>
   <div id="msgBox" class="msg"></div>
@@ -66,7 +67,7 @@ h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
   </div>
   <div class="nav-links">
     <a href="index.html">🏠 На сайт</a>
-    <a href="admin-login.html" class="purple">🔐 Админ</a>
+    <a href="admin-login.html" class="purple"> Админ</a>
   </div>
 </div>
 <script>
@@ -94,7 +95,7 @@ function doLogin(e){
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const pass = document.getElementById('loginPassword').value;
   const user = users.find(u=>u.email.toLowerCase()===email && u.password===pass);
-  if(!user) return showMsg('Неверный email или пароль 🦉');
+  if(!user) return showMsg('Неверный email или пароль ');
   currentUser = user;
   DB.set('currentUser', user);
   showMsg('Добро пожаловать, ' + user.name + '! ✨', 'success');
@@ -109,7 +110,7 @@ function doRegister(e){
   const pass = document.getElementById('regPassword').value;
   const pass2 = document.getElementById('regPassword2').value;
   if(pass!==pass2) return showMsg('Пароли не совпадают 🦉');
-  if(users.find(u=>u.email.toLowerCase()===email)) return showMsg('Email уже зарегистрирован 🦉');
+  if(users.find(u=>u.email.toLowerCase()===email)) return showMsg('Email уже зарегистрирован ');
   const newUser = { id:Date.now(), name, email, phone, city, password:pass, date:new Date().toLocaleDateString('ru-RU') };
   users.push(newUser);
   DB.set('users', users);
