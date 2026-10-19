@@ -2,16 +2,17 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>🔐 Админ — Игривый совёнок</title>
+<title> Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#673AB7">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
 body { background:linear-gradient(135deg,#311B92 0%,#4527A0 50%,#512DA8 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
 .login-wrap { background:#FFF8E1; border-radius:22px; padding:30px; max-width:900px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.3); border:3px solid #FFC107; text-align:center; }
-.owl-big { font-size:70px; display:block; margin-bottom:8px; animation:float 3s ease-in-out infinite; }
+.owl-big { width:120px; height:120px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
 .subtitle { color:#673AB7; margin-bottom:20px; font-size:13px; font-weight:bold; }
@@ -52,20 +53,20 @@ table th { background:#673AB7; color:#fff; }
 </head>
 <body>
 <div class="login-wrap">
-  <span class="owl-big">🦉</span>
+  <img src="logo.png" class="owl-big" alt="Игривый совёнок">
   <h1>Админ-панель</h1>
   <p class="subtitle">Игривый совёнок — управление 🔐</p>
   <div id="msgBox" class="msg"></div>
 
   <div id="loginBlock">
     <div class="hint">
-      💡 <b>Временные данные:</b><br>
+       <b>Временные данные:</b><br>
       Логин: <b>admin</b> | Пароль: <b>777</b><br>
       <span style="font-size:10px">(при первом входе установите новый пароль)</span>
     </div>
     <form onsubmit="doLogin(event)">
       <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
-      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required></div>
+      <div class="form-group"><label> Пароль</label><input type="password" id="loginPass" required></div>
       <button type="submit" class="btn-submit">Войти 🦉</button>
     </form>
   </div>
@@ -252,7 +253,7 @@ function renderAdmin(){
   document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>`<tr><td>${c.name}</td><td>${c.desc}</td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})">🗑</button></td></tr>`).join('');
   document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'🎁':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('');
   document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
-  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})"></button></td></tr>`).join('');
   document.getElementById('adminNews').innerHTML = news.map(n=>`<tr><td>${n.title}</td><td>${n.date}</td><td><button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️</button><button class="btn btn-del" onclick="delNews(${n.id})">🗑</button></td></tr>`).join('');
   document.getElementById('adminBlog').innerHTML = blog.map(b=>`<tr><td>${b.title}</td><td>${b.date}</td><td><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑</button></td></tr>`).join('');
   document.getElementById('adminFaq').innerHTML = faq.map((f,i)=>`<tr><td>${f.q}</td><td>${f.a}</td><td><button class="btn btn-edit" onclick="openFaqModal(${i})">✏️</button><button class="btn btn-del" onclick="delFaq(${i})">🗑</button></td></tr>`).join('');
@@ -264,16 +265,16 @@ function renderAdmin(){
       <option value="paid" ${o.status==='paid'?'selected':''}>✅ Оплачен</option>
       <option value="sent" ${o.status==='sent'?'selected':''}>🚚 Отправлен</option>
       <option value="done" ${o.status==='done'?'selected':''}>📦 Доставлен</option>
-      <option value="cancel" ${o.status==='cancel'?'selected':''}>❌ Отменён</option>
-    </select></td><td style="font-size:10px">${o.date}</td><td><button class="btn btn-del" onclick="delOrder(${o.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет заказов</td></tr>';
-  document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td><button class="btn btn-del" onclick="delUser(${u.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет покупателей</td></tr>';
+      <option value="cancel" ${o.status==='cancel'?'selected':''}> Отменён</option>
+    </select></td><td style="font-size:10px">${o.date}</td><td><button class="btn btn-del" onclick="delOrder(${o.id})"></button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет заказов</td></tr>';
+  document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td><button class="btn btn-del" onclick="delUser(${u.id})"></button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет покупателей</td></tr>';
   document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
   const req = settings.requisites;
   document.getElementById('req_card').value = req.cardNumber || '';
   document.getElementById('req_holder').value = req.cardHolder || '';
   document.getElementById('req_bank').value = req.bank || '';
   document.getElementById('req_sbp').value = req.sbp || '';
-  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'%':'₽'}</td><td><button class="btn btn-del" onclick="delPromo(${i})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'%':'₽'}</td><td><button class="btn btn-del" onclick="delPromo(${i})"></button></td></tr>`).join('');
 }
 
 function saveRequisites(){
@@ -477,7 +478,7 @@ function delBlog(id){ if(!confirm('Удалить?'))return; blog=blog.filter(b=
 function openFaqModal(idx){
   const f = idx!==undefined ? faq[idx] : {q:'',a:''};
   document.getElementById('formContent').innerHTML = `
-    <h2>${idx!==undefined?'✏️':'➕'} FAQ</h2>
+    <h2>${idx!==undefined?'✏️':''} FAQ</h2>
     <input id="f_q" placeholder="Вопрос" value="${f.q}">
     <textarea id="f_a" placeholder="Ответ">${f.a}</textarea>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
@@ -504,7 +505,7 @@ function adminChangePass(){
   if(old!==admin.password) return alert('Неверный текущий пароль');
   if(nw.length<4) return alert('Минимум 4 символа');
   admin.password=nw; saveAll();
-  alert('Пароль изменён 🦉');
+  alert('Пароль изменён ');
 }
 function exportData(){
   const data = {catalogs,products,videos,games,news,blog,faq,reviews,users,orders,contacts,settings};
