@@ -13,7 +13,17 @@
   --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E;
   --card:rgba(255,255,255,0.85); --border:rgba(255,255,255,0.5);
 }
-body { background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80); color:var(--text); min-height:100vh; padding-bottom:70px; position:relative; overflow-x:hidden; }
+   body { 
+     background: url('https://ibb.co/1tKFvpnC') !important;
+     background-size: cover !important;
+     background-position: center !important;
+     background-attachment: fixed !important;
+     color:var(--text); 
+     min-height:100vh; 
+     padding-bottom:70px; 
+     position: relative;
+     overflow-x: hidden;
+   }
 body::before { content:''; position:fixed; inset:0; background:radial-gradient(circle at 10% 20%,rgba(255,193,7,0.15),transparent 50%),radial-gradient(circle at 90% 80%,rgba(103,58,183,0.1),transparent 50%); z-index:-1; pointer-events:none; }
 body::after { content:'⭐ 🌟 ✨ ⭐ 🌟 ✨'; position:fixed; top:0; left:0; width:100%; height:100%; font-size:40px; opacity:0.06; display:flex; flex-wrap:wrap; align-content:space-around; justify-content:space-around; pointer-events:none; z-index:0; animation:floatStars 20s ease-in-out infinite; }
 @keyframes floatStars { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
