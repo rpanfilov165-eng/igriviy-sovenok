@@ -93,12 +93,9 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .image-preview-box { background:#FFF8E1; border:2px dashed #FFC107; border-radius:12px; padding:15px; text-align:center; margin-top:10px; min-height:150px; display:flex; align-items:center; justify-content:center; }
 .image-preview-box img { max-width:100%; max-height:200px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
 .image-preview-box .placeholder-text { color:#888; font-size:13px; }
-.product-preview-card { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border:2px solid #FFC107; border-radius:16px; padding:16px; margin-top:12px; }
-.product-preview-card h5 { color:#5D4037; font-size:12px; font-weight:800; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
 .preview-product { background:#fff; border-radius:14px; padding:12px; border:2px solid #FFE0B2; }
 .preview-product img { width:100%; height:120px; object-fit:cover; border-radius:10px; margin-bottom:8px; background:linear-gradient(135deg,#FFE0B2,#FFCC80); }
 .preview-product h3 { font-size:15px; color:#2D1B4E; margin-bottom:4px; }
-.preview-product .price { color:#D84315; font-weight:800; font-size:18px; }
 .preview-product .desc { font-size:12px; color:#666; margin:6px 0; }
 .preview-product .badge { display:inline-block; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:700; margin-right:5px; }
 .badge-free { background:#4CAF50; color:#fff; }
@@ -107,6 +104,22 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .badge-cat { background:#FFE0B2; color:#5D4037; }
 .form-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; padding-top:14px; border-top:2px dashed #FFE0B2; flex-wrap:wrap; }
 .btn-preview { background:linear-gradient(135deg,#2196F3,#42A5F5); color:#fff; }
+
+/* === СЕТКА ИКОНОК ДЛЯ ВКЛАДОК === */
+.icon-selector { margin:10px 0; }
+.icon-selector-label { font-weight:700; color:#5D4037; margin-bottom:8px; font-size:13px; }
+.icon-category { margin-bottom:12px; }
+.icon-category-title { font-size:11px; color:#888; font-weight:700; margin-bottom:6px; text-transform:uppercase; letter-spacing:0.5px; }
+.icon-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(44px,1fr)); gap:6px; }
+.icon-option { width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:22px; background:#fff; border:2px solid #FFE0B2; border-radius:10px; cursor:pointer; transition:all .2s; }
+.icon-option:hover { transform:scale(1.15); border-color:#FFC107; background:#FFF8E1; box-shadow:0 4px 12px rgba(255,193,7,0.3); }
+.icon-option.selected { background:linear-gradient(135deg,#FFD54F,#FFC107); border-color:#FF9800; box-shadow:0 4px 12px rgba(255,152,0,0.4); transform:scale(1.1); }
+.icon-custom-input { margin-top:10px; display:flex; gap:8px; align-items:center; }
+.icon-custom-input input { flex:1; padding:10px; border:2px solid #FFE0B2; border-radius:10px; font-size:14px; text-align:center; }
+.icon-preview-box { background:#FFF8E1; padding:12px; border-radius:10px; margin-top:10px; text-align:center; border:2px dashed #FFC107; }
+.icon-preview-box .preview-icon { font-size:40px; }
+.icon-preview-box .preview-text { font-size:12px; color:#666; margin-top:5px; }
+
 @media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 24px 6px 8px; } .login-wrap { padding:18px; } .item-row { flex-direction:column; align-items:flex-start; } .product-form-section .form-row { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -138,7 +151,7 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
   <div class="admin-panel" id="adminPanel">
     <h3>⚙️ Управление сайтом</h3>
     <div class="admin-tabs" id="adminTabs">
-      <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard"> Дашборд</button></div>
+      <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard">📊 Дашборд</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground">🖼 Фон</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs">📚 Каталоги</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aProducts',this)" data-tab="aProducts">🛍 Товары</button></div>
@@ -148,7 +161,7 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
       <div class="tab-wrapper"><button onclick="showTab('aBlog',this)" data-tab="aBlog">📝 Блог</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aFaq',this)" data-tab="aFaq">❓ FAQ</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aReviews',this)" data-tab="aReviews">⭐ Отзывы</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders"> Заказы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders">📦 Заказы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aUsers',this)" data-tab="aUsers">👥 Покупатели</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aContacts',this)" data-tab="aContacts">✉️ Сообщения</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aSuggestions',this)" data-tab="aSuggestions">💡 Предложения</button></div>
@@ -157,39 +170,39 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
       <div class="tab-wrapper"><button onclick="showTab('aReturns',this)" data-tab="aReturns">🔄 Возвраты</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aSubscribers',this)" data-tab="aSubscribers"> Подписчики</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aChat',this)" data-tab="aChat">💬 Чат</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aLog',this)" data-tab="aLog">📋 Журнал</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aSale',this)" data-tab="aSale">🔥 Акции</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aPages',this)" data-tab="aPages">📄 Страницы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aLog',this)" data-tab="aLog"> Журнал</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSale',this)" data-tab="aSale"> Акции</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aPages',this)" data-tab="aPages"> Страницы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aRequisites',this)" data-tab="aRequisites">💳 Реквизиты</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aPromos',this)" data-tab="aPromos">🎟 Промокоды</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">️ Настройки</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">⚙️ Настройки</button></div>
     </div>
 
-    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statUsers">0</div><div class="lbl">Покупателей</div></div><div class="stat-box"><div class="num" id="statProducts">0</div><div class="lbl">Товаров</div></div></div></div>
-    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4>📤 Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none">✕ Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div><div class="bg-preset" onclick="applyPreset('mint')" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9,#A5D6A7)"></div><div class="bg-preset" onclick="applyPreset('lavender')" style="background:linear-gradient(135deg,#F3E5F5,#E1BEE7,#D7BDE2)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
-    <div id="aCatalogs" class="admin-section"><h3>📚 Каталоги</h3><button class="btn btn-add" onclick="openCatalogModal()">➕ Добавить</button><div id="adminCatalogs"></div></div>
-    <div id="aProducts" class="admin-section"><h3>🛍 Товары</h3><button class="btn btn-add" onclick="openProductModal()"> Добавить товар</button><div id="adminProducts"></div></div>
+    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statUsers">0</div><div class="lbl">Покупателей</div></div><div class="stat-box"><div class="num" id="statProducts">0</div><div class="lbl">Товаров</div></div><div class="stat-box"><div class="num" id="statCatalogs">0</div><div class="lbl">Каталогов</div></div></div></div>
+    <div id="aBackground" class="admin-section"><h3> Фон сайта</h3><div class="bg-box"><h4>📤 Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon"></div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none">✕ Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div><div class="bg-preset" onclick="applyPreset('mint')" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9,#A5D6A7)"></div><div class="bg-preset" onclick="applyPreset('lavender')" style="background:linear-gradient(135deg,#F3E5F5,#E1BEE7,#D7BDE2)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
+    <div id="aCatalogs" class="admin-section"><h3>📚 Каталоги</h3><button class="btn btn-add" onclick="openCatalogModal()">➕ Добавить каталог</button><div id="adminCatalogs"></div></div>
+    <div id="aProducts" class="admin-section"><h3>🛍 Товары</h3><button class="btn btn-add" onclick="openProductModal()">➕ Добавить товар</button><div id="adminProducts"></div></div>
     <div id="aVideos" class="admin-section"><h3>🎬 Видео</h3><button class="btn btn-add" onclick="openVideoModal()">➕ Добавить</button><div id="adminVideos"></div></div>
     <div id="aGames" class="admin-section"><h3>🎮 Пособия</h3><button class="btn btn-add" onclick="openGameModal()">➕ Добавить</button><div id="adminGames"></div></div>
     <div id="aNews" class="admin-section"><h3>📰 Новости</h3><button class="btn btn-add" onclick="openNewsModal()">➕ Добавить</button><div id="adminNews"></div></div>
     <div id="aBlog" class="admin-section"><h3>📝 Блог</h3><button class="btn btn-add" onclick="openBlogModal()">➕ Добавить</button><div id="adminBlog"></div></div>
     <div id="aFaq" class="admin-section"><h3>❓ FAQ</h3><button class="btn btn-add" onclick="openFaqModal()">➕ Добавить вопрос</button><div id="adminFaq"></div></div>
     <div id="aReviews" class="admin-section"><h3>⭐ Отзывы</h3><div id="adminReviews"></div></div>
-    <div id="aOrders" class="admin-section"><h3>📦 Заказы</h3><div id="adminOrders"></div></div>
-    <div id="aUsers" class="admin-section"><h3>👥 Покупатели</h3><div id="adminUsers"></div></div>
-    <div id="aContacts" class="admin-section"><h3>✉️ Сообщения</h3><div id="adminContacts"></div></div>
-    <div id="aSuggestions" class="admin-section"><h3>💡 Предложения</h3><div id="adminSuggestionsList"></div></div>
+    <div id="aOrders" class="admin-section"><h3> Заказы</h3><div id="adminOrders"></div></div>
+    <div id="aUsers" class="admin-section"><h3> Покупатели</h3><div id="adminUsers"></div></div>
+    <div id="aContacts" class="admin-section"><h3>️ Сообщения</h3><div id="adminContacts"></div></div>
+    <div id="aSuggestions" class="admin-section"><h3> Предложения</h3><div id="adminSuggestionsList"></div></div>
     <div id="aBanners" class="admin-section"><h3>🖼 Баннеры</h3><button class="btn btn-add" onclick="openBannerModal()">➕ Добавить</button><div id="adminBanners"></div></div>
     <div id="aEvents" class="admin-section"><h3>📅 Мероприятия</h3><button class="btn btn-add" onclick="openEventModal()">➕ Добавить</button><div id="adminEvents"></div></div>
     <div id="aReturns" class="admin-section"><h3>🔄 Возвраты</h3><div id="adminReturns"></div></div>
-    <div id="aSubscribers" class="admin-section"><h3>📧 Подписчики</h3><div id="adminSubscribers"></div><button class="btn btn-purple" onclick="sendNewsletter()" style="margin-top:12px">📧 Рассылка</button></div>
+    <div id="aSubscribers" class="admin-section"><h3>📧 Подписчики</h3><div id="adminSubscribers"></div><button class="btn btn-purple" onclick="sendNewsletter()" style="margin-top:12px"> Рассылка</button></div>
     <div id="aChat" class="admin-section"><h3>💬 Чат</h3><div id="adminChat"></div><button class="btn btn-del" onclick="if(confirm('Очистить чат?')){DB.set('chatMessages',[]);renderAdmin();}">🗑 Очистить</button></div>
-    <div id="aLog" class="admin-section"><h3> Журнал</h3><div id="adminLog"></div><button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}">🗑 Очистить</button></div>
+    <div id="aLog" class="admin-section"><h3> Журнал</h3><div id="adminLog"></div><button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}"> Очистить</button></div>
     <div id="aSale" class="admin-section"><h3>🔥 Акции</h3><div class="form-group"><label><input type="checkbox" id="sale_active"> Активна</label></div><div class="form-group"><label>Скидка %</label><input id="sale_percent" type="number" placeholder="30"></div><div class="form-group"><label>Окончание</label><input id="sale_end" type="datetime-local"></div><button class="btn btn-purple" onclick="saveSale()">💾 Сохранить</button></div>
     <div id="aPages" class="admin-section"><h3>📄 Страницы</h3><button class="btn btn-add" onclick="openPageModal()">➕ Добавить</button><div id="adminPages"></div></div>
     <div id="aRequisites" class="admin-section"><h3>💳 Реквизиты</h3><div class="form-group"><label>Карта</label><input id="req_card" placeholder="2200 0000 0000 0000"></div><div class="form-group"><label>ФИО</label><input id="req_holder" placeholder="ИВАНОВ ИВАН"></div><div class="form-group"><label>Банк</label><input id="req_bank" placeholder="Сбербанк"></div><div class="form-group"><label>СБП</label><input id="req_sbp" placeholder="+7..."></div><button class="btn btn-purple" onclick="saveRequisites()">💾 Сохранить</button></div>
     <div id="aPromos" class="admin-section"><h3>🎟 Промокоды</h3><button class="btn btn-add" onclick="openPromoModal()">➕ Добавить</button><div id="adminPromos"></div></div>
-    <div id="aSettings" class="admin-section"><h3>⚙️ Настройки</h3><div class="bg-box"><h4>🔑 Сменить пароль</h4><div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div><div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div><button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button></div><div class="bg-box"><h4>💾 Данные</h4><button class="btn" onclick="exportData()"> Экспорт</button><button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сброс</button><button class="btn btn-del" onclick="logout()">🚪 Выйти</button></div></div>
+    <div id="aSettings" class="admin-section"><h3>⚙️ Настройки</h3><div class="bg-box"><h4>🔑 Сменить пароль</h4><div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div><div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div><button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button></div><div class="bg-box"><h4>📌 Мои вкладки</h4><p style="font-size:12px;color:#666;margin-bottom:10px;">Создавайте собственные вкладки с любой иконкой и содержимым.</p><button class="btn btn-add" onclick="openCustomTabModal()" style="margin-bottom:10px;">➕ Создать новую вкладку</button><div id="customTabsList"></div></div><div class="bg-box"><h4> Скрытые вкладки</h4><div id="hiddenTabsList"></div><button class="btn btn-restore" onclick="restoreAllTabs()"> Восстановить все</button></div><div class="bg-box"><h4>💾 Данные</h4><button class="btn" onclick="exportData()">📤 Экспорт</button><button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сброс</button><button class="btn btn-del" onclick="logout()">🚪 Выйти</button></div></div>
     <div id="customTabsContainer"></div>
   </div>
   <div class="nav-links"><a href="index.html">🏠 На сайт</a><a href="login.html">👤 Покупатель</a></div>
@@ -204,7 +217,26 @@ let catalogs = DB.get('catalogs',[{id:1,name:'Развивающие игры',d
 let products = DB.get('products',[{id:1,name:'Азбука-раскраска',price:0,free:true,catalogId:2,img:'',desc:'Учим буквы',rating:4.5,stock:10,age:5,sale:false,salePrice:0,createdAt:Date.now()}]);
 let videos = DB.get('videos',[]); let games = DB.get('games',[]); let news = DB.get('news',[]); let blog = DB.get('blog',[]); let faq = DB.get('faq',[]); let reviews = DB.get('reviews',[]); let users = DB.get('users',[]); let orders = DB.get('orders',[]); let contacts = DB.get('contacts',[]); let suggestions = DB.get('suggestions',[]); let banners = DB.get('banners',[]); let events = DB.get('events',[]); let pages = DB.get('pages',[]);
 let settings = DB.get('settings',{requisites:{cardNumber:'',cardHolder:'',bank:'',sbp:''},promos:[],sale:{active:false,percent:30,endDate:Date.now()+86400000*7},headerColors:{color1:'#2D1B4E',color2:'#673AB7'},backgroundImage:null,backgroundType:null});
-let customTabs = DB.get('customTabs',[]); let hiddenTabs = DB.get('hiddenTabs',[]); let tempBgData = null;
+let customTabs = DB.get('customTabs',[]); let hiddenTabs = DB.get('hiddenTabs',[]); let selectedIcon = '📌'; let tempBgData = null;
+
+// === НАБОР ИКОНОК ПО КАТЕГОРИЯМ ===
+const ICON_SETS = {
+  '📋 Общие': ['📌','📝','📄','📋','📑','🗂️','📁','📂','️','📊','📈','','🔖','📎','','📐'],
+  '⭐ Звёзды и награды': ['⭐','','✨','💫','🏆','🥇','🥈','🥉','🎖️','🏅','','🎪','🎨',''],
+  '💡 Идеи и мысли': ['💡','💭','🧠','🤔','💬','🗨️','💭','📣','','🔕','⚡','','✨'],
+  '🛍 Магазин': ['🛍️','🛒','🎁','🎀','💰','💵','💳','🏷️','📦','🚚','','🎊','🎈'],
+  '👥 Люди': ['👤','','👨‍👩👧','👨‍💼','👩‍💼','‍🎓','👨‍🏫','👩‍🏫','👶','🧒','👦','🧑','👱'],
+  '🎮 Игры и развлечения': ['','🎲','🎯','','🎨','🎭','','🎤','🎧','','🎶','🎹','','🎸'],
+  '📚 Образование': ['📚','📖','','📗','📘','','📓','📔','✏️','🖊️','🖋️','📝','🎓','📏'],
+  '🔧 Инструменты': ['🔧','🔨','⚙️','🛠️','🔩','','🔌','💻','️','📱','⌨️','️','📷'],
+  '❤️ Эмоции': ['❤️','🧡','💛','💚','💙','','🖤','🤍','💔','❣️','💕','💖','','💘','💝','😍','🥰','😘','😊','🙂','🤗','🤩','😎','🤓','😇'],
+  ' Природа': ['🌸','','🌻','🌼','','🌹','🌳','','🌴','🌵','','🌿','☘️','','🍂','🍁','','🌛','🌜','☀️','🌤️','⭐','🌟','🌙','','🌈','❄️','️','⛄'],
+  '🐾 Животные': ['🦉','','🐶','🐰','','🐻','🐼','','🐯','🦁','','🐸','🐔','🐧','🦆','','🦋','🐝','','🐢','🐍','','🐙','🦑','','🦀','🐠','','🐬','🐳','','🐊','🦜','','🦩','🕊️','🐇','🦝','','🦦','🦥','️','🦔'],
+  ' Еда': ['🍕','','🍟','🌭','','🌮','🌯','','🧆','🥚','','🥞','🧇','🥐','🥨','🥖','🧀','🥗','🥘','','🍜','🍲','','🍣','🍱','','🦪','🍤','','🍚','🍘','','🥠','🥮','','🍧','🍨','🍦','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','','🍯'],
+  '⚽ Спорт': ['⚽','🏀','','⚾','🥎','','🏐','🏉','','🏸','','🏒','🏑','','⛳','🏹','','🥋','','🛹','🛼','','⛸️','🥌','🎿','⛷️','','🏋️','🤸','🤺','🤾','🏌️','🧘','🏄','','🤽','🚣','','🚴','🏆','','🥈','🥉','','🎖️','🏵️','🎗️','🎫','️','🎪','🎭','🩰','🎨','','🎧','🎼','🎹','🥁','','🎺','🎸','','🎲','♟️','','🎮','️','🧩'],
+  ' Транспорт': ['🚗','🚕','🚙','🚌','🚎','🏎️','🚓','','🚒','🚐','','🚛','🚜','🦯','🦽','🦼','🛴','🚲','🛵','🏍️','🛺','','🚍','🚘','🚖','🚡','🚠','🚟','🚃','🚋','🚞','🚝','🚄','🚅','🚈','🚂','🚆','🚇','🚊','🚉','✈️','','🛬','🛩️','💺','🛰️','🚀','','🚁','🛶','','🚤','🛥️','🛳️','⛴️','','⚓','🪝','','🚧','🚦','🚥','🗺️','','🗼','🏰','','🏟️','🎡','','🎠','⛲','️','🏝️','️','🌋','⛰️','️','🗻','🏕️','⛺','🛖','🏠','🏡','🏘️','🏚️','🏗️','','🏢','🏬','','🏤','🏥','','🏨','🏪','','🏩','💒','️','⛪','🕌','','🛕','🕋','️','🛤️','️','🌉','','🌅','🌄','','🌆','🌃','🌌','🌠'],
+  '🔢 Цифры и символы': ['0️⃣','1️','2️⃣','3️','4️⃣','5️','6️⃣','7️','8️⃣','9️','🔟','💯','','#️⃣','*️','⏯️','️','⏺️','⏹️','⏮️','⏭️','','⏫','⏬','◀️','▶️','⬆️','⬇️','↗️','↘️','↙️','↖️','↕️','↔️','↪️','↩️','⤴️','⤵️','🔁','🔂','🔄','🔃','➕','➖','➗','✖️','♾️','💱','™️','©️','®️','🔚','🔙','🔛','🔝','🔜','〰️','➰','➿','✔️','☑️','✅','❌','❎','➡️','⬅️','⬆️','⬇️','↗️','️','↙️','↖️','️','↔️','↪️','️','⤴️','⤵️','🔁','🔂','🔄','🔃','🎵','','➕','➖','➗','✖️','♾️','💱','™️','©️','®️','🔚','🔙','🔛','🔝','🔜','〰️','➰','','✔️','☑️','✅','','❎','➡️','⬅️','⬆️','⬇️']
+};
 
 function saveAll(){DB.set('catalogs',catalogs);DB.set('products',products);DB.set('videos',videos);DB.set('games',games);DB.set('news',news);DB.set('blog',blog);DB.set('faq',faq);DB.set('reviews',reviews);DB.set('admin',admin);DB.set('users',users);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);DB.set('banners',banners);DB.set('events',events);DB.set('pages',pages);DB.set('suggestions',suggestions);}
 function saveCustomTabs(){DB.set('customTabs',customTabs);}
@@ -220,7 +252,74 @@ function showTab(id,btn){document.querySelectorAll('.admin-section').forEach(s=>
 function openForm(){document.getElementById('formModal').classList.add('active');}
 function closeForm(){document.getElementById('formModal').classList.remove('active');}
 
-// === УЛУЧШЕННАЯ ФОРМА ТОВАРА С ПОДПИСЯМИ ===
+// === КАТАЛОГИ ===
+function openCatalogModal(id){
+  const c = id ? catalogs.find(x=>x.id==id) : {name:'',desc:'',ageMin:0,ageMax:10};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️ Редактировать каталог':'➕ Новый каталог'}</h2>
+    <div class="form-group">
+      <label> Название каталога *</label>
+      <input id="f_name" placeholder="Например: Развивающие игры" value="${c.name}">
+      <div class="form-hint">💡 Краткое и понятное название раздела</div>
+    </div>
+    <div class="form-group">
+      <label>📝 Описание</label>
+      <textarea id="f_desc" placeholder="Краткое описание каталога">${c.desc}</textarea>
+      <div class="form-hint">💡 Что включает этот каталог</div>
+    </div>
+    <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group">
+        <label>👶 Возраст от</label>
+        <input id="f_ageMin" type="number" placeholder="0" value="${c.ageMin||0}">
+        <div class="form-hint">💡 Минимальный возраст ребёнка</div>
+      </div>
+      <div class="form-group">
+        <label> Возраст до</label>
+        <input id="f_ageMax" type="number" placeholder="12" value="${c.ageMax||10}">
+        <div class="form-hint">💡 Максимальный возраст ребёнка</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveCatalog(${id||0})">💾 Сохранить</button>
+    </div>
+  `;
+  openForm();
+}
+
+function saveCatalog(id){
+  const name = document.getElementById('f_name').value.trim();
+  const desc = document.getElementById('f_desc').value.trim();
+  const ageMin = +document.getElementById('f_ageMin').value;
+  const ageMax = +document.getElementById('f_ageMax').value;
+  if(!name) return alert('⚠️ Введите название каталога');
+  if(id){
+    const c = catalogs.find(x=>x.id==id);
+    if(c) Object.assign(c,{name,desc,ageMin,ageMax});
+    addLog(`Каталог изменён: "${name}"`);
+    showMsg('✅ Каталог обновлён!','success');
+  } else {
+    catalogs.push({id:Date.now(),name,desc,ageMin,ageMax});
+    addLog(`Каталог добавлен: "${name}"`);
+    showMsg('✅ Каталог добавлен!','success');
+  }
+  saveAll();
+  closeForm();
+  renderAdmin();
+}
+
+function delCatalog(id){
+  const c = catalogs.find(x=>x.id==id);
+  if(!c) return;
+  if(!confirm(`Удалить каталог "${c.name}"?\n\nТовары в этом каталоге останутся, но будут без категории.`)) return;
+  catalogs = catalogs.filter(x=>x.id!=id);
+  saveAll();
+  addLog(`Каталог удалён: "${c.name}"`);
+  renderAdmin();
+  showMsg(' Каталог удалён','success');
+}
+
+// === ТОВАРЫ ===
 function openProductModal(id){
   const p = id ? products.find(x=>x.id==id) : {name:'',price:0,free:true,catalogId:catalogs[0]?.id||0,img:'',desc:'',stock:0,age:0,sale:false,salePrice:0,createdAt:Date.now()};
   const opts = catalogs.map(c=>`<option value="${c.id}" ${c.id==p.catalogId?'selected':''}>${c.name}</option>`).join('');
@@ -233,14 +332,14 @@ function openProductModal(id){
       <h4>📝 Основная информация</h4>
       <div class="form-row single">
         <div class="form-group">
-          <label> Название товара *</label>
+          <label>📌 Название товара *</label>
           <input id="f_name" placeholder="Например: Азбука-раскраска" value="${p.name}" oninput="updateProductPreview()">
-          <div class="form-hint">💡 Короткое и понятное название товара</div>
+          <div class="form-hint"> Короткое и понятное название товара</div>
         </div>
       </div>
       <div class="form-row single">
         <div class="form-group">
-          <label>📋 Описание товара</label>
+          <label> Описание товара</label>
           <textarea id="f_desc" placeholder="Опишите товар: для чего он, что включает, особенности..." style="min-height:80px;" oninput="updateProductPreview()">${p.desc||''}</textarea>
           <div class="form-hint">💡 Краткое описание, которое увидят покупатели</div>
         </div>
@@ -284,7 +383,7 @@ function openProductModal(id){
     </div>
 
     <div class="product-form-section">
-      <h4>📚 Категория товара</h4>
+      <h4> Категория товара</h4>
       <div class="form-row single">
         <div class="form-group">
           <label>🗂 Выберите каталог *</label>
@@ -322,7 +421,7 @@ function openProductModal(id){
     <div class="form-actions">
       <button class="btn" onclick="closeForm()">❌ Отмена</button>
       <button class="btn btn-preview" onclick="updateProductPreview()">👁 Обновить предпросмотр</button>
-      <button class="btn btn-purple" onclick="saveProduct(${id||0})"> Сохранить товар</button>
+      <button class="btn btn-purple" onclick="saveProduct(${id||0})">💾 Сохранить товар</button>
     </div>
   `;
   
@@ -362,7 +461,7 @@ function updateImagePreview(){
   const img = document.getElementById('f_img').value.trim();
   const box = document.getElementById('imagePreviewBox');
   if(!img){
-    box.innerHTML = '<div class="placeholder-text"> Здесь появится предпросмотр картинки</div>';
+    box.innerHTML = '<div class="placeholder-text">🖼 Здесь появится предпросмотр картинки</div>';
     return;
   }
   box.innerHTML = `<img src="${img}" alt="Предпросмотр" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-text\\'>❌ Не удалось загрузить картинку. Проверьте ссылку.</div>'">`;
@@ -394,7 +493,7 @@ function updateProductPreview(){
   }
   
   const badges = [];
-  if(free) badges.push('<span class="badge badge-free">🎁 Бесплатно</span>');
+  if(free) badges.push('<span class="badge badge-free"> Бесплатно</span>');
   else badges.push('<span class="badge badge-paid">💰 Платно</span>');
   if(sale) badges.push('<span class="badge badge-sale">🔥 Акция</span>');
   if(cat) badges.push(`<span class="badge badge-cat">📚 ${cat.name}</span>`);
@@ -407,7 +506,7 @@ function updateProductPreview(){
       <p class="desc">${desc}</p>
       ${priceHtml}
       <p style="font-size:11px;color:${stock>0?'#4CAF50':'#E53935'};font-weight:700;">${stock>0?'✅ В наличии: '+stock+' шт.':'❌ Нет в наличии'}</p>
-      ${age>0?`<p style="font-size:11px;color:#666;">👶 Возраст: ${age}+ лет</p>`:''}
+      ${age>0?`<p style="font-size:11px;color:#666;"> Возраст: ${age}+ лет</p>`:''}
     </div>
   `;
 }
@@ -425,7 +524,7 @@ function saveProduct(id){
   const desc = document.getElementById('f_desc').value.trim();
   
   if(!name) return alert('⚠️ Введите название товара');
-  if(!free && (!price || price<0)) return alert('️ Введите корректную цену');
+  if(!free && (!price || price<0)) return alert('⚠️ Введите корректную цену');
   
   if(id){
     const p = products.find(x=>x.id==id);
@@ -442,9 +541,129 @@ function saveProduct(id){
   renderAdmin();
 }
 
-function delProduct(id){if(!confirm('Удалить товар?'))return;products=products.filter(p=>p.id!=id);saveAll();addLog(`Товар удалён #${id}`);renderAdmin();showMsg(' Удалено','success');}
+function delProduct(id){if(!confirm('Удалить товар?'))return;products=products.filter(p=>p.id!=id);saveAll();addLog(`Товар удалён #${id}`);renderAdmin();showMsg('🗑 Удалено','success');}
 
-// === ФОН ===
+// === СЕТКА ИКОНОК ДЛЯ ВКЛАДОК ===
+function renderIconSelector(currentIcon){
+  selectedIcon = currentIcon || '📌';
+  let html = '<div class="icon-selector">';
+  html += '<div class="icon-selector-label">🎨 Выберите иконку для вкладки:</div>';
+  
+  for(const category in ICON_SETS){
+    html += `<div class="icon-category">`;
+    html += `<div class="icon-category-title">${category}</div>`;
+    html += `<div class="icon-grid">`;
+    ICON_SETS[category].forEach(icon=>{
+      const selected = icon === selectedIcon ? 'selected' : '';
+      html += `<div class="icon-option ${selected}" onclick="selectIcon('${icon}', this)" title="${icon}">${icon}</div>`;
+    });
+    html += `</div></div>`;
+  }
+  
+  html += '<div class="icon-custom-input">';
+  html += '<label style="font-size:12px;font-weight:700;color:#5D4037;">✏️ Своя иконка:</label>';
+  html += '<input type="text" id="customIconInput" placeholder="Вставьте эмодзи" value="'+selectedIcon+'" maxlength="4" oninput="updateIconFromInput(this.value)">';
+  html += '</div>';
+  
+  html += '<div class="icon-preview-box">';
+  html += '<div class="preview-icon" id="iconPreview">'+selectedIcon+'</div>';
+  html += '<div class="preview-text">Предпросмотр иконки</div>';
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function selectIcon(icon, element){
+  selectedIcon = icon;
+  document.querySelectorAll('.icon-option').forEach(el=>el.classList.remove('selected'));
+  element.classList.add('selected');
+  document.getElementById('customIconInput').value = icon;
+  document.getElementById('iconPreview').textContent = icon;
+}
+
+function updateIconFromInput(value){
+  if(value.trim()){
+    selectedIcon = value.trim();
+    document.querySelectorAll('.icon-option').forEach(el=>el.classList.remove('selected'));
+    document.getElementById('iconPreview').textContent = selectedIcon;
+  }
+}
+
+function openCustomTabModal(id){
+  const tab = id ? customTabs.find(t=>t.id==id) : {name:'',icon:'📌',content:''};
+  const iconSelectorHtml = renderIconSelector(tab.icon || '📌');
+  
+  document.getElementById('formContent').innerHTML = `
+    <h2>${id?'✏️ Редактировать вкладку':'➕ Создать вкладку'}</h2>
+    <p style="font-size:12px;color:#666;margin-bottom:10px;">Создайте свою вкладку с произвольным содержимым (поддерживается HTML).</p>
+    
+    ${iconSelectorHtml}
+    
+    <div class="form-group" style="margin-top:15px;">
+      <label>📝 Название вкладки *</label>
+      <input id="ct_name" placeholder="Например: Мои заметки" value="${tab.name||''}">
+    </div>
+    <div class="form-group">
+      <label>📄 Содержимое (HTML) *</label>
+      <textarea id="ct_content" placeholder="<h1>Заголовок</h1><p>Текст...</p><ul><li>Пункт 1</li></ul>" style="min-height:200px;font-family:monospace;">${tab.content||''}</textarea>
+      <p style="font-size:11px;color:#888;margin-top:5px;">💡 Подсказка: можно использовать HTML-теги: &lt;h1&gt;, &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;img&gt;, &lt;a&gt;, &lt;b&gt;, &lt;i&gt; и др.</p>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveCustomTab(${id||0})">💾 Сохранить</button>
+    </div>
+  `;
+  openForm();
+}
+
+function saveCustomTab(id){
+  const name = document.getElementById('ct_name').value.trim();
+  const content = document.getElementById('ct_content').value.trim();
+  const icon = selectedIcon || '📌';
+  
+  if(!name) return alert('⚠️ Введите название вкладки');
+  if(!content) return alert('⚠️ Введите содержимое вкладки');
+  
+  if(id){
+    const tab = customTabs.find(t=>t.id==id);
+    if(tab){Object.assign(tab,{icon,name,content});addLog(`Вкладка изменена: "${name}"`);}
+    showMsg('✅ Вкладка обновлена!','success');
+  } else {
+    const newTab = {id:Date.now(), icon, name, content};
+    customTabs.push(newTab);
+    addLog(`Вкладка создана: "${name}"`);
+    showMsg('✅ Вкладка создана!','success');
+  }
+  
+  saveCustomTabs();
+  closeForm();
+  renderCustomTabsInMenu();
+  renderCustomTabSections();
+  renderCustomTabsList();
+}
+
+function deleteCustomTab(id){
+  const tab = customTabs.find(t=>t.id==id);
+  if(!tab) return;
+  if(!confirm(`Удалить вкладку "${tab.name}"?`)) return;
+  customTabs = customTabs.filter(t=>t.id!=id);
+  hiddenTabs = hiddenTabs.filter(t=>t!=id);
+  saveCustomTabs();
+  saveHiddenTabs();
+  addLog(`Вкладка удалена: "${tab.name}"`);
+  renderCustomTabsInMenu();
+  renderCustomTabSections();
+  renderCustomTabsList();
+  renderHiddenTabsList();
+  showMsg('🗑 Вкладка удалена','success');
+  const activeSection = document.querySelector('.admin-section.active');
+  if(activeSection && activeSection.id == id){
+    showTab('aDashboard', document.querySelector('[data-tab="aDashboard"]'));
+  }
+}
+
+// === ОСТАЛЬНЫЕ ФУНКЦИИ ===
 function handleFileUpload(event){const file=event.target.files[0];if(!file)return;if(!file.type.startsWith('image/')){showMsg('❌ Не изображение!','error');return;}if(file.size>2*1024*1024){showMsg('❌ Файл больше 2 МБ','error');return;}const reader=new FileReader();reader.onload=function(e){tempBgData=e.target.result;document.getElementById('bgPreviewImg').src=tempBgData;document.getElementById('bgPreviewContainer').style.display='block';document.getElementById('applyBgBtn').style.display='inline-block';document.getElementById('cancelBgBtn').style.display='inline-block';showMsg('✅ Загружен!','success');};reader.readAsDataURL(file);}
 function applyUploadedBg(){if(!tempBgData){showMsg('Выберите файл','error');return;}settings.backgroundImage=tempBgData;settings.backgroundType='image';saveAll();addLog('Фон установлен');showMsg('✅ Фон установлен!','success');cancelUpload();renderCurrentBg();}
 function cancelUpload(){tempBgData=null;document.getElementById('bgFileInput').value='';document.getElementById('bgPreviewContainer').style.display='none';document.getElementById('applyBgBtn').style.display='none';document.getElementById('cancelBgBtn').style.display='none';}
@@ -463,18 +682,19 @@ function renderAdmin(){
   document.getElementById('statRevenue').textContent=revenue+'₽';
   document.getElementById('statUsers').textContent=users.length;
   document.getElementById('statProducts').textContent=products.length;
+  document.getElementById('statCatalogs').textContent=catalogs.length;
   
   const catDiv=document.getElementById('adminCatalogs');
-  if(catalogs.length===0){catDiv.innerHTML='<div class="empty-state">Нет каталогов</div>';}
+  if(catalogs.length===0){catDiv.innerHTML='<div class="empty-state">Нет каталогов. Нажмите "Добавить каталог"</div>';}
   else{catDiv.innerHTML=catalogs.map(c=>{const count=products.filter(p=>p.catalogId==c.id).length;return `<div class="item-row"><div class="item-info"><h4>📚 ${c.name}</h4><p>${c.desc}</p><p>Возраст: ${c.ageMin||0}-${c.ageMax||10} лет | Товаров: <b>${count}</b></p></div><div class="item-actions"><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delCatalog(${c.id})">🗑 Удалить</button></div></div>`;}).join('');}
   
   const prodDiv=document.getElementById('adminProducts');
   if(products.length===0){prodDiv.innerHTML='<div class="empty-state">Нет товаров</div>';}
-  else{prodDiv.innerHTML=products.map(p=>{const cat=catalogs.find(c=>c.id==p.catalogId);return `<div class="item-row"><div class="item-info"><h4>${p.name} ${p.free?'🎁':'💰'}</h4><p>${p.desc||''} | Цена: ${p.free?'Бесплатно':p.price+'₽'} | Остаток: ${p.stock||0}</p><p style="font-size:11px;">Каталог: <b>${cat?cat.name:'—'}</b></p></div><div class="item-actions"><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑 Удалить</button></div></div>`;}).join('');}
+  else{prodDiv.innerHTML=products.map(p=>{const cat=catalogs.find(c=>c.id==p.catalogId);return `<div class="item-row"><div class="item-info"><h4>${p.name} ${p.free?'':'💰'}</h4><p>${p.desc||''} | Цена: ${p.free?'Бесплатно':p.price+'₽'} | Остаток: ${p.stock||0}</p><p style="font-size:11px;">Каталог: <b>${cat?cat.name:'—'}</b></p></div><div class="item-actions"><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑 Удалить</button></div></div>`;}).join('');}
   
   const vidDiv=document.getElementById('adminVideos');
   if(videos.length===0){vidDiv.innerHTML='<div class="empty-state">Нет видео</div>';}
-  else{vidDiv.innerHTML=videos.map(v=>`<div class="item-row"><div class="item-info"><h4>🎬 ${v.name}</h4><p>${v.desc||''}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{vidDiv.innerHTML=videos.map(v=>`<div class="item-row"><div class="item-info"><h4> ${v.name}</h4><p>${v.desc||''}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const gameDiv=document.getElementById('adminGames');
   if(games.length===0){gameDiv.innerHTML='<div class="empty-state">Нет пособий</div>';}
@@ -486,19 +706,19 @@ function renderAdmin(){
   
   const blogDiv=document.getElementById('adminBlog');
   if(blog.length===0){blogDiv.innerHTML='<div class="empty-state">Нет статей</div>';}
-  else{blogDiv.innerHTML=blog.map(b=>`<div class="item-row"><div class="item-info"><h4> ${b.title}</h4><p>${b.date}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{blogDiv.innerHTML=blog.map(b=>`<div class="item-row"><div class="item-info"><h4>📝 ${b.title}</h4><p>${b.date}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const faqDiv=document.getElementById('adminFaq');
   if(faq.length===0){faqDiv.innerHTML='<div class="empty-state">Нет вопросов FAQ</div>';}
-  else{faqDiv.innerHTML=faq.map((f,i)=>`<div class="item-row"><div class="item-info"><h4>❓ ${f.q}</h4><p>${f.a}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openFaqModal(${i})">✏️ Изменить</button><button class="btn btn-del" onclick="delFaq(${i})">🗑 Удалить</button></div></div>`).join('');}
+  else{faqDiv.innerHTML=faq.map((f,i)=>`<div class="item-row"><div class="item-info"><h4>❓ ${f.q}</h4><p>${f.a}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openFaqModal(${i})">️ Изменить</button><button class="btn btn-del" onclick="delFaq(${i})"> Удалить</button></div></div>`).join('');}
   
   const revDiv=document.getElementById('adminReviews');
   if(reviews.length===0){revDiv.innerHTML='<div class="empty-state">Нет отзывов</div>';}
-  else{revDiv.innerHTML=reviews.map(r=>`<div class="item-row"><div class="item-info"><h4>⭐ ${r.author}</h4><p>${r.text}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openReviewModal(${r.id})">️ Изменить</button><button class="btn btn-del" onclick="delReview(${r.id})"> Удалить</button></div></div>`).join('');}
+  else{revDiv.innerHTML=reviews.map(r=>`<div class="item-row"><div class="item-info"><h4>⭐ ${r.author}</h4><p>${r.text}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openReviewModal(${r.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delReview(${r.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const ordDiv=document.getElementById('adminOrders');
   if(orders.length===0){ordDiv.innerHTML='<div class="empty-state">Нет заказов</div>';}
-  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4>📦 Заказ #${o.id}</h4><p>👤 ${o.userName} (${o.userEmail})</p><p> ${o.total}₽ | 📅 ${o.date}</p><p>Статус: <b>${o.status}</b></p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4>📦 Заказ #${o.id}</h4><p>👤 ${o.userName} (${o.userEmail})</p><p>💰 ${o.total}₽ | 📅 ${o.date}</p><p>Статус: <b>${o.status}</b></p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const usrDiv=document.getElementById('adminUsers');
   if(users.length===0){usrDiv.innerHTML='<div class="empty-state">Нет покупателей</div>';}
@@ -506,7 +726,7 @@ function renderAdmin(){
   
   const contDiv=document.getElementById('adminContacts');
   if(contacts.length===0){contDiv.innerHTML='<div class="empty-state">Нет сообщений</div>';}
-  else{contDiv.innerHTML=contacts.map(c=>`<div class="item-row"><div class="item-info"><h4>✉️ ${c.name}</h4><p>📧 ${c.email}</p><p>${c.msg}</p><p style="font-size:10px;color:#888;">${c.date}</p></div><div class="item-actions"><button class="btn btn-view" onclick="viewContact(${c.id})">👁 Просмотр</button><button class="btn btn-del" onclick="delContact(${c.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{contDiv.innerHTML=contacts.map(c=>`<div class="item-row"><div class="item-info"><h4>✉️ ${c.name}</h4><p>📧 ${c.email}</p><p>${c.msg}</p><p style="font-size:10px;color:#888;">${c.date}</p></div><div class="item-actions"><button class="btn btn-view" onclick="viewContact(${c.id})"> Просмотр</button><button class="btn btn-del" onclick="delContact(${c.id})"> Удалить</button></div></div>`).join('');}
   
   const sugDiv=document.getElementById('adminSuggestionsList');
   if(suggestions.length===0){sugDiv.innerHTML='<div class="empty-state">Нет предложений</div>';}
@@ -518,12 +738,12 @@ function renderAdmin(){
   
   const evtDiv=document.getElementById('adminEvents');
   if(events.length===0){evtDiv.innerHTML='<div class="empty-state">Нет мероприятий</div>';}
-  else{evtDiv.innerHTML=events.map(e=>`<div class="item-row"><div class="item-info"><h4>📅 ${e.title}</h4><p>${e.date} ${e.time}</p><p>${e.desc}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openEventModal(${e.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delEvent(${e.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{evtDiv.innerHTML=events.map(e=>`<div class="item-row"><div class="item-info"><h4> ${e.title}</h4><p>${e.date} ${e.time}</p><p>${e.desc}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openEventModal(${e.id})">✏️ Изменить</button><button class="btn btn-del" onclick="delEvent(${e.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const retDiv=document.getElementById('adminReturns');
   const returns=DB.get('returns',[]);
   if(returns.length===0){retDiv.innerHTML='<div class="empty-state">Нет заявок</div>';}
-  else{retDiv.innerHTML=returns.map(r=>`<div class="item-row"><div class="item-info"><h4> Заявка #${r.id}</h4><p>Заказ: ${r.orderId}</p><p>Клиент: ${r.name} (${r.email})</p><p>Причина: ${r.reason}</p><p>Дата: ${r.date} | Статус: <b>${r.status}</b></p></div><div class="item-actions"><select onchange="changeReturnStatus(${r.id},this.value)" style="padding:5px;border-radius:6px;margin-right:5px;"><option value="На рассмотрении" ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option><option value="Одобрено" ${r.status==='Одобрено'?'selected':''}>✅ Одобрено</option><option value="Отклонено" ${r.status==='Отклонено'?'selected':''}>❌ Отклонено</option></select><button class="btn btn-del" onclick="delReturn(${r.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{retDiv.innerHTML=returns.map(r=>`<div class="item-row"><div class="item-info"><h4>🔄 Заявка #${r.id}</h4><p>Заказ: ${r.orderId}</p><p>Клиент: ${r.name} (${r.email})</p><p>Причина: ${r.reason}</p><p>Дата: ${r.date} | Статус: <b>${r.status}</b></p></div><div class="item-actions"><select onchange="changeReturnStatus(${r.id},this.value)" style="padding:5px;border-radius:6px;margin-right:5px;"><option value="На рассмотрении" ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option><option value="Одобрено" ${r.status==='Одобрено'?'selected':''}>✅ Одобрено</option><option value="Отклонено" ${r.status==='Отклонено'?'selected':''}>❌ Отклонено</option></select><button class="btn btn-del" onclick="delReturn(${r.id})">🗑 Удалить</button></div></div>`).join('');}
   
   const subDiv=document.getElementById('adminSubscribers');
   const subs=DB.get('subscribers',[]);
@@ -533,7 +753,7 @@ function renderAdmin(){
   const chatDiv=document.getElementById('adminChat');
   const chat=DB.get('chatMessages',[]);
   if(chat.length===0){chatDiv.innerHTML='<div class="empty-state">Чат пуст</div>';}
-  else{chatDiv.innerHTML=chat.map(m=>`<div class="item-row" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};"><div class="item-info"><h4>${m.from==='user'?'👤 Покупатель':'🤖 Бот'}</h4><p>${m.text}</p><p style="font-size:10px;color:#888;">${m.time||''}</p></div></div>`).join('');}
+  else{chatDiv.innerHTML=chat.map(m=>`<div class="item-row" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};"><div class="item-info"><h4>${m.from==='user'?'👤 Покупатель':' Бот'}</h4><p>${m.text}</p><p style="font-size:10px;color:#888;">${m.time||''}</p></div></div>`).join('');}
   
   const logDiv=document.getElementById('adminLog');
   const log=DB.get('log',[]);
@@ -558,57 +778,53 @@ function renderAdmin(){
   renderCustomTabsList();renderHiddenTabsList();
 }
 
-function openCatalogModal(id){const c=id?catalogs.find(x=>x.id==id):{name:'',desc:'',ageMin:0,ageMax:10};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️ Редактировать':'➕ Новый'} каталог</h2><div class="form-group"><label>📚 Название</label><input id="f_name" placeholder="Например: Развивающие игры" value="${c.name}"></div><div class="form-group"><label>📝 Описание</label><textarea id="f_desc" placeholder="Краткое описание">${c.desc}</textarea></div><div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label>👶 Возраст от</label><input id="f_ageMin" type="number" placeholder="0" value="${c.ageMin||0}"></div><div class="form-group"><label>👶 Возраст до</label><input id="f_ageMax" type="number" placeholder="12" value="${c.ageMax||10}"></div></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveCatalog(${id||0})">💾 Сохранить</button></div>`;openForm();}
-function saveCatalog(id){const name=document.getElementById('f_name').value.trim();const desc=document.getElementById('f_desc').value.trim();const ageMin=+document.getElementById('f_ageMin').value;const ageMax=+document.getElementById('f_ageMax').value;if(!name)return alert('⚠️ Введите название');if(id){const c=catalogs.find(x=>x.id==id);Object.assign(c,{name,desc,ageMin,ageMax});addLog(`Каталог изменён: "${name}"`);}else{catalogs.push({id:Date.now(),name,desc,ageMin,ageMax});addLog(`Каталог добавлен: "${name}"`);}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
-function delCatalog(id){const c=catalogs.find(x=>x.id==id);if(!c)return;if(!confirm(`Удалить каталог "${c.name}"?`))return;catalogs=catalogs.filter(x=>x.id!=id);saveAll();addLog(`Каталог удалён: "${c.name}"`);renderAdmin();showMsg('🗑 Удалено','success');}
-
 function openVideoModal(id){const v=id?videos.find(x=>x.id==id):{name:'',url:'',desc:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':''} Видео</h2><div class="form-group"><label>🎬 Название</label><input id="f_name" placeholder="Название видео" value="${v.name}"></div><div class="form-group"><label>🔗 URL видео</label><input id="f_url" placeholder="https://..." value="${v.url}"></div><div class="form-group"><label>📝 Описание</label><textarea id="f_desc" placeholder="Описание">${v.desc||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveVideo(${id||0})">Сохранить</button></div>`;openForm();}
-function saveVideo(id){const name=document.getElementById('f_name').value.trim();const url=document.getElementById('f_url').value.trim();const desc=document.getElementById('f_desc').value.trim();if(!name||!url)return alert('⚠️ Заполните название и URL');if(id){const v=videos.find(x=>x.id==id);Object.assign(v,{name,url,desc});}else{videos.push({id:Date.now(),name,url,desc});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function saveVideo(id){const name=document.getElementById('f_name').value.trim();const url=document.getElementById('f_url').value.trim();const desc=document.getElementById('f_desc').value.trim();if(!name||!url)return alert('️ Заполните название и URL');if(id){const v=videos.find(x=>x.id==id);Object.assign(v,{name,url,desc});}else{videos.push({id:Date.now(),name,url,desc});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delVideo(id){if(!confirm('Удалить видео?'))return;videos=videos.filter(v=>v.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
-function openGameModal(id){const g=id?games.find(x=>x.id==id):{name:'',desc:'',img:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Пособие</h2><div class="form-group"><label> Название</label><input id="f_name" placeholder="Название пособия" value="${g.name}"></div><div class="form-group"><label> URL картинки</label><input id="f_img" placeholder="https://..." value="${g.img||''}"></div><div class="form-group"><label>📝 Описание</label><textarea id="f_desc" placeholder="Описание">${g.desc||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveGame(${id||0})">Сохранить</button></div>`;openForm();}
+function openGameModal(id){const g=id?games.find(x=>x.id==id):{name:'',desc:'',img:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':''} Пособие</h2><div class="form-group"><label>🎮 Название</label><input id="f_name" placeholder="Название пособия" value="${g.name}"></div><div class="form-group"><label>🔗 URL картинки</label><input id="f_img" placeholder="https://..." value="${g.img||''}"></div><div class="form-group"><label>📝 Описание</label><textarea id="f_desc" placeholder="Описание">${g.desc||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveGame(${id||0})">Сохранить</button></div>`;openForm();}
 function saveGame(id){const name=document.getElementById('f_name').value.trim();const img=document.getElementById('f_img').value.trim();const desc=document.getElementById('f_desc').value.trim();if(!name)return alert('⚠️ Введите название');if(id){const g=games.find(x=>x.id==id);Object.assign(g,{name,img,desc});}else{games.push({id:Date.now(),name,img,desc});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
-function delGame(id){if(!confirm('Удалить пособие?'))return;games=games.filter(g=>g.id!=id);saveAll();renderAdmin();showMsg(' Удалено','success');}
+function delGame(id){if(!confirm('Удалить пособие?'))return;games=games.filter(g=>g.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
-function openNewsModal(id){const n=id?news.find(x=>x.id==id):{title:'',text:'',date:new Date().toISOString().slice(0,10)};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Новость</h2><div class="form-group"><label> Заголовок</label><input id="f_title" placeholder="Заголовок новости" value="${n.title}"></div><div class="form-group"><label>📅 Дата</label><input id="f_date" type="date" value="${n.date}"></div><div class="form-group"><label> Текст новости</label><textarea id="f_text" placeholder="Текст новости..." style="min-height:100px;">${n.text||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveNews(${id||0})">Сохранить</button></div>`;openForm();}
-function saveNews(id){const title=document.getElementById('f_title').value.trim();const date=document.getElementById('f_date').value;const text=document.getElementById('f_text').value.trim();if(!title)return alert('⚠️ Введите заголовок');if(id){const n=news.find(x=>x.id==id);Object.assign(n,{title,date,text});}else{news.push({id:Date.now(),title,date,text});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
-function delNews(id){if(!confirm('Удалить новость?'))return;news=news.filter(n=>n.id!=id);saveAll();renderAdmin();showMsg(' Удалено','success');}
+function openNewsModal(id){const n=id?news.find(x=>x.id==id):{title:'',text:'',date:new Date().toISOString().slice(0,10)};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Новость</h2><div class="form-group"><label>📰 Заголовок</label><input id="f_title" placeholder="Заголовок новости" value="${n.title}"></div><div class="form-group"><label>📅 Дата</label><input id="f_date" type="date" value="${n.date}"></div><div class="form-group"><label>📝 Текст новости</label><textarea id="f_text" placeholder="Текст новости..." style="min-height:100px;">${n.text||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveNews(${id||0})">Сохранить</button></div>`;openForm();}
+function saveNews(id){const title=document.getElementById('f_title').value.trim();const date=document.getElementById('f_date').value;const text=document.getElementById('f_text').value.trim();if(!title)return alert('️ Введите заголовок');if(id){const n=news.find(x=>x.id==id);Object.assign(n,{title,date,text});}else{news.push({id:Date.now(),title,date,text});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function delNews(id){if(!confirm('Удалить новость?'))return;news=news.filter(n=>n.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
-function openBlogModal(id){const b=id?blog.find(x=>x.id==id):{title:'',text:'',date:new Date().toISOString().slice(0,10)};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Статья</h2><div class="form-group"><label> Заголовок</label><input id="f_title" placeholder="Заголовок статьи" value="${b.title}"></div><div class="form-group"><label>📅 Дата</label><input id="f_date" type="date" value="${b.date}"></div><div class="form-group"><label> Текст статьи</label><textarea id="f_text" placeholder="Текст статьи..." style="min-height:120px;">${b.text||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveBlog(${id||0})">Сохранить</button></div>`;openForm();}
+function openBlogModal(id){const b=id?blog.find(x=>x.id==id):{title:'',text:'',date:new Date().toISOString().slice(0,10)};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Статья</h2><div class="form-group"><label>📝 Заголовок</label><input id="f_title" placeholder="Заголовок статьи" value="${b.title}"></div><div class="form-group"><label>📅 Дата</label><input id="f_date" type="date" value="${b.date}"></div><div class="form-group"><label> Текст статьи</label><textarea id="f_text" placeholder="Текст статьи..." style="min-height:120px;">${b.text||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveBlog(${id||0})">Сохранить</button></div>`;openForm();}
 function saveBlog(id){const title=document.getElementById('f_title').value.trim();const date=document.getElementById('f_date').value;const text=document.getElementById('f_text').value.trim();if(!title)return alert('⚠️ Введите заголовок');if(id){const b=blog.find(x=>x.id==id);Object.assign(b,{title,date,text});}else{blog.push({id:Date.now(),title,date,text});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delBlog(id){if(!confirm('Удалить статью?'))return;blog=blog.filter(b=>b.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
-function openFaqModal(idx){const f=idx!==undefined?faq[idx]:{q:'',a:''};document.getElementById('formContent').innerHTML=`<h2>${idx!==undefined?'✏️ Редактировать':' Новый'} вопрос FAQ</h2><div class="form-group"><label>❓ Вопрос</label><input id="f_q" placeholder="Например: Как сделать заказ?" value="${f.q}"></div><div class="form-group"><label>💬 Ответ</label><textarea id="f_a" placeholder="Развёрнутый ответ на вопрос..." style="min-height:80px;">${f.a}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveFaq(${idx!==undefined?idx:-1})">💾 Сохранить</button></div>`;openForm();}
+function openFaqModal(idx){const f=idx!==undefined?faq[idx]:{q:'',a:''};document.getElementById('formContent').innerHTML=`<h2>${idx!==undefined?'✏️ Редактировать':'➕ Новый'} вопрос FAQ</h2><div class="form-group"><label>❓ Вопрос</label><input id="f_q" placeholder="Например: Как сделать заказ?" value="${f.q}"></div><div class="form-group"><label> Ответ</label><textarea id="f_a" placeholder="Развёрнутый ответ на вопрос..." style="min-height:80px;">${f.a}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveFaq(${idx!==undefined?idx:-1})">💾 Сохранить</button></div>`;openForm();}
 function saveFaq(idx){const q=document.getElementById('f_q').value.trim();const a=document.getElementById('f_a').value.trim();if(!q||!a)return alert('⚠️ Заполните вопрос и ответ');if(idx>=0){faq[idx]={id:faq[idx].id||Date.now(),q,a};}else{faq.push({id:Date.now(),q,a});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delFaq(idx){if(idx===undefined||idx===null)return;const f=faq[idx];if(!f)return;if(!confirm(`Удалить вопрос "${f.q}"?`))return;faq.splice(idx,1);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
 function openReviewModal(id){const r=reviews.find(x=>x.id==id);if(!r)return;document.getElementById('formContent').innerHTML=`<h2>✏️ Редактировать отзыв</h2><div class="form-group"><label>👤 Автор</label><input id="f_author" placeholder="Имя автора" value="${r.author}"></div><div class="form-group"><label>💬 Текст отзыва</label><textarea id="f_text" placeholder="Текст отзыва" style="min-height:80px;">${r.text}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveReview(${id})">Сохранить</button></div>`;openForm();}
-function saveReview(id){const author=document.getElementById('f_author').value.trim();const text=document.getElementById('f_text').value.trim();if(!author||!text)return alert('️ Заполните поля');const r=reviews.find(x=>x.id==id);if(r){Object.assign(r,{author,text});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function saveReview(id){const author=document.getElementById('f_author').value.trim();const text=document.getElementById('f_text').value.trim();if(!author||!text)return alert('⚠️ Заполните поля');const r=reviews.find(x=>x.id==id);if(r){Object.assign(r,{author,text});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delReview(id){if(!confirm('Удалить отзыв?'))return;reviews=reviews.filter(r=>r.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 
 function delOrder(id){if(!confirm('Удалить заказ?'))return;orders=orders.filter(o=>o.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
-function openUserModal(id){const u=users.find(x=>x.id==id);if(!u)return;document.getElementById('formContent').innerHTML=`<h2>✏️ Редактировать покупателя</h2><div class="form-group"><label>👤 Имя</label><input id="f_name" placeholder="Имя" value="${u.name}"></div><div class="form-group"><label>📧 Email</label><input id="f_email" placeholder="Email" value="${u.email}"></div><div class="form-group"><label>📱 Телефон</label><input id="f_phone" placeholder="Телефон" value="${u.phone||''}"></div><div class="form-group"><label>🏙 Город</label><input id="f_city" placeholder="Город" value="${u.city||''}"></div><div class="form-group"><label>🎁 Баллы</label><input id="f_points" type="number" placeholder="0" value="${u.points||0}"></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveUser(${id})">Сохранить</button></div>`;openForm();}
-function saveUser(id){const name=document.getElementById('f_name').value.trim();const email=document.getElementById('f_email').value.trim();const phone=document.getElementById('f_phone').value.trim();const city=document.getElementById('f_city').value.trim();const points=+document.getElementById('f_points').value;if(!name||!email)return alert('⚠️ Заполните имя и email');const u=users.find(x=>x.id==id);if(u){Object.assign(u,{name,email,phone,city,points});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function openUserModal(id){const u=users.find(x=>x.id==id);if(!u)return;document.getElementById('formContent').innerHTML=`<h2>✏️ Редактировать покупателя</h2><div class="form-group"><label>👤 Имя</label><input id="f_name" placeholder="Имя" value="${u.name}"></div><div class="form-group"><label>📧 Email</label><input id="f_email" placeholder="Email" value="${u.email}"></div><div class="form-group"><label> Телефон</label><input id="f_phone" placeholder="Телефон" value="${u.phone||''}"></div><div class="form-group"><label>🏙 Город</label><input id="f_city" placeholder="Город" value="${u.city||''}"></div><div class="form-group"><label>🎁 Баллы</label><input id="f_points" type="number" placeholder="0" value="${u.points||0}"></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveUser(${id})">Сохранить</button></div>`;openForm();}
+function saveUser(id){const name=document.getElementById('f_name').value.trim();const email=document.getElementById('f_email').value.trim();const phone=document.getElementById('f_phone').value.trim();const city=document.getElementById('f_city').value.trim();const points=+document.getElementById('f_points').value;if(!name||!email)return alert('️ Заполните имя и email');const u=users.find(x=>x.id==id);if(u){Object.assign(u,{name,email,phone,city,points});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delUser(id){if(!confirm('Удалить покупателя?'))return;users=users.filter(u=>u.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
-function viewContact(id){const c=contacts.find(x=>x.id==id);if(!c)return;document.getElementById('formContent').innerHTML=`<h2>✉️ Сообщение</h2><div style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Отправитель</h4><p><b>${c.name}</b> (${c.email})</p><h4 style="margin-top:12px;">Сообщение</h4><p>${c.msg}</p><h4 style="margin-top:12px;">📅 Дата</h4><p>${c.date}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${c.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;openForm();}
+function viewContact(id){const c=contacts.find(x=>x.id==id);if(!c)return;document.getElementById('formContent').innerHTML=`<h2>️ Сообщение</h2><div style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Отправитель</h4><p><b>${c.name}</b> (${c.email})</p><h4 style="margin-top:12px;">Сообщение</h4><p>${c.msg}</p><h4 style="margin-top:12px;">📅 Дата</h4><p>${c.date}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${c.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;openForm();}
 function delContact(id){if(!confirm('Удалить сообщение?'))return;contacts=contacts.filter(c=>c.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 function viewSuggestion(id){const s=suggestions.find(x=>x.id==id);if(!s)return;document.getElementById('formContent').innerHTML=`<h2>💡 Предложение</h2><div style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Автор</h4><p><b>${s.name}</b> (${s.email})</p><p>📅 ${s.date}</p><h4 style="margin-top:12px;">Тип</h4><p>${s.type}</p><h4 style="margin-top:12px;">📄 Заголовок</h4><p><b>${s.title}</b></p><h4 style="margin-top:12px;"> Описание</h4><p>${s.text}</p><h4 style="margin-top:12px;">📊 Статус</h4><p><b>${s.status}</b></p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${s.email}" class="btn btn-purple" style="text-decoration:none;"> Ответить</a></div>`;openForm();}
 function changeSuggestionStatus(id,status){const s=suggestions.find(x=>x.id==id);if(s){s.status=status;saveAll();renderAdmin();showMsg('✅ Статус изменён','success');}}
 function deleteSuggestion(id){if(!confirm('Удалить предложение?'))return;suggestions=suggestions.filter(s=>s.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 function openBannerModal(id){const b=id?banners.find(x=>x.id==id):{img:'',link:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Баннер</h2><div class="form-group"><label>🖼 URL картинки</label><input id="b_img" placeholder="https://..." value="${b.img||''}"></div><div class="form-group"><label>🔗 Ссылка при клике</label><input id="b_link" placeholder="#products" value="${b.link||''}"></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveBanner(${id||0})">Сохранить</button></div>`;openForm();}
-function saveBanner(id){const img=document.getElementById('b_img').value.trim();const link=document.getElementById('b_link').value.trim();if(!img)return alert('️ Введите URL');if(id){const b=banners.find(x=>x.id==id);Object.assign(b,{img,link});}else{banners.push({id:Date.now(),img,link});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function saveBanner(id){const img=document.getElementById('b_img').value.trim();const link=document.getElementById('b_link').value.trim();if(!img)return alert('⚠️ Введите URL');if(id){const b=banners.find(x=>x.id==id);Object.assign(b,{img,link});}else{banners.push({id:Date.now(),img,link});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delBanner(id){if(!confirm('Удалить баннер?'))return;banners=banners.filter(b=>b.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
-function openEventModal(id){const e=id?events.find(x=>x.id==id):{title:'',date:'',time:'',desc:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':''} Мероприятие</h2><div class="form-group"><label>📅 Название</label><input id="e_title" placeholder="Название мероприятия" value="${e.title}"></div><div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label> Дата</label><input id="e_date" type="date" value="${e.date}"></div><div class="form-group"><label> Время</label><input id="e_time" type="time" value="${e.time}"></div></div><div class="form-group"><label>📝 Описание</label><textarea id="e_desc" placeholder="Описание">${e.desc||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveEvent(${id||0})">Сохранить</button></div>`;openForm();}
+function openEventModal(id){const e=id?events.find(x=>x.id==id):{title:'',date:'',time:'',desc:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':''} Мероприятие</h2><div class="form-group"><label>📅 Название</label><input id="e_title" placeholder="Название мероприятия" value="${e.title}"></div><div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label>📅 Дата</label><input id="e_date" type="date" value="${e.date}"></div><div class="form-group"><label>🕐 Время</label><input id="e_time" type="time" value="${e.time}"></div></div><div class="form-group"><label>📝 Описание</label><textarea id="e_desc" placeholder="Описание">${e.desc||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveEvent(${id||0})">Сохранить</button></div>`;openForm();}
 function saveEvent(id){const title=document.getElementById('e_title').value.trim();const date=document.getElementById('e_date').value;const time=document.getElementById('e_time').value;const desc=document.getElementById('e_desc').value.trim();if(!title)return alert('⚠️ Введите название');if(id){const e=events.find(x=>x.id==id);Object.assign(e,{title,date,time,desc});}else{events.push({id:Date.now(),title,date,time,desc});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
 function delEvent(id){if(!confirm('Удалить мероприятие?'))return;events=events.filter(e=>e.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
 function changeReturnStatus(id,status){const returns=DB.get('returns',[]);const r=returns.find(x=>x.id==id);if(r){r.status=status;DB.set('returns',returns);renderAdmin();showMsg('✅ Статус изменён','success');}}
 function delReturn(id){if(!confirm('Удалить заявку?'))return;let returns=DB.get('returns',[]);returns=returns.filter(r=>r.id!=id);DB.set('returns',returns);renderAdmin();showMsg('🗑 Удалено','success');}
-function openPageModal(id){const p=id?pages.find(x=>x.id==id):{title:'',content:'',slug:''};document.getElementById('formContent').innerHTML=`<h2>${id?'️':'➕'} Страница</h2><div class="form-group"><label>📄 Заголовок</label><input id="pg_title" placeholder="Заголовок" value="${p.title}"></div><div class="form-group"><label> URL (slug)</label><input id="pg_slug" placeholder="about" value="${p.slug||''}"></div><div class="form-group"><label>📝 Содержимое (HTML)</label><textarea id="pg_content" placeholder="<h1>Заголовок</h1><p>Текст...</p>" style="min-height:120px;">${p.content||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="savePage(${id||0})">Сохранить</button></div>`;openForm();}
+function openPageModal(id){const p=id?pages.find(x=>x.id==id):{title:'',content:'',slug:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Страница</h2><div class="form-group"><label>📄 Заголовок</label><input id="pg_title" placeholder="Заголовок" value="${p.title}"></div><div class="form-group"><label>🔗 URL (slug)</label><input id="pg_slug" placeholder="about" value="${p.slug||''}"></div><div class="form-group"><label>📝 Содержимое (HTML)</label><textarea id="pg_content" placeholder="<h1>Заголовок</h1><p>Текст...</p>" style="min-height:120px;">${p.content||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="savePage(${id||0})">Сохранить</button></div>`;openForm();}
 function savePage(id){const title=document.getElementById('pg_title').value.trim();const slug=document.getElementById('pg_slug').value.trim();const content=document.getElementById('pg_content').value.trim();if(!title)return alert('⚠️ Введите заголовок');if(id){const p=pages.find(x=>x.id==id);Object.assign(p,{title,slug,content});}else{pages.push({id:Date.now(),title,slug,content});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
-function delPage(id){if(!confirm('Удалить страницу?'))return;pages=pages.filter(p=>p.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delPage(id){if(!confirm('Удалить страницу?'))return;pages=pages.filter(p=>p.id!=id);saveAll();renderAdmin();showMsg(' Удалено','success');}
 function openPromoModal(idx){const p=idx!==undefined?settings.promos[idx]:{code:'',discount:0,type:'percent'};document.getElementById('formContent').innerHTML=`<h2>${idx!==undefined?'✏️':'➕'} Промокод</h2><div class="form-group"><label>🎟 Код промокода</label><input id="p_code" placeholder="Например: OWL20" value="${p.code}"></div><div class="form-group"><label>💰 Размер скидки</label><input id="p_discount" type="number" placeholder="10" value="${p.discount}"></div><div class="form-group"><label>📊 Тип скидки</label><select id="p_type"><option value="percent" ${p.type==='percent'?'selected':''}>Процент (%)</option><option value="fixed" ${p.type==='fixed'?'selected':''}>Фикс. сумма (₽)</option></select></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="savePromo(${idx!==undefined?idx:-1})">Сохранить</button></div>`;openForm();}
-function savePromo(idx){const code=document.getElementById('p_code').value.trim().toUpperCase();const discount=+document.getElementById('p_discount').value;const type=document.getElementById('p_type').value;if(!code||!discount)return alert('⚠️ Заполните поля');if(idx>=0){settings.promos[idx]={code,discount,type};}else{settings.promos.push({code,discount,type});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
-function delPromo(i){if(!confirm('Удалить промокод?'))return;settings.promos.splice(i,1);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function savePromo(idx){const code=document.getElementById('p_code').value.trim().toUpperCase();const discount=+document.getElementById('p_discount').value;const type=document.getElementById('p_type').value;if(!code||!discount)return alert('️ Заполните поля');if(idx>=0){settings.promos[idx]={code,discount,type};}else{settings.promos.push({code,discount,type});}saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');}
+function delPromo(i){if(!confirm('Удалить промокод?'))return;settings.promos.splice(i,1);saveAll();renderAdmin();showMsg(' Удалено','success');}
 function saveRequisites(){settings.requisites={cardNumber:document.getElementById('req_card').value.trim(),cardHolder:document.getElementById('req_holder').value.trim(),bank:document.getElementById('req_bank').value.trim(),sbp:document.getElementById('req_sbp').value.trim()};saveAll();addLog('Реквизиты изменены');showMsg('✅ Сохранено!','success');}
 function saveSale(){settings.sale={active:document.getElementById('sale_active').checked,percent:+document.getElementById('sale_percent').value,endDate:new Date(document.getElementById('sale_end').value).getTime()};saveAll();addLog(`Акция: ${settings.sale.active?'вкл':'выкл'}, ${settings.sale.percent}%`);showMsg('✅ Сохранено!','success');}
 function sendNewsletter(){const subs=DB.get('subscribers',[]);if(subs.length===0)return showMsg('Нет подписчиков');const subject=prompt('Тема:');if(!subject)return;const text=prompt('Текст:');if(!text)return;const newsletters=DB.get('newsletters',[]);newsletters.push({id:Date.now(),subject,text,date:new Date().toLocaleString('ru-RU'),recipients:subs.length});DB.set('newsletters',newsletters);addLog(`Рассылка: "${subject}" (${subs.length})`);showMsg(`📧 Отправлено ${subs.length}!`,'success');}
@@ -619,13 +835,10 @@ function hideTab(tabId){if(!confirm('Скрыть эту вкладку?'))retur
 function showTabAgain(tabId){hiddenTabs=hiddenTabs.filter(t=>t!==tabId);saveHiddenTabs();applyHiddenTabs();addLog(`Вкладка восстановлена: ${tabId}`);showMsg('✅ Вкладка восстановлена!','success');renderAdmin();}
 function restoreAllTabs(){if(!confirm('Восстановить ВСЕ скрытые вкладки?'))return;hiddenTabs=[];saveHiddenTabs();applyHiddenTabs();addLog('Все вкладки восстановлены');showMsg('✅ Все вкладки восстановлены!','success');renderAdmin();}
 function applyHiddenTabs(){document.querySelectorAll('.tab-wrapper').forEach(wrapper=>{const btn=wrapper.querySelector('button');const tabId=btn.getAttribute('data-tab');if(hiddenTabs.includes(tabId)){btn.classList.add('tab-hidden');}else{btn.classList.remove('tab-hidden');}});renderHiddenTabsList();}
-function renderHiddenTabsList(){const list=document.getElementById('hiddenTabsList');if(!list)return;const tabNames={'aDashboard':'📊 Дашборд','aBackground':'🖼 Фон','aCatalogs':'📚 Каталоги','aProducts':'🛍 Товары','aVideos':' Видео','aGames':'🎮 Пособия','aNews':'📰 Новости','aBlog':'📝 Блог','aFaq':' FAQ','aReviews':'⭐ Отзывы','aOrders':'📦 Заказы','aUsers':' Покупатели','aContacts':'✉️ Сообщения','aSuggestions':'💡 Предложения','aBanners':'🖼 Баннеры','aEvents':' Мероприятия','aReturns':'🔄 Возвраты','aSubscribers':'📧 Подписчики','aChat':'💬 Чат','aLog':'📋 Журнал','aSale':'🔥 Акции','aPages':'📄 Страницы','aRequisites':'💳 Реквизиты','aPromos':'🎟 Промокоды'};if(hiddenTabs.length===0){list.innerHTML='<p style="color:#4CAF50;font-weight:700;">✅ Все вкладки видимы</p>';return;}list.innerHTML='<div style="background:#FFF3E0;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid #FF9800;"><h4 style="color:#E65100;margin-bottom:8px;">🗑 Скрытые вкладки ('+hiddenTabs.length+')</h4>'+hiddenTabs.map(tabId=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#fff;border-radius:8px;margin:5px 0;"><span style="font-weight:700;">${tabNames[tabId]||tabId}</span><button class="btn btn-edit" onclick="showTabAgain(\'${tabId}\')">↩️ Показать</button></div>`).join('')+'</div>';}
+function renderHiddenTabsList(){const list=document.getElementById('hiddenTabsList');if(!list)return;const tabNames={'aDashboard':'📊 Дашборд','aBackground':'🖼 Фон','aCatalogs':' Каталоги','aProducts':'🛍 Товары','aVideos':'🎬 Видео','aGames':'🎮 Пособия','aNews':'📰 Новости','aBlog':'📝 Блог','aFaq':'❓ FAQ','aReviews':'⭐ Отзывы','aOrders':'📦 Заказы','aUsers':'👥 Покупатели','aContacts':'✉️ Сообщения','aSuggestions':'💡 Предложения','aBanners':' Баннеры','aEvents':'📅 Мероприятия','aReturns':'🔄 Возвраты','aSubscribers':'📧 Подписчики','aChat':'💬 Чат','aLog':' Журнал','aSale':'🔥 Акции','aPages':'📄 Страницы','aRequisites':'💳 Реквизиты','aPromos':'🎟 Промокоды'};if(hiddenTabs.length===0){list.innerHTML='<p style="color:#4CAF50;font-weight:700;">✅ Все вкладки видимы</p>';return;}list.innerHTML='<div style="background:#FFF3E0;padding:12px;border-radius:10px;margin:10px 0;border-left:4px solid #FF9800;"><h4 style="color:#E65100;margin-bottom:8px;">🗑 Скрытые вкладки ('+hiddenTabs.length+')</h4>'+hiddenTabs.map(tabId=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#fff;border-radius:8px;margin:5px 0;"><span style="font-weight:700;">${tabNames[tabId]||tabId}</span><button class="btn btn-edit" onclick="showTabAgain(\'${tabId}\')">↩️ Показать</button></div>`).join('')+'</div>';}
 function renderCustomTabsInMenu(){document.querySelectorAll('.tab-wrapper.custom-tab').forEach(el=>el.remove());const tabsContainer=document.getElementById('adminTabs');customTabs.forEach(tab=>{if(hiddenTabs.includes(tab.id))return;const wrapper=document.createElement('div');wrapper.className='tab-wrapper custom-tab';const btn=document.createElement('button');btn.onclick=function(){showTab(tab.id,btn);};btn.setAttribute('data-tab',tab.id);btn.textContent=`${tab.icon} ${tab.name}`;const delBtn=document.createElement('button');delBtn.className='tab-delete-btn';delBtn.innerHTML='✕';delBtn.onclick=function(e){e.stopPropagation();deleteCustomTab(tab.id);};wrapper.appendChild(btn);wrapper.appendChild(delBtn);tabsContainer.appendChild(wrapper);});}
 function renderCustomTabSections(){document.querySelectorAll('.custom-tab-section').forEach(el=>el.remove());const container=document.getElementById('customTabsContainer');container.innerHTML='';customTabs.forEach(tab=>{const section=document.createElement('div');section.id=tab.id;section.className='admin-section custom-tab-section';section.innerHTML=`<h3>${tab.icon} ${tab.name}</h3><div style="margin-bottom:15px;"><button class="btn btn-edit" onclick="openCustomTabModal(${tab.id})">✏️ Редактировать</button><button class="btn btn-del" onclick="deleteCustomTab(${tab.id})">🗑 Удалить</button></div><div class="custom-tab-content">${tab.content}</div>`;container.appendChild(section);});}
-function renderCustomTabsList(){const list=document.getElementById('customTabsList');if(!list)return;if(customTabs.length===0){list.innerHTML='<p style="color:#666;font-style:italic;">У вас пока нет своих вкладок.</p>';return;}list.innerHTML=customTabs.map(tab=>`<div class="item-row" style="border-left-color:#4CAF50;"><div class="item-info"><h4>${tab.icon} ${tab.name}</h4><p style="font-size:11px;color:#888;">ID: ${tab.id}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openCustomTabModal(${tab.id})">✏️ Редактировать</button><button class="btn btn-del" onclick="deleteCustomTab(${tab.id})">🗑 Удалить</button></div></div>`).join('');}
-function openCustomTabModal(id){const tab=id?customTabs.find(t=>t.id==id):{name:'',icon:'',content:''};document.getElementById('formContent').innerHTML=`<h2>${id?'✏️ Редактировать':'➕ Создать'} вкладку</h2><div class="form-group"><label>📌 Иконка (эмодзи)</label><input id="ct_icon" placeholder="📌" value="${tab.icon||''}" maxlength="4"></div><div class="form-group"><label>📝 Название вкладки</label><input id="ct_name" placeholder="Например: Мои заметки" value="${tab.name||''}"></div><div class="form-group"><label> Содержимое (HTML)</label><textarea id="ct_content" placeholder="<h1>Заголовок</h1><p>Текст...</p>" style="min-height:200px;font-family:monospace;">${tab.content||''}</textarea></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveCustomTab(${id||0})">💾 Сохранить</button></div>`;openForm();}
-function saveCustomTab(id){const icon=document.getElementById('ct_icon').value.trim()||'';const name=document.getElementById('ct_name').value.trim();const content=document.getElementById('ct_content').value.trim();if(!name)return alert('⚠️ Введите название');if(!content)return alert('️ Введите содержимое');if(id){const tab=customTabs.find(t=>t.id==id);if(tab){Object.assign(tab,{icon,name,content});addLog(`Вкладка изменена: "${name}"`);}showMsg('✅ Вкладка обновлена!','success');}else{const newTab={id:Date.now(),icon,name,content};customTabs.push(newTab);addLog(`Вкладка создана: "${name}"`);showMsg('✅ Вкладка создана!','success');}saveCustomTabs();closeForm();renderCustomTabsInMenu();renderCustomTabSections();renderCustomTabsList();}
-function deleteCustomTab(id){const tab=customTabs.find(t=>t.id==id);if(!tab)return;if(!confirm(`Удалить вкладку "${tab.name}"?`))return;customTabs=customTabs.filter(t=>t.id!=id);hiddenTabs=hiddenTabs.filter(t=>t!=id);saveCustomTabs();saveHiddenTabs();addLog(`Вкладка удалена: "${tab.name}"`);renderCustomTabsInMenu();renderCustomTabSections();renderCustomTabsList();renderHiddenTabsList();showMsg(' Вкладка удалена','success');const activeSection=document.querySelector('.admin-section.active');if(activeSection&&activeSection.id==id){showTab('aDashboard',document.querySelector('[data-tab="aDashboard"]'));}}
+function renderCustomTabsList(){const list=document.getElementById('customTabsList');if(!list)return;if(customTabs.length===0){list.innerHTML='<p style="color:#666;font-style:italic;">У вас пока нет своих вкладок. Нажмите "Создать новую вкладку" выше.</p>';return;}list.innerHTML=customTabs.map(tab=>`<div class="item-row" style="border-left-color:#4CAF50;"><div class="item-info"><h4>${tab.icon} ${tab.name}</h4><p style="font-size:11px;color:#888;">ID: ${tab.id}</p></div><div class="item-actions"><button class="btn btn-edit" onclick="openCustomTabModal(${tab.id})">✏️ Редактировать</button><button class="btn btn-del" onclick="deleteCustomTab(${tab.id})">🗑 Удалить</button></div></div>`).join('');}
 
 if(sessionStorage.getItem('isAdmin')=='1'&&!admin.firstLogin){showAdminPanel();}
 </script>
