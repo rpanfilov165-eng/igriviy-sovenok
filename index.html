@@ -10,20 +10,18 @@
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
 
 :root {
-  --site-bg-image: url('https://i.ibb.co/1tKFvpnC/1792417758.png');
-  --site-bg-gradient: none;
   --headerColor1: #5D4037; 
   --headerColor2: #795548;
   --accent: #FFC107; 
   --primary: #673AB7; 
   --text: #2D1B4E;
-  --card: rgba(255,255,255,0.85); 
-  --border: rgba(255,255,255,0.5);
+  --card: rgba(255,255,255,0.9); 
+  --border: rgba(255,255,255,0.6);
 }
 
-/* === ОСНОВНОЙ ФОН С КАРТИНКОЙ === */
+/* === ВАШ ФОН ЗА СОВОЙ (ИСПРАВЛЕНО) === */
 body { 
-  background: var(--site-bg-image) center/cover fixed !important;
+  background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center center / cover fixed !important;
   color: var(--text); 
   min-height: 100vh; 
   padding-bottom: 70px; 
@@ -31,17 +29,17 @@ body {
   overflow-x: hidden; 
 }
 
-/* Полупрозрачный белый слой, чтобы текст читался поверх узора */
+/* Полупрозрачный белый слой, чтобы текст и товары читались поверх рисунка */
 body::before { 
   content: ''; 
   position: fixed; 
   inset: 0; 
-  background: rgba(255, 255, 255, 0.85) !important; 
+  background: rgba(255, 255, 255, 0.88) !important; 
   z-index: -1; 
   pointer-events: none; 
 }
 
-/* Анимированные звёздочки */
+/* Анимированные звёздочки поверх всего */
 body::after { 
   content: '⭐ 🌟 ✨ ⭐ 🌟 ✨ ⭐ 🌟 ✨'; 
   position: fixed; 
@@ -59,7 +57,6 @@ body::after {
 }
 @keyframes floatStars { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
 
-/* Классы для админки */
 body.custom-bg-image { background-image: var(--site-bg-image) !important; background-size: cover !important; background-position: center !important; background-attachment: fixed !important; }
 body.custom-bg-gradient { background: var(--site-bg-gradient) !important; }
 body.dark { --text:#f0e6ff; --card:rgba(30,20,60,0.9); --border:rgba(255,255,255,0.1); }
@@ -359,22 +356,13 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
 
-// === ПРИМЕНЕНИЕ ФОНА ИЗ АДМИНКИ ===
+// Этот блок оставлен для совместимости с админкой, но жёсткий CSS выше уже применил ваш фон!
 (function applySiteBackground(){
   const settings = DB.get('settings', {});
   const root = document.documentElement;
-  if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){
-      root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`);
-      document.body.classList.add('custom-bg-image');
-    } else {
-      root.style.setProperty('--site-bg-gradient', settings.backgroundImage);
-      document.body.classList.add('custom-bg-gradient');
-    }
-  }
-  if(settings.headerColors){
-    root.style.setProperty('--headerColor1', settings.headerColors.color1 || '#5D4037');
-    root.style.setProperty('--headerColor2', settings.headerColors.color2 || '#795548');
+  if(settings.backgroundImage && settings.backgroundType === 'image'){
+    root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`);
+    document.body.classList.add('custom-bg-image');
   }
 })();
 
