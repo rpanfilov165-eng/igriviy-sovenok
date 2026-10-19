@@ -5,23 +5,66 @@
 <title>🦉 Игривый совёнок — развивающие игры и пособия</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
-:root { --headerColor1:#2D1B4E; --headerColor2:#673AB7; --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E; --card:rgba(255,255,255,0.97); --border:rgba(255,255,255,0.7); }
-body { background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center/cover fixed !important; color:var(--text); min-height:100vh; padding-bottom:70px; position:relative; overflow-x:hidden; }
-body::before { content:''; position:fixed; inset:0; background:rgba(255,255,255,0.88); z-index:-1; pointer-events:none; }
+:root {
+  --headerColor1:#2D1B4E; --headerColor2:#673AB7;
+  --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E;
+  --card:rgba(255,255,255,0.97); --border:rgba(255,255,255,0.7);
+}
+body { 
+  background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center/cover fixed !important;
+  color:var(--text); 
+  min-height:100vh; 
+  padding-bottom:70px; 
+  position:relative; 
+  overflow-x:hidden; 
+}
+body::before { 
+  content:''; 
+  position:fixed; 
+  inset:0; 
+  background:rgba(255,255,255,0.88); 
+  z-index:-1; 
+  pointer-events:none; 
+}
+body::after { 
+  content:'⭐ 🌟 ✨ ⭐  ✨ ⭐ 🌟 ✨'; 
+  position:fixed; 
+  top:0; left:0; 
+  width:100%; height:100%; 
+  font-size:40px; 
+  opacity:0.06; 
+  display:flex; 
+  flex-wrap:wrap; 
+  align-content:space-around; 
+  justify-content:space-around; 
+  pointer-events:none; 
+  z-index:0; 
+  animation:floatStars 20s ease-in-out infinite; 
+}
+@keyframes floatStars { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
 body.custom-bg-image { background-image:var(--site-bg-image)!important; background-size:cover!important; background-position:center!important; background-attachment:fixed!important; }
 body.custom-bg-gradient { background:var(--site-bg-gradient)!important; }
 body.dark { --text:#f0e6ff; --card:rgba(30,20,60,0.95); --border:rgba(255,255,255,0.1); }
 a { color:var(--primary); text-decoration:none; font-weight:700; }
-header { background: var(--header-bg, linear-gradient(135deg,#2D1B4E,#673AB7)); color:#FFFFFF; padding:12px 20px; box-shadow:0 4px 20px rgba(0,0,0,0.3); position:sticky; top:0; z-index:100; border-bottom:3px solid #FFC107; }
+
+header { 
+  background: var(--header-bg, linear-gradient(135deg,#2D1B4E,#673AB7)); 
+  color:#FFFFFF; 
+  padding:12px 20px; 
+  box-shadow:0 4px 20px rgba(0,0,0,0.3); 
+  position:sticky; top:0; z-index:100; 
+  border-bottom:3px solid #FFC107;
+}
 .header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
 .logo { font-size:20px; font-weight:900; display:flex; align-items:center; gap:12px; cursor:pointer; color:#FFFFFF; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 .logo-img { width:52px; height:52px; border-radius:50%; animation:float 3s ease-in-out infinite; box-shadow:0 4px 15px rgba(255,193,7,0.5); background:#fff; padding:3px; border:2px solid #FFC107; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 .user-info { background:rgba(255,255,255,0.2); padding:8px 16px; border-radius:24px; font-size:14px; font-weight:700; color:#FFFFFF; border:1px solid rgba(255,255,255,0.3); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-.user-info a { color:#FFD54F; font-weight:800; margin-left:5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+.user-info a { color:#FFD54F; font-weight:800; margin-left:5px; }
 nav { display:flex; flex-wrap:wrap; gap:6px; }
 nav button, nav a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#2D1B4E; border:none; padding:8px 14px; border-radius:20px; cursor:pointer; font-size:12px; font-weight:800; text-decoration:none; display:inline-block; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
 nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(255,193,7,0.6); }
@@ -29,6 +72,8 @@ nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12p
 .cart-count { position:absolute; top:-6px; right:-6px; background:#FFC107; color:#2D1B4E; border-radius:50%; width:22px; height:22px; font-size:11px; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid #fff; }
 .admin-link { background:linear-gradient(135deg,#9C27B0,#BA68C8)!important; color:#fff!important; font-weight:800; }
 .theme-btn { background:linear-gradient(135deg,#37474F,#546E7A)!important; color:#fff!important; font-weight:800; }
+.search-btn-header { background:linear-gradient(135deg,#2196F3,#42A5F5)!important; color:#fff!important; font-weight:800; }
+
 .container { max-width:1400px; margin:24px auto; padding:0 15px; position:relative; z-index:1; }
 .section { background:var(--card); backdrop-filter:blur(20px); padding:28px; margin-bottom:20px; border-radius:24px; box-shadow:0 8px 32px rgba(103,58,183,0.2); border:2px solid rgba(255,193,7,0.3); animation:fadeUp .5s ease; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
@@ -61,6 +106,7 @@ nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12p
 .filters button.active { background:linear-gradient(135deg,var(--accent),#FFD54F); border-color:var(--accent); color:#2D1B4E; }
 .sort-box select, .search-box { padding:9px 12px; border:2px solid var(--border); border-radius:12px; font-size:13px; background:var(--card); color:var(--text); font-weight:700; }
 .search-box { width:100%; margin-bottom:14px; }
+
 .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
 .modal.active { display:flex; }
 .modal-content { background:var(--card); backdrop-filter:blur(30px); padding:28px; border-radius:24px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; border:2px solid var(--accent); box-shadow:0 20px 60px rgba(0,0,0,0.4); color:var(--text); }
@@ -71,22 +117,53 @@ nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12p
 .modal-content label input { width:auto; }
 .modal-actions { display:flex; justify-content:flex-end; margin-top:14px; gap:8px; flex-wrap:wrap; }
 .close-btn { background:linear-gradient(135deg,#9E9E9E,#757575)!important; color:#fff!important; }
+
 .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; }
 .stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:18px; border-radius:18px; text-align:center; box-shadow:0 8px 24px rgba(103,58,183,0.3); }
 .stat-box:hover { transform:translateY(-4px); }
 .stat-box .num { font-size:28px; font-weight:900; }
 .stat-box .lbl { font-size:12px; opacity:0.95; font-weight:700; }
+
 footer { background:linear-gradient(135deg,#2D1B4E,#4A2C6E); color:#FFF8E1; text-align:center; padding:22px; position:fixed; bottom:0; left:0; right:0; font-size:13px; z-index:50; font-weight:700; border-top:3px solid #FFC107; }
 footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
+
 .page { display:none; }
 .page.active { display:block; }
 
-/* === ГЛАВНЫЙ ЭКРАН === */
-.welcome { text-align:center; padding:40px 30px; position:relative; overflow:hidden; border-radius:30px; background: linear-gradient(-45deg, #FFD54F, #FFC107, #FF9800, #FFB74D, #FFE082, #FFD54F); background-size: 400% 400%; animation: rainbowShift 8s ease infinite; box-shadow: 0 10px 40px rgba(255,193,7,0.5); border:3px solid #FFC107; }
+.welcome { 
+  text-align:center; 
+  padding:40px 30px;
+  position:relative;
+  overflow:hidden;
+  border-radius:30px;
+  background: linear-gradient(-45deg, #FFD54F, #FFC107, #FF9800, #FFB74D, #FFE082, #FFD54F);
+  background-size: 400% 400%;
+  animation: rainbowShift 8s ease infinite;
+  box-shadow: 0 10px 40px rgba(255,193,7,0.5);
+  border:3px solid #FFC107;
+}
 @keyframes rainbowShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 .welcome h1 { color:#2D1B4E; font-size:34px; margin-bottom:12px; font-weight:900; text-shadow: 2px 2px 4px rgba(255,255,255,0.8); position: relative; z-index: 1; }
 .welcome p { color:#3E2723; font-size:16px; font-weight:700; text-shadow: 1px 1px 2px rgba(255,255,255,0.6); position: relative; z-index: 1; }
-.big-owl { width:280px; height:280px; display:block; margin:20px auto; animation: float 3s ease-in-out infinite; filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3)); border-radius:50%; background: transparent; padding: 0; position: relative; z-index: 1; border: 4px solid #fff; box-shadow: 0 8px 30px rgba(255,193,7,0.6); }
+
+.big-owl { 
+  width:280px; 
+  height:280px; 
+  display:block; 
+  margin:20px auto; 
+  animation: float 3s ease-in-out infinite;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+  border-radius:50%;
+  background: transparent;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  border: 4px solid #fff;
+  box-shadow: 0 8px 30px rgba(255,193,7,0.6);
+}
+
+.welcome-user { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:18px; border-radius:16px; margin-bottom:18px; text-align:center; font-weight:800; font-size:16px; box-shadow:0 6px 20px rgba(76,175,80,0.4); display:none; }
+.welcome-user.active { display:block; }
 
 .cart-item { display:flex; gap:14px; padding:14px; border:2px solid var(--border); border-radius:14px; margin-bottom:10px; background:var(--card); align-items:center; }
 .cart-item img { width:75px; height:75px; object-fit:cover; border-radius:10px; }
@@ -95,6 +172,7 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 .qty-control button { width:30px; height:30px; border:none; background:linear-gradient(135deg,var(--accent),#FFD54F); border-radius:50%; cursor:pointer; font-weight:900; }
 .cart-total { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:20px; border-radius:16px; margin-top:14px; text-align:center; }
 .cart-total .sum { font-size:32px; font-weight:900; margin:10px 0; }
+
 .order-card { background:var(--card); border:2px solid var(--border); border-radius:14px; padding:14px; margin-bottom:12px; }
 .order-status { display:inline-block; padding:4px 12px; border-radius:12px; font-size:11px; font-weight:800; color:#fff; }
 .status-new { background:linear-gradient(135deg,#2196F3,#42A5F5); }
@@ -102,26 +180,32 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 .status-sent { background:linear-gradient(135deg,#FF9800,#FFB74D); }
 .status-done { background:linear-gradient(135deg,#9C27B0,#BA68C8); }
 .status-cancel { background:linear-gradient(135deg,#9E9E9E,#BDBDBD); }
+
 .requisites-box { background:linear-gradient(135deg,#E8F5E9,#C8E6C9); border:2px dashed #4CAF50; padding:14px; border-radius:14px; margin:14px 0; color:#2E7D32; font-weight:700; }
 .empty-state { text-align:center; padding:35px; opacity:0.8; }
 .empty-state .big-icon { font-size:55px; display:block; margin-bottom:12px; }
+
 .banner-slider { position:relative; height:220px; border-radius:20px; overflow:hidden; margin-bottom:18px; box-shadow:0 8px 24px rgba(0,0,0,0.2); }
 .banner-slider img { width:100%; height:100%; object-fit:cover; cursor:pointer; }
 .banner-dots { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:7px; }
 .banner-dots span { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.5); cursor:pointer; }
 .banner-dots span.active { background:#fff; width:28px; border-radius:5px; }
+
 .quiz-box { background:linear-gradient(135deg,rgba(255,224,178,0.98),rgba(255,204,128,0.98)); padding:22px; border-radius:18px; margin-bottom:18px; border:2px solid var(--accent); }
 .quiz-box h3 { color:#5D4037; margin-bottom:12px; font-weight:900; }
 .quiz-options { display:flex; flex-wrap:wrap; gap:10px; margin:12px 0; }
 .quiz-options button { background:rgba(255,255,255,0.98); border:2px solid var(--accent); padding:11px 18px; border-radius:14px; cursor:pointer; font-weight:800; }
 .quiz-options button:hover { background:var(--accent); }
+
 .timer-box { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; padding:18px; border-radius:18px; text-align:center; margin-bottom:18px; font-weight:800; }
 .timer-box .time { font-size:32px; font-weight:900; margin:12px 0; font-family:'Courier New',monospace; }
+
 .compare-bar { position:fixed; bottom:70px; left:0; right:0; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:12px; display:none; justify-content:space-between; align-items:center; z-index:99; }
 .compare-bar.active { display:flex; }
 .compare-list { display:flex; gap:10px; overflow-x:auto; }
 .compare-item { background:#fff; color:#2D1B4E; padding:6px 12px; border-radius:10px; font-size:12px; display:flex; align-items:center; gap:6px; font-weight:700; }
 .compare-item button { background:#E53935; color:#fff; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer; }
+
 .chat-widget { position:fixed; bottom:90px; right:20px; z-index:99; }
 .chat-btn { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; font-size:30px; cursor:pointer; box-shadow:0 6px 20px rgba(103,58,183,0.5); }
 .chat-btn:hover { transform:scale(1.1) rotate(10deg); }
@@ -135,29 +219,40 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 .chat-input { display:flex; border-top:1px solid var(--border); }
 .chat-input input { flex:1; border:none; padding:12px; background:transparent; color:var(--text); font-weight:700; }
 .chat-input button { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:12px 18px; cursor:pointer; font-weight:800; }
+
 .achievement { background:linear-gradient(135deg,#FFD700,#FFA500); padding:16px; border-radius:16px; margin:12px 0; display:flex; align-items:center; gap:14px; color:#2D1B4E; }
 .achievement .icon { font-size:42px; }
 .achievement .info h4 { margin-bottom:4px; font-weight:900; }
 .achievement.locked { opacity:0.4; filter:grayscale(1); }
+
 .event-card { background:var(--card); border-left:4px solid var(--primary); padding:14px; border-radius:12px; margin-bottom:12px; border:2px solid var(--border); }
 .event-card .date { color:var(--primary); font-weight:800; font-size:12px; }
+
 .blog-card { background:var(--card); padding:18px; border-radius:14px; margin-bottom:12px; border-left:4px solid var(--accent); border:2px solid var(--border); }
+
 .faq-item { background:var(--card); padding:14px; border-radius:12px; margin-bottom:10px; cursor:pointer; border:2px solid var(--border); }
 .faq-item summary { font-weight:800; color:var(--text); }
 .faq-item p { margin-top:10px; font-size:13px; font-weight:600; }
+
 .contact-form input, .contact-form textarea { width:100%; padding:12px; margin:7px 0; border:2px solid var(--border); border-radius:12px; background:rgba(255,255,255,0.8); color:var(--text); font-weight:700; }
+
 .toast { position:fixed; bottom:90px; right:20px; background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:12px 20px; border-radius:14px; box-shadow:0 6px 20px rgba(76,175,80,0.5); z-index:9999; animation:slideInRight .35s; font-weight:800; }
 @keyframes slideInRight { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
+
 .subscribe-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:24px; border-radius:20px; text-align:center; margin-bottom:18px; border:2px solid #FFC107; }
 .subscribe-box input { padding:12px; border-radius:12px; border:none; margin-right:10px; width:55%; font-weight:700; }
 .subscribe-box button { background:linear-gradient(135deg,#FFC107,#FFD54F); color:#2D1B4E; border:none; padding:12px 22px; border-radius:12px; font-weight:900; cursor:pointer; }
+
 .compare-table { width:100%; border-collapse:collapse; }
 .compare-table th, .compare-table td { padding:12px; border:2px solid var(--border); text-align:center; font-weight:700; }
 .compare-table th { background:linear-gradient(135deg,var(--primary),#7E57C2); color:#fff; font-weight:800; }
+
 .history-item { display:flex; gap:12px; padding:10px; background:var(--card); border-radius:10px; margin-bottom:8px; align-items:center; border:2px solid var(--border); }
 .history-item img { width:55px; height:55px; object-fit:cover; border-radius:8px; }
+
 .points-display { background:linear-gradient(135deg,#FFD700,#FFA500); color:#2D1B4E; padding:14px; border-radius:14px; text-align:center; margin-bottom:18px; font-weight:900; border:2px solid #FFC107; }
 .points-display .num { font-size:32px; }
+
 .suggestion-form { background:linear-gradient(135deg,#E3F2FD,#BBDEFB); padding:20px; border-radius:16px; margin-bottom:20px; border:2px solid #64B5F6; }
 .suggestion-form h3 { color:#1565C0; margin-bottom:12px; font-weight:900; }
 .suggestion-item { background:var(--card); padding:16px; border-radius:14px; margin-bottom:12px; border-left:4px solid var(--primary); border:2px solid var(--border); }
@@ -166,9 +261,26 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 .suggestion-item .text { font-size:14px; line-height:1.5; font-weight:600; }
 .suggestion-item .service-type { display:inline-block; background:linear-gradient(135deg,#FFD54F,#FFC107); padding:3px 10px; border-radius:10px; font-size:11px; font-weight:800; margin-top:8px; }
 
-/* Блок приветствия авторизованного пользователя */
-.welcome-user { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:18px; border-radius:16px; margin-bottom:18px; text-align:center; font-weight:800; font-size:16px; box-shadow:0 6px 20px rgba(76,175,80,0.4); display:none; }
-.welcome-user.active { display:block; }
+/* === ПОИСК ПО САЙТУ === */
+.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:2000; justify-content:center; align-items:flex-start; padding:80px 20px 20px; overflow-y:auto; }
+.search-overlay.active { display:flex; }
+.search-container { background:var(--card); border-radius:20px; padding:24px; width:100%; max-width:700px; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid var(--accent); max-height:80vh; overflow-y:auto; position:relative; }
+.search-container h2 { color:var(--text); margin-bottom:16px; font-weight:800; display:flex; align-items:center; gap:10px; }
+.search-input-wrap { position:relative; margin-bottom:20px; }
+.search-input-wrap input { width:100%; padding:14px 50px 14px 20px; border:2px solid var(--accent); border-radius:14px; font-size:15px; font-weight:600; background:#fff; color:var(--text); }
+.search-input-wrap input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 4px rgba(103,58,183,0.15); }
+.search-input-wrap .search-icon { position:absolute; right:15px; top:50%; transform:translateY(-50%); font-size:22px; opacity:0.5; }
+.search-close-btn { position:absolute; top:15px; right:15px; background:#E53935; color:#fff; border:none; width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; font-weight:800; }
+.search-close-btn:hover { background:#C62828; }
+.search-result-item { background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; cursor:pointer; transition:all .2s; display:flex; gap:12px; align-items:center; }
+.search-result-item:hover { border-color:var(--accent); transform:translateX(5px); box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.search-result-item img { width:60px; height:60px; object-fit:cover; border-radius:10px; background:linear-gradient(135deg,#FFE0B2,#FFCC80); }
+.search-result-info { flex:1; }
+.search-result-info h4 { color:var(--text); font-size:14px; margin-bottom:4px; }
+.search-result-info p { font-size:12px; color:#666; margin:2px 0; }
+.search-result-type { display:inline-block; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; margin-top:4px; }
+.search-empty { text-align:center; padding:30px; color:#888; }
+.search-empty .big-icon { font-size:50px; margin-bottom:10px; }
 
 @media (max-width:700px) {
   .header-inner { flex-direction:column; }
@@ -191,26 +303,27 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
     </div>
     <div class="user-info" id="userInfo">👤 Гость | <a href="login.html">Войти</a></div>
     <nav>
-      <button onclick="showSection('home')"> Главная</button>
+      <button onclick="showSection('home')">🏠 Главная</button>
       <button onclick="showSection('catalogs')">📚 Каталоги</button>
       <button onclick="showSection('products')">🛍 Товары</button>
-      <button onclick="showSection('quiz')">🎯 Квиз</button>
+      <button onclick="showSection('quiz')"> Квиз</button>
       <button onclick="showSection('favorites')">❤️ Избранное</button>
-      <button onclick="showSection('compare')">️ Сравнение <span id="compareCount">0</span></button>
+      <button onclick="showSection('compare')">⚖️ Сравнение <span id="compareCount">0</span></button>
       <button onclick="showSection('history')">👁 История</button>
-      <button onclick="showSection('videos')"> Видео</button>
+      <button onclick="showSection('videos')">🎬 Видео</button>
       <button onclick="showSection('games')">🎮 Пособия</button>
       <button onclick="showSection('achievements')">🏆 Достижения</button>
-      <button onclick="showSection('events')"> Мероприятия</button>
-      <button onclick="showSection('blog')">📝 Блог</button>
+      <button onclick="showSection('events')">📅 Мероприятия</button>
+      <button onclick="showSection('blog')"> Блог</button>
       <button onclick="showSection('faq')">❓ FAQ</button>
-      <button onclick="showSection('contacts')">📞 Контакты</button>
+      <button onclick="showSection('contacts')"> Контакты</button>
       <button onclick="showSection('orders')">📦 Заказы</button>
       <button onclick="showSection('returns')">🔄 Возврат</button>
       <button onclick="showSection('suggestions')">💡 Предложения</button>
+      <button class="search-btn-header" onclick="openSearch()">🔍 Поиск</button>
       <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>
       <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-      <a href="admin-login.html" class="admin-link">🔐 Админ</a>
+      <a href="admin-login.html" class="admin-link"> Админ</a>
     </nav>
   </div>
 </header>
@@ -221,13 +334,11 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
       <img src="logo.png" class="big-owl" alt="Игривый совёнок">
       <h1>Добро пожаловать в «Игривый совёнок»!</h1>
       <p>Уютный мир игр, пособий и знаний для маленьких совят и их родителей 🌙✨</p>
-      <!-- КНОПКА ВХОДА — исчезает после авторизации -->
       <div id="loginPrompt" style="margin-top:16px;">
-        <a href="login.html" class="btn btn-purple" style="font-size:15px;padding:13px 28px;">🔑 Войти / Регистрация</a>
+        <a href="login.html" class="btn btn-purple" style="font-size:15px;padding:13px 28px;"> Войти / Регистрация</a>
       </div>
     </div>
     
-    <!-- Приветствие авторизованного пользователя -->
     <div id="welcomeUser" class="welcome-user"></div>
     
     <div class="section" style="padding:0;overflow:hidden"><div class="banner-slider" id="bannerSlider"></div></div>
@@ -245,7 +356,7 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
       <div class="quiz-box" id="quizBox"><h3>Сколько лет вашему ребёнку?</h3><div class="quiz-options" id="quizAge"></div></div>
     </div>
     <div class="subscribe-box">
-      <h3>📧 Подпишитесь на рассылку</h3>
+      <h3> Подпишитесь на рассылку</h3>
       <p style="margin:12px 0;font-weight:700;">Получайте скидки и новости первыми!</p>
       <input type="email" id="subEmail" placeholder="Ваш email">
       <button onclick="subscribe()">Подписаться</button>
@@ -256,16 +367,16 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
   </div>
   
   <div id="catalogs" class="page"><div class="section"><h2>📚 Каталоги</h2><input class="search-box" placeholder="🔍 Поиск каталога..." oninput="renderCatalogs(this.value)"><div class="grid" id="catalogsGrid"></div></div></div>
-  <div id="products" class="page"><div class="section"><h2>🛍 Товары</h2>
+  <div id="products" class="page"><div class="section"><h2> Товары</h2>
     <div class="filters"><button class="active" onclick="filterProducts('all',this)">Все</button><button onclick="filterProducts('free',this)">🎁 Бесплатные</button><button onclick="filterProducts('paid',this)">💰 Платные</button><button onclick="filterProducts('sale',this)">🔥 Со скидкой</button></div>
-    <div class="sort-box"><select onchange="sortProducts(this.value)"><option value="default">Сортировка</option><option value="price-asc">Цена ↑</option><option value="price-desc">Цена ↓</option><option value="name">По названию</option><option value="rating">По рейтингу</option><option value="new">Новинки</option></select><input class="search-box" style="flex:1;margin:0" placeholder=" Поиск..." oninput="renderProducts(this.value)"></div>
+    <div class="sort-box"><select onchange="sortProducts(this.value)"><option value="default">Сортировка</option><option value="price-asc">Цена ↑</option><option value="price-desc">Цена ↓</option><option value="name">По названию</option><option value="rating">По рейтингу</option><option value="new">Новинки</option></select><input class="search-box" style="flex:1;margin:0" placeholder="🔍 Поиск..." oninput="renderProducts(this.value)"></div>
     <div class="grid" id="productsGrid"></div>
   </div></div>
   <div id="quiz" class="page"><div class="section"><h2>🎯 Квиз</h2><div id="quizFull"></div></div></div>
   <div id="favorites" class="page"><div class="section"><h2>❤️ Избранное</h2><div class="grid" id="favoritesGrid"></div></div></div>
   <div id="compare" class="page"><div class="section"><h2>⚖️ Сравнение</h2><div id="compareGrid"></div></div></div>
   <div id="history" class="page"><div class="section"><h2>👁 История</h2><div id="historyList"></div></div></div>
-  <div id="videos" class="page"><div class="section"><h2> Видео</h2><div class="grid" id="videosGrid"></div></div></div>
+  <div id="videos" class="page"><div class="section"><h2>🎬 Видео</h2><div class="grid" id="videosGrid"></div></div></div>
   <div id="games" class="page"><div class="section"><h2>🎮 Пособия</h2><div class="grid" id="gamesGrid"></div></div></div>
   <div id="achievements" class="page"><div class="section"><h2>🏆 Достижения</h2><div id="achievementsList"></div></div></div>
   <div id="events" class="page"><div class="section"><h2>📅 Мероприятия</h2><div id="eventsList"></div></div></div>
@@ -275,9 +386,9 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
     <p style="margin-bottom:12px;font-weight:700;">📧 Email: <b>info@owl-site.ru</b></p>
     <p style="margin-bottom:12px;font-weight:700;">📱 Телефон: <b>+7 (800) 555-35-35</b></p>
     <p style="margin-bottom:18px;font-weight:700;">🕐 Пн-Вс 9:00-21:00</p>
-    <div class="contact-form"><input id="c_name" placeholder="Ваше имя"><input id="c_email" type="email" placeholder="Email"><textarea id="c_msg" placeholder="Сообщение"></textarea><button class="btn btn-purple" onclick="sendContact()">Отправить </button></div>
+    <div class="contact-form"><input id="c_name" placeholder="Ваше имя"><input id="c_email" type="email" placeholder="Email"><textarea id="c_msg" placeholder="Сообщение"></textarea><button class="btn btn-purple" onclick="sendContact()">Отправить 🦉</button></div>
   </div></div>
-  <div id="orders" class="page"><div class="section"><h2> Мои заказы</h2><div id="ordersList"></div></div></div>
+  <div id="orders" class="page"><div class="section"><h2>📦 Мои заказы</h2><div id="ordersList"></div></div></div>
   <div id="returns" class="page"><div class="section"><h2>🔄 Возврат</h2>
     <p style="margin-bottom:18px;font-weight:700;">Можно вернуть в течение 14 дней.</p>
     <div class="contact-form"><input id="r_order" placeholder="Номер заказа"><input id="r_name" placeholder="Ваше имя"><input id="r_email" type="email" placeholder="Email"><textarea id="r_reason" placeholder="Причина"></textarea><button class="btn btn-purple" onclick="submitReturn()">Отправить 🦉</button></div>
@@ -288,15 +399,15 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
       <h2>💡 Предложения</h2>
       <p style="margin-bottom:18px;font-weight:700;">Есть идея? Напишите нам!</p>
       <div class="suggestion-form">
-        <h3> Оставить предложение</h3>
+        <h3>📝 Оставить предложение</h3>
         <input id="s_name" placeholder="Ваше имя" style="margin-bottom:10px;">
         <input id="s_email" type="email" placeholder="Email" style="margin-bottom:10px;">
         <select id="s_type" style="margin-bottom:10px;">
           <option value="Услуга">🛠 Услуга</option>
           <option value="Товар">🛍 Товар</option>
-          <option value="Мероприятие">📅 Мероприятие</option>
+          <option value="Мероприятие"> Мероприятие</option>
           <option value="Сотрудничество">🤝 Сотрудничество</option>
-          <option value="Другое"> Другое</option>
+          <option value="Другое">💭 Другое</option>
         </select>
         <textarea id="s_title" placeholder="Заголовок" style="margin-bottom:10px;"></textarea>
         <textarea id="s_text" placeholder="Описание..." style="min-height:100px;"></textarea>
@@ -308,11 +419,29 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
   </div>
 </div>
 
+<!-- ОВЕРЛЕЙ ПОИСКА -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-container">
+    <button class="search-close-btn" onclick="closeSearch()">✕</button>
+    <h2>🔍 Поиск по сайту</h2>
+    <div class="search-input-wrap">
+      <input type="text" id="searchInput" placeholder="Введите название товара, каталога, статьи..." oninput="performSearch(this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">
+        <div class="big-icon">🔍</div>
+        <p>Начните вводить текст для поиска</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal" id="cartModal"><div class="modal-content" style="max-width:650px"><h2>🛒 Корзина</h2><div id="cartItems"></div><div id="cartTotal"></div><div class="modal-actions"><button class="btn close-btn" onclick="closeModal('cartModal')">Продолжить</button><button class="btn btn-purple" id="checkoutBtn" onclick="openCheckout()">Оформить</button></div></div></div>
 <div class="modal" id="checkoutModal"><div class="modal-content"><h2>📝 Оформление</h2><div class="requisites-box" id="payRequisites"></div>
-  <input id="co_name" placeholder="👤 Имя" required><input id="co_email" type="email" placeholder="📧 Email" required><input id="co_phone" placeholder="📱 Телефон" required><input id="co_city" placeholder="🏙 Город" required><textarea id="co_address" placeholder="📮 Адрес" required></textarea>
+  <input id="co_name" placeholder="👤 Имя" required><input id="co_email" type="email" placeholder="📧 Email" required><input id="co_phone" placeholder="📱 Телефон" required><input id="co_city" placeholder=" Город" required><textarea id="co_address" placeholder="📮 Адрес" required></textarea>
   <select id="co_delivery"><option value="Почта России (300₽)">Почта России (300₽)</option><option value="СДЭК (400₽)">СДЭК (400₽)</option><option value="Самовывоз (бесплатно)">Самовывоз</option></select>
-  <select id="co_payment"><option value="Перевод на карту">Карта</option><option value="СБП">СБП</option><option value="При получении">При получении</option><option value="Бонусными баллами"> Баллами</option></select>
+  <select id="co_payment"><option value="Перевод на карту">Карта</option><option value="СБП">СБП</option><option value="При получении">При получении</option><option value="Бонусными баллами">🎁 Баллами</option></select>
   <input id="co_promo" placeholder="🎟 Промокод"><textarea id="co_comment" placeholder="💬 Комментарий"></textarea>
   <div id="checkoutSummary" style="background:var(--card);padding:14px;border-radius:12px;margin:14px 0;border:2px solid var(--border)"></div>
   <div class="modal-actions"><button class="btn close-btn" onclick="closeModal('checkoutModal')">Отмена</button><button class="btn btn-purple" onclick="submitOrder()">✅ Подтвердить</button></div>
@@ -320,9 +449,9 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 <div class="modal" id="productModal"><div class="modal-content" id="productModalContent"></div></div>
 <div class="modal" id="formModal"><div class="modal-content" id="formContent"></div></div>
 <div class="compare-bar" id="compareBar"><div class="compare-list" id="compareList"></div><div><button class="btn" onclick="showSection('compare')">⚖️ Сравнить</button><button class="btn btn-del" onclick="clearCompare()">🗑 Очистить</button></div></div>
-<div class="chat-widget"><div class="chat-window" id="chatWindow"><div class="chat-header">💬 Поддержка</div><div class="chat-messages" id="chatMessages"></div><div class="chat-input"><input id="chatInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter')sendChat()"><button onclick="sendChat()"></button></div></div><button class="chat-btn" onclick="toggleChat()">💬</button></div>
+<div class="chat-widget"><div class="chat-window" id="chatWindow"><div class="chat-header">💬 Поддержка</div><div class="chat-messages" id="chatMessages"></div><div class="chat-input"><input id="chatInput" placeholder="Сообщение..." onkeypress="if(event.key==='Enter')sendChat()"><button onclick="sendChat()">➤</button></div></div><button class="chat-btn" onclick="toggleChat()"></button></div>
 
-<footer><p>🦉 © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a> | <a href="#home" onclick="showSection('home');return false;">Наверх ↑</a></p></footer>
+<footer><p> © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a> | <a href="#home" onclick="showSection('home');return false;">Наверх ↑</a></p></footer>
 
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
@@ -340,12 +469,12 @@ const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catc
 })();
 
 let catalogs = DB.get('catalogs',[{id:1,name:'Развивающие игры',desc:'Игры для малышей от 2 лет',ageMin:2,ageMax:5},{id:2,name:'Учебные пособия',desc:'Математика, чтение',ageMin:5,ageMax:10},{id:3,name:'Творчество',desc:'Рисование, лепка',ageMin:3,ageMax:8}]);
-let products = DB.get('products',[{id:1,name:'Азбука-раскраска',price:0,free:true,catalogId:2,img:'https://via.placeholder.com/220x150/FFC107/5D4037?text=Азбука',desc:'Учим буквы',rating:4.5,stock:10,age:5,sale:false,createdAt:Date.now()-100000},{id:2,name:'Набор цифр',price:350,free:false,catalogId:1,img:'https://via.placeholder.com/220x150/673AB7/fff?text=Цифры',desc:'Яркие цифры',rating:5,stock:5,age:3,sale:true,salePrice:245,createdAt:Date.now()-50000},{id:3,name:'Мозаика',price:590,free:false,catalogId:1,img:'https://via.placeholder.com/220x150/795548/fff?text=Мозаика',desc:'Логика',rating:4,stock:8,age:4,sale:false,createdAt:Date.now()-200000},{id:4,name:'Краски',price:290,free:false,catalogId:3,img:'https://via.placeholder.com/220x150/E53935/fff?text=Краски',desc:'Безопасные',rating:4.8,stock:12,age:3,sale:false,createdAt:Date.now()-10000}]);
-let videos = DB.get('videos',[{id:1,name:'Уроки',url:'https://www.w3schools.com/html/mov_bbb.mp4',desc:'Обучение'}]);
-let games = DB.get('games',[{id:1,name:'Лото',desc:'Математика',img:'https://via.placeholder.com/220x150/795548/fff?text=Лото'}]);
-let reviews = DB.get('reviews',[{id:1,author:'Мария',text:'Отлично! 🦉'}]);
-let blog = DB.get('blog',[{id:1,title:'Как выбрать игры',date:'2026-10-15',text:'Советы по выбору...'}]);
-let faq = DB.get('faq',[{q:'Как заказать?',a:'Добавьте в корзину и оформите.'},{q:'Оплата?',a:'Карта, СБП, при получении.'}]);
+let products = DB.get('products',[{id:1,name:'Азбука-раскраска',price:0,free:true,catalogId:2,img:'https://via.placeholder.com/220x150/FFC107/5D4037?text=Азбука',desc:'Учим буквы играя',rating:4.5,stock:10,age:5,sale:false,createdAt:Date.now()-100000},{id:2,name:'Набор цифр',price:350,free:false,catalogId:1,img:'https://via.placeholder.com/220x150/673AB7/fff?text=Цифры',desc:'Яркие цифры для счёта',rating:5,stock:5,age:3,sale:true,salePrice:245,createdAt:Date.now()-50000},{id:3,name:'Логическая мозаика',price:590,free:false,catalogId:1,img:'https://via.placeholder.com/220x150/795548/fff?text=Мозаика',desc:'Развиваем логику',rating:4,stock:8,age:4,sale:false,createdAt:Date.now()-200000},{id:4,name:'Пальчиковые краски',price:290,free:false,catalogId:3,img:'https://via.placeholder.com/220x150/E53935/fff?text=Краски',desc:'Безопасные краски',rating:4.8,stock:12,age:3,sale:false,createdAt:Date.now()-10000}]);
+let videos = DB.get('videos',[{id:1,name:'Уроки для совят',url:'https://www.w3schools.com/html/mov_bbb.mp4',desc:'Весёлое обучение'}]);
+let games = DB.get('games',[{id:1,name:'Математическое лото',desc:'Пособие для изучения математики',img:'https://via.placeholder.com/220x150/795548/fff?text=Лото'}]);
+let reviews = DB.get('reviews',[{id:1,author:'Мария',text:'Моему ребёнку очень нравится! 🦉'}]);
+let blog = DB.get('blog',[{id:1,title:'Как выбрать развивающие игры по возрасту',date:'2026-10-15',text:'В этой статье мы расскажем, как подобрать игры для вашего малыша...'},{id:2,title:'10 советов по развитию логики у детей',date:'2026-10-10',text:'Логика — основа мышления. Вот 10 простых упражнений...'}]);
+let faq = DB.get('faq',[{q:'Как сделать заказ?',a:'Добавьте товары в корзину и нажмите «Оформить заказ». Заполните данные и выберите способ оплаты.'},{q:'Какие способы оплаты?',a:'Перевод на карту, СБП или оплата при получении.'},{q:'Как быстро доставляют?',a:'Почта России — 5-10 дней, СДЭК — 2-5 дней.'},{q:'Можно ли вернуть товар?',a:'Да, в течение 14 дней с момента получения.'}]);
 let orders = DB.get('orders',[]);
 let cart = DB.get('cart',[]);
 let favorites = DB.get('favorites',[]);
@@ -355,16 +484,15 @@ let achievements = DB.get('achievements',[]);
 let returns = DB.get('returns',[]);
 let subscribers = DB.get('subscribers',[]);
 let suggestions = DB.get('suggestions',[]);
-let banners = DB.get('banners',[{id:1,img:'https://via.placeholder.com/1200x220/673AB7/fff?text=🦉+Игривый+совёнок!',link:'#products'}]);
-let events = DB.get('events',[{id:1,title:'Мастер-класс',date:'2026-11-01',time:'14:00',desc:'Для детей 4-7 лет'}]);
-let chatMessages = DB.get('chatMessages',[{from:'bot',text:'Здравствуйте! 🦉'}]);
+let banners = DB.get('banners',[{id:1,img:'https://via.placeholder.com/1200x220/673AB7/fff?text=🦉+Игривый+совёнок!',link:'#products'},{id:2,img:'https://via.placeholder.com/1200x220/FFC107/5D4037?text=🔥+Скидка+30%!',link:'#products'},{id:3,img:'https://via.placeholder.com/1200x220/4CAF50/fff?text=🎁+Бесплатная+доставка+от+3000₽',link:'#products'}]);
+let events = DB.get('events',[{id:1,title:'Мастер-класс по рисованию',date:'2026-11-01',time:'14:00',desc:'Онлайн-урок для детей 4-7 лет'},{id:2,title:'Вебинар для родителей',date:'2026-11-15',time:'19:00',desc:'Как развивать ребёнка через игру'}]);
+let chatMessages = DB.get('chatMessages',[{from:'bot',text:'Здравствуйте! 🦉 Чем могу помочь?'}]);
 let settings = DB.get('settings',{requisites:{cardNumber:'2200 1234 5678 9012',cardHolder:'ИВАНОВ ИВАН',bank:'Сбербанк',sbp:'+7 900 123-45-67'},promos:[{code:'OWL10',discount:10,type:'percent'}],sale:{active:true,percent:30,endDate:Date.now()+86400000*3},theme:'light',headerColors:{color1:'#2D1B4E',color2:'#673AB7'}});
 
 let currentProductFilter='all', currentSort='default', currentSearch='';
 
 function saveAll(){DB.set('catalogs',catalogs);DB.set('products',products);DB.set('videos',videos);DB.set('games',games);DB.set('reviews',reviews);DB.set('blog',blog);DB.set('faq',faq);DB.set('orders',orders);DB.set('cart',cart);DB.set('favorites',favorites);DB.set('compare',compareList);DB.set('history',history);DB.set('achievements',achievements);DB.set('returns',returns);DB.set('subscribers',subscribers);DB.set('suggestions',suggestions);DB.set('banners',banners);DB.set('events',events);DB.set('chatMessages',chatMessages);DB.set('settings',settings);}
 
-// === ОБНОВЛЕНИЕ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЕ + СКРЫТИЕ КНОПКИ ВХОДА ===
 function updateUserInfo(){
   const current = DB.get('currentUser', null);
   const el = document.getElementById('userInfo');
@@ -372,11 +500,8 @@ function updateUserInfo(){
   const welcomeUser = document.getElementById('welcomeUser');
   
   if(current){
-    // Пользователь авторизован
     el.innerHTML = `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
-    // Скрываем кнопку "Войти/Регистрация"
     if(loginPrompt) loginPrompt.style.display = 'none';
-    // Показываем приветствие
     if(welcomeUser){
       welcomeUser.classList.add('active');
       welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>! У вас <b>${current.points||0}</b> бонусных баллов 🎁`;
@@ -384,11 +509,8 @@ function updateUserInfo(){
     const pointsBox = document.getElementById('pointsBox');
     if(pointsBox){ pointsBox.style.display='block'; document.getElementById('pointsNum').textContent=current.points||0; }
   } else {
-    // Гость
     el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
-    // Показываем кнопку входа
     if(loginPrompt) loginPrompt.style.display = 'block';
-    // Скрываем приветствие
     if(welcomeUser) welcomeUser.classList.remove('active');
     const pointsBox = document.getElementById('pointsBox');
     if(pointsBox) pointsBox.style.display = 'none';
@@ -397,13 +519,13 @@ function updateUserInfo(){
 
 function showSection(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'});}
 function doLogout(){localStorage.removeItem('currentUser');updateUserInfo();showSection('home');showToast('Вы вышли 🦉');}
-function addToCart(productId){const p=products.find(x=>x.id==productId);if(!p)return;if(p.free){showToast('Бесплатные не в корзину 🎁');return;}const existing=cart.find(c=>c.productId==productId);if(existing)existing.qty++;else cart.push({productId,qty:1});saveAll();updateCartCount();showToast(`«${p.name}» в корзине 🛒`);checkAchievements('first_purchase');}
+function addToCart(productId){const p=products.find(x=>x.id==productId);if(!p)return;if(p.free){showToast('Бесплатные не в корзину 🎁');return;}const existing=cart.find(c=>c.productId==productId);if(existing)existing.qty++;else cart.push({productId,qty:1});saveAll();updateCartCount();showToast(`«${p.name}» в корзине `);checkAchievements('first_purchase');}
 function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
 function changeQty(productId,delta){const item=cart.find(c=>c.productId==productId);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
 function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0);}
 function getCartTotal(){return cart.reduce((s,c)=>{const p=products.find(x=>x.id==c.productId);if(!p)return s;const price=p.sale&&p.salePrice?p.salePrice:p.price;return s+price*c.qty;},0);}
 function openCart(){openModal('cartModal');renderCart();}
-function renderCart(){const items=document.getElementById('cartItems');const total=document.getElementById('cartTotal');const btn=document.getElementById('checkoutBtn');if(cart.length===0){items.innerHTML='<div class="empty-state"><span class="big-icon">🛒</span><p>Корзина пуста</p></div>';total.innerHTML='';btn.style.display='none';return;}btn.style.display='inline-block';items.innerHTML=cart.map(c=>{const p=products.find(x=>x.id==c.productId);if(!p)return '';const price=p.sale&&p.salePrice?p.salePrice:p.price;return `<div class="cart-item"><img src="${p.img||''}" alt=""><div class="cart-item-info"><h4>${p.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽ × ${c.qty} = <b>${price*c.qty} ₽</b></p></div><div class="qty-control"><button onclick="changeQty(${p.id},-1)">−</button><span><b>${c.qty}</b></span><button onclick="changeQty(${p.id},1)">+</button><button class="btn btn-del btn-small" onclick="removeFromCart(${p.id})">🗑</button></div></div>`;}).join('');total.innerHTML=`<div class="cart-total"><div>Итого:</div><div class="sum">${getCartTotal()} ₽</div></div>`;}
+function renderCart(){const items=document.getElementById('cartItems');const total=document.getElementById('cartTotal');const btn=document.getElementById('checkoutBtn');if(cart.length===0){items.innerHTML='<div class="empty-state"><span class="big-icon">🛒</span><p>Корзина пуста</p></div>';total.innerHTML='';btn.style.display='none';return;}btn.style.display='inline-block';items.innerHTML=cart.map(c=>{const p=products.find(x=>x.id==c.productId);if(!p)return '';const price=p.sale&&p.salePrice?p.salePrice:p.price;return `<div class="cart-item"><img src="${p.img||''}" alt=""><div class="cart-item-info"><h4>${p.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽ × ${c.qty} = <b>${price*c.qty} ₽</b></p></div><div class="qty-control"><button onclick="changeQty(${p.id},-1)">−</button><span><b>${c.qty}</b></span><button onclick="changeQty(${p.id},1)">+</button><button class="btn btn-del btn-small" onclick="removeFromCart(${p.id})"></button></div></div>`;}).join('');total.innerHTML=`<div class="cart-total"><div>Итого:</div><div class="sum">${getCartTotal()} ₽</div></div>`;}
 function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();if(favorites.length>=5)checkAchievements('collector');}
 function toggleCompare(productId){const idx=compareList.indexOf(productId);if(idx>=0)compareList.splice(idx,1);else {if(compareList.length>=4){alert('Максимум 4 товара');return;}compareList.push(productId);}saveAll();renderCompareBar();renderAll();}
 function clearCompare(){compareList=[];saveAll();renderCompareBar();renderCompare();}
@@ -413,7 +535,7 @@ function addToHistory(productId){history=history.filter(id=>id!=productId);histo
 function renderHistory(){const l=document.getElementById('historyList');if(!l)return;if(history.length===0){l.innerHTML='<div class="empty-state"><span class="big-icon">👁</span><p>История пуста</p></div>';return;}l.innerHTML=history.map(id=>{const p=products.find(x=>x.id==id);if(!p)return '';return `<div class="history-item"><img src="${p.img||''}" alt="" onclick="openProductModal(${p.id})" style="cursor:pointer"><div style="flex:1"><h4 style="cursor:pointer" onclick="openProductModal(${p.id})">${p.name}</h4><p style="font-size:12px;font-weight:700;">${p.price} ₽</p></div><button class="btn btn-small" onclick="addToCart(${p.id})">🛒</button></div>`;}).join('');}
 function rateProduct(productId,rating){const p=products.find(x=>x.id==productId);if(!p)return;p.rating=((p.rating||0)+rating)/2;saveAll();renderAll();showToast('Спасибо! 🦉');checkAchievements('reviewer');}
 function renderStars(rating,productId){let html='<div class="rating">';for(let i=1;i<=5;i++){html+=`<span class="rating-star" onclick="rateProduct(${productId},${i})">${i<=Math.round(rating)?'★':'☆'}</span>`;}html+=` <span style="color:#8D6E63;font-size:11px;font-weight:700;">(${rating.toFixed(1)})</span></div>`;return html;}
-function renderProductCard(p){const cat=catalogs.find(c=>c.id==p.catalogId);const badge=p.free?'<span class="badge-free"> Бесплатно</span>':'<span class="badge-paid">💰 Платно</span>';const hotBadge=p.sale?'<span class="badge-hot">🔥 Скидка</span>':'';const priceHtml=p.free?'<p class="price" style="color:#4CAF50">Бесплатно!</p>':(p.sale&&p.salePrice?`<p class="price">${p.salePrice} ₽ <s style="font-size:12px;color:#999">${p.price}₽</s></p>`:`<p class="price">${p.price} ₽</p>`);const isFav=favorites.includes(p.id);const isCompare=compareList.includes(p.id);return `<div class="card">${badge}${hotBadge}<img src="${p.img||''}" alt="" onclick="openProductModal(${p.id})"><h3 onclick="openProductModal(${p.id})" style="cursor:pointer">${p.name}</h3><p>${p.desc||''}</p>${renderStars(p.rating||0,p.id)}${priceHtml}<p style="font-size:11px;color:${p.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${p.stock>0?'В наличии: '+p.stock+' шт.':'Нет в наличии'}</p><span class="badge-cat">${cat?cat.name:'—'}</span><div class="card-actions">${!p.free&&p.stock>0?`<button class="btn btn-small" onclick="addToCart(${p.id})">🛒 В корзину</button>`:''}<button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${p.id})">${isFav?'❤️':'♡'}</button><button class="btn btn-small" style="background:${isCompare?'#E53935':'var(--card)'};color:${isCompare?'#fff':'var(--text)'};border:1px solid var(--border)" onclick="toggleCompare(${p.id})">⚖️</button></div></div>`;}
+function renderProductCard(p){const cat=catalogs.find(c=>c.id==p.catalogId);const badge=p.free?'<span class="badge-free">🎁 Бесплатно</span>':'<span class="badge-paid"> Платно</span>';const hotBadge=p.sale?'<span class="badge-hot">🔥 Скидка</span>':'';const priceHtml=p.free?'<p class="price" style="color:#4CAF50">Бесплатно!</p>':(p.sale&&p.salePrice?`<p class="price">${p.salePrice} ₽ <s style="font-size:12px;color:#999">${p.price}₽</s></p>`:`<p class="price">${p.price} ₽</p>`);const isFav=favorites.includes(p.id);const isCompare=compareList.includes(p.id);return `<div class="card">${badge}${hotBadge}<img src="${p.img||''}" alt="" onclick="openProductModal(${p.id})"><h3 onclick="openProductModal(${p.id})" style="cursor:pointer">${p.name}</h3><p>${p.desc||''}</p>${renderStars(p.rating||0,p.id)}${priceHtml}<p style="font-size:11px;color:${p.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${p.stock>0?'В наличии: '+p.stock+' шт.':'Нет в наличии'}</p><span class="badge-cat">${cat?cat.name:'—'}</span><div class="card-actions">${!p.free&&p.stock>0?`<button class="btn btn-small" onclick="addToCart(${p.id})">🛒 В корзину</button>`:''}<button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${p.id})">${isFav?'❤️':'♡'}</button><button class="btn btn-small" style="background:${isCompare?'#E53935':'var(--card)'};color:${isCompare?'#fff':'var(--text)'};border:1px solid var(--border)" onclick="toggleCompare(${p.id})">⚖️</button></div></div>`;}
 function openProductModal(id){const p=products.find(x=>x.id==id);if(!p)return;addToHistory(id);const cat=catalogs.find(c=>c.id==p.catalogId);const price=p.sale&&p.salePrice?p.salePrice:p.price;document.getElementById('productModalContent').innerHTML=`<h2>${p.name}</h2><img src="${p.img||''}" style="width:100%;border-radius:14px;margin-bottom:14px"><p>${p.desc||''}</p>${renderStars(p.rating||0,p.id)}<p><b>Каталог:</b> ${cat?cat.name:'—'}</p><p><b>Возраст:</b> ${p.age||'—'} лет</p><p><b>Наличие:</b> ${p.stock>0?p.stock+' шт.':'нет'}</p>${p.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка ${settings.sale.percent}%!</p>`:''}${p.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}<div class="modal-actions"><button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>${!p.free&&p.stock>0?`<button class="btn btn-purple" onclick="addToCart(${p.id});closeModal('productModal')">🛒 В корзину</button>`:''}</div>`;openModal('productModal');}
 function renderProducts(q=''){currentSearch=q;const g=document.getElementById('productsGrid');if(!g)return;let f=products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase()));if(currentProductFilter==='free')f=f.filter(p=>p.free);if(currentProductFilter==='paid')f=f.filter(p=>!p.free);if(currentProductFilter==='sale')f=f.filter(p=>p.sale);if(currentSort==='price-asc')f.sort((a,b)=>a.price-b.price);if(currentSort==='price-desc')f.sort((a,b)=>b.price-a.price);if(currentSort==='name')f.sort((a,b)=>a.name.localeCompare(b.name));if(currentSort==='rating')f.sort((a,b)=>(b.rating||0)-(a.rating||0));if(currentSort==='new')f.sort((a,b)=>b.createdAt-a.createdAt);g.innerHTML=f.map(p=>renderProductCard(p)).join('')||'<div class="empty-state"><span class="big-icon">🛍</span><p>Не найдено</p></div>';}
 function filterProducts(type,btn){currentProductFilter=type;document.querySelectorAll('.filters button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProducts(currentSearch);}
@@ -423,39 +545,135 @@ function renderVideos(){const g=document.getElementById('videosGrid');if(!g)retu
 function renderGames(){const g=document.getElementById('gamesGrid');if(!g)return;g.innerHTML=games.map(gm=>`<div class="card"><img src="${gm.img||''}" alt=""><h3>${gm.name}</h3><p>${gm.desc||''}</p></div>`).join('')||'<p>Нет пособий</p>';}
 function renderBlog(){const l=document.getElementById('blogList');if(!l)return;l.innerHTML=blog.map(b=>`<div class="blog-card"><h3>📝 ${b.title}</h3><p style="color:#8D6E63;font-size:11px;font-weight:700;">${b.date}</p><p>${b.text}</p></div>`).join('')||'<p>Нет статей</p>';}
 function renderFaq(){const l=document.getElementById('faqList');if(!l)return;l.innerHTML=faq.map(f=>`<details class="faq-item"><summary>❓ ${f.q}</summary><p>${f.a}</p></details>`).join('');}
-function renderReviews(){const l=document.getElementById('reviews');if(!l)return;l.innerHTML=reviews.map(r=>`<div class="card"><b>🦉 ${r.author}</b><p>${r.text}</p></div>`).join('')||'<p>Нет отзывов</p>';}
+function renderReviews(){const l=document.getElementById('reviews');if(!l)return;l.innerHTML=reviews.map(r=>`<div class="card"><b> ${r.author}</b><p>${r.text}</p></div>`).join('')||'<p>Нет отзывов</p>';}
 function renderPopular(){const g=document.getElementById('popularGrid');if(!g)return;const pop=[...products].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,4);g.innerHTML=pop.map(p=>renderProductCard(p)).join('');}
-function renderOrders(){const l=document.getElementById('ordersList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML=`<div class="empty-state"><span class="big-icon">🔐</span><p>Войдите для просмотра</p><a href="login.html" class="btn btn-purple">Войти</a></div>`;return;}const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);if(myOrders.length===0){l.innerHTML='<div class="empty-state"><span class="big-icon">📦</span><p>Нет заказов</p></div>';return;}const statusMap={new:{t:'Новый',c:'status-new'},paid:{t:'Оплачен',c:'status-paid'},sent:{t:'Отправлен',c:'status-sent'},done:{t:'Доставлен',c:'status-done'},cancel:{t:'Отменён',c:'status-cancel'}};l.innerHTML=myOrders.map(o=>{const st=statusMap[o.status]||statusMap.new;const itemsHtml=o.items.map(i=>{const p=products.find(x=>x.id==i.productId);return p?`<li>${p.name} × ${i.qty} = ${p.price*i.qty}₽</li>`:'';}).join('');return `<div class="order-card"><h4>Заказ #${o.id} <span class="order-status ${st.c}">${st.t}</span></h4><p style="font-size:11px;opacity:0.8;font-weight:700;">📅 ${o.date}</p><ul style="margin:10px 0;padding-left:20px;font-size:12px;font-weight:600;">${itemsHtml}</ul><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;font-weight:700;">🚚 ${o.delivery} | 💳 ${o.payment}</p>${o.trackNumber?`<p style="font-size:12px;color:var(--primary);font-weight:700;">📍 Трек: <b>${o.trackNumber}</b></p>`:''}</div>`;}).join('');}
+function renderOrders(){const l=document.getElementById('ordersList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML=`<div class="empty-state"><span class="big-icon">🔐</span><p>Войдите для просмотра</p><a href="login.html" class="btn btn-purple">Войти</a></div>`;return;}const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);if(myOrders.length===0){l.innerHTML='<div class="empty-state"><span class="big-icon"></span><p>Нет заказов</p></div>';return;}const statusMap={new:{t:'Новый',c:'status-new'},paid:{t:'Оплачен',c:'status-paid'},sent:{t:'Отправлен',c:'status-sent'},done:{t:'Доставлен',c:'status-done'},cancel:{t:'Отменён',c:'status-cancel'}};l.innerHTML=myOrders.map(o=>{const st=statusMap[o.status]||statusMap.new;const itemsHtml=o.items.map(i=>{const p=products.find(x=>x.id==i.productId);return p?`<li>${p.name} × ${i.qty} = ${p.price*i.qty}₽</li>`:'';}).join('');return `<div class="order-card"><h4>Заказ #${o.id} <span class="order-status ${st.c}">${st.t}</span></h4><p style="font-size:11px;opacity:0.8;font-weight:700;">📅 ${o.date}</p><ul style="margin:10px 0;padding-left:20px;font-size:12px;font-weight:600;">${itemsHtml}</ul><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;font-weight:700;">🚚 ${o.delivery} | 💳 ${o.payment}</p>${o.trackNumber?`<p style="font-size:12px;color:var(--primary);font-weight:700;">📍 Трек: <b>${o.trackNumber}</b></p>`:''}</div>`;}).join('');}
 function renderReturns(){const l=document.getElementById('returnsList');if(!l)return;const current=DB.get('currentUser',{});const myReturns=returns.filter(r=>r.email===(current.email));l.innerHTML=myReturns.length?myReturns.map(r=>`<div class="order-card"><h4>Заявка #${r.id}</h4><p>Заказ: ${r.orderId}</p><p>Причина: ${r.reason}</p><p>Статус: <b>${r.status}</b></p></div>`).join(''):'<p>Нет заявок</p>';}
-function renderStats(){const s=document.getElementById('stats');if(!s)return;s.innerHTML=`<div class="stat-box"><div class="num">${catalogs.length}</div><div class="lbl">📚 Каталогов</div></div><div class="stat-box"><div class="num">${products.length}</div><div class="lbl">🛍 Товаров</div></div><div class="stat-box"><div class="num">${products.filter(p=>p.free).length}</div><div class="lbl">🎁 Бесплатных</div></div><div class="stat-box"><div class="num">${videos.length}</div><div class="lbl">🎬 Видео</div></div><div class="stat-box"><div class="num">${blog.length}</div><div class="lbl"> Статей</div></div><div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ Избранное</div></div>`;}
+function renderStats(){const s=document.getElementById('stats');if(!s)return;s.innerHTML=`<div class="stat-box"><div class="num">${catalogs.length}</div><div class="lbl">📚 Каталогов</div></div><div class="stat-box"><div class="num">${products.length}</div><div class="lbl"> Товаров</div></div><div class="stat-box"><div class="num">${products.filter(p=>p.free).length}</div><div class="lbl"> Бесплатных</div></div><div class="stat-box"><div class="num">${videos.length}</div><div class="lbl">🎬 Видео</div></div><div class="stat-box"><div class="num">${blog.length}</div><div class="lbl">📝 Статей</div></div><div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ Избранное</div></div>`;}
 function renderBanners(){const slider=document.getElementById('bannerSlider');if(!slider||banners.length===0){if(slider)slider.style.display='none';return;}let currentBanner=0;slider.innerHTML=banners.map((b,i)=>`<img src="${b.img}" alt="" style="display:${i===0?'block':'none'}" data-idx="${i}" onclick="window.location='${b.link||'#'}'">`).join('')+`<div class="banner-dots">${banners.map((_,i)=>`<span class="${i===0?'active':''}" onclick="showBanner(${i})"></span>`).join('')}</div>`;setInterval(()=>{const imgs=slider.querySelectorAll('img');const dots=slider.querySelectorAll('.banner-dots span');if(imgs.length===0)return;imgs[currentBanner].style.display='none';dots[currentBanner].classList.remove('active');currentBanner=(currentBanner+1)%banners.length;imgs[currentBanner].style.display='block';dots[currentBanner].classList.add('active');},4000);}
 function showBanner(idx){const slider=document.getElementById('bannerSlider');slider.querySelectorAll('img').forEach((img,i)=>img.style.display=i===idx?'block':'none');slider.querySelectorAll('.banner-dots span').forEach((s,i)=>s.classList.toggle('active',i===idx));}
 function renderSaleTimer(){const box=document.getElementById('saleTimer');if(!settings.sale.active){box.style.display='none';return;}box.style.display='block';document.getElementById('salePercent').textContent=settings.sale.percent;updateTimer();setInterval(updateTimer,1000);}
 function updateTimer(){const diff=settings.sale.endDate-Date.now();if(diff<=0){document.getElementById('timerDisplay').textContent='Акция завершена!';return;}const h=Math.floor(diff/3600000);const m=Math.floor((diff%3600000)/60000);const s=Math.floor((diff%60000)/1000);document.getElementById('timerDisplay').textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
 function renderProductOfDay(){const el=document.getElementById('productOfDay');if(!el)return;const day=new Date().getDate();const p=products[day%products.length];if(p)el.innerHTML=renderProductCard(p);}
 function renderQuiz(){const ages=[{min:1,max:2,label:'1-2 года'},{min:3,max:4,label:'3-4 года'},{min:5,max:7,label:'5-7 лет'},{min:8,max:12,label:'8-12 лет'}];const html=ages.map(a=>`<button onclick="runQuiz(${a.min},${a.max})">${a.label}</button>`).join('');const quizBox=document.getElementById('quizBox');if(quizBox)quizBox.querySelector('#quizAge').innerHTML=html;const quizFull=document.getElementById('quizFull');if(quizFull)quizFull.innerHTML=`<div class="quiz-box"><h3>Выберите возраст:</h3><div class="quiz-options">${html}</div><div id="quizResult"></div></div>`;}
-function runQuiz(min,max){const results=products.filter(p=>p.age>=min&&p.age<=max);const resultDiv=document.getElementById('quizResult');if(!resultDiv)return;if(results.length===0){resultDiv.innerHTML='<p style="margin-top:15px"> Нет товаров</p>';return;}resultDiv.innerHTML=`<h4 style="margin-top:15px">✅ Подобрали ${results.length} товар(ов):</h4><div class="grid" style="margin-top:10px">${results.map(p=>renderProductCard(p)).join('')}</div>`;}
-function renderAchievements(){const l=document.getElementById('achievementsList');if(!l)return;const allAchievements=[{id:'first_purchase',icon:'',title:'Первая покупка',desc:'Совершите покупку',check:()=>orders.length>0},{id:'collector',icon:'❤️',title:'Коллекционер',desc:'5 в избранном',check:()=>favorites.length>=5},{id:'reviewer',icon:'⭐',title:'Критик',desc:'Оцените товар',check:()=>products.some(p=>(p.rating||0)>0)},{id:'shopper',icon:'🛍',title:'Шопоголик',desc:'3 покупки',check:()=>orders.length>=3},{id:'social',icon:'',title:'Активист',desc:'Оставьте отзыв',check:()=>reviews.length>0},{id:'explorer',icon:'🔍',title:'Исследователь',desc:'10 просмотров',check:()=>history.length>=10}];l.innerHTML=allAchievements.map(a=>{const unlocked=achievements.includes(a.id)||a.check();if(a.check()&&!achievements.includes(a.id))achievements.push(a.id);return `<div class="achievement ${unlocked?'':'locked'}"><div class="icon">${a.icon}</div><div class="info"><h4>${a.title}</h4><p>${a.desc}</p>${unlocked?'<p style="color:#2E7D32;font-weight:900;">✅ Получено!</p>':'<p>🔒 Заблокировано</p>'}</div></div>`;}).join('');saveAll();}
-function checkAchievements(id){if(!achievements.includes(id)){achievements.push(id);saveAll();const a={first_purchase:' Первая покупка!',collector:'❤️ Коллекционер!',reviewer:'⭐ Критик!',shopper:'🛍 Шопоголик!',social:' Активист!',explorer:'🔍 Исследователь!'}[id];if(a)showToast(`🏆 ${a}`);}}
-function renderEvents(){const l=document.getElementById('eventsList');if(!l)return;l.innerHTML=events.map(e=>`<div class="event-card"><div class="date"> ${e.date} в ${e.time}</div><h3>${e.title}</h3><p>${e.desc}</p><button class="btn btn-small" onclick="alert('Записаны! 🦉')">Записаться</button></div>`).join('')||'<p>Нет мероприятий</p>';}
-function openCheckout(){const current=DB.get('currentUser',null);if(!current){if(confirm('Войти для оформления?'))window.location.href='login.html';return;}if(cart.length===0){alert('Корзина пуста 🦉');return;}const req=settings.requisites;const reqBox=document.getElementById('payRequisites');if(req.cardNumber){reqBox.innerHTML=`<h4>💳 Реквизиты:</h4><p><b>Карта:</b> ${req.cardNumber}</p><p><b>Получатель:</b> ${req.cardHolder||'—'}</p><p><b>Банк:</b> ${req.bank||'—'}</p>${req.sbp?`<p><b>СБП:</b> ${req.sbp}</p>`:''}`;}else reqBox.innerHTML='<p>Реквизиты после оформления</p>';document.getElementById('co_name').value=current.name||'';document.getElementById('co_email').value=current.email||'';const sum=getCartTotal();const itemsHtml=cart.map(c=>{const p=products.find(x=>x.id==c.productId);return p?`<li>${p.name} × ${c.qty} = ${p.price*c.qty}₽</li>`:'';}).join('');document.getElementById('checkoutSummary').innerHTML=`<h4>📋 Заказ:</h4><ul style="padding-left:20px;margin:10px 0;font-size:12px">${itemsHtml}</ul><p><b>Итого: <span style="color:#D84315">${sum} ₽</span></b></p>`;closeModal('cartModal');openModal('checkoutModal');}
+function runQuiz(min,max){const results=products.filter(p=>p.age>=min&&p.age<=max);const resultDiv=document.getElementById('quizResult');if(!resultDiv)return;if(results.length===0){resultDiv.innerHTML='<p style="margin-top:15px">😔 Нет товаров</p>';return;}resultDiv.innerHTML=`<h4 style="margin-top:15px">✅ Подобрали ${results.length} товар(ов):</h4><div class="grid" style="margin-top:10px">${results.map(p=>renderProductCard(p)).join('')}</div>`;}
+function renderAchievements(){const l=document.getElementById('achievementsList');if(!l)return;const allAchievements=[{id:'first_purchase',icon:'🛒',title:'Первая покупка',desc:'Совершите покупку',check:()=>orders.length>0},{id:'collector',icon:'❤️',title:'Коллекционер',desc:'5 в избранном',check:()=>favorites.length>=5},{id:'reviewer',icon:'⭐',title:'Критик',desc:'Оцените товар',check:()=>products.some(p=>(p.rating||0)>0)},{id:'shopper',icon:'🛍',title:'Шопоголик',desc:'3 покупки',check:()=>orders.length>=3},{id:'social',icon:'📢',title:'Активист',desc:'Оставьте отзыв',check:()=>reviews.length>0},{id:'explorer',icon:'🔍',title:'Исследователь',desc:'10 просмотров',check:()=>history.length>=10}];l.innerHTML=allAchievements.map(a=>{const unlocked=achievements.includes(a.id)||a.check();if(a.check()&&!achievements.includes(a.id))achievements.push(a.id);return `<div class="achievement ${unlocked?'':'locked'}"><div class="icon">${a.icon}</div><div class="info"><h4>${a.title}</h4><p>${a.desc}</p>${unlocked?'<p style="color:#2E7D32;font-weight:900;">✅ Получено!</p>':'<p>🔒 Заблокировано</p>'}</div></div>`;}).join('');saveAll();}
+function checkAchievements(id){if(!achievements.includes(id)){achievements.push(id);saveAll();const a={first_purchase:'🛒 Первая покупка!',collector:'❤️ Коллекционер!',reviewer:'⭐ Критик!',shopper:' Шопоголик!',social:'📢 Активист!',explorer:'🔍 Исследователь!'}[id];if(a)showToast(` ${a}`);}}
+function renderEvents(){const l=document.getElementById('eventsList');if(!l)return;l.innerHTML=events.map(e=>`<div class="event-card"><div class="date">📅 ${e.date} в ${e.time}</div><h3>${e.title}</h3><p>${e.desc}</p><button class="btn btn-small" onclick="alert('Записаны! 🦉')">Записаться</button></div>`).join('')||'<p>Нет мероприятий</p>';}
+function openCheckout(){const current=DB.get('currentUser',null);if(!current){if(confirm('Войти для оформления?'))window.location.href='login.html';return;}if(cart.length===0){alert('Корзина пуста ');return;}const req=settings.requisites;const reqBox=document.getElementById('payRequisites');if(req.cardNumber){reqBox.innerHTML=`<h4>💳 Реквизиты:</h4><p><b>Карта:</b> ${req.cardNumber}</p><p><b>Получатель:</b> ${req.cardHolder||'—'}</p><p><b>Банк:</b> ${req.bank||'—'}</p>${req.sbp?`<p><b>СБП:</b> ${req.sbp}</p>`:''}`;}else reqBox.innerHTML='<p>Реквизиты после оформления</p>';document.getElementById('co_name').value=current.name||'';document.getElementById('co_email').value=current.email||'';const sum=getCartTotal();const itemsHtml=cart.map(c=>{const p=products.find(x=>x.id==c.productId);return p?`<li>${p.name} × ${c.qty} = ${p.price*c.qty}₽</li>`:'';}).join('');document.getElementById('checkoutSummary').innerHTML=`<h4>📋 Заказ:</h4><ul style="padding-left:20px;margin:10px 0;font-size:12px">${itemsHtml}</ul><p><b>Итого: <span style="color:#D84315">${sum} ₽</span></b></p>`;closeModal('cartModal');openModal('checkoutModal');}
 function submitOrder(){const current=DB.get('currentUser',null);if(!current)return;const name=document.getElementById('co_name').value.trim();const email=document.getElementById('co_email').value.trim();const phone=document.getElementById('co_phone').value.trim();const city=document.getElementById('co_city').value.trim();const address=document.getElementById('co_address').value.trim();const delivery=document.getElementById('co_delivery').value;const payment=document.getElementById('co_payment').value;const promo=document.getElementById('co_promo').value.trim();const comment=document.getElementById('co_comment').value.trim();if(!name||!email||!phone||!city||!address){alert('Заполните все поля 🦉');return;}let total=getCartTotal();if(payment==='Бонусными баллами'){const points=current.points||0;if(points<total){alert(`Нужно ${total}, у вас ${points}`);return;}current.points-=total;DB.set('currentUser',current);const users=DB.get('users',[]);const u=users.find(x=>x.id==current.id);if(u)u.points=current.points;DB.set('users',users);total=0;}if(promo){const p=settings.promos.find(pr=>pr.code.toLowerCase()===promo.toLowerCase());if(p){if(p.type==='percent')total=Math.round(total*(1-p.discount/100));else total=Math.max(0,total-p.discount);}}const order={id:Date.now(),userId:current.id,userName:current.name,userEmail:current.email,items:cart.map(c=>({productId:c.productId,qty:c.qty})),total,name,email,phone,city,address,delivery,payment,comment,status:'new',date:new Date().toLocaleString('ru-RU'),trackNumber:'TR'+Date.now().toString().slice(-8)};orders.push(order);cart.forEach(c=>{const p=products.find(x=>x.id==c.productId);if(p)p.stock=Math.max(0,(p.stock||0)-c.qty);});const pointsEarned=Math.floor(total/100);if(pointsEarned>0){current.points=(current.points||0)+pointsEarned;DB.set('currentUser',current);const users=DB.get('users',[]);const u=users.find(x=>x.id==current.id);if(u)u.points=current.points;DB.set('users',users);}cart=[];saveAll();updateCartCount();updateUserInfo();closeModal('checkoutModal');alert(`✅ Заказ #${order.id}!\nСумма: ${total} ₽\nБаллов: +${pointsEarned}\nТрек: ${order.trackNumber}`);checkAchievements('first_purchase');showSection('orders');}
-function submitReturn(){const orderId=document.getElementById('r_order').value.trim();const name=document.getElementById('r_name').value.trim();const email=document.getElementById('r_email').value.trim();const reason=document.getElementById('r_reason').value.trim();if(!orderId||!name||!email||!reason)return alert('Заполните все поля');returns.push({id:Date.now(),orderId,name,email,reason,status:'На рассмотрении',date:new Date().toLocaleString('ru-RU')});saveAll();document.getElementById('r_order').value='';document.getElementById('r_name').value='';document.getElementById('r_email').value='';document.getElementById('r_reason').value='';showToast('Заявка отправлена! 🦉');renderReturns();}
+function submitReturn(){const orderId=document.getElementById('r_order').value.trim();const name=document.getElementById('r_name').value.trim();const email=document.getElementById('r_email').value.trim();const reason=document.getElementById('r_reason').value.trim();if(!orderId||!name||!email||!reason)return alert('Заполните все поля');returns.push({id:Date.now(),orderId,name,email,reason,status:'На рассмотрении',date:new Date().toLocaleString('ru-RU')});saveAll();document.getElementById('r_order').value='';document.getElementById('r_name').value='';document.getElementById('r_email').value='';document.getElementById('r_reason').value='';showToast('Заявка отправлена! ');renderReturns();}
 function submitSuggestion(){const name=document.getElementById('s_name').value.trim();const email=document.getElementById('s_email').value.trim();const type=document.getElementById('s_type').value;const title=document.getElementById('s_title').value.trim();const text=document.getElementById('s_text').value.trim();if(!name||!email||!title||!text){alert('Заполните все поля 🦉');return;}suggestions.push({id:Date.now(),name,email,type,title,text,status:'Новое',date:new Date().toLocaleString('ru-RU')});saveAll();document.getElementById('s_name').value='';document.getElementById('s_email').value='';document.getElementById('s_title').value='';document.getElementById('s_text').value='';showToast('✅ Отправлено! Спасибо! 🦉');renderSuggestions();}
 function renderSuggestions(){const l=document.getElementById('suggestionsList');if(!l)return;if(suggestions.length===0){l.innerHTML='<div class="empty-state"><span class="big-icon">💡</span><p>Пока нет предложений</p></div>';return;}l.innerHTML=suggestions.slice().reverse().map(s=>`<div class="suggestion-item"><div class="author">👤 ${s.name} <span class="service-type">${s.type}</span></div><div class="date">📅 ${s.date}</div><h4 style="margin:8px 0;color:var(--text);font-weight:800;">${s.title}</h4><div class="text">${s.text}</div></div>`).join('');}
 function subscribe(){const email=document.getElementById('subEmail').value.trim();if(!email)return alert('Введите email');if(subscribers.includes(email))return alert('Уже подписаны');subscribers.push(email);saveAll();document.getElementById('subEmail').value='';showToast('Подписка оформлена! 📧');}
-function sendContact(){const name=document.getElementById('c_name').value.trim();const email=document.getElementById('c_email').value.trim();const msg=document.getElementById('c_msg').value.trim();if(!name||!email||!msg)return alert('Заполните все поля');const contacts=DB.get('contacts',[]);contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});DB.set('contacts',contacts);document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';showToast('Отправлено! 🦉');}
+function sendContact(){const name=document.getElementById('c_name').value.trim();const email=document.getElementById('c_email').value.trim();const msg=document.getElementById('c_msg').value.trim();if(!name||!email||!msg)return alert('Заполните все поля');const contacts=DB.get('contacts',[]);contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});DB.set('contacts',contacts);document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';showToast('Отправлено! ');}
 function openReviewModal(){const current=DB.get('currentUser',null);document.getElementById('formContent').innerHTML=`<h2>✍️ Отзыв</h2><input id="f_author" placeholder="Имя" value="${current?current.name:''}"><textarea id="f_text" placeholder="Отзыв"></textarea><div class="modal-actions"><button class="btn close-btn" onclick="closeModal('formModal')">Отмена</button><button class="btn btn-purple" onclick="saveReview()">Отправить 🦉</button></div>`;openModal('formModal');}
 function saveReview(){const author=document.getElementById('f_author').value.trim();const text=document.getElementById('f_text').value.trim();if(!author||!text)return alert('Заполните поля');reviews.push({id:Date.now(),author,text});saveAll();closeModal('formModal');renderReviews();checkAchievements('social');}
 function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
 function toggleChat(){document.getElementById('chatWindow').classList.toggle('active');}
-function sendChat(){const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;chatMessages.push({from:'user',text,time:new Date().toLocaleTimeString('ru-RU')});input.value='';setTimeout(()=>{const answers=['Спасибо! 🦉 Скоро ответим.','Посмотрите раздел FAQ.','Работаем 9:00-21:00. Тел: +7 (800) 555-35-35','Доставка по России! 🚚','Много бесплатных товаров! 🎁'];chatMessages.push({from:'bot',text:answers[Math.floor(Math.random()*answers.length)],time:new Date().toLocaleTimeString('ru-RU')});saveAll();renderChat();},1000);saveAll();renderChat();}
+function sendChat(){const input=document.getElementById('chatInput');const text=input.value.trim();if(!text)return;chatMessages.push({from:'user',text,time:new Date().toLocaleTimeString('ru-RU')});input.value='';setTimeout(()=>{const answers=['Спасибо! 🦉 Скоро ответим.','Посмотрите раздел FAQ.','Работаем 9:00-21:00. Тел: +7 (800) 555-35-35','Доставка по России! ','Много бесплатных товаров! 🎁'];chatMessages.push({from:'bot',text:answers[Math.floor(Math.random()*answers.length)],time:new Date().toLocaleTimeString('ru-RU')});saveAll();renderChat();},1000);saveAll();renderChat();}
 function renderChat(){const m=document.getElementById('chatMessages');if(!m)return;m.innerHTML=chatMessages.map(msg=>`<div class="chat-msg ${msg.from}">${msg.text}</div>`).join('');m.scrollTop=m.scrollHeight;}
 function openModal(id){document.getElementById(id).classList.add('active');}
 function closeModal(id){document.getElementById(id).classList.remove('active');}
 function showToast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
 function renderAll(){renderCatalogs();renderProducts(currentSearch);renderVideos();renderGames();renderBlog();renderFaq();renderReviews();renderStats();renderPopular();renderFavorites();renderOrders();renderReturns();renderSuggestions();updateUserInfo();updateCartCount();renderBanners();renderSaleTimer();renderProductOfDay();renderQuiz();renderAchievements();renderEvents();renderHistory();renderCompare();renderCompareBar();renderChat();if(settings.theme==='dark')document.body.classList.add('dark');}
 function renderFavorites(){const g=document.getElementById('favoritesGrid');if(!g)return;const favProducts=products.filter(p=>favorites.includes(p.id));g.innerHTML=favProducts.length?favProducts.map(p=>renderProductCard(p)).join(''):'<div class="empty-state"><span class="big-icon">❤️</span><p>Пусто</p></div>';}
+
+// === ПОИСК ПО САЙТУ ===
+function openSearch(){
+  document.getElementById('searchOverlay').classList.add('active');
+  setTimeout(()=>{
+    const input = document.getElementById('searchInput');
+    input.focus();
+    input.value = '';
+    document.getElementById('searchResults').innerHTML = '<div class="search-empty"><div class="big-icon"></div><p>Начните вводить текст для поиска</p></div>';
+  }, 100);
+}
+
+function closeSearch(){
+  document.getElementById('searchOverlay').classList.remove('active');
+}
+
+function performSearch(query){
+  const resultsDiv = document.getElementById('searchResults');
+  const q = query.toLowerCase().trim();
+  
+  if(q.length < 2){
+    resultsDiv.innerHTML = '<div class="search-empty"><div class="big-icon">🔍</div><p>Введите минимум 2 символа</p></div>';
+    return;
+  }
+  
+  const results = [];
+  
+  products.forEach(p=>{
+    if(p.name.toLowerCase().includes(q) || (p.desc||'').toLowerCase().includes(q)){
+      results.push({type:'Товар',icon:'🛍',title:p.name,desc:p.desc||'',img:p.img||'',action:()=>openProductModal(p.id)});
+    }
+  });
+  
+  catalogs.forEach(c=>{
+    if(c.name.toLowerCase().includes(q) || (c.desc||'').toLowerCase().includes(q)){
+      results.push({type:'Каталог',icon:'📚',title:c.name,desc:c.desc||'',img:'',action:()=>{showSection('catalogs');closeSearch();}});
+    }
+  });
+  
+  blog.forEach(b=>{
+    if(b.title.toLowerCase().includes(q) || (b.text||'').toLowerCase().includes(q)){
+      results.push({type:'Статья',icon:'📝',title:b.title,desc:(b.text||'').substring(0,80)+'...',img:'',action:()=>{showSection('blog');closeSearch();}});
+    }
+  });
+  
+  faq.forEach(f=>{
+    if((f.q||'').toLowerCase().includes(q) || (f.a||'').toLowerCase().includes(q)){
+      results.push({type:'FAQ',icon:'❓',title:f.q,desc:(f.a||'').substring(0,80)+'...',img:'',action:()=>{showSection('faq');closeSearch();}});
+    }
+  });
+  
+  events.forEach(e=>{
+    if((e.title||'').toLowerCase().includes(q) || (e.desc||'').toLowerCase().includes(q)){
+      results.push({type:'Мероприятие',icon:'',title:e.title,desc:e.desc||'',img:'',action:()=>{showSection('events');closeSearch();}});
+    }
+  });
+  
+  reviews.forEach(r=>{
+    if((r.author||'').toLowerCase().includes(q) || (r.text||'').toLowerCase().includes(q)){
+      results.push({type:'Отзыв',icon:'⭐',title:'Отзыв от '+r.author,desc:(r.text||'').substring(0,80)+'...',img:'',action:()=>{showSection('home');closeSearch();}});
+    }
+  });
+  
+  if(results.length === 0){
+    resultsDiv.innerHTML = '<div class="search-empty"><div class="big-icon">😔</div><p>Ничего не найдено по запросу "'+q+'"</p></div>';
+    return;
+  }
+  
+  resultsDiv.innerHTML = '<p style="font-size:12px;color:#666;margin-bottom:12px;font-weight:700;">Найдено результатов: <b>'+results.length+'</b></p>' + 
+    results.map((r,i)=>`
+      <div class="search-result-item" onclick="searchResultClick(${i})">
+        ${r.img?`<img src="${r.img}" alt="" onerror="this.style.display='none'">`:''}
+        <div class="search-result-info">
+          <h4>${r.icon} ${r.title}</h4>
+          <p>${r.desc}</p>
+          <span class="search-result-type">${r.type}</span>
+        </div>
+      </div>
+    `).join('');
+  
+  window._searchResults = results;
+}
+
+function searchResultClick(index){
+  const result = window._searchResults[index];
+  if(result && result.action) result.action();
+}
+
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeSearch();
+});
+
+document.getElementById('searchOverlay')?.addEventListener('click', function(e){
+  if(e.target === this) closeSearch();
+});
+
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
 renderAll();
 </script>
