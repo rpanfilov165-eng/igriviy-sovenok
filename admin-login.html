@@ -8,57 +8,71 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png">
 <link rel="apple-touch-icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito','Segoe UI',sans-serif; transition: all .3s; }
 body { background:linear-gradient(135deg,#311B92 0%,#4527A0 50%,#512DA8 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-.login-wrap { background:#FFF8E1; border-radius:22px; padding:30px; max-width:950px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.3); border:3px solid #FFC107; text-align:center; max-height:95vh; overflow-y:auto; }
-.owl-big { width:120px; height:120px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; }
+.login-wrap { background:rgba(255,248,225,0.95); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:980px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(255,193,7,0.5); text-align:center; max-height:95vh; overflow-y:auto; }
+.owl-big { width:120px; height:120px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2)); }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-h1 { color:#5D4037; margin-bottom:5px; font-size:24px; }
-.subtitle { color:#673AB7; margin-bottom:20px; font-size:13px; font-weight:bold; }
+h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; background:linear-gradient(135deg,#673AB7,#FFC107); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { color:#673AB7; margin-bottom:20px; font-size:14px; font-weight:700; }
 .form-group { margin-bottom:12px; text-align:left; }
-.form-group label { display:block; color:#5D4037; font-weight:bold; margin-bottom:4px; font-size:12px; }
-.form-group input, .form-group select, .form-group textarea { width:100%; padding:10px; border:2px solid #FFE0B2; border-radius:10px; font-size:13px; background:#fff; }
-.form-group textarea { min-height:60px; resize:vertical; }
-.btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:12px; border-radius:14px; font-size:15px; font-weight:bold; cursor:pointer; margin-top:8px; }
-.back-link { display:inline-block; margin-top:15px; color:#673AB7; text-decoration:none; font-weight:bold; font-size:13px; }
-.msg { padding:8px; border-radius:8px; margin-bottom:12px; font-size:13px; display:none; }
-.msg.error { background:#FFEBEE; color:#C62828; display:block; }
-.msg.success { background:#E8F5E9; color:#2E7D32; display:block; }
-.hint { background:#E8EAF6; padding:10px; border-radius:10px; font-size:12px; color:#512DA8; margin-bottom:12px; text-align:left; }
-.admin-panel { display:none; background:#fff; padding:18px; border-radius:14px; margin-top:12px; text-align:left; max-height:80vh; overflow-y:auto; }
-.admin-panel h3 { color:#5D4037; margin-bottom:10px; border-bottom:2px dashed #FFC107; padding-bottom:5px; font-size:16px; }
-.admin-panel h4 { color:#5D4037; margin:12px 0 8px; font-size:14px; }
-.admin-tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:12px; }
-.admin-tabs button { background:#FFE0B2; border:none; padding:7px 10px; border-radius:9px; cursor:pointer; font-weight:bold; color:#5D4037; font-size:11px; }
-.admin-tabs button.active { background:#673AB7; color:#fff; }
-.admin-section { display:none; }
+.form-group label { display:block; color:#2D1B4E; font-weight:700; margin-bottom:5px; font-size:13px; }
+.form-group input, .form-group select, .form-group textarea { width:100%; padding:11px; border:2px solid #FFE0B2; border-radius:12px; font-size:13px; background:#fff; font-weight:600; }
+.form-group input:focus, .form-group textarea:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
+.form-group textarea { min-height:70px; resize:vertical; }
+.btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:13px; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 4px 14px rgba(103,58,183,0.4); }
+.btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(103,58,183,0.5); }
+.back-link { display:inline-block; margin-top:15px; color:#673AB7; text-decoration:none; font-weight:700; font-size:13px; }
+.msg { padding:10px; border-radius:10px; margin-bottom:12px; font-size:13px; display:none; font-weight:600; }
+.msg.error { background:#FFEBEE; color:#C62828; display:block; border:1px solid #EF9A9A; }
+.msg.success { background:#E8F5E9; color:#2E7D32; display:block; border:1px solid #A5D6A7; }
+.hint { background:linear-gradient(135deg,#E8EAF6,#C5CAE9); padding:12px; border-radius:12px; font-size:12px; color:#512DA8; margin-bottom:12px; text-align:left; border-left:4px solid #673AB7; }
+.admin-panel { display:none; background:#fff; padding:20px; border-radius:18px; margin-top:12px; text-align:left; max-height:80vh; overflow-y:auto; box-shadow:0 4px 20px rgba(0,0,0,0.1); }
+.admin-panel h3 { color:#2D1B4E; margin-bottom:12px; padding-bottom:8px; border-bottom:3px solid transparent; border-image:linear-gradient(90deg,#FFC107,#673AB7) 1; font-size:18px; font-weight:800; }
+.admin-panel h4 { color:#2D1B4E; margin:14px 0 10px; font-size:15px; font-weight:700; }
+.admin-tabs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
+.admin-tabs button { background:linear-gradient(135deg,#FFE0B2,#FFCC80); border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; color:#5D4037; font-size:11px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+.admin-tabs button:hover { transform:translateY(-2px); }
+.admin-tabs button.active { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; box-shadow:0 4px 12px rgba(103,58,183,0.4); }
+.admin-section { display:none; animation:fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 .admin-section.active { display:block; }
-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:11px; }
-table th, table td { padding:5px; text-align:left; border-bottom:1px solid #FFE0B2; }
-table th { background:#673AB7; color:#fff; }
-.btn { background:#FFC107; color:#3E2723; border:none; padding:5px 10px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:11px; margin:2px; }
-.btn-del { background:#E53935; color:#fff; }
-.btn-edit { background:#43A047; color:#fff; }
-.btn-purple { background:#673AB7; color:#fff; }
-.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1000; justify-content:center; align-items:center; padding:15px; }
-.form-modal.active { display:flex; }
-.form-modal-content { background:#FFF8E1; padding:22px; border-radius:18px; width:100%; max-width:500px; max-height:90vh; overflow-y:auto; border:3px solid #FFC107; }
-.form-modal-content h2 { color:#5D4037; margin-bottom:12px; font-size:18px; }
-.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:9px; margin:5px 0; border:2px solid #FFE0B2; border-radius:9px; font-size:12px; }
-.form-modal-content label { display:flex; align-items:center; gap:5px; margin:7px 0; font-weight:bold; color:#5D4037; font-size:12px; }
+table { width:100%; border-collapse:collapse; margin-top:10px; font-size:11px; }
+table th, table td { padding:6px; text-align:left; border-bottom:1px solid #FFE0B2; }
+table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-weight:700; }
+.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; border:none; padding:6px 12px; border-radius:10px; cursor:pointer; font-weight:700; font-size:11px; margin:2px; box-shadow:0 2px 6px rgba(255,193,7,0.3); }
+.btn:hover { transform:translateY(-1px); box-shadow:0 4px 10px rgba(255,193,7,0.5); }
+.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; box-shadow:0 2px 6px rgba(229,57,53,0.3); }
+.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; box-shadow:0 2px 6px rgba(67,160,71,0.3); }
+.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; box-shadow:0 2px 6px rgba(103,58,183,0.3); }
+.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.form-modal.active { display:flex; animation:fadeIn .25s; }
+.form-modal-content { background:rgba(255,248,225,0.98); backdrop-filter:blur(30px); padding:24px; border-radius:20px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+.form-modal-content h2 { color:#2D1B4E; margin-bottom:14px; font-size:20px; font-weight:800; }
+.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
+.form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
 .form-modal-content label input { width:auto; }
-.nav-links { margin-top:12px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
-.nav-links a { background:#FFC107; color:#3E2723; padding:7px 12px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:12px; }
-.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-bottom:15px; }
-.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:12px; border-radius:10px; text-align:center; }
-.stat-box .num { font-size:22px; font-weight:bold; }
-.stat-box .lbl { font-size:10px; opacity:.9; }
-.log-item { padding:5px; font-size:11px; border-bottom:1px solid #FFE0B2; }
-.banner-item, .event-item, .return-item, .sub-item, .chat-item, .page-item { padding:8px; background:#FFF8E1; border-radius:8px; margin:5px 0; display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
-.banner-item img { max-width:150px; border-radius:6px; }
-@media (max-width:600px) {
-  .admin-tabs button { font-size:10px; padding:5px 7px; }
+.nav-links { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; box-shadow:0 2px 8px rgba(255,193,7,0.3); }
+.nav-links a:hover { transform:translateY(-2px); }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:18px; }
+.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:14px; border-radius:14px; text-align:center; box-shadow:0 6px 16px rgba(103,58,183,0.3); }
+.stat-box .num { font-size:24px; font-weight:800; }
+.stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
+.log-item { padding:6px; font-size:11px; border-bottom:1px solid #FFE0B2; }
+.banner-item, .event-item, .return-item, .sub-item, .chat-item, .page-item { padding:10px; background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border-radius:10px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border:1px solid #FFE0B2; }
+.banner-item img { max-width:150px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
+.bg-box h4 { margin-top:0; color:#5D4037; }
+.bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
+.bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+.bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
+.current-bg-preview { max-width:100%; border-radius:12px; margin-top:12px; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+@media (max-width:700px) {
+  .admin-tabs button { font-size:10px; padding:6px 8px; }
+  .login-wrap { padding:18px; }
 }
 </style>
 </head>
@@ -66,24 +80,24 @@ table th { background:#673AB7; color:#fff; }
 <div class="login-wrap">
   <img src="logo.png" class="owl-big" alt="Игривый совёнок">
   <h1>Админ-панель</h1>
-  <p class="subtitle">Игривый совёнок — управление 🔐</p>
+  <p class="subtitle">Игривый совёнок — управление сайтом 🔐</p>
   <div id="msgBox" class="msg"></div>
 
   <div id="loginBlock">
     <div class="hint">
       💡 <b>Временные данные:</b><br>
       Логин: <b>admin</b> | Пароль: <b>777</b><br>
-      <span style="font-size:10px">(при первом входе установите новый пароль)</span>
+      <span style="font-size:11px">(при первом входе установите новый пароль)</span>
     </div>
     <form onsubmit="doLogin(event)">
-      <div class="form-group"><label> Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
-      <div class="form-group"><label> Пароль</label><input type="password" id="loginPass" required></div>
+      <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
+      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required></div>
       <button type="submit" class="btn-submit">Войти 🦉</button>
     </form>
   </div>
 
   <div id="changePassBlock" style="display:none">
-    <h3 style="color:#5D4037;margin-bottom:12px">🔑 Установите новый пароль</h3>
+    <h3 style="color:#2D1B4E;margin-bottom:14px;font-weight:800"> Установите новый пароль</h3>
     <form onsubmit="changePassword(event)">
       <div class="form-group"><label>Новый пароль</label><input type="password" id="newPass" required minlength="4"></div>
       <div class="form-group"><label>Повторите пароль</label><input type="password" id="newPass2" required minlength="4"></div>
@@ -92,30 +106,31 @@ table th { background:#673AB7; color:#fff; }
   </div>
 
   <div class="admin-panel" id="adminPanel">
-    <h3>⚙️ Управление сайтом 🦉</h3>
+    <h3>️ Управление сайтом 🦉</h3>
     <div class="admin-tabs">
       <button class="active" onclick="showTab('aDashboard',this)">📊 Дашборд</button>
-      <button onclick="showTab('aCatalogs',this)">Каталоги</button>
-      <button onclick="showTab('aProducts',this)">Товары</button>
-      <button onclick="showTab('aVideos',this)">Видео</button>
-      <button onclick="showTab('aGames',this)">Пособия</button>
-      <button onclick="showTab('aNews',this)">Новости</button>
-      <button onclick="showTab('aBlog',this)">Блог</button>
-      <button onclick="showTab('aFaq',this)">FAQ</button>
-      <button onclick="showTab('aReviews',this)">Отзывы</button>
-      <button onclick="showTab('aOrders',this)">Заказы</button>
-      <button onclick="showTab('aUsers',this)">Покупатели</button>
-      <button onclick="showTab('aContacts',this)">Сообщения</button>
+      <button onclick="showTab('aCatalogs',this)">📚 Каталоги</button>
+      <button onclick="showTab('aProducts',this)">🛍 Товары</button>
+      <button onclick="showTab('aVideos',this)">🎬 Видео</button>
+      <button onclick="showTab('aGames',this)">🎮 Пособия</button>
+      <button onclick="showTab('aNews',this)">📰 Новости</button>
+      <button onclick="showTab('aBlog',this)"> Блог</button>
+      <button onclick="showTab('aFaq',this)">❓ FAQ</button>
+      <button onclick="showTab('aReviews',this)">⭐ Отзывы</button>
+      <button onclick="showTab('aOrders',this)">📦 Заказы</button>
+      <button onclick="showTab('aUsers',this)"> Покупатели</button>
+      <button onclick="showTab('aContacts',this)">✉️ Сообщения</button>
       <button onclick="showTab('aBanners',this)">🖼 Баннеры</button>
       <button onclick="showTab('aEvents',this)">📅 Мероприятия</button>
       <button onclick="showTab('aReturns',this)">🔄 Возвраты</button>
       <button onclick="showTab('aSubscribers',this)">📧 Подписчики</button>
       <button onclick="showTab('aChat',this)">💬 Чат</button>
-      <button onclick="showTab('aLog',this)"> Журнал</button>
+      <button onclick="showTab('aLog',this)">📋 Журнал</button>
       <button onclick="showTab('aSale',this)">🔥 Акции</button>
-      <button onclick="showTab('aPages',this)">📄 Страницы</button>
+      <button onclick="showTab('aPages',this)"> Страницы</button>
+      <button onclick="showTab('aBackground',this)"> Фон сайта</button>
       <button onclick="showTab('aRequisites',this)">💳 Реквизиты</button>
-      <button onclick="showTab('aPromos',this)">🎟 Промокоды</button>
+      <button onclick="showTab('aPromos',this)"> Промокоды</button>
       <button onclick="showTab('aSettings',this)">⚙️ Настройки</button>
     </div>
 
@@ -220,26 +235,26 @@ table th { background:#673AB7; color:#fff; }
     <div id="aSubscribers" class="admin-section">
       <h4>📧 Список подписчиков</h4>
       <div id="adminSubscribers"></div>
-      <button class="btn btn-purple" onclick="sendNewsletter()" style="margin-top:10px"> Отправить рассылку</button>
+      <button class="btn btn-purple" onclick="sendNewsletter()" style="margin-top:12px">📧 Отправить рассылку</button>
     </div>
 
     <!-- ЧАТ -->
     <div id="aChat" class="admin-section">
       <h4>💬 Сообщения чата поддержки</h4>
       <div id="adminChat"></div>
-      <button class="btn btn-del" onclick="if(confirm('Очистить чат?')){chatMessages=[];saveAll();renderAdmin();}">Очистить чат</button>
+      <button class="btn btn-del" onclick="if(confirm('Очистить чат?')){DB.set('chatMessages',[]);renderAdmin();}">🗑 Очистить чат</button>
     </div>
 
     <!-- ЖУРНАЛ -->
     <div id="aLog" class="admin-section">
       <h4>📋 Журнал действий</h4>
       <div id="adminLog"></div>
-      <button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}">Очистить журнал</button>
+      <button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}">🗑 Очистить журнал</button>
     </div>
 
     <!-- АКЦИИ -->
     <div id="aSale" class="admin-section">
-      <h4> Настройки акции</h4>
+      <h4>🔥 Настройки акции</h4>
       <div class="form-group"><label><input type="checkbox" id="sale_active"> Акция активна</label></div>
       <div class="form-group"><label>Процент скидки</label><input id="sale_percent" type="number" placeholder="30"></div>
       <div class="form-group"><label>Дата окончания</label><input id="sale_end" type="datetime-local"></div>
@@ -250,6 +265,50 @@ table th { background:#673AB7; color:#fff; }
     <div id="aPages" class="admin-section">
       <button class="btn" onclick="openPageModal()">+ Страница</button>
       <div id="adminPages"></div>
+    </div>
+
+    <!-- ФОН САЙТА -->
+    <div id="aBackground" class="admin-section">
+      <h3>🎨 Управление фоном сайта</h3>
+      <p style="font-size:13px;opacity:0.8;margin-bottom:16px">Измените фон всего сайта — загрузите изображение, укажите URL или выберите градиент</p>
+
+      <div class="bg-box">
+        <h4>📤 Загрузить изображение с компьютера</h4>
+        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Максимальный размер: 2 МБ. Поддерживаются JPG, PNG, GIF, WEBP</p>
+        <input type="file" id="bgFile" accept="image/*" onchange="previewBackground(event)" style="padding:10px;background:#fff;border:2px solid #FFE0B2;border-radius:10px;width:100%">
+        <div id="bgPreview"></div>
+        <button class="btn btn-purple" onclick="saveBackground()" style="margin-top:12px">💾 Установить как фон</button>
+      </div>
+
+      <div class="bg-box">
+        <h4>🔗 Указать URL изображения</h4>
+        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Вставьте прямую ссылку на изображение из интернета</p>
+        <input id="bgUrl" placeholder="https://example.com/image.jpg" style="width:100%;padding:11px;border:2px solid #FFE0B2;border-radius:10px;margin-bottom:10px;font-size:13px">
+        <button class="btn btn-purple" onclick="saveBackgroundUrl()">💾 Установить по URL</button>
+      </div>
+
+      <div class="bg-box">
+        <h4>🌈 Готовые градиенты</h4>
+        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Нажмите на градиент, чтобы применить его</p>
+        <div class="bg-preview-grid">
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#667eea 0%,#764ba2 100%)')" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)" title="Фиолетовый закат"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#f093fb 0%,#f5576c 100%)')" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)" title="Розовый рассвет"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)')" style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)" title="Голубое небо"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)')" style="background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)" title="Мятная свежесть"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#fa709a 0%,#fee140 100%)')" style="background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)" title="Закатное солнце"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#30cfd0 0%,#330867 100%)')" style="background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)" title="Ночное небо"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#a8edea 0%,#fed6e3 100%)')" style="background:linear-gradient(135deg,#a8edea 0%,#fed6e3 100%)" title="Пастельный"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)')" style="background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)" title="Нежно-розовый"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#5D4037 0%,#8D6E63 50%,#D7CCC8 100%)')" style="background:linear-gradient(135deg,#5D4037 0%,#8D6E63 50%,#D7CCC8 100%)" title="Кофейный"></div>
+          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 50%,#FFCC80 100%)')" style="background:linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 50%,#FFCC80 100%)" title="Совиный (стандартный)"></div>
+        </div>
+      </div>
+
+      <div class="bg-box">
+        <h4> Текущий фон</h4>
+        <div id="currentBgDisplay" style="font-size:13px;opacity:0.7">Фон не установлен</div>
+        <button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px"> Убрать фон (вернуть стандартный)</button>
+      </div>
     </div>
 
     <!-- РЕКВИЗИТЫ -->
@@ -270,27 +329,27 @@ table th { background:#673AB7; color:#fff; }
 
     <!-- НАСТРОЙКИ -->
     <div id="aSettings" class="admin-section">
-      <h4> Сменить пароль</h4>
+      <h4>🔑 Сменить пароль</h4>
       <div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div>
       <div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div>
       <button class="btn btn-purple" onclick="adminChangePass()">Сохранить</button>
-      <hr style="margin:15px 0;border-color:#FFE0B2">
+      <hr style="margin:18px 0;border-color:#FFE0B2">
       <h4>🎨 Цвета сайта</h4>
       <div class="form-group"><label>Основной цвет</label><input type="color" id="color_primary" value="#673AB7"></div>
       <div class="form-group"><label>Акцентный цвет</label><input type="color" id="color_accent" value="#FFC107"></div>
       <button class="btn btn-purple" onclick="saveColors()">Сохранить цвета</button>
-      <hr style="margin:15px 0;border-color:#FFE0B2">
+      <hr style="margin:18px 0;border-color:#FFE0B2">
       <h4>💾 Данные</h4>
       <button class="btn" onclick="exportData()">📤 Экспорт (JSON)</button>
-      <button class="btn" onclick="importData()">📥 Импорт (JSON)</button>
+      <button class="btn" onclick="importData()"> Импорт (JSON)</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
       <button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сбросить всё</button>
-      <button class="btn btn-del" onclick="logout()">🚪 Выйти</button>
+      <button class="btn btn-del" onclick="logout()"> Выйти</button>
     </div>
   </div>
 
   <div class="nav-links">
-    <a href="index.html">🏠 На сайт</a>
+    <a href="index.html"> На сайт</a>
     <a href="login.html">👤 Покупатель</a>
   </div>
 </div>
@@ -324,7 +383,9 @@ let settings = DB.get('settings', {
   requisites:{cardNumber:'',cardHolder:'',bank:'',sbp:''},
   promos:[{code:'OWL10',discount:10,type:'percent'}],
   sale:{active:false,percent:30,endDate:Date.now()+86400000*7},
-  colors:{primary:'#673AB7',accent:'#FFC107'}
+  colors:{primary:'#673AB7',accent:'#FFC107'},
+  backgroundImage:null,
+  backgroundIsGradient:false
 });
 
 function saveAll(){
@@ -392,6 +453,78 @@ function showTab(id, btn){
   btn.classList.add('active');
 }
 
+// === УПРАВЛЕНИЕ ФОНОМ ===
+function previewBackground(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 2000000) return alert('Файл слишком большой! Максимум 2 МБ. Сожмите изображение.');
+  const reader = new FileReader();
+  reader.onload = function(e){
+    document.getElementById('bgPreview').innerHTML = `
+      <img src="${e.target.result}" class="current-bg-preview">
+      <p style="font-size:12px;color:#673AB7;margin-top:10px;font-weight:700">✅ Предпросмотр. Нажмите "Установить как фон"</p>`;
+    window._tempBg = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveBackground(){
+  if(!window._tempBg) return alert('Сначала выберите файл');
+  settings.backgroundImage = window._tempBg;
+  settings.backgroundIsGradient = false;
+  saveAll();
+  addLog('Изменён фон сайта (загрузка файла)');
+  alert('✅ Фон установлен! Обновите главную страницу сайта.');
+  document.getElementById('bgPreview').innerHTML = '';
+  document.getElementById('bgFile').value = '';
+  window._tempBg = null;
+  renderCurrentBg();
+}
+
+function saveBackgroundUrl(){
+  const url = document.getElementById('bgUrl').value.trim();
+  if(!url) return alert('Введите URL изображения');
+  settings.backgroundImage = url;
+  settings.backgroundIsGradient = false;
+  saveAll();
+  addLog('Изменён фон сайта (URL: '+url+')');
+  alert('✅ Фон установлен по URL! Обновите главную страницу.');
+  document.getElementById('bgUrl').value = '';
+  renderCurrentBg();
+}
+
+function setPresetBg(gradient){
+  settings.backgroundImage = gradient;
+  settings.backgroundIsGradient = true;
+  saveAll();
+  addLog('Установлен градиентный фон');
+  alert('✅ Градиентный фон установлен! Обновите главную страницу.');
+  renderCurrentBg();
+}
+
+function removeBackground(){
+  if(!confirm('Убрать фон сайта? Вернётся стандартный кремовый фон.')) return;
+  settings.backgroundImage = null;
+  settings.backgroundIsGradient = false;
+  saveAll();
+  addLog('Фон сайта удалён (сброшен к стандартному)');
+  alert('✅ Фон сброшен к стандартному');
+  renderCurrentBg();
+}
+
+function renderCurrentBg(){
+  const display = document.getElementById('currentBgDisplay');
+  if(!settings.backgroundImage){
+    display.innerHTML = '<p style="color:#999">Фон не установлен — используется стандартный</p>';
+    return;
+  }
+  if(settings.backgroundIsGradient){
+    display.innerHTML = `<div style="height:100px;border-radius:12px;background:${settings.backgroundImage};margin-top:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15)"></div><p style="font-size:12px;margin-top:8px;color:#673AB7">Текущий фон: градиент</p>`;
+  } else {
+    display.innerHTML = `<img src="${settings.backgroundImage}" class="current-bg-preview"><p style="font-size:12px;margin-top:8px;color:#673AB7">Текущий фон: изображение</p>`;
+  }
+}
+
 function renderAdmin(){
   // ДАШБОРД
   document.getElementById('statOrders').textContent = orders.length;
@@ -405,54 +538,54 @@ function renderAdmin(){
   document.getElementById('statSubs').textContent = subs.length;
 
   const top = [...products].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,5);
-  document.getElementById('topProducts').innerHTML = top.length ? top.map((p,i)=>`<div style="padding:8px;background:#FFF8E1;border-radius:8px;margin:5px 0">${i+1}. ${p.name} — ${(p.rating||0).toFixed(1)}★</div>`).join('') : '<p>Нет товаров</p>';
+  document.getElementById('topProducts').innerHTML = top.length ? top.map((p,i)=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;font-weight:600">${i+1}. ${p.name} — ${(p.rating||0).toFixed(1)}★</div>`).join('') : '<p>Нет товаров</p>';
   const recent = orders.slice(-5).reverse();
-  document.getElementById('recentOrders').innerHTML = recent.length ? recent.map(o=>`<div style="padding:8px;background:#FFF8E1;border-radius:8px;margin:5px 0">Заказ #${o.id} — ${o.total}₽ — ${o.userName} — ${o.date}</div>`).join('') : '<p>Нет заказов</p>';
+  document.getElementById('recentOrders').innerHTML = recent.length ? recent.map(o=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;font-size:12px">Заказ #${o.id} — ${o.total}₽ — ${o.userName} — ${o.date}</div>`).join('') : '<p>Нет заказов</p>';
 
   // КАТАЛОГИ
-  document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>`<tr><td>${c.name}</td><td>${c.desc}</td><td>${c.ageMin||0}-${c.ageMax||10}</td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})"></button></td></tr>`).join('');
+  document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>`<tr><td>${c.name}</td><td>${c.desc}</td><td>${c.ageMin||0}-${c.ageMax||10}</td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})">🗑</button></td></tr>`).join('');
   // ТОВАРЫ
   document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'🎁':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td>${p.age||'—'}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('');
   // ВИДЕО
-  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
   // ПОСОБИЯ
   document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})">🗑</button></td></tr>`).join('');
   // НОВОСТИ
   document.getElementById('adminNews').innerHTML = news.map(n=>`<tr><td>${n.title}</td><td>${n.date}</td><td><button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️</button><button class="btn btn-del" onclick="delNews(${n.id})">🗑</button></td></tr>`).join('');
   // БЛОГ
-  document.getElementById('adminBlog').innerHTML = blog.map(b=>`<tr><td>${b.title}</td><td>${b.date}</td><td><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBlog(${b.id})"></button></td></tr>`).join('');
+  document.getElementById('adminBlog').innerHTML = blog.map(b=>`<tr><td>${b.title}</td><td>${b.date}</td><td><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑</button></td></tr>`).join('');
   // FAQ
-  document.getElementById('adminFaq').innerHTML = faq.map((f,i)=>`<tr><td>${f.q}</td><td>${f.a}</td><td><button class="btn btn-edit" onclick="openFaqModal(${i})">️</button><button class="btn btn-del" onclick="delFaq(${i})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminFaq').innerHTML = faq.map((f,i)=>`<tr><td>${f.q}</td><td>${f.a}</td><td><button class="btn btn-edit" onclick="openFaqModal(${i})">✏️</button><button class="btn btn-del" onclick="delFaq(${i})">🗑</button></td></tr>`).join('');
   // ОТЗЫВЫ
   document.getElementById('adminReviews').innerHTML = reviews.map(r=>`<tr><td>${r.author}</td><td>${r.text}</td><td><button class="btn btn-del" onclick="delReview(${r.id})">🗑</button></td></tr>`).join('');
   // ЗАКАЗЫ
   document.getElementById('adminOrders').innerHTML = orders.map(o=>`<tr><td>#${o.id}</td><td>${o.userName}<br><small>${o.userEmail}</small></td><td>${o.total}₽</td><td>
-    <select onchange="changeOrderStatus(${o.id},this.value)" style="padding:3px;border-radius:6px">
+    <select onchange="changeOrderStatus(${o.id},this.value)" style="padding:4px;border-radius:6px">
       <option value="new" ${o.status==='new'?'selected':''}>🆕 Новый</option>
       <option value="paid" ${o.status==='paid'?'selected':''}>✅ Оплачен</option>
       <option value="sent" ${o.status==='sent'?'selected':''}>🚚 Отправлен</option>
       <option value="done" ${o.status==='done'?'selected':''}>📦 Доставлен</option>
-      <option value="cancel" ${o.status==='cancel'?'selected':''}> Отменён</option>
+      <option value="cancel" ${o.status==='cancel'?'selected':''}>❌ Отменён</option>
     </select></td><td>${o.trackNumber||'—'}</td><td style="font-size:10px">${o.date}</td><td><button class="btn btn-del" onclick="delOrder(${o.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="7" style="text-align:center">Нет заказов</td></tr>';
   // ПОКУПАТЕЛИ
   document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td>${u.points||0}</td><td><button class="btn btn-del" onclick="delUser(${u.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет покупателей</td></tr>';
   // СООБЩЕНИЯ
-  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
+  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})"></button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
   // БАННЕРЫ
-  document.getElementById('adminBanners').innerHTML = banners.map(b=>`<div class="banner-item"><img src="${b.img}" alt=""><div><b>Ссылка:</b> ${b.link||'—'}</div><button class="btn btn-del" onclick="banners=banners.filter(x=>x.id!=${b.id});saveAll();addLog('Удалён баннер');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет баннеров</p>';
+  document.getElementById('adminBanners').innerHTML = banners.map(b=>`<div class="banner-item"><img src="${b.img}" alt=""><div style="flex:1"><b>Ссылка:</b> ${b.link||'—'}</div><button class="btn btn-del" onclick="banners=banners.filter(x=>x.id!=${b.id});saveAll();addLog('Удалён баннер');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет баннеров</p>';
   // МЕРОПРИЯТИЯ
-  document.getElementById('adminEvents').innerHTML = events.map(e=>`<div class="event-item"><div><b>${e.title}</b><br><small>${e.date} ${e.time}</small><br>${e.desc}</div><button class="btn btn-del" onclick="events=events.filter(x=>x.id!=${e.id});saveAll();addLog('Удалено мероприятие');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет мероприятий</p>';
+  document.getElementById('adminEvents').innerHTML = events.map(e=>`<div class="event-item"><div style="flex:1"><b>${e.title}</b><br><small>${e.date} ${e.time}</small><br>${e.desc}</div><button class="btn btn-del" onclick="events=events.filter(x=>x.id!=${e.id});saveAll();addLog('Удалено мероприятие');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет мероприятий</p>';
   // ВОЗВРАТЫ
-  document.getElementById('adminReturns').innerHTML = returns.map(r=>`<div class="return-item"><div><b>Заявка #${r.id}</b><br>Заказ: ${r.orderId}<br>Клиент: ${r.name} (${r.email})<br>Причина: ${r.reason}<br>Дата: ${r.date}</div><select onchange="returns.find(x=>x.id==${r.id}).status=this.value;saveAll();addLog('Изменён статус возврата #${r.id}');renderAdmin()" style="padding:5px;border-radius:6px">
+  document.getElementById('adminReturns').innerHTML = returns.map(r=>`<div class="return-item"><div style="flex:1"><b>Заявка #${r.id}</b><br>Заказ: ${r.orderId}<br>Клиент: ${r.name} (${r.email})<br>Причина: ${r.reason}<br>Дата: ${r.date}</div><select onchange="returns.find(x=>x.id==${r.id}).status=this.value;saveAll();addLog('Изменён статус возврата #${r.id}');renderAdmin()" style="padding:5px;border-radius:6px">
     <option ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option>
     <option ${r.status==='Одобрено'?'selected':''}>Одобрено</option>
     <option ${r.status==='Отклонено'?'selected':''}>Отклонено</option>
   </select><button class="btn btn-del" onclick="returns=returns.filter(x=>x.id!=${r.id});saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет заявок на возврат</p>';
   // ПОДПИСЧИКИ
-  document.getElementById('adminSubscribers').innerHTML = subs.map((s,i)=>`<div class="sub-item">${s} <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет подписчиков</p>';
+  document.getElementById('adminSubscribers').innerHTML = subs.map((s,i)=>`<div class="sub-item" style="flex:1">${s} <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет подписчиков</p>';
   // ЧАТ
   const chat = DB.get('chatMessages',[]);
-  document.getElementById('adminChat').innerHTML = chat.map(m=>`<div class="chat-item" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'}"><b>${m.from==='user'?' Покупатель':'🤖 Бот'}:</b> ${m.text}<br><small style="color:#888">${m.time||''}</small></div>`).join('') || '<p>Чат пуст</p>';
+  document.getElementById('adminChat').innerHTML = chat.map(m=>`<div class="chat-item" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};flex-direction:column;align-items:flex-start"><div><b>${m.from==='user'?'👤 Покупатель':'🤖 Бот'}:</b> ${m.text}</div><small style="color:#888">${m.time||''}</small></div>`).join('') || '<p>Чат пуст</p>';
   // ЖУРНАЛ
   const log = DB.get('log',[]);
   document.getElementById('adminLog').innerHTML = log.slice(-30).reverse().map(l=>`<div class="log-item">${l.date} — ${l.action}</div>`).join('') || '<p>Журнал пуст</p>';
@@ -468,12 +601,14 @@ function renderAdmin(){
   document.getElementById('req_bank').value = req.bank || '';
   document.getElementById('req_sbp').value = req.sbp || '';
   // ПРОМОКОДЫ
-  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'Процент':'Сумма'}</td><td><button class="btn btn-del" onclick="delPromo(${i})"></button></td></tr>`).join('');
+  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'Процент':'Сумма'}</td><td><button class="btn btn-del" onclick="delPromo(${i})">🗑</button></td></tr>`).join('');
   // СТРАНИЦЫ
-  document.getElementById('adminPages').innerHTML = pages.map(p=>`<div class="page-item"><div><b>${p.title}</b><br><small>${p.content?String(p.content).substring(0,50):''}...</small></div><button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️</button><button class="btn btn-del" onclick="pages=pages.filter(x=>x.id!=${p.id});saveAll();addLog('Удалена страница');renderAdmin()"></button></div>`).join('') || '<p>Нет страниц</p>';
+  document.getElementById('adminPages').innerHTML = pages.map(p=>`<div class="page-item"><div style="flex:1"><b>${p.title}</b><br><small>${p.content?String(p.content).substring(0,50):''}...</small></div><button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️</button><button class="btn btn-del" onclick="pages=pages.filter(x=>x.id!=${p.id});saveAll();addLog('Удалена страница');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет страниц</p>';
   // ЦВЕТА
   document.getElementById('color_primary').value = settings.colors.primary || '#673AB7';
   document.getElementById('color_accent').value = settings.colors.accent || '#FFC107';
+  // ФОН
+  renderCurrentBg();
 }
 
 function saveRequisites(){
@@ -485,7 +620,7 @@ function saveRequisites(){
   };
   saveAll();
   addLog('Изменены реквизиты');
-  alert('✅ Реквизиты сохранены! ');
+  alert('✅ Реквизиты сохранены! 🦉');
 }
 function changeOrderStatus(id, status){
   const o = orders.find(x=>x.id==id);
@@ -527,12 +662,12 @@ function sendNewsletter(){
   newsletters.push({id:Date.now(), subject, text, date:new Date().toLocaleString('ru-RU'), recipients:subs.length});
   DB.set('newsletters', newsletters);
   addLog(`Рассылка отправлена: "${subject}" (${subs.length} получателей)`);
-  alert(`📧 Рассылка отправлена ${subs.length} подписчикам!`);
+  alert(` Рассылка отправлена ${subs.length} подписчикам!`);
 }
 
 function openPromoModal(){
   document.getElementById('formContent').innerHTML = `
-    <h2> Новый промокод</h2>
+    <h2>🎟 Новый промокод</h2>
     <input id="p_code" placeholder="Код (OWL20)">
     <input id="p_discount" type="number" placeholder="Размер скидки">
     <select id="p_type"><option value="percent">Процент (%)</option><option value="fixed">Фикс. сумма (₽)</option></select>
@@ -585,7 +720,7 @@ function openProductModal(id){
   const p = id ? products.find(x=>x.id==id) : {name:'',price:0,free:true,catalogId:catalogs[0]?.id||0,img:'',desc:'',stock:0,age:0,sale:false,salePrice:0,createdAt:Date.now()};
   const opts = catalogs.map(c=>`<option value="${c.id}" ${c.id==p.catalogId?'selected':''}>${c.name}</option>`).join('');
   document.getElementById('formContent').innerHTML = `
-    <h2>${id?'️':'➕'} Товар</h2>
+    <h2>${id?'✏️':'➕'} Товар</h2>
     <input id="f_name" placeholder="Название" value="${p.name}">
     <label><input type="checkbox" id="f_free" ${p.free?'checked':''}> 🎁 Бесплатный</label>
     <input id="f_price" type="number" placeholder="Цена" value="${p.price}" ${p.free?'disabled':''}>
@@ -723,7 +858,7 @@ function delBlog(id){ if(!confirm('Удалить?'))return; blog=blog.filter(b=
 function openFaqModal(idx){
   const f = idx!==undefined ? faq[idx] : {q:'',a:''};
   document.getElementById('formContent').innerHTML = `
-    <h2>${idx!==undefined?'️':'➕'} FAQ</h2>
+    <h2>${idx!==undefined?'✏️':'➕'} FAQ</h2>
     <input id="f_q" placeholder="Вопрос" value="${f.q}">
     <textarea id="f_a" placeholder="Ответ">${f.a}</textarea>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
@@ -746,7 +881,7 @@ function delReview(id){ if(!confirm('Удалить?'))return; reviews=reviews.f
 
 function openBannerModal(){
   document.getElementById('formContent').innerHTML = `
-    <h2>🖼 Новый баннер</h2>
+    <h2> Новый баннер</h2>
     <input id="b_img" placeholder="URL изображения">
     <input id="b_link" placeholder="Ссылка при клике (например, #products)">
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
@@ -789,7 +924,7 @@ function saveEvent(){
 function openPageModal(id){
   const p = id ? pages.find(x=>x.id==id) : {title:'',content:'',slug:''};
   document.getElementById('formContent').innerHTML = `
-    <h2>${id?'✏️':'➕'} Страница</h2>
+    <h2>${id?'️':'➕'} Страница</h2>
     <input id="pg_title" placeholder="Заголовок" value="${p.title}">
     <input id="pg_slug" placeholder="URL (например, about)" value="${p.slug||''}">
     <textarea id="pg_content" placeholder="Содержимое страницы (HTML)" style="min-height:120px">${p.content||''}</textarea>
