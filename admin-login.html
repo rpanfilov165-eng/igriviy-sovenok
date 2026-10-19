@@ -2,14 +2,14 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>🔐 Админ — Игривый совёнок</title>
+<title> Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
 body { background:linear-gradient(135deg,#311B92,#4527A0,#512DA8); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-.login-wrap { background:rgba(255,248,225,0.98); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:900px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(255,193,7,0.5); text-align:center; max-height:95vh; overflow-y:auto; }
+.login-wrap { background:rgba(255,248,225,0.98); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:980px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(255,193,7,0.5); text-align:center; max-height:95vh; overflow-y:auto; }
 .owl-big { width:120px; height:120px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; background:linear-gradient(135deg,#673AB7,#FFC107); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -39,6 +39,10 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 .btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; }
 .nav-links { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:18px; }
+.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:14px; border-radius:14px; text-align:center; }
+.stat-box .num { font-size:24px; font-weight:800; }
+.stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
 .bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
 .bg-box h4 { margin-top:0; color:#5D4037; }
 .file-upload-box { background:#fff; border:2px dashed #673AB7; border-radius:12px; padding:20px; text-align:center; margin:12px 0; cursor:pointer; transition:all .3s; }
@@ -51,6 +55,8 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 .bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
 .bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
 .bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; }
+.suggestion-admin-item { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px; border-radius:10px; margin:8px 0; border-left:4px solid #673AB7; }
+.suggestion-admin-item .type-badge { display:inline-block; background:#673AB7; color:#fff; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; margin-left:8px; }
 @media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } }
 </style>
 </head>
@@ -72,17 +78,18 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
   <div class="admin-panel" id="adminPanel">
     <h3>⚙️ Управление сайтом</h3>
     <div class="admin-tabs">
-      <button class="active" onclick="showTab('aBackground',this)">🖼 Фон сайта</button>
+      <button class="active" onclick="showTab('aBackground',this)"> Фон сайта</button>
+      <button onclick="showTab('aDashboard',this)">📊 Дашборд</button>
       <button onclick="showTab('aProducts',this)">🛍 Товары</button>
-      <button onclick="showTab('aOrders',this)">📦 Заказы</button>
+      <button onclick="showTab('aOrders',this)"> Заказы</button>
+      <button onclick="showTab('aSuggestions',this)">💡 Предложения</button>
+      <button onclick="showTab('aUsers',this)">👥 Покупатели</button>
       <button onclick="showTab('aSettings',this)">⚙️ Настройки</button>
     </div>
 
-    <!-- УПРАВЛЕНИЕ ФОНОМ -->
     <div id="aBackground" class="admin-section active">
       <h3>🎨 Изменить фон всего сайта</h3>
       <p style="font-size:13px;opacity:0.8;margin-bottom:16px">Логотип и меню останутся на месте поверх фона.</p>
-      
       <div class="bg-box">
         <h4>📤 Загрузить своё изображение</h4>
         <p style="font-size:11px;opacity:0.7;margin-bottom:10px">Максимальный размер: 2 МБ (JPG, PNG)</p>
@@ -98,7 +105,6 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
           <button class="btn btn-purple" onclick="applyBgImage()" style="margin-top:10px">💾 Применить этот фон</button>
         </div>
       </div>
-
       <div class="bg-box">
         <h4>🌈 Или выберите готовый градиент</h4>
         <div class="bg-preview-grid">
@@ -108,18 +114,33 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
           <div class="bg-preset" onclick="applyBgGradient('linear-gradient(135deg, #F3E5F5, #E1BEE7, #D7BDE2)')" style="background:linear-gradient(135deg, #F3E5F5, #E1BEE7, #D7BDE2)" title="Лаванда"></div>
         </div>
       </div>
-
       <div class="bg-box">
         <h4>🔄 Сбросить настройки</h4>
         <button class="btn btn-del" onclick="resetBg()">🗑 Вернуть стандартный фон</button>
       </div>
     </div>
 
-    <!-- ТОВАРЫ (Заглушка для примера) -->
+    <div id="aDashboard" class="admin-section">
+      <h3>📊 Статистика</h3>
+      <div class="stats">
+        <div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div>
+        <div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div>
+        <div class="stat-box"><div class="num" id="statUsers">0</div><div class="lbl">Покупателей</div></div>
+        <div class="stat-box"><div class="num" id="statProducts">0</div><div class="lbl">Товаров</div></div>
+        <div class="stat-box"><div class="num" id="statSuggestions">0</div><div class="lbl">Предложений</div></div>
+      </div>
+    </div>
+
     <div id="aProducts" class="admin-section"><h3>🛍 Товары</h3><p>Управление товарами...</p></div>
     <div id="aOrders" class="admin-section"><h3>📦 Заказы</h3><p>Список заказов...</p></div>
-    
-    <!-- НАСТРОЙКИ -->
+
+    <div id="aSuggestions" class="admin-section">
+      <h3>💡 Предложения услуг от пользователей</h3>
+      <div id="adminSuggestionsList"></div>
+    </div>
+
+    <div id="aUsers" class="admin-section"><h3>👥 Покупатели</h3><p>Список покупателей...</p></div>
+
     <div id="aSettings" class="admin-section">
       <h3>⚙️ Настройки</h3>
       <div class="form-group"><label>Сменить пароль админа</label><input type="password" id="newAdminPass" placeholder="Новый пароль"></div>
@@ -131,29 +152,29 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
   </div>
   
   <div class="nav-links">
-    <a href="index.html">🏠 На сайт</a>
+    <a href="index.html"> На сайт</a>
     <a href="login.html">👤 Вход для покупателей</a>
   </div>
 </div>
 
 <script>
-// Проверка авторизации при загрузке
 if(sessionStorage.getItem('isAdmin') === 'true') {
   document.getElementById('loginBlock').style.display = 'none';
   document.getElementById('adminPanel').style.display = 'block';
+  renderAdmin();
 }
 
 function doLogin(e) {
   e.preventDefault();
   const u = document.getElementById('loginUser').value;
   const p = document.getElementById('loginPass').value;
-  // Стандартный вход (можно сменить пароль в настройках)
   const savedPass = localStorage.getItem('adminPass') || '777';
   
   if(u === 'admin' && p === savedPass) {
     sessionStorage.setItem('isAdmin', 'true');
     document.getElementById('loginBlock').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
+    renderAdmin();
   } else {
     showMsg('❌ Неверный логин или пароль', 'error');
   }
@@ -178,7 +199,6 @@ function showMsg(text, type) {
   setTimeout(() => { box.className = 'msg'; }, 3000);
 }
 
-// === ЛОГИКА ФОНА ===
 let tempBgData = null;
 
 document.getElementById('bgUpload').addEventListener('change', function(e) {
@@ -202,27 +222,28 @@ document.getElementById('bgUpload').addEventListener('change', function(e) {
 
 function applyBgImage() {
   if (!tempBgData) return;
-  const settings = {
-    type: 'image',
-    value: `url('${tempBgData}') center/cover fixed no-repeat`
-  };
-  localStorage.setItem('siteBgSettings', JSON.stringify(settings));
+  const settings = DB_get('settings', {});
+  settings.backgroundImage = tempBgData;
+  settings.backgroundType = 'image';
+  DB_set('settings', settings);
   showMsg('✅ Фон установлен! Обновите главную страницу (F5).', 'success');
   document.getElementById('bgPreviewContainer').style.display = 'none';
   document.getElementById('bgUpload').value = '';
 }
 
 function applyBgGradient(gradient) {
-  const settings = {
-    type: 'gradient',
-    value: gradient
-  };
-  localStorage.setItem('siteBgSettings', JSON.stringify(settings));
+  const settings = DB_get('settings', {});
+  settings.backgroundImage = gradient;
+  settings.backgroundType = 'gradient';
+  DB_set('settings', settings);
   showMsg('✅ Градиент установлен! Обновите главную страницу (F5).', 'success');
 }
 
 function resetBg() {
-  localStorage.removeItem('siteBgSettings');
+  const settings = DB_get('settings', {});
+  settings.backgroundImage = null;
+  settings.backgroundType = null;
+  DB_set('settings', settings);
   showMsg('✅ Фон сброшен до стандартного.', 'success');
 }
 
@@ -235,6 +256,52 @@ function changeAdminPass() {
   localStorage.setItem('adminPass', newPass);
   showMsg('✅ Пароль администратора изменён!', 'success');
   document.getElementById('newAdminPass').value = '';
+}
+
+function DB_get(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } }
+function DB_set(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+function renderAdmin() {
+  const orders = DB_get('orders', []);
+  const products = DB_get('products', []);
+  const users = DB_get('users', []);
+  const suggestions = DB_get('suggestions', []);
+  
+  document.getElementById('statOrders').textContent = orders.length;
+  const revenue = orders.reduce((s,o) => s + (o.total || 0), 0);
+  document.getElementById('statRevenue').textContent = revenue + '₽';
+  document.getElementById('statUsers').textContent = users.length;
+  document.getElementById('statProducts').textContent = products.length;
+  document.getElementById('statSuggestions').textContent = suggestions.length;
+  
+  // Предложения
+  const sugList = document.getElementById('adminSuggestionsList');
+  if (suggestions.length === 0) {
+    sugList.innerHTML = '<p style="text-align:center;padding:20px;opacity:0.6;">Пока нет предложений</p>';
+  } else {
+    sugList.innerHTML = suggestions.slice().reverse().map(s => `
+      <div class="suggestion-admin-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <b>👤 ${s.name}</b> <span class="type-badge">${s.type}</span>
+            <div style="font-size:11px;color:#888;margin-top:4px;"> ${s.email} | 📅 ${s.date}</div>
+          </div>
+          <button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑 Удалить</button>
+        </div>
+        <h4 style="margin:10px 0 6px;color:#5D4037;">${s.title}</h4>
+        <p style="font-size:13px;line-height:1.5;">${s.text}</p>
+      </div>
+    `).join('');
+  }
+}
+
+function deleteSuggestion(id) {
+  if (!confirm('Удалить это предложение?')) return;
+  let suggestions = DB_get('suggestions', []);
+  suggestions = suggestions.filter(s => s.id !== id);
+  DB_set('suggestions', suggestions);
+  renderAdmin();
+  showMsg('✅ Предложение удалено', 'success');
 }
 </script>
 </body>
