@@ -7,8 +7,8 @@
 <meta name="description" content="Уютный мир развивающих игр, пособий и знаний для детей">
 <meta name="theme-color" content="#673AB7">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦉</text></svg>">
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Comic Sans MS','Segoe UI',sans-serif; }
 body { background:linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 100%); color:#3E2723; min-height:100vh; padding-bottom:60px; }
@@ -16,8 +16,8 @@ a { color:#673AB7; text-decoration:none; }
 header { background:linear-gradient(135deg,#5D4037 0%,#795548 100%); color:#FFF8E1; padding:12px 20px; box-shadow:0 4px 12px rgba(0,0,0,.2); position:sticky; top:0; z-index:100; }
 .header-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
 .logo { font-size:22px; font-weight:bold; display:flex; align-items:center; gap:8px; cursor:pointer; }
-.logo-owl { font-size:36px; animation:blink 3s infinite; }
-@keyframes blink { 0%,90%,100%{transform:scale(1)} 95%{transform:scale(1.15)} }
+.logo-img { width:50px; height:50px; border-radius:50%; animation:blink 3s infinite; }
+@keyframes blink { 0%,90%,100%{transform:scale(1)} 95%{transform:scale(1.1)} }
 .user-info { background:rgba(255,255,255,.15); padding:6px 12px; border-radius:20px; font-size:12px; }
 .user-info a { color:#FFC107; font-weight:bold; }
 nav { display:flex; flex-wrap:wrap; gap:5px; }
@@ -73,7 +73,7 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
 .page.active { display:block; }
 .welcome { text-align:center; padding:25px; }
 .welcome h1 { color:#5D4037; font-size:28px; margin-bottom:8px; }
-.big-owl { font-size:80px; display:block; margin:15px 0; animation:float 3s ease-in-out infinite; }
+.big-owl { width:150px; height:150px; display:block; margin:15px auto; animation:float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 .cart-item { display:flex; gap:12px; padding:12px; border:2px solid #FFE0B2; border-radius:10px; margin-bottom:8px; background:#FFF8E1; align-items:center; }
 .cart-item img { width:70px; height:70px; object-fit:cover; border-radius:8px; }
@@ -113,14 +113,14 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
 <header>
   <div class="header-inner">
     <div class="logo" onclick="showSection('home')">
-      <span class="logo-owl">🦉</span>
+      <img src="logo.png" class="logo-img" alt="Игривый совёнок">
       <span>Игривый совёнок</span>
     </div>
     <div class="user-info" id="userInfo">👤 Гость | <a href="login.html">Войти</a></div>
     <nav>
       <button onclick="showSection('home')">🏠 Главная</button>
       <button onclick="showSection('catalogs')">📚 Каталоги</button>
-      <button onclick="showSection('products')">🛍 Товары</button>
+      <button onclick="showSection('products')"> Товары</button>
       <button onclick="showSection('favorites')">❤️ Избранное</button>
       <button onclick="showSection('videos')">🎬 Видео</button>
       <button onclick="showSection('games')">🎮 Пособия</button>
@@ -144,10 +144,10 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
   <!-- ГЛАВНАЯ -->
   <div id="home" class="page active">
     <div class="section welcome">
-      <span class="big-owl">🦉</span>
+      <img src="logo.png" class="big-owl" alt="Игривый совёнок">
       <h1>Добро пожаловать в «Игривый совёнок»!</h1>
       <p>Уютный мир игр, пособий и знаний для маленьких совят и их родителей 🌙✨</p>
-      <p style="margin-top:10px"><a href="login.html" class="btn btn-purple">🔑 Войти / Регистрация</a></p>
+      <p style="margin-top:10px"><a href="login.html" class="btn btn-purple"> Войти / Регистрация</a></p>
     </div>
     <div class="section">
       <h2>📊 Статистика</h2>
@@ -166,7 +166,7 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
 
   <div id="catalogs" class="page">
     <div class="section">
-      <h2>📚 Каталоги</h2>
+      <h2> Каталоги</h2>
       <input class="search-box" placeholder="🔍 Поиск каталога..." oninput="renderCatalogs(this.value)">
       <div class="grid" id="catalogsGrid"></div>
     </div>
@@ -217,7 +217,7 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
 
   <div id="blog" class="page">
     <div class="section">
-      <h2>📝 Блог «Игривого совёнка»</h2>
+      <h2> Блог «Игривого совёнка»</h2>
       <div id="blogList"></div>
     </div>
   </div>
@@ -232,7 +232,7 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
   <div id="contacts" class="page">
     <div class="section">
       <h2>📞 Контакты</h2>
-      <p style="margin-bottom:10px">📧 Email: <b>info@owl-site.ru</b></p>
+      <p style="margin-bottom:10px"> Email: <b>info@owl-site.ru</b></p>
       <p style="margin-bottom:10px">📱 Телефон: <b>+7 (800) 555-35-35</b></p>
       <p style="margin-bottom:10px">🏙 Адрес: <b>г. Москва, ул. Совиная, д. 7</b></p>
       <p style="margin-bottom:15px">🕐 Режим работы: <b>Пн-Вс 9:00-21:00</b></p>
@@ -273,10 +273,10 @@ footer { background:#5D4037; color:#FFF8E1; text-align:center; padding:20px; pos
   <div class="modal-content">
     <h2>📝 Оформление заказа</h2>
     <div class="requisites-box" id="payRequisites"></div>
-    <input id="co_name" placeholder="👤 Ваше имя" required>
-    <input id="co_email" type="email" placeholder="📧 Email" required>
+    <input id="co_name" placeholder=" Ваше имя" required>
+    <input id="co_email" type="email" placeholder=" Email" required>
     <input id="co_phone" placeholder="📱 Телефон" required>
-    <input id="co_city" placeholder="🏙 Город" required>
+    <input id="co_city" placeholder=" Город" required>
     <textarea id="co_address" placeholder="📮 Адрес доставки" required></textarea>
     <select id="co_delivery">
       <option value="Почта России (300₽)">Почта России (300₽)</option>
@@ -324,7 +324,7 @@ let catalogs = DB.get('catalogs', [
   {id:3, name:'Творчество', desc:'Рисование, лепка, аппликация'}
 ]);
 let products = DB.get('products', [
-  {id:1, name:'Азбука-раскраска', price:0, free:true, catalogId:2, img:'https://via.placeholder.com/220x150/FFC107/5D4037?text=🦉Азбука', desc:'Учим буквы играя', rating:4.5, stock:10},
+  {id:1, name:'Азбука-раскраска', price:0, free:true, catalogId:2, img:'https://via.placeholder.com/220x150/FFC107/5D4037?text=Азбука', desc:'Учим буквы играя', rating:4.5, stock:10},
   {id:2, name:'Набор цифр', price:350, free:false, catalogId:1, img:'https://via.placeholder.com/220x150/673AB7/fff?text=🔢Цифры', desc:'Яркие цифры для счёта', rating:5, stock:5},
   {id:3, name:'Логическая мозаика', price:590, free:false, catalogId:1, img:'https://via.placeholder.com/220x150/795548/fff?text=🧩Мозаика', desc:'Развиваем логику', rating:4, stock:8},
   {id:4, name:'Пальчиковые краски', price:290, free:false, catalogId:3, img:'https://via.placeholder.com/220x150/E53935/fff?text=🎨Краски', desc:'Безопасные краски', rating:4.8, stock:12}
@@ -383,7 +383,6 @@ function doLogout(){
   showToast('Вы вышли 🦉');
 }
 
-// === КОРЗИНА ===
 function addToCart(productId){
   const p = products.find(x=>x.id==productId);
   if(!p) return;
@@ -443,14 +442,13 @@ function renderCart(){
         <button onclick="changeQty(${p.id},-1)">−</button>
         <span><b>${c.qty}</b></span>
         <button onclick="changeQty(${p.id},1)">+</button>
-        <button class="btn btn-del btn-small" onclick="removeFromCart(${p.id})">🗑</button>
+        <button class="btn btn-del btn-small" onclick="removeFromCart(${p.id})"></button>
       </div>
     </div>`;
   }).join('');
   total.innerHTML = `<div class="cart-total"><div>Итого:</div><div class="sum">${getCartTotal()} ₽</div></div>`;
 }
 
-// === ИЗБРАННОЕ ===
 function toggleFavorite(productId){
   const idx = favorites.indexOf(productId);
   if(idx>=0) favorites.splice(idx,1);
@@ -465,7 +463,6 @@ function renderFavorites(){
     : '<div class="empty-state"><span class="big-icon">❤️</span><p>В избранном пусто</p></div>';
 }
 
-// === РЕЙТИНГ ===
 function rateProduct(productId, rating){
   const p = products.find(x=>x.id==productId);
   if(!p) return;
@@ -497,7 +494,7 @@ function renderProductCard(p){
     <p style="font-size:11px;color:${p.stock>0?'#4CAF50':'#E53935'}">${p.stock>0?'В наличии: '+p.stock+' шт.':'Нет в наличии'}</p>
     <span class="badge-cat">${cat?cat.name:'—'}</span>
     <div class="card-actions">
-      ${!p.free && p.stock>0 ? `<button class="btn btn-small" onclick="addToCart(${p.id})">🛒 В корзину</button>` : ''}
+      ${!p.free && p.stock>0 ? `<button class="btn btn-small" onclick="addToCart(${p.id})"> В корзину</button>` : ''}
       <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${p.id})">${isFav?'❤️':'♡'}</button>
     </div>
   </div>`;
@@ -514,7 +511,7 @@ function openProductModal(id){
     ${renderStars(p.rating||0, p.id)}
     <p><b>Каталог:</b> ${cat?cat.name:'—'}</p>
     <p><b>Наличие:</b> ${p.stock>0?p.stock+' шт.':'нет'}</p>
-    ${p.free ? '<p class="price" style="color:#4CAF50;font-size:26px;margin:12px 0">Бесплатно! 🎁</p>' : `<p class="price" style="font-size:26px;margin:12px 0">${p.price} ₽</p>`}
+    ${p.free ? '<p class="price" style="color:#4CAF50;font-size:26px;margin:12px 0">Бесплатно! </p>' : `<p class="price" style="font-size:26px;margin:12px 0">${p.price} ₽</p>`}
     <div class="modal-actions">
       <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
       ${!p.free && p.stock>0 ? `<button class="btn btn-purple" onclick="addToCart(${p.id});closeModal('productModal')">🛒 В корзину</button>` : ''}
@@ -532,7 +529,7 @@ function renderProducts(q=''){
   if(currentSort==='price-desc') f.sort((a,b)=>b.price-a.price);
   if(currentSort==='name') f.sort((a,b)=>a.name.localeCompare(b.name));
   if(currentSort==='rating') f.sort((a,b)=>(b.rating||0)-(a.rating||0));
-  g.innerHTML = f.map(p=>renderProductCard(p)).join('') || '<div class="empty-state"><span class="big-icon">🛍</span><p>Товары не найдены</p></div>';
+  g.innerHTML = f.map(p=>renderProductCard(p)).join('') || '<div class="empty-state"><span class="big-icon"></span><p>Товары не найдены</p></div>';
 }
 function filterProducts(type, btn){
   currentProductFilter = type;
@@ -557,7 +554,7 @@ function renderGames(){
 }
 function renderBlog(){
   const l=document.getElementById('blogList'); if(!l) return;
-  l.innerHTML = blog.map(b=>`<div class="blog-card"><h3>📝 ${b.title}</h3><p style="color:#8D6E63;font-size:11px">${b.date}</p><p>${b.text}</p></div>`).join('') || '<p>Нет статей</p>';
+  l.innerHTML = blog.map(b=>`<div class="blog-card"><h3> ${b.title}</h3><p style="color:#8D6E63;font-size:11px">${b.date}</p><p>${b.text}</p></div>`).join('') || '<p>Нет статей</p>';
 }
 function renderFaq(){
   const l=document.getElementById('faqList'); if(!l) return;
@@ -576,7 +573,7 @@ function renderOrders(){
   const l=document.getElementById('ordersList'); if(!l) return;
   const current = DB.get('currentUser', null);
   if(!current){
-    l.innerHTML = `<div class="empty-state"><span class="big-icon">🔐</span><p>Войдите, чтобы видеть заказы</p><a href="login.html" class="btn btn-purple">Войти</a></div>`;
+    l.innerHTML = `<div class="empty-state"><span class="big-icon"></span><p>Войдите, чтобы видеть заказы</p><a href="login.html" class="btn btn-purple">Войти</a></div>`;
     return;
   }
   const myOrders = orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);
@@ -611,7 +608,6 @@ function renderStats(){
     <div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ В избранном</div></div>`;
 }
 
-// === ОФОРМЛЕНИЕ ЗАКАЗА ===
 function openCheckout(){
   const current = DB.get('currentUser', null);
   if(!current){
@@ -708,7 +704,7 @@ function sendContact(){
   document.getElementById('c_name').value='';
   document.getElementById('c_email').value='';
   document.getElementById('c_msg').value='';
-  showToast('Сообщение отправлено! 🦉');
+  showToast('Сообщение отправлено! ');
 }
 
 function openModal(id){ document.getElementById(id).classList.add('active'); }
@@ -727,7 +723,6 @@ function renderAll(){
   renderFavorites(); renderOrders(); updateUserInfo(); updateCartCount();
 }
 
-// === PWA ===
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -736,7 +731,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 function installApp(){
   if(!deferredPrompt) {
-    alert('Чтобы установить приложение:\n\n📱 На Android: меню Chrome → «Добавить на главный экран»\n🍎 На iPhone: меню Safari → «На экран «Домой»');
+    alert('Чтобы установить приложение:\n\n📱 На Android: меню Chrome → «Добавить на главный экран»\n На iPhone: меню Safari → «На экран «Домой»');
     return;
   }
   deferredPrompt.prompt();
