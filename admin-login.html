@@ -33,22 +33,33 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .admin-section { display:none; animation:fadeIn .3s; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 .admin-section.active { display:block; }
-table { width:100%; border-collapse:collapse; margin-top:10px; font-size:11px; }
-table th, table td { padding:6px; text-align:left; border-bottom:1px solid #FFE0B2; }
-table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-weight:700; }
-.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; border:none; padding:6px 12px; border-radius:10px; cursor:pointer; font-weight:700; font-size:11px; margin:2px; }
-.btn:hover { transform:translateY(-1px); }
-.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
-.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; }
-.btn-view { background:linear-gradient(135deg,#2196F3,#42A5F5); color:#fff; }
-.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; }
+
+/* Стили для элементов с кнопками */
+.item-row { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px; border-radius:10px; margin:8px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border-left:4px solid #673AB7; }
+.item-row:hover { box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.item-info { flex:1; min-width:200px; }
+.item-info h4 { color:#5D4037; margin-bottom:5px; font-weight:700; }
+.item-info p { font-size:12px; color:#666; margin:3px 0; }
+.item-actions { display:flex; gap:5px; flex-wrap:wrap; }
+
+/* Большие заметные кнопки */
+.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:700; font-size:12px; margin:2px; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
+.btn:hover { transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,0.2); }
+.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; padding:8px 14px; font-size:12px; }
+.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; padding:8px 14px; font-size:12px; }
+.btn-view { background:linear-gradient(135deg,#2196F3,#42A5F5); color:#fff; padding:8px 14px; font-size:12px; }
+.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:8px 14px; font-size:12px; }
+.btn-add { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:10px 18px; font-size:13px; margin-bottom:15px; }
+
 .nav-links { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 .nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; }
+
 .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:18px; }
 .stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:14px; border-radius:14px; text-align:center; box-shadow:0 6px 16px rgba(103,58,183,0.3); }
 .stat-box:hover { transform:translateY(-3px); }
 .stat-box .num { font-size:24px; font-weight:800; }
 .stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
+
 .bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
 .bg-box h4 { margin-top:0; color:#5D4037; }
 .file-upload-box { background:#fff; border:2px dashed #673AB7; border-radius:12px; padding:20px; text-align:center; margin:12px 0; cursor:pointer; transition:all .3s; }
@@ -64,12 +75,7 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 .color-picker-group input[type="color"] { width:60px; height:40px; border:none; border-radius:8px; cursor:pointer; }
 .color-picker-group span { font-size:12px; color:#5D4037; font-weight:bold; }
 .preview-strip { margin-top:10px; padding:15px; border-radius:10px; color:#fff; font-size:12px; font-weight:bold; text-align:center; }
-.suggestion-admin-item, .review-admin-item, .message-admin-item { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px; border-radius:10px; margin:8px 0; border-left:4px solid #673AB7; }
-.type-badge { display:inline-block; background:#673AB7; color:#fff; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; margin-left:8px; }
-.status-badge { display:inline-block; padding:3px 10px; border-radius:10px; font-size:10px; font-weight:700; color:#fff; margin-left:8px; }
-.status-new { background:#2196F3; }
-.status-approved { background:#4CAF50; }
-.status-rejected { background:#E53935; }
+
 .form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
 .form-modal.active { display:flex; }
 .form-modal-content { background:rgba(255,248,225,0.98); padding:24px; border-radius:20px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
@@ -77,10 +83,10 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 .form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
 .form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
 .form-modal-content label input { width:auto; }
-.detail-view { background:#FFF8E1; padding:15px; border-radius:12px; margin:10px 0; border-left:4px solid #673AB7; }
-.detail-view h4 { color:#5D4037; margin-bottom:8px; }
-.detail-view p { margin:5px 0; font-size:13px; }
-@media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } }
+
+.empty-state { text-align:center; padding:30px; color:#999; font-style:italic; }
+
+@media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } .item-row { flex-direction:column; align-items:flex-start; } }
 </style>
 </head>
 <body>
@@ -93,7 +99,7 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
   <div id="loginBlock">
     <form onsubmit="doLogin(event)">
       <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="Введите логин"></div>
-      <div class="form-group"><label> Пароль</label><input type="password" id="loginPass" required placeholder="Введите пароль"></div>
+      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required placeholder="Введите пароль"></div>
       <button type="submit" class="btn-submit">Войти 🦉</button>
     </form>
   </div>
@@ -127,7 +133,7 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
       <button onclick="showTab('aSuggestions',this)">💡 Предложения</button>
       <button onclick="showTab('aBanners',this)">🖼 Баннеры</button>
       <button onclick="showTab('aEvents',this)"> Мероприятия</button>
-      <button onclick="showTab('aReturns',this)"> Возвраты</button>
+      <button onclick="showTab('aReturns',this)">🔄 Возвраты</button>
       <button onclick="showTab('aSubscribers',this)"> Подписчики</button>
       <button onclick="showTab('aChat',this)">💬 Чат</button>
       <button onclick="showTab('aLog',this)">📋 Журнал</button>
@@ -149,10 +155,6 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
         <div class="stat-box"><div class="num" id="statCatalogs">0</div><div class="lbl">Каталогов</div></div>
         <div class="stat-box"><div class="num" id="statSuggestions">0</div><div class="lbl">Предложений</div></div>
       </div>
-      <h4>🏆 Топ-5 товаров</h4>
-      <div id="topProducts"></div>
-      <h4>📈 Последние заказы</h4>
-      <div id="recentOrders"></div>
     </div>
 
     <!-- ФОН САЙТА -->
@@ -174,10 +176,10 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
       <div class="bg-box">
         <h4>🔄 Текущий фон</h4>
         <div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div>
-        <button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button>
+        <button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать фон</button>
       </div>
       <div class="bg-box">
-        <h4> Градиенты</h4>
+        <h4>🌈 Градиенты</h4>
         <div class="bg-preview-grid">
           <div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div>
           <div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div>
@@ -198,115 +200,128 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 
     <!-- КАТАЛОГИ -->
     <div id="aCatalogs" class="admin-section">
-      <button class="btn" onclick="openCatalogModal()">➕ Добавить</button>
-      <table><thead><tr><th>Название</th><th>Описание</th><th>Возраст</th><th>Товаров</th><th>Действия</th></tr></thead><tbody id="adminCatalogs"></tbody></table>
+      <h3>📚 Каталоги</h3>
+      <button class="btn btn-add" onclick="openCatalogModal()"> Добавить каталог</button>
+      <div id="adminCatalogs"></div>
     </div>
 
     <!-- ТОВАРЫ -->
     <div id="aProducts" class="admin-section">
-      <button class="btn" onclick="openProductModal()">+ Добавить</button>
-      <table><thead><tr><th>Название</th><th>Тип</th><th>Цена</th><th>Остаток</th><th>Действия</th></tr></thead><tbody id="adminProducts"></tbody></table>
+      <h3>🛍 Товары</h3>
+      <button class="btn btn-add" onclick="openProductModal()">➕ Добавить товар</button>
+      <div id="adminProducts"></div>
     </div>
 
     <!-- ВИДЕО -->
     <div id="aVideos" class="admin-section">
-      <button class="btn" onclick="openVideoModal()">+ Добавить</button>
-      <table><thead><tr><th>Название</th><th>URL</th><th>Действия</th></tr></thead><tbody id="adminVideos"></tbody></table>
+      <h3> Видео</h3>
+      <button class="btn btn-add" onclick="openVideoModal()">➕ Добавить видео</button>
+      <div id="adminVideos"></div>
     </div>
 
     <!-- ПОСОБИЯ -->
     <div id="aGames" class="admin-section">
-      <button class="btn" onclick="openGameModal()">+ Добавить</button>
-      <table><thead><tr><th>Название</th><th>Описание</th><th>Действия</th></tr></thead><tbody id="adminGames"></tbody></table>
+      <h3>🎮 Пособия</h3>
+      <button class="btn btn-add" onclick="openGameModal()">➕ Добавить пособие</button>
+      <div id="adminGames"></div>
     </div>
 
     <!-- НОВОСТИ -->
     <div id="aNews" class="admin-section">
-      <button class="btn" onclick="openNewsModal()">+ Добавить</button>
-      <table><thead><tr><th>Заголовок</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminNews"></tbody></table>
+      <h3>📰 Новости</h3>
+      <button class="btn btn-add" onclick="openNewsModal()">➕ Добавить новость</button>
+      <div id="adminNews"></div>
     </div>
 
     <!-- БЛОГ -->
     <div id="aBlog" class="admin-section">
-      <button class="btn" onclick="openBlogModal()">+ Добавить</button>
-      <table><thead><tr><th>Заголовок</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminBlog"></tbody></table>
+      <h3>📝 Блог</h3>
+      <button class="btn btn-add" onclick="openBlogModal()">➕ Добавить статью</button>
+      <div id="adminBlog"></div>
     </div>
 
     <!-- FAQ -->
     <div id="aFaq" class="admin-section">
-      <button class="btn" onclick="openFaqModal()">+ Добавить</button>
-      <table><thead><tr><th>Вопрос</th><th>Ответ</th><th>Действия</th></tr></thead><tbody id="adminFaq"></tbody></table>
+      <h3>❓ FAQ (Частые вопросы)</h3>
+      <button class="btn btn-add" onclick="openFaqModal()"> Добавить вопрос</button>
+      <div id="adminFaq"></div>
     </div>
 
     <!-- ОТЗЫВЫ -->
     <div id="aReviews" class="admin-section">
-      <table><thead><tr><th>Автор</th><th>Отзыв</th><th>Действия</th></tr></thead><tbody id="adminReviews"></tbody></table>
+      <h3>⭐ Отзывы</h3>
+      <div id="adminReviews"></div>
     </div>
 
     <!-- ЗАКАЗЫ -->
     <div id="aOrders" class="admin-section">
-      <table><thead><tr><th>#</th><th>Клиент</th><th>Сумма</th><th>Статус</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminOrders"></tbody></table>
+      <h3>📦 Заказы</h3>
+      <div id="adminOrders"></div>
     </div>
 
     <!-- ПОКУПАТЕЛИ -->
     <div id="aUsers" class="admin-section">
-      <table><thead><tr><th>Имя</th><th>Email</th><th>Телефон</th><th>Город</th><th>Баллы</th><th>Действия</th></tr></thead><tbody id="adminUsers"></tbody></table>
+      <h3>👥 Покупатели</h3>
+      <div id="adminUsers"></div>
     </div>
 
     <!-- СООБЩЕНИЯ -->
     <div id="aContacts" class="admin-section">
-      <table><thead><tr><th>Имя</th><th>Email</th><th>Сообщение</th><th>Дата</th><th>Действия</th></tr></thead><tbody id="adminContacts"></tbody></table>
+      <h3>✉️ Сообщения</h3>
+      <div id="adminContacts"></div>
     </div>
 
     <!-- ПРЕДЛОЖЕНИЯ -->
     <div id="aSuggestions" class="admin-section">
-      <h4> Предложения от пользователей</h4>
+      <h3>💡 Предложения</h3>
       <div id="adminSuggestionsList"></div>
     </div>
 
     <!-- БАННЕРЫ -->
     <div id="aBanners" class="admin-section">
-      <button class="btn" onclick="openBannerModal()">+ Добавить</button>
+      <h3> Баннеры</h3>
+      <button class="btn btn-add" onclick="openBannerModal()"> Добавить баннер</button>
       <div id="adminBanners"></div>
     </div>
 
     <!-- МЕРОПРИЯТИЯ -->
     <div id="aEvents" class="admin-section">
-      <button class="btn" onclick="openEventModal()">+ Добавить</button>
+      <h3>📅 Мероприятия</h3>
+      <button class="btn btn-add" onclick="openEventModal()">➕ Добавить мероприятие</button>
       <div id="adminEvents"></div>
     </div>
 
     <!-- ВОЗВРАТЫ -->
     <div id="aReturns" class="admin-section">
-      <h4>🔄 Заявки на возврат</h4>
+      <h3>🔄 Возвраты</h3>
       <div id="adminReturns"></div>
     </div>
 
     <!-- ПОДПИСЧИКИ -->
     <div id="aSubscribers" class="admin-section">
-      <h4> Подписчики</h4>
+      <h3>📧 Подписчики</h3>
       <div id="adminSubscribers"></div>
       <button class="btn btn-purple" onclick="sendNewsletter()" style="margin-top:12px">📧 Рассылка</button>
     </div>
 
     <!-- ЧАТ -->
     <div id="aChat" class="admin-section">
-      <h4>💬 Чат поддержки</h4>
+      <h3>💬 Чат поддержки</h3>
       <div id="adminChat"></div>
-      <button class="btn btn-del" onclick="if(confirm('Очистить чат?')){DB.set('chatMessages',[]);renderAdmin();}"> Очистить</button>
+      <button class="btn btn-del" onclick="if(confirm('Очистить весь чат?')){DB.set('chatMessages',[]);renderAdmin();}">🗑 Очистить чат</button>
     </div>
 
     <!-- ЖУРНАЛ -->
     <div id="aLog" class="admin-section">
-      <h4>📋 Журнал действий</h4>
+      <h3>📋 Журнал действий</h3>
       <div id="adminLog"></div>
-      <button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}">🗑 Очистить</button>
+      <button class="btn btn-del" onclick="if(confirm('Очистить журнал?')){DB.set('log',[]);renderAdmin();}">🗑 Очистить журнал</button>
     </div>
 
     <!-- АКЦИИ -->
     <div id="aSale" class="admin-section">
-      <h4>🔥 Настройки акции</h4>
-      <div class="form-group"><label><input type="checkbox" id="sale_active"> Активна</label></div>
+      <h3>🔥 Настройки акции</h3>
+      <div class="form-group"><label><input type="checkbox" id="sale_active"> Акция активна</label></div>
       <div class="form-group"><label>Скидка %</label><input id="sale_percent" type="number" placeholder="30"></div>
       <div class="form-group"><label>Окончание</label><input id="sale_end" type="datetime-local"></div>
       <button class="btn btn-purple" onclick="saveSale()">💾 Сохранить</button>
@@ -314,38 +329,41 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
 
     <!-- СТРАНИЦЫ -->
     <div id="aPages" class="admin-section">
-      <button class="btn" onclick="openPageModal()">+ Добавить</button>
+      <h3>📄 Страницы</h3>
+      <button class="btn btn-add" onclick="openPageModal()"> Добавить страницу</button>
       <div id="adminPages"></div>
     </div>
 
     <!-- РЕКВИЗИТЫ -->
     <div id="aRequisites" class="admin-section">
-      <h4>💳 Реквизиты</h4>
-      <div class="form-group"><label>Карта</label><input id="req_card" placeholder="2200 0000 0000 0000"></div>
-      <div class="form-group"><label>ФИО</label><input id="req_holder" placeholder="ИВАНОВ ИВАН"></div>
+      <h3>💳 Реквизиты</h3>
+      <div class="form-group"><label>Номер карты</label><input id="req_card" placeholder="2200 0000 0000 0000"></div>
+      <div class="form-group"><label>ФИО получателя</label><input id="req_holder" placeholder="ИВАНОВ ИВАН"></div>
       <div class="form-group"><label>Банк</label><input id="req_bank" placeholder="Сбербанк"></div>
       <div class="form-group"><label>СБП</label><input id="req_sbp" placeholder="+7..."></div>
-      <button class="btn btn-purple" onclick="saveRequisites()">💾 Сохранить</button>
+      <button class="btn btn-purple" onclick="saveRequisites()"> Сохранить</button>
     </div>
 
     <!-- ПРОМОКОДЫ -->
     <div id="aPromos" class="admin-section">
-      <button class="btn" onclick="openPromoModal()">+ Добавить</button>
-      <table><thead><tr><th>Код</th><th>Скидка</th><th>Тип</th><th>Действия</th></tr></thead><tbody id="adminPromos"></tbody></table>
+      <h3>🎟 Промокоды</h3>
+      <button class="btn btn-add" onclick="openPromoModal()"> Добавить промокод</button>
+      <div id="adminPromos"></div>
     </div>
 
     <!-- НАСТРОЙКИ -->
     <div id="aSettings" class="admin-section">
-      <h4>🔑 Сменить пароль</h4>
+      <h3>⚙️ Настройки</h3>
+      <h4> Сменить пароль</h4>
       <div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div>
       <div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div>
-      <button class="btn btn-purple" onclick="adminChangePass()">Сохранить</button>
+      <button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button>
       <hr style="margin:18px 0;border-color:#FFE0B2">
       <h4>💾 Данные</h4>
       <button class="btn" onclick="exportData()">📤 Экспорт</button>
       <button class="btn" onclick="importData()">📥 Импорт</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
-      <button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}"> Сброс</button>
+      <button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные сайта?')){localStorage.clear();location.reload();}">🗑 Полный сброс</button>
       <button class="btn btn-del" onclick="logout()">🚪 Выйти</button>
     </div>
   </div>
@@ -368,7 +386,7 @@ let videos = DB.get('videos',[]);
 let games = DB.get('games',[]);
 let news = DB.get('news',[]);
 let blog = DB.get('blog',[]);
-let faq = DB.get('faq',[]);
+let faq = DB.get('faq',[{id:1,q:'Как сделать заказ?',a:'Добавьте товары в корзину и оформите заказ.'}]);
 let reviews = DB.get('reviews',[]);
 let users = DB.get('users',[]);
 let orders = DB.get('orders',[]);
@@ -383,7 +401,7 @@ let tempBgData = null;
 
 function saveAll(){DB.set('catalogs',catalogs);DB.set('products',products);DB.set('videos',videos);DB.set('games',games);DB.set('news',news);DB.set('blog',blog);DB.set('faq',faq);DB.set('reviews',reviews);DB.set('admin',admin);DB.set('users',users);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);DB.set('banners',banners);DB.set('events',events);DB.set('pages',pages);DB.set('suggestions',suggestions);}
 function addLog(action){const log=DB.get('log',[]);log.push({date:new Date().toLocaleString('ru-RU'),action});if(log.length>200)log.shift();DB.set('log',log);}
-function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},4000);}
+function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
 
 function doLogin(e){
   e.preventDefault();
@@ -428,6 +446,9 @@ function showTab(id,btn){
   btn.classList.add('active');
 }
 
+function openForm(){document.getElementById('formModal').classList.add('active');}
+function closeForm(){document.getElementById('formModal').classList.remove('active');}
+
 // === ФОН ===
 function handleFileUpload(event){
   const file = event.target.files[0];
@@ -439,7 +460,7 @@ function handleFileUpload(event){
     tempBgData = e.target.result;
     document.getElementById('bgPreviewImg').src = tempBgData;
     document.getElementById('bgPreviewContainer').style.display = 'block';
-    document.getElementById('bgFileInfo').textContent = `📄 ${file.name} | ${(file.size/1024).toFixed(1)} КБ`;
+    document.getElementById('bgFileInfo').textContent = ` ${file.name} | ${(file.size/1024).toFixed(1)} КБ`;
     document.getElementById('applyBgBtn').style.display = 'inline-block';
     document.getElementById('cancelBgBtn').style.display = 'inline-block';
     showMsg('✅ Загружен! Нажмите "Применить"','success');
@@ -492,7 +513,7 @@ function renderCurrentBg(){
   const display = document.getElementById('currentBgDisplay');
   if(!settings.backgroundImage){display.innerHTML='<p style="color:#888;font-size:12px">Фон не установлен</p>';return;}
   if(settings.backgroundType==='image'){display.innerHTML=`<img src="${settings.backgroundImage}" class="current-bg-img"><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🖼 Изображение</p>`;}
-  else{display.innerHTML=`<div style="height:100px;border-radius:10px;background:${settings.backgroundImage};margin-top:10px"></div><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700"> Градиент</p>`;}
+  else{display.innerHTML=`<div style="height:100px;border-radius:10px;background:${settings.backgroundImage};margin-top:10px"></div><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🌈 Градиент</p>`;}
 }
 
 function loadCurrentColors(){
@@ -524,6 +545,7 @@ function saveHeaderColors(){
   showMsg('✅ Сохранено!','success');
 }
 
+// === РЕНДЕРИНГ ВСЕХ РАЗДЕЛОВ С КНОПКАМИ ===
 function renderAdmin(){
   loadCurrentColors();
   renderCurrentBg();
@@ -536,93 +558,326 @@ function renderAdmin(){
   document.getElementById('statCatalogs').textContent = catalogs.length;
   document.getElementById('statSuggestions').textContent = suggestions.length;
   
-  const top = [...products].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,5);
-  document.getElementById('topProducts').innerHTML = top.length ? top.map((p,i)=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;font-weight:600">${i+1}. ${p.name} — ${(p.rating||0).toFixed(1)}★</div>`).join('') : '<p>Нет товаров</p>';
-  const recent = orders.slice(-5).reverse();
-  document.getElementById('recentOrders').innerHTML = recent.length ? recent.map(o=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;font-size:12px">Заказ #${o.id} — ${o.total}₽ — ${o.userName} — ${o.date}</div>`).join('') : '<p>Нет заказов</p>';
-  
   // КАТАЛОГИ
-  document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>{
-    const count = products.filter(p=>p.catalogId==c.id).length;
-    return `<tr><td><b>${c.name}</b></td><td>${c.desc}</td><td>${c.ageMin||0}-${c.ageMax||10}</td><td><b>${count}</b></td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})"></button></td></tr>`;
-  }).join('') || '<tr><td colspan="5" style="text-align:center;padding:20px;">Нет каталогов</td></tr>';
-  
-  // ТОВАРЫ
-  document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'🎁':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет товаров</td></tr>';
-  
-  // ВИДЕО
-  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет видео</td></tr>';
-  
-  // ПОСОБИЯ
-  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет пособий</td></tr>';
-  
-  // НОВОСТИ
-  document.getElementById('adminNews').innerHTML = news.map(n=>`<tr><td>${n.title}</td><td>${n.date}</td><td><button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️</button><button class="btn btn-del" onclick="delNews(${n.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет новостей</td></tr>';
-  
-  // БЛОГ
-  document.getElementById('adminBlog').innerHTML = blog.map(b=>`<tr><td>${b.title}</td><td>${b.date}</td><td><button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBlog(${b.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет статей</td></tr>';
-  
-  // FAQ
-  document.getElementById('adminFaq').innerHTML = faq.map((f,i)=>`<tr><td>${f.q}</td><td>${f.a}</td><td><button class="btn btn-edit" onclick="openFaqModal(${i})">✏️</button><button class="btn btn-del" onclick="delFaq(${i})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет вопросов</td></tr>';
-  
-  // ОТЗЫВЫ
-  document.getElementById('adminReviews').innerHTML = reviews.map(r=>`<tr><td>${r.author}</td><td>${r.text}</td><td><button class="btn btn-edit" onclick="openReviewModal(${r.id})">✏️</button><button class="btn btn-del" onclick="delReview(${r.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center">Нет отзывов</td></tr>';
-  
-  // ЗАКАЗЫ
-  document.getElementById('adminOrders').innerHTML = orders.map(o=>`<tr><td>#${o.id}</td><td>${o.userName}<br><small>${o.userEmail}</small></td><td>${o.total}₽</td><td><select onchange="changeOrderStatus(${o.id},this.value)" style="padding:4px;border-radius:6px"><option value="new" ${o.status==='new'?'selected':''}>🆕 Новый</option><option value="paid" ${o.status==='paid'?'selected':''}>✅ Оплачен</option><option value="sent" ${o.status==='sent'?'selected':''}>🚚 Отправлен</option><option value="done" ${o.status==='done'?'selected':''}>📦 Доставлен</option><option value="cancel" ${o.status==='cancel'?'selected':''}>❌ Отменён</option></select></td><td style="font-size:10px">${o.date}</td><td><button class="btn btn-view" onclick="viewOrder(${o.id})">👁</button><button class="btn btn-del" onclick="delOrder(${o.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет заказов</td></tr>';
-  
-  // ПОКУПАТЕЛИ
-  document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td>${u.points||0}</td><td><button class="btn btn-edit" onclick="openUserModal(${u.id})">✏️</button><button class="btn btn-del" onclick="delUser(${u.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет покупателей</td></tr>';
-  
-  // СООБЩЕНИЯ
-  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-view" onclick="viewContact(${c.id})"></button><button class="btn btn-del" onclick="delContact(${c.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
-  
-  // ПРЕДЛОЖЕНИЯ
-  if(suggestions.length===0){
-    document.getElementById('adminSuggestionsList').innerHTML = '<p style="text-align:center;padding:20px;opacity:0.6;">Пока нет предложений</p>';
+  const catDiv = document.getElementById('adminCatalogs');
+  if(catalogs.length===0){
+    catDiv.innerHTML = '<div class="empty-state">Нет каталогов. Нажмите "Добавить каталог"</div>';
   } else {
-    document.getElementById('adminSuggestionsList').innerHTML = suggestions.slice().reverse().map(s=>{
-      const statusClass = s.status==='Новое'?'status-new':s.status==='Одобрено'?'status-approved':'status-rejected';
-      return `<div class="suggestion-admin-item">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-          <div><b>👤 ${s.name}</b> <span class="type-badge">${s.type}</span> <span class="status-badge ${statusClass}">${s.status}</span><div style="font-size:11px;color:#888;margin-top:4px;">📧 ${s.email} | 📅 ${s.date}</div></div>
-          <div>
-            <select onchange="changeSuggestionStatus(${s.id},this.value)" style="padding:4px;border-radius:6px;margin-right:5px;">
-              <option value="Новое" ${s.status==='Новое'?'selected':''}> Новое</option>
-              <option value="Одобрено" ${s.status==='Одобрено'?'selected':''}>✅ Одобрено</option>
-              <option value="Отклонено" ${s.status==='Отклонено'?'selected':''}>❌ Отклонено</option>
-            </select>
-            <button class="btn btn-view" onclick="viewSuggestion(${s.id})">👁</button>
-            <button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑</button>
-          </div>
+    catDiv.innerHTML = catalogs.map(c=>{
+      const count = products.filter(p=>p.catalogId==c.id).length;
+      return `<div class="item-row">
+        <div class="item-info">
+          <h4>📚 ${c.name}</h4>
+          <p>${c.desc}</p>
+          <p>Возраст: ${c.ageMin||0}-${c.ageMax||10} лет | Товаров: <b>${count}</b></p>
         </div>
-        <h4 style="margin:10px 0 6px;color:#5D4037;">${s.title}</h4>
-        <p style="font-size:13px;line-height:1.5;">${s.text}</p>
+        <div class="item-actions">
+          <button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️ Изменить</button>
+          <button class="btn btn-del" onclick="delCatalog(${c.id})"> Удалить</button>
+        </div>
       </div>`;
     }).join('');
   }
   
+  // ТОВАРЫ
+  const prodDiv = document.getElementById('adminProducts');
+  if(products.length===0){
+    prodDiv.innerHTML = '<div class="empty-state">Нет товаров</div>';
+  } else {
+    prodDiv.innerHTML = products.map(p=>`<div class="item-row">
+      <div class="item-info">
+        <h4>${p.name} ${p.free?'🎁':'💰'}</h4>
+        <p>${p.desc||''} | Цена: ${p.free?'Бесплатно':p.price+'₽'} | Остаток: ${p.stock||0}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openProductModal(${p.id})">️ Изменить</button>
+        <button class="btn btn-del" onclick="delProduct(${p.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ВИДЕО
+  const vidDiv = document.getElementById('adminVideos');
+  if(videos.length===0){
+    vidDiv.innerHTML = '<div class="empty-state">Нет видео</div>';
+  } else {
+    vidDiv.innerHTML = videos.map(v=>`<div class="item-row">
+      <div class="item-info">
+        <h4>🎬 ${v.name}</h4>
+        <p>${v.desc||''}</p>
+        <p style="font-size:10px;color:#888;">${v.url}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delVideo(${v.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ПОСОБИЯ
+  const gameDiv = document.getElementById('adminGames');
+  if(games.length===0){
+    gameDiv.innerHTML = '<div class="empty-state">Нет пособий</div>';
+  } else {
+    gameDiv.innerHTML = games.map(g=>`<div class="item-row">
+      <div class="item-info">
+        <h4>🎮 ${g.name}</h4>
+        <p>${g.desc||''}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delGame(${g.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // НОВОСТИ
+  const newsDiv = document.getElementById('adminNews');
+  if(news.length===0){
+    newsDiv.innerHTML = '<div class="empty-state">Нет новостей</div>';
+  } else {
+    newsDiv.innerHTML = news.map(n=>`<div class="item-row">
+      <div class="item-info">
+        <h4>📰 ${n.title}</h4>
+        <p>${n.date}</p>
+        <p style="font-size:11px;">${(n.text||'').substring(0,50)}...</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delNews(${n.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // БЛОГ
+  const blogDiv = document.getElementById('adminBlog');
+  if(blog.length===0){
+    blogDiv.innerHTML = '<div class="empty-state">Нет статей</div>';
+  } else {
+    blogDiv.innerHTML = blog.map(b=>`<div class="item-row">
+      <div class="item-info">
+        <h4> ${b.title}</h4>
+        <p>${b.date}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openBlogModal(${b.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delBlog(${b.id})"> Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // FAQ - ВОТ ЗДЕСЬ КНОПКИ УДАЛЕНИЯ!
+  const faqDiv = document.getElementById('adminFaq');
+  if(faq.length===0){
+    faqDiv.innerHTML = '<div class="empty-state">Нет вопросов FAQ</div>';
+  } else {
+    faqDiv.innerHTML = faq.map((f,i)=>`<div class="item-row">
+      <div class="item-info">
+        <h4>❓ ${f.q}</h4>
+        <p>${f.a}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openFaqModal(${i})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delFaq(${i})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ОТЗЫВЫ
+  const revDiv = document.getElementById('adminReviews');
+  if(reviews.length===0){
+    revDiv.innerHTML = '<div class="empty-state">Нет отзывов</div>';
+  } else {
+    revDiv.innerHTML = reviews.map(r=>`<div class="item-row">
+      <div class="item-info">
+        <h4>⭐ ${r.author}</h4>
+        <p>${r.text}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openReviewModal(${r.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delReview(${r.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ЗАКАЗЫ
+  const ordDiv = document.getElementById('adminOrders');
+  if(orders.length===0){
+    ordDiv.innerHTML = '<div class="empty-state">Нет заказов</div>';
+  } else {
+    ordDiv.innerHTML = orders.map(o=>`<div class="item-row">
+      <div class="item-info">
+        <h4>📦 Заказ #${o.id}</h4>
+        <p>👤 ${o.userName} (${o.userEmail})</p>
+        <p>💰 ${o.total}₽ | 📅 ${o.date}</p>
+        <p>Статус: <b>${o.status}</b></p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-view" onclick="viewOrder(${o.id})"> Просмотр</button>
+        <button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ПОКУПАТЕЛИ
+  const usrDiv = document.getElementById('adminUsers');
+  if(users.length===0){
+    usrDiv.innerHTML = '<div class="empty-state">Нет покупателей</div>';
+  } else {
+    usrDiv.innerHTML = users.map(u=>`<div class="item-row">
+      <div class="item-info">
+        <h4>👤 ${u.name}</h4>
+        <p> ${u.email} | 📱 ${u.phone||'—'} | 🏙 ${u.city||'—'}</p>
+        <p>Баллы: <b>${u.points||0}</b></p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openUserModal(${u.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delUser(${u.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // СООБЩЕНИЯ
+  const contDiv = document.getElementById('adminContacts');
+  if(contacts.length===0){
+    contDiv.innerHTML = '<div class="empty-state">Нет сообщений</div>';
+  } else {
+    contDiv.innerHTML = contacts.map(c=>`<div class="item-row">
+      <div class="item-info">
+        <h4>✉️ ${c.name}</h4>
+        <p>📧 ${c.email}</p>
+        <p>${c.msg}</p>
+        <p style="font-size:10px;color:#888;">${c.date}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-view" onclick="viewContact(${c.id})">👁 Просмотр</button>
+        <button class="btn btn-del" onclick="delContact(${c.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
+  // ПРЕДЛОЖЕНИЯ
+  const sugDiv = document.getElementById('adminSuggestionsList');
+  if(suggestions.length===0){
+    sugDiv.innerHTML = '<div class="empty-state">Нет предложений</div>';
+  } else {
+    sugDiv.innerHTML = suggestions.map(s=>`<div class="item-row">
+      <div class="item-info">
+        <h4>💡 ${s.title}</h4>
+        <p>👤 ${s.name} (${s.email}) | Тип: ${s.type}</p>
+        <p>${s.text}</p>
+        <p style="font-size:10px;color:#888;">${s.date} | Статус: <b>${s.status}</b></p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-view" onclick="viewSuggestion(${s.id})">👁 Просмотр</button>
+        <button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
+  
   // БАННЕРЫ
-  document.getElementById('adminBanners').innerHTML = banners.map(b=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><img src="${b.img}" alt="" style="max-width:150px;border-radius:8px"><div style="flex:1"><b>Ссылка:</b> ${b.link||'—'}</div><button class="btn btn-edit" onclick="openBannerModal(${b.id})">✏️</button><button class="btn btn-del" onclick="delBanner(${b.id})">🗑</button></div>`).join('') || '<p>Нет баннеров</p>';
+  const banDiv = document.getElementById('adminBanners');
+  if(banners.length===0){
+    banDiv.innerHTML = '<div class="empty-state">Нет баннеров</div>';
+  } else {
+    banDiv.innerHTML = banners.map(b=>`<div class="item-row">
+      <div class="item-info">
+        <img src="${b.img}" alt="" style="max-width:150px;border-radius:8px;margin-top:5px;">
+        <p>Ссылка: ${b.link||'—'}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openBannerModal(${b.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delBanner(${b.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
   
   // МЕРОПРИЯТИЯ
-  document.getElementById('adminEvents').innerHTML = events.map(e=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>${e.title}</b><br><small>${e.date} ${e.time}</small><br>${e.desc}</div><button class="btn btn-edit" onclick="openEventModal(${e.id})">✏️</button><button class="btn btn-del" onclick="delEvent(${e.id})">🗑</button></div>`).join('') || '<p>Нет мероприятий</p>';
+  const evtDiv = document.getElementById('adminEvents');
+  if(events.length===0){
+    evtDiv.innerHTML = '<div class="empty-state">Нет мероприятий</div>';
+  } else {
+    evtDiv.innerHTML = events.map(e=>`<div class="item-row">
+      <div class="item-info">
+        <h4>📅 ${e.title}</h4>
+        <p>${e.date} ${e.time}</p>
+        <p>${e.desc}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openEventModal(${e.id})">️ Изменить</button>
+        <button class="btn btn-del" onclick="delEvent(${e.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
   
   // ВОЗВРАТЫ
+  const retDiv = document.getElementById('adminReturns');
   const returns = DB.get('returns',[]);
-  document.getElementById('adminReturns').innerHTML = returns.map(r=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>Заявка #${r.id}</b><br>Заказ: ${r.orderId}<br>Клиент: ${r.name} (${r.email})<br>Причина: ${r.reason}<br>Дата: ${r.date}</div><select onchange="changeReturnStatus(${r.id},this.value)" style="padding:5px;border-radius:6px"><option ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option><option ${r.status==='Одобрено'?'selected':''}>Одобрено</option><option ${r.status==='Отклонено'?'selected':''}>Отклонено</option></select><button class="btn btn-del" onclick="delReturn(${r.id})">🗑</button></div>`).join('') || '<p>Нет заявок</p>';
+  if(returns.length===0){
+    retDiv.innerHTML = '<div class="empty-state">Нет заявок на возврат</div>';
+  } else {
+    retDiv.innerHTML = returns.map(r=>`<div class="item-row">
+      <div class="item-info">
+        <h4>🔄 Заявка #${r.id}</h4>
+        <p>Заказ: ${r.orderId}</p>
+        <p>Клиент: ${r.name} (${r.email})</p>
+        <p>Причина: ${r.reason}</p>
+        <p>Дата: ${r.date} | Статус: <b>${r.status}</b></p>
+      </div>
+      <div class="item-actions">
+        <select onchange="changeReturnStatus(${r.id},this.value)" style="padding:5px;border-radius:6px;margin-right:5px;">
+          <option value="На рассмотрении" ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option>
+          <option value="Одобрено" ${r.status==='Одобрено'?'selected':''}>✅ Одобрено</option>
+          <option value="Отклонено" ${r.status==='Отклонено'?'selected':''}>❌ Отклонено</option>
+        </select>
+        <button class="btn btn-del" onclick="delReturn(${r.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
   
   // ПОДПИСЧИКИ
+  const subDiv = document.getElementById('adminSubscribers');
   const subs = DB.get('subscribers',[]);
-  document.getElementById('adminSubscribers').innerHTML = subs.map((s,i)=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center">${s} <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin();">🗑</button></div>`).join('') || '<p>Нет подписчиков</p>';
+  if(subs.length===0){
+    subDiv.innerHTML = '<div class="empty-state">Нет подписчиков</div>';
+  } else {
+    subDiv.innerHTML = subs.map((s,i)=>`<div class="item-row">
+      <div class="item-info">
+        <h4>📧 ${s}</h4>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin();">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
   
   // ЧАТ
+  const chatDiv = document.getElementById('adminChat');
   const chat = DB.get('chatMessages',[]);
-  document.getElementById('adminChat').innerHTML = chat.map(m=>`<div style="padding:10px;background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};border-radius:10px;margin:6px 0"><b>${m.from==='user'?' Покупатель':'🤖 Бот'}:</b> ${m.text}<br><small style="color:#888">${m.time||''}</small></div>`).join('') || '<p>Чат пуст</p>';
+  if(chat.length===0){
+    chatDiv.innerHTML = '<div class="empty-state">Чат пуст</div>';
+  } else {
+    chatDiv.innerHTML = chat.map(m=>`<div class="item-row" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};">
+      <div class="item-info">
+        <h4>${m.from==='user'?'👤 Покупатель':'🤖 Бот'}</h4>
+        <p>${m.text}</p>
+        <p style="font-size:10px;color:#888;">${m.time||''}</p>
+      </div>
+    </div>`).join('');
+  }
   
   // ЖУРНАЛ
+  const logDiv = document.getElementById('adminLog');
   const log = DB.get('log',[]);
-  document.getElementById('adminLog').innerHTML = log.slice(-30).reverse().map(l=>`<div style="padding:5px;font-size:11px;border-bottom:1px solid #FFE0B2">${l.date} — ${l.action}</div>`).join('') || '<p>Журнал пуст</p>';
+  if(log.length===0){
+    logDiv.innerHTML = '<div class="empty-state">Журнал пуст</div>';
+  } else {
+    logDiv.innerHTML = log.slice(-30).reverse().map(l=>`<div class="item-row" style="padding:8px;">
+      <div class="item-info">
+        <p style="font-size:11px;"><b>${l.date}</b> — ${l.action}</p>
+      </div>
+    </div>`).join('');
+  }
   
   // АКЦИЯ
   document.getElementById('sale_active').checked = settings.sale.active;
@@ -638,21 +893,46 @@ function renderAdmin(){
   document.getElementById('req_sbp').value = req.sbp||'';
   
   // ПРОМОКОДЫ
-  document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'Процент':'Сумма'}</td><td><button class="btn btn-edit" onclick="openPromoModal(${i})">✏️</button><button class="btn btn-del" onclick="delPromo(${i})">🗑</button></td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">Нет промокодов</td></tr>';
+  const promoDiv = document.getElementById('adminPromos');
+  if(settings.promos.length===0){
+    promoDiv.innerHTML = '<div class="empty-state">Нет промокодов</div>';
+  } else {
+    promoDiv.innerHTML = settings.promos.map((p,i)=>`<div class="item-row">
+      <div class="item-info">
+        <h4>🎟 ${p.code}</h4>
+        <p>Скидка: ${p.discount}${p.type==='percent'?'%':'₽'}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openPromoModal(${i})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delPromo(${i})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
   
   // СТРАНИЦЫ
-  document.getElementById('adminPages').innerHTML = pages.map(p=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>${p.title}</b><br><small>${p.content?String(p.content).substring(0,50):''}...</small></div><button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delPage(${p.id})"></button></div>`).join('') || '<p>Нет страниц</p>';
+  const pageDiv = document.getElementById('adminPages');
+  if(pages.length===0){
+    pageDiv.innerHTML = '<div class="empty-state">Нет страниц</div>';
+  } else {
+    pageDiv.innerHTML = pages.map(p=>`<div class="item-row">
+      <div class="item-info">
+        <h4>📄 ${p.title}</h4>
+        <p>URL: ${p.slug||'—'}</p>
+      </div>
+      <div class="item-actions">
+        <button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️ Изменить</button>
+        <button class="btn btn-del" onclick="delPage(${p.id})">🗑 Удалить</button>
+      </div>
+    </div>`).join('');
+  }
 }
 
-// === ФУНКЦИИ РЕДАКТИРОВАНИЯ И УДАЛЕНИЯ ===
-
-function openForm(){document.getElementById('formModal').classList.add('active');}
-function closeForm(){document.getElementById('formModal').classList.remove('active');}
+// === ФУНКЦИИ УДАЛЕНИЯ И РЕДАКТИРОВАНИЯ ===
 
 // КАТАЛОГИ
 function openCatalogModal(id){
   const c = id ? catalogs.find(x=>x.id==id) : {name:'',desc:'',ageMin:0,ageMax:10};
-  document.getElementById('formContent').innerHTML = `<h2>${id?'✏️ Редактировать':'➕ Новый'} каталог</h2><input id="f_name" placeholder="Название" value="${c.name}"><textarea id="f_desc" placeholder="Описание">${c.desc}</textarea><input id="f_ageMin" type="number" placeholder="Возраст от" value="${c.ageMin||0}"><input id="f_ageMax" type="number" placeholder="Возраст до" value="${c.ageMax||10}"><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveCatalog(${id||0})"> Сохранить</button></div>`;
+  document.getElementById('formContent').innerHTML = `<h2>${id?'✏️ Редактировать':'➕ Новый'} каталог</h2><input id="f_name" placeholder="Название" value="${c.name}"><textarea id="f_desc" placeholder="Описание">${c.desc}</textarea><input id="f_ageMin" type="number" placeholder="Возраст от" value="${c.ageMin||0}"><input id="f_ageMax" type="number" placeholder="Возраст до" value="${c.ageMax||10}"><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveCatalog(${id||0})">💾 Сохранить</button></div>`;
   openForm();
 }
 function saveCatalog(id){
@@ -668,7 +948,7 @@ function saveCatalog(id){
 function delCatalog(id){
   const c = catalogs.find(x=>x.id==id);
   if(!c) return;
-  if(!confirm(`Удалить каталог "${c.name}"?`)) return;
+  if(!confirm(`Удалить каталог "${c.name}"?\n\nТовары останутся, но без категории.`)) return;
   catalogs = catalogs.filter(x=>x.id!=id);
   saveAll();addLog(`Каталог удалён: "${c.name}"`);renderAdmin();showMsg('🗑 Удалено','success');
 }
@@ -677,7 +957,7 @@ function delCatalog(id){
 function openProductModal(id){
   const p=id?products.find(x=>x.id==id):{name:'',price:0,free:true,catalogId:catalogs[0]?.id||0,img:'',desc:'',stock:0,age:0,sale:false,salePrice:0,createdAt:Date.now()};
   const opts=catalogs.map(c=>`<option value="${c.id}" ${c.id==p.catalogId?'selected':''}>${c.name}</option>`).join('');
-  document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Товар</h2><input id="f_name" placeholder="Название" value="${p.name}"><label><input type="checkbox" id="f_free" ${p.free?'checked':''}> 🎁 Бесплатный</label><input id="f_price" type="number" placeholder="Цена" value="${p.price}" ${p.free?'disabled':''}><input id="f_stock" type="number" placeholder="Остаток" value="${p.stock||0}"><input id="f_age" type="number" placeholder="Возраст" value="${p.age||0}"><label><input type="checkbox" id="f_sale" ${p.sale?'checked':''}> 🔥 Скидка</label><input id="f_salePrice" type="number" placeholder="Цена со скидкой" value="${p.salePrice||0}"><select id="f_cat">${opts}</select><input id="f_img" placeholder="URL картинки" value="${p.img||''}"><textarea id="f_desc" placeholder="Описание">${p.desc||''}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveProduct(${id||0})">Сохранить</button></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Товар</h2><input id="f_name" placeholder="Название" value="${p.name}"><label><input type="checkbox" id="f_free" ${p.free?'checked':''}>  Бесплатный</label><input id="f_price" type="number" placeholder="Цена" value="${p.price}" ${p.free?'disabled':''}><input id="f_stock" type="number" placeholder="Остаток" value="${p.stock||0}"><input id="f_age" type="number" placeholder="Возраст" value="${p.age||0}"><label><input type="checkbox" id="f_sale" ${p.sale?'checked':''}> 🔥 Скидка</label><input id="f_salePrice" type="number" placeholder="Цена со скидкой" value="${p.salePrice||0}"><select id="f_cat">${opts}</select><input id="f_img" placeholder="URL картинки" value="${p.img||''}"><textarea id="f_desc" placeholder="Описание">${p.desc||''}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveProduct(${id||0})">Сохранить</button></div>`;
   document.getElementById('f_free').addEventListener('change',function(){document.getElementById('f_price').disabled=this.checked;if(this.checked)document.getElementById('f_price').value=0;});
   openForm();
 }
@@ -697,7 +977,7 @@ function saveProduct(id){
   else {products.push({id:Date.now(),name,price,free,stock,age,sale,salePrice,catalogId,img,desc,rating:0,createdAt:Date.now()});addLog(`Товар добавлен: "${name}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delProduct(id){if(!confirm('Удалить товар?'))return;products=products.filter(p=>p.id!=id);saveAll();addLog(`Товар удалён #${id}`);renderAdmin();showMsg(' Удалено','success');}
+function delProduct(id){if(!confirm('Удалить товар?'))return;products=products.filter(p=>p.id!=id);saveAll();addLog(`Товар удалён #${id}`);renderAdmin();showMsg('🗑 Удалено','success');}
 
 // ВИДЕО
 function openVideoModal(id){
@@ -714,7 +994,7 @@ function saveVideo(id){
   else {videos.push({id:Date.now(),name,url,desc});addLog(`Видео добавлено: "${name}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delVideo(id){if(!confirm('Удалить?'))return;videos=videos.filter(v=>v.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delVideo(id){if(!confirm('Удалить видео?'))return;videos=videos.filter(v=>v.id!=id);saveAll();addLog('Видео удалено');renderAdmin();showMsg('🗑 Удалено','success');}
 
 // ПОСОБИЯ
 function openGameModal(id){
@@ -731,7 +1011,7 @@ function saveGame(id){
   else {games.push({id:Date.now(),name,img,desc});addLog(`Пособие добавлено: "${name}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delGame(id){if(!confirm('Удалить?'))return;games=games.filter(g=>g.id!=id);saveAll();renderAdmin();showMsg(' Удалено','success');}
+function delGame(id){if(!confirm('Удалить пособие?'))return;games=games.filter(g=>g.id!=id);saveAll();addLog('Пособие удалено');renderAdmin();showMsg('🗑 Удалено','success');}
 
 // НОВОСТИ
 function openNewsModal(id){
@@ -748,7 +1028,7 @@ function saveNews(id){
   else {news.push({id:Date.now(),title,date,text});addLog(`Новость добавлена: "${title}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delNews(id){if(!confirm('Удалить?'))return;news=news.filter(n=>n.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delNews(id){if(!confirm('Удалить новость?'))return;news=news.filter(n=>n.id!=id);saveAll();addLog('Новость удалена');renderAdmin();showMsg(' Удалено','success');}
 
 // БЛОГ
 function openBlogModal(id){
@@ -765,29 +1045,39 @@ function saveBlog(id){
   else {blog.push({id:Date.now(),title,date,text});addLog(`Статья добавлена: "${title}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delBlog(id){if(!confirm('Удалить?'))return;blog=blog.filter(b=>b.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delBlog(id){if(!confirm('Удалить статью?'))return;blog=blog.filter(b=>b.id!=id);saveAll();addLog('Статья удалена');renderAdmin();showMsg(' Удалено','success');}
 
 // FAQ
 function openFaqModal(idx){
   const f=idx!==undefined?faq[idx]:{q:'',a:''};
-  document.getElementById('formContent').innerHTML=`<h2>${idx!==undefined?'✏️':''} FAQ</h2><input id="f_q" placeholder="Вопрос" value="${f.q}"><textarea id="f_a" placeholder="Ответ">${f.a}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveFaq(${idx!==undefined?idx:-1})">Сохранить</button></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>${idx!==undefined?'✏️ Редактировать':'➕ Новый'} вопрос FAQ</h2><input id="f_q" placeholder="Вопрос" value="${f.q}"><textarea id="f_a" placeholder="Ответ" style="min-height:80px;">${f.a}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveFaq(${idx!==undefined?idx:-1})">💾 Сохранить</button></div>`;
   openForm();
 }
 function saveFaq(idx){
   const q=document.getElementById('f_q').value.trim();
   const a=document.getElementById('f_a').value.trim();
-  if(!q||!a) return alert('Заполните поля');
-  if(idx>=0){faq[idx]={q,a};addLog(`FAQ изменён: "${q}"`);}
-  else {faq.push({q,a});addLog(`FAQ добавлен: "${q}"`);}
+  if(!q||!a) return alert('Заполните вопрос и ответ');
+  if(idx>=0){faq[idx]={id:faq[idx].id||Date.now(),q,a};addLog(`FAQ изменён: "${q}"`);}
+  else {faq.push({id:Date.now(),q,a});addLog(`FAQ добавлен: "${q}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delFaq(i){if(!confirm('Удалить?'))return;faq.splice(i,1);saveAll();renderAdmin();showMsg(' Удалено','success');}
+function delFaq(idx){
+  if(idx===undefined||idx===null) return;
+  const f = faq[idx];
+  if(!f) return;
+  if(!confirm(`Удалить вопрос "${f.q}"?`)) return;
+  faq.splice(idx,1);
+  saveAll();
+  addLog(`FAQ удалён: "${f.q}"`);
+  renderAdmin();
+  showMsg(' Вопрос удалён','success');
+}
 
 // ОТЗЫВЫ
 function openReviewModal(id){
   const r=reviews.find(x=>x.id==id);
   if(!r) return;
-  document.getElementById('formContent').innerHTML=`<h2>✏️ Редактировать отзыв</h2><input id="f_author" placeholder="Автор" value="${r.author}"><textarea id="f_text" placeholder="Отзыв">${r.text}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveReview(${id})">Сохранить</button></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>✏️ Редактировать отзыв</h2><input id="f_author" placeholder="Автор" value="${r.author}"><textarea id="f_text" placeholder="Отзыв" style="min-height:80px;">${r.text}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveReview(${id})">Сохранить</button></div>`;
   openForm();
 }
 function saveReview(id){
@@ -798,14 +1088,14 @@ function saveReview(id){
   if(r){Object.assign(r,{author,text});addLog(`Отзыв изменён: "${author}"`);}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delReview(id){if(!confirm('Удалить отзыв?'))return;reviews=reviews.filter(r=>r.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delReview(id){if(!confirm('Удалить отзыв?'))return;reviews=reviews.filter(r=>r.id!=id);saveAll();addLog('Отзыв удалён');renderAdmin();showMsg(' Удалено','success');}
 
 // ЗАКАЗЫ
 function viewOrder(id){
   const o=orders.find(x=>x.id==id);
   if(!o) return;
   const itemsHtml=o.items.map(i=>{const p=products.find(x=>x.id==i.productId);return p?`<li>${p.name} × ${i.qty} = ${p.price*i.qty}₽</li>`:'';}).join('');
-  document.getElementById('formContent').innerHTML=`<h2>📦 Заказ #${o.id}</h2><div class="detail-view"><h4>👤 Клиент</h4><p><b>${o.userName}</b> (${o.userEmail})</p><p>📱 ${o.phone}</p><p>🏙 ${o.city}</p><p> ${o.address}</p><h4 style="margin-top:12px;"> Товары</h4><ul style="padding-left:20px;">${itemsHtml}</ul><h4 style="margin-top:12px;">💰 Итого: ${o.total} ₽</h4><p>🚚 ${o.delivery}</p><p>💳 ${o.payment}</p>${o.trackNumber?`<p>📍 Трек: <b>${o.trackNumber}</b></p>`:''}<p>📅 ${o.date}</p><p>💬 ${o.comment||'—'}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>📦 Заказ #${o.id}</h2><div class="detail-view" style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Клиент</h4><p><b>${o.userName}</b> (${o.userEmail})</p><p> ${o.phone}</p><p> ${o.city}</p><p>📍 ${o.address}</p><h4 style="margin-top:12px;">🛍 Товары</h4><ul style="padding-left:20px;">${itemsHtml}</ul><h4 style="margin-top:12px;">💰 Итого: ${o.total} ₽</h4><p> ${o.delivery}</p><p>💳 ${o.payment}</p>${o.trackNumber?`<p>📍 Трек: <b>${o.trackNumber}</b></p>`:''}<p>📅 ${o.date}</p><p> ${o.comment||'—'}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button></div>`;
   openForm();
 }
 function changeOrderStatus(id,status){
@@ -838,16 +1128,16 @@ function delUser(id){if(!confirm('Удалить покупателя?'))return;
 function viewContact(id){
   const c=contacts.find(x=>x.id==id);
   if(!c) return;
-  document.getElementById('formContent').innerHTML=`<h2>✉️ Сообщение</h2><div class="detail-view"><h4>👤 Отправитель</h4><p><b>${c.name}</b> (${c.email})</p><h4 style="margin-top:12px;"> Сообщение</h4><p>${c.msg}</p><h4 style="margin-top:12px;">📅 Дата</h4><p>${c.date}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${c.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>✉️ Сообщение</h2><div style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Отправитель</h4><p><b>${c.name}</b> (${c.email})</p><h4 style="margin-top:12px;"> Сообщение</h4><p>${c.msg}</p><h4 style="margin-top:12px;">📅 Дата</h4><p>${c.date}</p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${c.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;
   openForm();
 }
-function delContact(id){if(!confirm('Удалить сообщение?'))return;contacts=contacts.filter(c=>c.id!=id);saveAll();renderAdmin();showMsg('🗑 Удалено','success');}
+function delContact(id){if(!confirm('Удалить сообщение?'))return;contacts=contacts.filter(c=>c.id!=id);saveAll();addLog('Сообщение удалено');renderAdmin();showMsg(' Удалено','success');}
 
 // ПРЕДЛОЖЕНИЯ
 function viewSuggestion(id){
   const s=suggestions.find(x=>x.id==id);
   if(!s) return;
-  document.getElementById('formContent').innerHTML=`<h2>💡 Предложение</h2><div class="detail-view"><h4>👤 Автор</h4><p><b>${s.name}</b> (${s.email})</p><p>📅 ${s.date}</p><h4 style="margin-top:12px;"> Тип</h4><p>${s.type}</p><h4 style="margin-top:12px;">📝 Заголовок</h4><p><b>${s.title}</b></p><h4 style="margin-top:12px;">📄 Описание</h4><p>${s.text}</p><h4 style="margin-top:12px;">📊 Статус</h4><p><b>${s.status}</b></p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${s.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>💡 Предложение</h2><div style="background:#FFF8E1;padding:15px;border-radius:12px;margin:10px 0;"><h4>👤 Автор</h4><p><b>${s.name}</b> (${s.email})</p><p>📅 ${s.date}</p><h4 style="margin-top:12px;"> Тип</h4><p>${s.type}</p><h4 style="margin-top:12px;">📄 Заголовок</h4><p><b>${s.title}</b></p><h4 style="margin-top:12px;">📋 Описание</h4><p>${s.text}</p><h4 style="margin-top:12px;">📊 Статус</h4><p><b>${s.status}</b></p></div><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Закрыть</button><a href="mailto:${s.email}" class="btn btn-purple" style="text-decoration:none;">📧 Ответить</a></div>`;
   openForm();
 }
 function changeSuggestionStatus(id,status){
@@ -870,12 +1160,12 @@ function saveBanner(id){
   else {banners.push({id:Date.now(),img,link});addLog('Баннер добавлен');}
   saveAll();closeForm();renderAdmin();showMsg('✅ Сохранено!','success');
 }
-function delBanner(id){if(!confirm('Удалить баннер?'))return;banners=banners.filter(b=>b.id!=id);saveAll();addLog('Баннер удалён');renderAdmin();showMsg(' Удалено','success');}
+function delBanner(id){if(!confirm('Удалить баннер?'))return;banners=banners.filter(b=>b.id!=id);saveAll();addLog('Баннер удалён');renderAdmin();showMsg('🗑 Удалено','success');}
 
 // МЕРОПРИЯТИЯ
 function openEventModal(id){
   const e=id?events.find(x=>x.id==id):{title:'',date:'',time:'',desc:''};
-  document.getElementById('formContent').innerHTML=`<h2>${id?'✏️':'➕'} Мероприятие</h2><input id="e_title" placeholder="Название" value="${e.title}"><input id="e_date" type="date" value="${e.date}"><input id="e_time" type="time" value="${e.time}"><textarea id="e_desc" placeholder="Описание">${e.desc||''}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveEvent(${id||0})">Сохранить</button></div>`;
+  document.getElementById('formContent').innerHTML=`<h2>${id?'️':'➕'} Мероприятие</h2><input id="e_title" placeholder="Название" value="${e.title}"><input id="e_date" type="date" value="${e.date}"><input id="e_time" type="time" value="${e.time}"><textarea id="e_desc" placeholder="Описание">${e.desc||''}</textarea><div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeForm()">Отмена</button><button class="btn btn-purple" onclick="saveEvent(${id||0})">Сохранить</button></div>`;
   openForm();
 }
 function saveEvent(id){
@@ -941,7 +1231,7 @@ function delPromo(i){if(!confirm('Удалить промокод?'))return;sett
 // ОСТАЛЬНЫЕ ФУНКЦИИ
 function saveRequisites(){settings.requisites={cardNumber:document.getElementById('req_card').value.trim(),cardHolder:document.getElementById('req_holder').value.trim(),bank:document.getElementById('req_bank').value.trim(),sbp:document.getElementById('req_sbp').value.trim()};saveAll();addLog('Реквизиты изменены');showMsg('✅ Сохранено!','success');}
 function saveSale(){settings.sale={active:document.getElementById('sale_active').checked,percent:+document.getElementById('sale_percent').value,endDate:new Date(document.getElementById('sale_end').value).getTime()};saveAll();addLog(`Акция: ${settings.sale.active?'вкл':'выкл'}, ${settings.sale.percent}%`);showMsg('✅ Сохранено!','success');}
-function sendNewsletter(){const subs=DB.get('subscribers',[]);if(subs.length===0)return showMsg('Нет подписчиков');const subject=prompt('Тема:');if(!subject)return;const text=prompt('Текст:');if(!text)return;const newsletters=DB.get('newsletters',[]);newsletters.push({id:Date.now(),subject,text,date:new Date().toLocaleString('ru-RU'),recipients:subs.length});DB.set('newsletters',newsletters);addLog(`Рассылка: "${subject}" (${subs.length})`);showMsg(`📧 Отправлено ${subs.length}!`,'success');}
+function sendNewsletter(){const subs=DB.get('subscribers',[]);if(subs.length===0)return showMsg('Нет подписчиков');const subject=prompt('Тема:');if(!subject)return;const text=prompt('Текст:');if(!text)return;const newsletters=DB.get('newsletters',[]);newsletters.push({id:Date.now(),subject,text,date:new Date().toLocaleString('ru-RU'),recipients:subs.length});DB.set('newsletters',newsletters);addLog(`Рассылка: "${subject}" (${subs.length})`);showMsg(` Отправлено ${subs.length}!`,'success');}
 function adminChangePass(){const old=document.getElementById('setOldPass').value;const nw=document.getElementById('setNewPass').value;if(old!==admin.password) return showMsg('Неверный пароль','error');if(nw.length<4) return showMsg('Минимум 4 символа','error');admin.password=nw;saveAll();addLog('Смена пароля');showMsg('✅ Пароль изменён!','success');document.getElementById('setOldPass').value='';document.getElementById('setNewPass').value='';}
 function exportData(){const data={catalogs,products,videos,games,news,blog,faq,reviews,users,orders,contacts,suggestions,banners,events,pages,settings,admin};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='owl-backup-'+Date.now()+'.json';a.click();addLog('Экспорт данных');}
 function importData(){document.getElementById('importFile').click();}
