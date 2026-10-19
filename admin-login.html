@@ -4,15 +4,12 @@
 <meta charset="UTF-8">
 <title>🔐 Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#673AB7">
-<link rel="manifest" href="manifest.json">
 <link rel="icon" href="logo.png">
-<link rel="apple-touch-icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito','Segoe UI',sans-serif; transition: all .3s; }
 body { background:linear-gradient(135deg,#311B92 0%,#4527A0 50%,#512DA8 100%); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-.login-wrap { background:rgba(255,248,225,0.95); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:980px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(255,193,7,0.5); text-align:center; max-height:95vh; overflow-y:auto; }
+.login-wrap { background:rgba(255,248,225,0.98); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:980px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(255,193,7,0.5); text-align:center; max-height:95vh; overflow-y:auto; }
 .owl-big { width:120px; height:120px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; filter:drop-shadow(0 8px 16px rgba(0,0,0,0.2)); }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; background:linear-gradient(135deg,#673AB7,#FFC107); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -24,7 +21,6 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .form-group textarea { min-height:70px; resize:vertical; }
 .btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:13px; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 4px 14px rgba(103,58,183,0.4); }
 .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(103,58,183,0.5); }
-.back-link { display:inline-block; margin-top:15px; color:#673AB7; text-decoration:none; font-weight:700; font-size:13px; }
 .msg { padding:10px; border-radius:10px; margin-bottom:12px; font-size:13px; display:none; font-weight:600; }
 .msg.error { background:#FFEBEE; color:#C62828; display:block; border:1px solid #EF9A9A; }
 .msg.success { background:#E8F5E9; color:#2E7D32; display:block; border:1px solid #A5D6A7; }
@@ -43,33 +39,25 @@ table { width:100%; border-collapse:collapse; margin-top:10px; font-size:11px; }
 table th, table td { padding:6px; text-align:left; border-bottom:1px solid #FFE0B2; }
 table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-weight:700; }
 .btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; border:none; padding:6px 12px; border-radius:10px; cursor:pointer; font-weight:700; font-size:11px; margin:2px; box-shadow:0 2px 6px rgba(255,193,7,0.3); }
-.btn:hover { transform:translateY(-1px); box-shadow:0 4px 10px rgba(255,193,7,0.5); }
-.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; box-shadow:0 2px 6px rgba(229,57,53,0.3); }
-.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; box-shadow:0 2px 6px rgba(67,160,71,0.3); }
-.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; box-shadow:0 2px 6px rgba(103,58,183,0.3); }
-.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
-.form-modal.active { display:flex; animation:fadeIn .25s; }
-.form-modal-content { background:rgba(255,248,225,0.98); backdrop-filter:blur(30px); padding:24px; border-radius:20px; width:100%; max-width:520px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
-.form-modal-content h2 { color:#2D1B4E; margin-bottom:14px; font-size:20px; font-weight:800; }
-.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
-.form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
-.form-modal-content label input { width:auto; }
+.btn:hover { transform:translateY(-1px); }
+.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
+.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; }
+.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; }
 .nav-links { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-.nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; box-shadow:0 2px 8px rgba(255,193,7,0.3); }
-.nav-links a:hover { transform:translateY(-2px); }
+.nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; }
 .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:18px; }
 .stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:14px; border-radius:14px; text-align:center; box-shadow:0 6px 16px rgba(103,58,183,0.3); }
 .stat-box .num { font-size:24px; font-weight:800; }
 .stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
-.log-item { padding:6px; font-size:11px; border-bottom:1px solid #FFE0B2; }
-.banner-item, .event-item, .return-item, .sub-item, .chat-item, .page-item { padding:10px; background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border-radius:10px; margin:6px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border:1px solid #FFE0B2; }
-.banner-item img { max-width:150px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
 .bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
 .bg-box h4 { margin-top:0; color:#5D4037; }
 .bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
 .bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
 .bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; box-shadow:0 8px 20px rgba(0,0,0,0.25); }
-.current-bg-preview { max-width:100%; border-radius:12px; margin-top:12px; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+.color-picker-group { display:flex; align-items:center; gap:10px; margin:8px 0; }
+.color-picker-group input[type="color"] { width:60px; height:40px; border:none; border-radius:8px; cursor:pointer; }
+.color-picker-group span { font-size:12px; color:#5D4037; font-weight:bold; }
+.preview-strip { margin-top:10px; padding:15px; border-radius:10px; color:#fff; font-size:12px; font-weight:bold; text-align:center; }
 @media (max-width:700px) {
   .admin-tabs button { font-size:10px; padding:6px 8px; }
   .login-wrap { padding:18px; }
@@ -97,7 +85,7 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
   </div>
 
   <div id="changePassBlock" style="display:none">
-    <h3 style="color:#2D1B4E;margin-bottom:14px;font-weight:800"> Установите новый пароль</h3>
+    <h3 style="color:#2D1B4E;margin-bottom:14px;font-weight:800">🔑 Установите новый пароль</h3>
     <form onsubmit="changePassword(event)">
       <div class="form-group"><label>Новый пароль</label><input type="password" id="newPass" required minlength="4"></div>
       <div class="form-group"><label>Повторите пароль</label><input type="password" id="newPass2" required minlength="4"></div>
@@ -106,44 +94,107 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
   </div>
 
   <div class="admin-panel" id="adminPanel">
-    <h3>️ Управление сайтом 🦉</h3>
+    <h3>⚙️ Управление сайтом </h3>
     <div class="admin-tabs">
-      <button class="active" onclick="showTab('aDashboard',this)">📊 Дашборд</button>
+      <button class="active" onclick="showTab('aBackground',this)">🎨 Фон сайта</button>
+      <button onclick="showTab('aDashboard',this)">📊 Дашборд</button>
       <button onclick="showTab('aCatalogs',this)">📚 Каталоги</button>
       <button onclick="showTab('aProducts',this)">🛍 Товары</button>
       <button onclick="showTab('aVideos',this)">🎬 Видео</button>
       <button onclick="showTab('aGames',this)">🎮 Пособия</button>
       <button onclick="showTab('aNews',this)">📰 Новости</button>
-      <button onclick="showTab('aBlog',this)"> Блог</button>
+      <button onclick="showTab('aBlog',this)">📝 Блог</button>
       <button onclick="showTab('aFaq',this)">❓ FAQ</button>
       <button onclick="showTab('aReviews',this)">⭐ Отзывы</button>
       <button onclick="showTab('aOrders',this)">📦 Заказы</button>
-      <button onclick="showTab('aUsers',this)"> Покупатели</button>
+      <button onclick="showTab('aUsers',this)">👥 Покупатели</button>
       <button onclick="showTab('aContacts',this)">✉️ Сообщения</button>
       <button onclick="showTab('aBanners',this)">🖼 Баннеры</button>
-      <button onclick="showTab('aEvents',this)">📅 Мероприятия</button>
+      <button onclick="showTab('aEvents',this)"> Мероприятия</button>
       <button onclick="showTab('aReturns',this)">🔄 Возвраты</button>
-      <button onclick="showTab('aSubscribers',this)">📧 Подписчики</button>
+      <button onclick="showTab('aSubscribers',this)"> Подписчики</button>
       <button onclick="showTab('aChat',this)">💬 Чат</button>
       <button onclick="showTab('aLog',this)">📋 Журнал</button>
       <button onclick="showTab('aSale',this)">🔥 Акции</button>
-      <button onclick="showTab('aPages',this)"> Страницы</button>
-      <button onclick="showTab('aBackground',this)"> Фон сайта</button>
+      <button onclick="showTab('aPages',this)">📄 Страницы</button>
       <button onclick="showTab('aRequisites',this)">💳 Реквизиты</button>
-      <button onclick="showTab('aPromos',this)"> Промокоды</button>
+      <button onclick="showTab('aPromos',this)">🎟 Промокоды</button>
       <button onclick="showTab('aSettings',this)">⚙️ Настройки</button>
     </div>
 
+    <!-- ФОН САЙТА -->
+    <div id="aBackground" class="admin-section active">
+      <h3>🎨 Управление фоном сайта</h3>
+      <p style="font-size:13px;opacity:0.8;margin-bottom:16px">Измените цвета фона шапки и основного фона сайта. Изменения применяются сразу на главной странице.</p>
+
+      <div class="bg-box">
+        <h4>🎨 Цвет шапки (где логотип и меню)</h4>
+        <p style="font-size:11px;opacity:0.7;margin-bottom:10px">Выберите два цвета для градиента шапки сайта</p>
+        <div class="color-picker-group">
+          <input type="color" id="headerColor1" value="#5D4037">
+          <span>Левый цвет градиента</span>
+        </div>
+        <div class="color-picker-group">
+          <input type="color" id="headerColor2" value="#795548">
+          <span>Правый цвет градиента</span>
+        </div>
+        <div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#5D4037,#795548)">
+          Предпросмотр шапки
+        </div>
+        <button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить цвет шапки</button>
+      </div>
+
+      <div class="bg-box">
+        <h4>🌍 Основной фон сайта (за совёнком)</h4>
+        <p style="font-size:11px;opacity:0.7;margin-bottom:10px">Выберите три цвета для градиента фона всего сайта</p>
+        <div class="color-picker-group">
+          <input type="color" id="bodyColor1" value="#FFF8E1">
+          <span>Верхний/левый цвет</span>
+        </div>
+        <div class="color-picker-group">
+          <input type="color" id="bodyColor2" value="#FFE0B2">
+          <span>Средний цвет</span>
+        </div>
+        <div class="color-picker-group">
+          <input type="color" id="bodyColor3" value="#FFCC80">
+          <span>Нижний/правый цвет</span>
+        </div>
+        <div id="bodyPreview" class="preview-strip" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80);color:#5D4037">
+          Предпросмотр фона сайта
+        </div>
+        <button class="btn btn-purple" onclick="saveBodyColors()" style="margin-top:12px"> Сохранить фон сайта</button>
+      </div>
+
+      <div class="bg-box">
+        <h4>🌈 Готовые пресеты фона</h4>
+        <p style="font-size:11px;opacity:0.7;margin-bottom:10px">Нажмите на пресет, чтобы применить его мгновенно</p>
+        <div class="bg-preview-grid">
+          <div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)" title="Тёплый кремовый"></div>
+          <div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)" title="Ночное небо"></div>
+          <div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)" title="Нежно-розовый"></div>
+          <div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)" title="Океан"></div>
+          <div class="bg-preset" onclick="applyPreset('mint')" style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9,#A5D6A7)" title="Мятный"></div>
+          <div class="bg-preset" onclick="applyPreset('lavender')" style="background:linear-gradient(135deg,#F3E5F5,#E1BEE7,#D7BDE2)" title="Лаванда"></div>
+          <div class="bg-preset" onclick="applyPreset('sunset')" style="background:linear-gradient(135deg,#FF9A9E,#FECFEF,#FAD0C4)" title="Закат"></div>
+          <div class="bg-preset" onclick="applyPreset('forest')" style="background:linear-gradient(135deg,#D4E7C5,#A8D5BA,#7BC4A0)" title="Лес"></div>
+        </div>
+      </div>
+
+      <div class="bg-box">
+        <h4>🔄 Сбросить к стандартному</h4>
+        <p style="font-size:11px;opacity:0.7;margin-bottom:10px">Вернуть стандартные кремовые цвета</p>
+        <button class="btn btn-del" onclick="resetBackground()">🗑 Сбросить все цвета фона</button>
+      </div>
+    </div>
+
     <!-- ДАШБОРД -->
-    <div id="aDashboard" class="admin-section active">
+    <div id="aDashboard" class="admin-section">
       <h3>📊 Статистика сайта</h3>
       <div class="stats">
         <div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div>
         <div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div>
         <div class="stat-box"><div class="num" id="statUsers">0</div><div class="lbl">Покупателей</div></div>
         <div class="stat-box"><div class="num" id="statProducts">0</div><div class="lbl">Товаров</div></div>
-        <div class="stat-box"><div class="num" id="statReturns">0</div><div class="lbl">Возвратов</div></div>
-        <div class="stat-box"><div class="num" id="statSubs">0</div><div class="lbl">Подписчиков</div></div>
       </div>
       <h4>🏆 Топ-5 товаров по рейтингу</h4>
       <div id="topProducts"></div>
@@ -267,50 +318,6 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
       <div id="adminPages"></div>
     </div>
 
-    <!-- ФОН САЙТА -->
-    <div id="aBackground" class="admin-section">
-      <h3>🎨 Управление фоном сайта</h3>
-      <p style="font-size:13px;opacity:0.8;margin-bottom:16px">Измените фон всего сайта — загрузите изображение, укажите URL или выберите градиент</p>
-
-      <div class="bg-box">
-        <h4>📤 Загрузить изображение с компьютера</h4>
-        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Максимальный размер: 2 МБ. Поддерживаются JPG, PNG, GIF, WEBP</p>
-        <input type="file" id="bgFile" accept="image/*" onchange="previewBackground(event)" style="padding:10px;background:#fff;border:2px solid #FFE0B2;border-radius:10px;width:100%">
-        <div id="bgPreview"></div>
-        <button class="btn btn-purple" onclick="saveBackground()" style="margin-top:12px">💾 Установить как фон</button>
-      </div>
-
-      <div class="bg-box">
-        <h4>🔗 Указать URL изображения</h4>
-        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Вставьте прямую ссылку на изображение из интернета</p>
-        <input id="bgUrl" placeholder="https://example.com/image.jpg" style="width:100%;padding:11px;border:2px solid #FFE0B2;border-radius:10px;margin-bottom:10px;font-size:13px">
-        <button class="btn btn-purple" onclick="saveBackgroundUrl()">💾 Установить по URL</button>
-      </div>
-
-      <div class="bg-box">
-        <h4>🌈 Готовые градиенты</h4>
-        <p style="font-size:12px;opacity:0.7;margin-bottom:10px">Нажмите на градиент, чтобы применить его</p>
-        <div class="bg-preview-grid">
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#667eea 0%,#764ba2 100%)')" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)" title="Фиолетовый закат"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#f093fb 0%,#f5576c 100%)')" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)" title="Розовый рассвет"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)')" style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)" title="Голубое небо"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)')" style="background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)" title="Мятная свежесть"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#fa709a 0%,#fee140 100%)')" style="background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)" title="Закатное солнце"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#30cfd0 0%,#330867 100%)')" style="background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)" title="Ночное небо"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#a8edea 0%,#fed6e3 100%)')" style="background:linear-gradient(135deg,#a8edea 0%,#fed6e3 100%)" title="Пастельный"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)')" style="background:linear-gradient(135deg,#ff9a9e 0%,#fecfef 100%)" title="Нежно-розовый"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#5D4037 0%,#8D6E63 50%,#D7CCC8 100%)')" style="background:linear-gradient(135deg,#5D4037 0%,#8D6E63 50%,#D7CCC8 100%)" title="Кофейный"></div>
-          <div class="bg-preset" onclick="setPresetBg('linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 50%,#FFCC80 100%)')" style="background:linear-gradient(135deg,#FFF8E1 0%,#FFE0B2 50%,#FFCC80 100%)" title="Совиный (стандартный)"></div>
-        </div>
-      </div>
-
-      <div class="bg-box">
-        <h4> Текущий фон</h4>
-        <div id="currentBgDisplay" style="font-size:13px;opacity:0.7">Фон не установлен</div>
-        <button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px"> Убрать фон (вернуть стандартный)</button>
-      </div>
-    </div>
-
     <!-- РЕКВИЗИТЫ -->
     <div id="aRequisites" class="admin-section">
       <h4>💳 Реквизиты для приёма платежей</h4>
@@ -334,28 +341,19 @@ table th { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; font-
       <div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div>
       <button class="btn btn-purple" onclick="adminChangePass()">Сохранить</button>
       <hr style="margin:18px 0;border-color:#FFE0B2">
-      <h4>🎨 Цвета сайта</h4>
-      <div class="form-group"><label>Основной цвет</label><input type="color" id="color_primary" value="#673AB7"></div>
-      <div class="form-group"><label>Акцентный цвет</label><input type="color" id="color_accent" value="#FFC107"></div>
-      <button class="btn btn-purple" onclick="saveColors()">Сохранить цвета</button>
-      <hr style="margin:18px 0;border-color:#FFE0B2">
       <h4>💾 Данные</h4>
       <button class="btn" onclick="exportData()">📤 Экспорт (JSON)</button>
-      <button class="btn" onclick="importData()"> Импорт (JSON)</button>
+      <button class="btn" onclick="importData()">📥 Импорт (JSON)</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
       <button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сбросить всё</button>
-      <button class="btn btn-del" onclick="logout()"> Выйти</button>
+      <button class="btn btn-del" onclick="logout()">🚪 Выйти</button>
     </div>
   </div>
 
   <div class="nav-links">
-    <a href="index.html"> На сайт</a>
+    <a href="index.html">🏠 На сайт</a>
     <a href="login.html">👤 Покупатель</a>
   </div>
-</div>
-
-<div class="form-modal" id="formModal">
-  <div class="form-modal-content" id="formContent"></div>
 </div>
 
 <script>
@@ -383,9 +381,8 @@ let settings = DB.get('settings', {
   requisites:{cardNumber:'',cardHolder:'',bank:'',sbp:''},
   promos:[{code:'OWL10',discount:10,type:'percent'}],
   sale:{active:false,percent:30,endDate:Date.now()+86400000*7},
-  colors:{primary:'#673AB7',accent:'#FFC107'},
-  backgroundImage:null,
-  backgroundIsGradient:false
+  headerColors:{color1:'#5D4037',color2:'#795548'},
+  bodyColors:{color1:'#FFF8E1',color2:'#FFE0B2',color3:'#FFCC80'}
 });
 
 function saveAll(){
@@ -453,89 +450,114 @@ function showTab(id, btn){
   btn.classList.add('active');
 }
 
-// === УПРАВЛЕНИЕ ФОНОМ ===
-function previewBackground(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  if(file.size > 2000000) return alert('Файл слишком большой! Максимум 2 МБ. Сожмите изображение.');
-  const reader = new FileReader();
-  reader.onload = function(e){
-    document.getElementById('bgPreview').innerHTML = `
-      <img src="${e.target.result}" class="current-bg-preview">
-      <p style="font-size:12px;color:#673AB7;margin-top:10px;font-weight:700">✅ Предпросмотр. Нажмите "Установить как фон"</p>`;
-    window._tempBg = e.target.result;
+// === УПРАВЛЕНИЕ ЦВЕТАМИ ФОНА ===
+
+function loadCurrentColors(){
+  document.getElementById('headerColor1').value = settings.headerColors?.color1 || '#5D4037';
+  document.getElementById('headerColor2').value = settings.headerColors?.color2 || '#795548';
+  document.getElementById('bodyColor1').value = settings.bodyColors?.color1 || '#FFF8E1';
+  document.getElementById('bodyColor2').value = settings.bodyColors?.color2 || '#FFE0B2';
+  document.getElementById('bodyColor3').value = settings.bodyColors?.color3 || '#FFCC80';
+  updateHeaderPreview();
+  updateBodyPreview();
+}
+
+function updateHeaderPreview(){
+  const c1 = document.getElementById('headerColor1').value;
+  const c2 = document.getElementById('headerColor2').value;
+  const preview = document.getElementById('headerPreview');
+  if(preview) preview.style.background = `linear-gradient(135deg,${c1},${c2})`;
+}
+
+function updateBodyPreview(){
+  const c1 = document.getElementById('bodyColor1').value;
+  const c2 = document.getElementById('bodyColor2').value;
+  const c3 = document.getElementById('bodyColor3').value;
+  const preview = document.getElementById('bodyPreview');
+  if(preview) preview.style.background = `linear-gradient(135deg,${c1},${c2},${c3})`;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  const hc1 = document.getElementById('headerColor1');
+  const hc2 = document.getElementById('headerColor2');
+  const bc1 = document.getElementById('bodyColor1');
+  const bc2 = document.getElementById('bodyColor2');
+  const bc3 = document.getElementById('bodyColor3');
+  if(hc1) hc1.addEventListener('input', updateHeaderPreview);
+  if(hc2) hc2.addEventListener('input', updateHeaderPreview);
+  if(bc1) bc1.addEventListener('input', updateBodyPreview);
+  if(bc2) bc2.addEventListener('input', updateBodyPreview);
+  if(bc3) bc3.addEventListener('input', updateBodyPreview);
+});
+
+function saveHeaderColors(){
+  const c1 = document.getElementById('headerColor1').value;
+  const c2 = document.getElementById('headerColor2').value;
+  settings.headerColors = {color1:c1, color2:c2};
+  saveAll();
+  addLog(`Изменён цвет шапки: ${c1} → ${c2}`);
+  showMsg('✅ Цвет шапки сохранён! Обновите главную страницу (F5)', 'success');
+}
+
+function saveBodyColors(){
+  const c1 = document.getElementById('bodyColor1').value;
+  const c2 = document.getElementById('bodyColor2').value;
+  const c3 = document.getElementById('bodyColor3').value;
+  settings.bodyColors = {color1:c1, color2:c2, color3:c3};
+  saveAll();
+  addLog(`Изменён фон сайта: ${c1}, ${c2}, ${c3}`);
+  showMsg('✅ Фон сайта сохранён! Обновите главную страницу (F5)', 'success');
+}
+
+function applyPreset(type){
+  const presets = {
+    warm: {header:{c1:'#5D4037',c2:'#795548'}, body:{c1:'#FFF8E1',c2:'#FFE0B2',c3:'#FFCC80'}},
+    night: {header:{c1:'#1a1a2e',c2:'#16213e'}, body:{c1:'#1a1a2e',c2:'#16213e',c3:'#0f3460'}},
+    pink: {header:{c1:'#880E4F',c2:'#C2185B'}, body:{c1:'#FFE5EC',c2:'#FFC2D1',c3:'#FFB3C6'}},
+    ocean: {header:{c1:'#006064',c2:'#00838F'}, body:{c1:'#E0F7FA',c2:'#B2EBF2',c3:'#80DEEA'}},
+    mint: {header:{c1:'#1B5E20',c2:'#2E7D32'}, body:{c1:'#E8F5E9',c2:'#C8E6C9',c3:'#A5D6A7'}},
+    lavender: {header:{c1:'#4A148C',c2:'#6A1B9A'}, body:{c1:'#F3E5F5',c2:'#E1BEE7',c3:'#D7BDE2'}},
+    sunset: {header:{c1:'#E65100',c2:'#F57C00'}, body:{c1:'#FF9A9E',c2:'#FECFEF',c3:'#FAD0C4'}},
+    forest: {header:{c1:'#1B5E20',c2:'#33691E'}, body:{c1:'#D4E7C5',c2:'#A8D5BA',c3:'#7BC4A0'}}
   };
-  reader.readAsDataURL(file);
-}
-
-function saveBackground(){
-  if(!window._tempBg) return alert('Сначала выберите файл');
-  settings.backgroundImage = window._tempBg;
-  settings.backgroundIsGradient = false;
+  
+  const p = presets[type];
+  settings.headerColors = {color1:p.header.c1, color2:p.header.c2};
+  settings.bodyColors = {color1:p.body.c1, color2:p.body.c2, color3:p.body.c3};
   saveAll();
-  addLog('Изменён фон сайта (загрузка файла)');
-  alert('✅ Фон установлен! Обновите главную страницу сайта.');
-  document.getElementById('bgPreview').innerHTML = '';
-  document.getElementById('bgFile').value = '';
-  window._tempBg = null;
-  renderCurrentBg();
+  
+  document.getElementById('headerColor1').value = p.header.c1;
+  document.getElementById('headerColor2').value = p.header.c2;
+  document.getElementById('bodyColor1').value = p.body.c1;
+  document.getElementById('bodyColor2').value = p.body.c2;
+  document.getElementById('bodyColor3').value = p.body.c3;
+  
+  updateHeaderPreview();
+  updateBodyPreview();
+  
+  addLog(`Применён пресет фона: ${type}`);
+  showMsg('✅ Пресет применён! Обновите главную страницу (F5)', 'success');
 }
 
-function saveBackgroundUrl(){
-  const url = document.getElementById('bgUrl').value.trim();
-  if(!url) return alert('Введите URL изображения');
-  settings.backgroundImage = url;
-  settings.backgroundIsGradient = false;
+function resetBackground(){
+  if(!confirm('Сбросить все цвета фона к стандартным?')) return;
+  settings.headerColors = {color1:'#5D4037', color2:'#795548'};
+  settings.bodyColors = {color1:'#FFF8E1', color2:'#FFE0B2', color3:'#FFCC80'};
   saveAll();
-  addLog('Изменён фон сайта (URL: '+url+')');
-  alert('✅ Фон установлен по URL! Обновите главную страницу.');
-  document.getElementById('bgUrl').value = '';
-  renderCurrentBg();
-}
-
-function setPresetBg(gradient){
-  settings.backgroundImage = gradient;
-  settings.backgroundIsGradient = true;
-  saveAll();
-  addLog('Установлен градиентный фон');
-  alert('✅ Градиентный фон установлен! Обновите главную страницу.');
-  renderCurrentBg();
-}
-
-function removeBackground(){
-  if(!confirm('Убрать фон сайта? Вернётся стандартный кремовый фон.')) return;
-  settings.backgroundImage = null;
-  settings.backgroundIsGradient = false;
-  saveAll();
-  addLog('Фон сайта удалён (сброшен к стандартному)');
-  alert('✅ Фон сброшен к стандартному');
-  renderCurrentBg();
-}
-
-function renderCurrentBg(){
-  const display = document.getElementById('currentBgDisplay');
-  if(!settings.backgroundImage){
-    display.innerHTML = '<p style="color:#999">Фон не установлен — используется стандартный</p>';
-    return;
-  }
-  if(settings.backgroundIsGradient){
-    display.innerHTML = `<div style="height:100px;border-radius:12px;background:${settings.backgroundImage};margin-top:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15)"></div><p style="font-size:12px;margin-top:8px;color:#673AB7">Текущий фон: градиент</p>`;
-  } else {
-    display.innerHTML = `<img src="${settings.backgroundImage}" class="current-bg-preview"><p style="font-size:12px;margin-top:8px;color:#673AB7">Текущий фон: изображение</p>`;
-  }
+  loadCurrentColors();
+  addLog('Фон сброшен к стандартному');
+  showMsg('✅ Фон сброшен к стандартному', 'success');
 }
 
 function renderAdmin(){
+  loadCurrentColors();
+  
   // ДАШБОРД
   document.getElementById('statOrders').textContent = orders.length;
   const revenue = orders.reduce((s,o)=>s+(o.total||0),0);
   document.getElementById('statRevenue').textContent = revenue+'₽';
   document.getElementById('statUsers').textContent = users.length;
   document.getElementById('statProducts').textContent = products.length;
-  const returns = DB.get('returns',[]);
-  document.getElementById('statReturns').textContent = returns.length;
-  const subs = DB.get('subscribers',[]);
-  document.getElementById('statSubs').textContent = subs.length;
 
   const top = [...products].sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,5);
   document.getElementById('topProducts').innerHTML = top.length ? top.map((p,i)=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;font-weight:600">${i+1}. ${p.name} — ${(p.rating||0).toFixed(1)}★</div>`).join('') : '<p>Нет товаров</p>';
@@ -545,11 +567,11 @@ function renderAdmin(){
   // КАТАЛОГИ
   document.getElementById('adminCatalogs').innerHTML = catalogs.map(c=>`<tr><td>${c.name}</td><td>${c.desc}</td><td>${c.ageMin||0}-${c.ageMax||10}</td><td><button class="btn btn-edit" onclick="openCatalogModal(${c.id})">✏️</button><button class="btn btn-del" onclick="delCatalog(${c.id})">🗑</button></td></tr>`).join('');
   // ТОВАРЫ
-  document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'🎁':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td>${p.age||'—'}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminProducts').innerHTML = products.map(p=>`<tr><td>${p.name}</td><td>${p.free?'':'💰'}</td><td>${p.free?'—':p.price+'₽'}</td><td>${p.stock||0}</td><td>${p.age||'—'}</td><td><button class="btn btn-edit" onclick="openProductModal(${p.id})">✏️</button><button class="btn btn-del" onclick="delProduct(${p.id})">🗑</button></td></tr>`).join('');
   // ВИДЕО
-  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminVideos').innerHTML = videos.map(v=>`<tr><td>${v.name}</td><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis">${v.url}</td><td><button class="btn btn-edit" onclick="openVideoModal(${v.id})">✏️</button><button class="btn btn-del" onclick="delVideo(${v.id})">🗑</button></td></tr>`).join('');
   // ПОСОБИЯ
-  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})">🗑</button></td></tr>`).join('');
+  document.getElementById('adminGames').innerHTML = games.map(g=>`<tr><td>${g.name}</td><td>${g.desc}</td><td><button class="btn btn-edit" onclick="openGameModal(${g.id})">✏️</button><button class="btn btn-del" onclick="delGame(${g.id})"></button></td></tr>`).join('');
   // НОВОСТИ
   document.getElementById('adminNews').innerHTML = news.map(n=>`<tr><td>${n.title}</td><td>${n.date}</td><td><button class="btn btn-edit" onclick="openNewsModal(${n.id})">✏️</button><button class="btn btn-del" onclick="delNews(${n.id})">🗑</button></td></tr>`).join('');
   // БЛОГ
@@ -570,25 +592,27 @@ function renderAdmin(){
   // ПОКУПАТЕЛИ
   document.getElementById('adminUsers').innerHTML = users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td>${u.phone||'—'}</td><td>${u.city||'—'}</td><td>${u.points||0}</td><td><button class="btn btn-del" onclick="delUser(${u.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="6" style="text-align:center">Нет покупателей</td></tr>';
   // СООБЩЕНИЯ
-  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})"></button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
+  document.getElementById('adminContacts').innerHTML = contacts.map(c=>`<tr><td>${c.name}</td><td>${c.email}</td><td>${c.msg}</td><td style="font-size:10px">${c.date}</td><td><button class="btn btn-del" onclick="delContact(${c.id})">🗑</button></td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center">Нет сообщений</td></tr>';
   // БАННЕРЫ
-  document.getElementById('adminBanners').innerHTML = banners.map(b=>`<div class="banner-item"><img src="${b.img}" alt=""><div style="flex:1"><b>Ссылка:</b> ${b.link||'—'}</div><button class="btn btn-del" onclick="banners=banners.filter(x=>x.id!=${b.id});saveAll();addLog('Удалён баннер');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет баннеров</p>';
+  document.getElementById('adminBanners').innerHTML = banners.map(b=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><img src="${b.img}" alt="" style="max-width:150px;border-radius:8px"><div style="flex:1"><b>Ссылка:</b> ${b.link||'—'}</div><button class="btn btn-del" onclick="banners=banners.filter(x=>x.id!=${b.id});saveAll();addLog('Удалён баннер');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет баннеров</p>';
   // МЕРОПРИЯТИЯ
-  document.getElementById('adminEvents').innerHTML = events.map(e=>`<div class="event-item"><div style="flex:1"><b>${e.title}</b><br><small>${e.date} ${e.time}</small><br>${e.desc}</div><button class="btn btn-del" onclick="events=events.filter(x=>x.id!=${e.id});saveAll();addLog('Удалено мероприятие');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет мероприятий</p>';
+  document.getElementById('adminEvents').innerHTML = events.map(e=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>${e.title}</b><br><small>${e.date} ${e.time}</small><br>${e.desc}</div><button class="btn btn-del" onclick="events=events.filter(x=>x.id!=${e.id});saveAll();addLog('Удалено мероприятие');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет мероприятий</p>';
   // ВОЗВРАТЫ
-  document.getElementById('adminReturns').innerHTML = returns.map(r=>`<div class="return-item"><div style="flex:1"><b>Заявка #${r.id}</b><br>Заказ: ${r.orderId}<br>Клиент: ${r.name} (${r.email})<br>Причина: ${r.reason}<br>Дата: ${r.date}</div><select onchange="returns.find(x=>x.id==${r.id}).status=this.value;saveAll();addLog('Изменён статус возврата #${r.id}');renderAdmin()" style="padding:5px;border-radius:6px">
+  const returns = DB.get('returns',[]);
+  document.getElementById('adminReturns').innerHTML = returns.map(r=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>Заявка #${r.id}</b><br>Заказ: ${r.orderId}<br>Клиент: ${r.name} (${r.email})<br>Причина: ${r.reason}<br>Дата: ${r.date}</div><select onchange="returns.find(x=>x.id==${r.id}).status=this.value;saveAll();addLog('Изменён статус возврата #${r.id}');renderAdmin()" style="padding:5px;border-radius:6px">
     <option ${r.status==='На рассмотрении'?'selected':''}>На рассмотрении</option>
     <option ${r.status==='Одобрено'?'selected':''}>Одобрено</option>
     <option ${r.status==='Отклонено'?'selected':''}>Отклонено</option>
   </select><button class="btn btn-del" onclick="returns=returns.filter(x=>x.id!=${r.id});saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет заявок на возврат</p>';
   // ПОДПИСЧИКИ
-  document.getElementById('adminSubscribers').innerHTML = subs.map((s,i)=>`<div class="sub-item" style="flex:1">${s} <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет подписчиков</p>';
+  const subs = DB.get('subscribers',[]);
+  document.getElementById('adminSubscribers').innerHTML = subs.map((s,i)=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center">${s} <button class="btn btn-del" onclick="subs.splice(${i},1);saveAll();renderAdmin()">🗑</button></div>`).join('') || '<p>Нет подписчиков</p>';
   // ЧАТ
   const chat = DB.get('chatMessages',[]);
-  document.getElementById('adminChat').innerHTML = chat.map(m=>`<div class="chat-item" style="background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};flex-direction:column;align-items:flex-start"><div><b>${m.from==='user'?'👤 Покупатель':'🤖 Бот'}:</b> ${m.text}</div><small style="color:#888">${m.time||''}</small></div>`).join('') || '<p>Чат пуст</p>';
+  document.getElementById('adminChat').innerHTML = chat.map(m=>`<div style="padding:10px;background:${m.from==='user'?'#E3F2FD':'#FFF8E1'};border-radius:10px;margin:6px 0"><b>${m.from==='user'?'👤 Покупатель':'🤖 Бот'}:</b> ${m.text}<br><small style="color:#888">${m.time||''}</small></div>`).join('') || '<p>Чат пуст</p>';
   // ЖУРНАЛ
   const log = DB.get('log',[]);
-  document.getElementById('adminLog').innerHTML = log.slice(-30).reverse().map(l=>`<div class="log-item">${l.date} — ${l.action}</div>`).join('') || '<p>Журнал пуст</p>';
+  document.getElementById('adminLog').innerHTML = log.slice(-30).reverse().map(l=>`<div style="padding:5px;font-size:11px;border-bottom:1px solid #FFE0B2">${l.date} — ${l.action}</div>`).join('') || '<p>Журнал пуст</p>';
   // АКЦИЯ
   document.getElementById('sale_active').checked = settings.sale.active;
   document.getElementById('sale_percent').value = settings.sale.percent;
@@ -603,12 +627,7 @@ function renderAdmin(){
   // ПРОМОКОДЫ
   document.getElementById('adminPromos').innerHTML = settings.promos.map((p,i)=>`<tr><td><b>${p.code}</b></td><td>${p.discount}${p.type==='percent'?'%':'₽'}</td><td>${p.type==='percent'?'Процент':'Сумма'}</td><td><button class="btn btn-del" onclick="delPromo(${i})">🗑</button></td></tr>`).join('');
   // СТРАНИЦЫ
-  document.getElementById('adminPages').innerHTML = pages.map(p=>`<div class="page-item"><div style="flex:1"><b>${p.title}</b><br><small>${p.content?String(p.content).substring(0,50):''}...</small></div><button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️</button><button class="btn btn-del" onclick="pages=pages.filter(x=>x.id!=${p.id});saveAll();addLog('Удалена страница');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет страниц</p>';
-  // ЦВЕТА
-  document.getElementById('color_primary').value = settings.colors.primary || '#673AB7';
-  document.getElementById('color_accent').value = settings.colors.accent || '#FFC107';
-  // ФОН
-  renderCurrentBg();
+  document.getElementById('adminPages').innerHTML = pages.map(p=>`<div style="padding:10px;background:linear-gradient(135deg,#FFF8E1,#FFE0B2);border-radius:10px;margin:6px 0;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div style="flex:1"><b>${p.title}</b><br><small>${p.content?String(p.content).substring(0,50):''}...</small></div><button class="btn btn-edit" onclick="openPageModal(${p.id})">✏️</button><button class="btn btn-del" onclick="pages=pages.filter(x=>x.id!=${p.id});saveAll();addLog('Удалена страница');renderAdmin()">🗑</button></div>`).join('') || '<p>Нет страниц</p>';
 }
 
 function saveRequisites(){
@@ -620,7 +639,7 @@ function saveRequisites(){
   };
   saveAll();
   addLog('Изменены реквизиты');
-  alert('✅ Реквизиты сохранены! 🦉');
+  showMsg('✅ Реквизиты сохранены! ', 'success');
 }
 function changeOrderStatus(id, status){
   const o = orders.find(x=>x.id==id);
@@ -638,22 +657,12 @@ function saveSale(){
   };
   saveAll();
   addLog(`Акция: ${settings.sale.active?'включена':'выключена'}, скидка ${settings.sale.percent}%`);
-  alert('Акция сохранена! 🔥');
-}
-
-function saveColors(){
-  settings.colors = {
-    primary: document.getElementById('color_primary').value,
-    accent: document.getElementById('color_accent').value
-  };
-  saveAll();
-  addLog('Изменены цвета сайта');
-  alert('Цвета сохранены! 🎨');
+  showMsg('Акция сохранена! 🔥', 'success');
 }
 
 function sendNewsletter(){
   const subs = DB.get('subscribers',[]);
-  if(subs.length===0) return alert('Нет подписчиков');
+  if(subs.length===0) return showMsg('Нет подписчиков');
   const subject = prompt('Тема рассылки:');
   if(!subject) return;
   const text = prompt('Текст рассылки:');
@@ -662,11 +671,12 @@ function sendNewsletter(){
   newsletters.push({id:Date.now(), subject, text, date:new Date().toLocaleString('ru-RU'), recipients:subs.length});
   DB.set('newsletters', newsletters);
   addLog(`Рассылка отправлена: "${subject}" (${subs.length} получателей)`);
-  alert(` Рассылка отправлена ${subs.length} подписчикам!`);
+  showMsg(`📧 Рассылка отправлена ${subs.length} подписчикам!`, 'success');
 }
 
 function openPromoModal(){
-  document.getElementById('formContent').innerHTML = `
+  const content = document.getElementById('formContent') || createFormModal();
+  content.innerHTML = `
     <h2>🎟 Новый промокод</h2>
     <input id="p_code" placeholder="Код (OWL20)">
     <input id="p_discount" type="number" placeholder="Размер скидки">
@@ -687,12 +697,35 @@ function savePromo(){
 }
 function delPromo(i){ if(!confirm('Удалить промокод?'))return; settings.promos.splice(i,1); saveAll(); renderAdmin(); }
 
-function openForm(){ document.getElementById('formModal').classList.add('active'); }
-function closeForm(){ document.getElementById('formModal').classList.remove('active'); }
+function createFormModal(){
+  if(!document.getElementById('formModal')){
+    const modal = document.createElement('div');
+    modal.id = 'formModal';
+    modal.className = 'form-modal';
+    modal.style.cssText = 'display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:1000;justify-content:center;align-items:center;padding:15px;';
+    const content = document.createElement('div');
+    content.id = 'formContent';
+    content.className = 'form-modal-content';
+    content.style.cssText = 'background:rgba(255,248,225,0.98);padding:24px;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;border:2px solid #FFC107;box-shadow:0 20px 60px rgba(0,0,0,0.4);';
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+  }
+  return document.getElementById('formContent');
+}
+
+function openForm(){ 
+  const modal = document.getElementById('formModal') || createFormModal();
+  modal.style.display = 'flex'; 
+}
+function closeForm(){ 
+  const modal = document.getElementById('formModal');
+  if(modal) modal.style.display = 'none'; 
+}
 
 function openCatalogModal(id){
   const c = id ? catalogs.find(x=>x.id==id) : {name:'',desc:'',ageMin:0,ageMax:10};
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${id?'✏️':'➕'} Каталог</h2>
     <input id="f_name" placeholder="Название" value="${c.name}">
     <textarea id="f_desc" placeholder="Описание">${c.desc}</textarea>
@@ -719,7 +752,8 @@ function delCatalog(id){ if(!confirm('Удалить?'))return; catalogs=catalog
 function openProductModal(id){
   const p = id ? products.find(x=>x.id==id) : {name:'',price:0,free:true,catalogId:catalogs[0]?.id||0,img:'',desc:'',stock:0,age:0,sale:false,salePrice:0,createdAt:Date.now()};
   const opts = catalogs.map(c=>`<option value="${c.id}" ${c.id==p.catalogId?'selected':''}>${c.name}</option>`).join('');
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${id?'✏️':'➕'} Товар</h2>
     <input id="f_name" placeholder="Название" value="${p.name}">
     <label><input type="checkbox" id="f_free" ${p.free?'checked':''}> 🎁 Бесплатный</label>
@@ -761,7 +795,8 @@ function delProduct(id){ if(!confirm('Удалить?'))return; products=product
 
 function openVideoModal(id){
   const v = id ? videos.find(x=>x.id==id) : {name:'',url:'',desc:''};
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${id?'✏️':'➕'} Видео</h2>
     <input id="f_name" placeholder="Название" value="${v.name}">
     <input id="f_url" placeholder="URL видео" value="${v.url}">
@@ -785,8 +820,9 @@ function delVideo(id){ if(!confirm('Удалить?'))return; videos=videos.filt
 
 function openGameModal(id){
   const g = id ? games.find(x=>x.id==id) : {name:'',desc:'',img:''};
-  document.getElementById('formContent').innerHTML = `
-    <h2>${id?'️':'➕'} Пособие</h2>
+  const content = createFormModal();
+  content.innerHTML = `
+    <h2>${id?'✏️':'➕'} Пособие</h2>
     <input id="f_name" placeholder="Название" value="${g.name}">
     <input id="f_img" placeholder="URL изображения" value="${g.img||''}">
     <textarea id="f_desc" placeholder="Описание">${g.desc||''}</textarea>
@@ -809,7 +845,8 @@ function delGame(id){ if(!confirm('Удалить?'))return; games=games.filter(
 
 function openNewsModal(id){
   const n = id ? news.find(x=>x.id==id) : {title:'',text:'',date:new Date().toISOString().slice(0,10)};
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${id?'✏️':'➕'} Новость</h2>
     <input id="f_title" placeholder="Заголовок" value="${n.title}">
     <input id="f_date" type="date" value="${n.date}">
@@ -833,7 +870,8 @@ function delNews(id){ if(!confirm('Удалить?'))return; news=news.filter(n=
 
 function openBlogModal(id){
   const b = id ? blog.find(x=>x.id==id) : {title:'',text:'',date:new Date().toISOString().slice(0,10)};
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${id?'✏️':'➕'} Статья блога</h2>
     <input id="f_title" placeholder="Заголовок" value="${b.title}">
     <input id="f_date" type="date" value="${b.date}">
@@ -857,7 +895,8 @@ function delBlog(id){ if(!confirm('Удалить?'))return; blog=blog.filter(b=
 
 function openFaqModal(idx){
   const f = idx!==undefined ? faq[idx] : {q:'',a:''};
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>${idx!==undefined?'✏️':'➕'} FAQ</h2>
     <input id="f_q" placeholder="Вопрос" value="${f.q}">
     <textarea id="f_a" placeholder="Ответ">${f.a}</textarea>
@@ -880,8 +919,9 @@ function delFaq(i){ if(!confirm('Удалить?'))return; faq.splice(i,1); save
 function delReview(id){ if(!confirm('Удалить?'))return; reviews=reviews.filter(r=>r.id!=id); saveAll(); renderAdmin(); }
 
 function openBannerModal(){
-  document.getElementById('formContent').innerHTML = `
-    <h2> Новый баннер</h2>
+  const content = createFormModal();
+  content.innerHTML = `
+    <h2>🖼 Новый баннер</h2>
     <input id="b_img" placeholder="URL изображения">
     <input id="b_link" placeholder="Ссылка при клике (например, #products)">
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
@@ -899,7 +939,8 @@ function saveBanner(){
 }
 
 function openEventModal(){
-  document.getElementById('formContent').innerHTML = `
+  const content = createFormModal();
+  content.innerHTML = `
     <h2>📅 Новое мероприятие</h2>
     <input id="e_title" placeholder="Название">
     <input id="e_date" type="date">
@@ -923,8 +964,9 @@ function saveEvent(){
 
 function openPageModal(id){
   const p = id ? pages.find(x=>x.id==id) : {title:'',content:'',slug:''};
-  document.getElementById('formContent').innerHTML = `
-    <h2>${id?'️':'➕'} Страница</h2>
+  const content = createFormModal();
+  content.innerHTML = `
+    <h2>${id?'✏️':'➕'} Страница</h2>
     <input id="pg_title" placeholder="Заголовок" value="${p.title}">
     <input id="pg_slug" placeholder="URL (например, about)" value="${p.slug||''}">
     <textarea id="pg_content" placeholder="Содержимое страницы (HTML)" style="min-height:120px">${p.content||''}</textarea>
@@ -947,11 +989,11 @@ function savePage(id){
 function adminChangePass(){
   const old=document.getElementById('setOldPass').value;
   const nw=document.getElementById('setNewPass').value;
-  if(old!==admin.password) return alert('Неверный текущий пароль');
-  if(nw.length<4) return alert('Минимум 4 символа');
+  if(old!==admin.password) return showMsg('Неверный текущий пароль');
+  if(nw.length<4) return showMsg('Минимум 4 символа');
   admin.password=nw; saveAll();
   addLog('Смена пароля администратора');
-  alert('Пароль изменён 🦉');
+  showMsg('Пароль изменён 🦉', 'success');
   document.getElementById('setOldPass').value='';
   document.getElementById('setNewPass').value='';
 }
@@ -992,7 +1034,7 @@ function handleImport(event){
       if(data.settings) settings = data.settings;
       saveAll();
       addLog('Импорт данных');
-      alert('✅ Данные импортированы!');
+      showMsg('✅ Данные импортированы!', 'success');
       renderAdmin();
     } catch(err){
       alert('Ошибка импорта: '+err.message);
