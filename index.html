@@ -9,13 +9,12 @@
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito','Segoe UI',sans-serif; transition: all .3s; }
 
-/* === ЦВЕТА ИЗ АДМИНКИ (по умолчанию) === */
+/* === ФОН ИЗ АДМИНКИ === */
 :root {
+  --site-bg-image: none;
+  --site-bg-gradient: none;
   --headerColor1: #5D4037;
   --headerColor2: #795548;
-  --bodyColor1: #FFF8E1;
-  --bodyColor2: #FFE0B2;
-  --bodyColor3: #FFCC80;
   --accent: #FFC107;
   --primary: #673AB7;
   --text: #2D1B4E;
@@ -23,8 +22,26 @@
   --border: rgba(255,255,255,0.5);
 }
 
+body.custom-bg-image {
+  background-image: var(--site-bg-image) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+body.custom-bg-image::before {
+  background: rgba(255,255,255,0.78) !important;
+  backdrop-filter: blur(3px);
+}
+
+body.custom-bg-gradient {
+  background: var(--site-bg-gradient) !important;
+}
+
+/* Стандартный фон (если не задан из админки) */
 body { 
-  background: linear-gradient(135deg, var(--bodyColor1), var(--bodyColor2), var(--bodyColor3));
+  background: linear-gradient(135deg, #FFF8E1, #FFE0B2, #FFCC80);
   color:var(--text); 
   min-height:100vh; 
   padding-bottom:70px; 
@@ -44,7 +61,7 @@ body::before {
 }
 
 body::after {
-  content: '⭐ 🌟 ✨ ⭐ 🌟 ✨ ⭐ 🌟 ✨';
+  content: '⭐  ✨ ⭐ 🌟 ✨ ⭐ 🌟 ✨';
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
@@ -236,23 +253,23 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
     <div class="user-info" id="userInfo">👤 Гость | <a href="login.html">Войти</a></div>
     <nav>
       <button onclick="showSection('home')">🏠 Главная</button>
-      <button onclick="showSection('catalogs')"> Каталоги</button>
-      <button onclick="showSection('products')">🛍 Товары</button>
+      <button onclick="showSection('catalogs')">📚 Каталоги</button>
+      <button onclick="showSection('products')"> Товары</button>
       <button onclick="showSection('quiz')">🎯 Квиз</button>
       <button onclick="showSection('favorites')">❤️ Избранное</button>
       <button onclick="showSection('compare')">⚖️ Сравнение <span id="compareCount">0</span></button>
-      <button onclick="showSection('history')"> История</button>
+      <button onclick="showSection('history')">👁 История</button>
       <button onclick="showSection('videos')">🎬 Видео</button>
-      <button onclick="showSection('games')"> Пособия</button>
+      <button onclick="showSection('games')">🎮 Пособия</button>
       <button onclick="showSection('achievements')">🏆 Достижения</button>
       <button onclick="showSection('events')">📅 Мероприятия</button>
       <button onclick="showSection('blog')">📝 Блог</button>
       <button onclick="showSection('faq')">❓ FAQ</button>
       <button onclick="showSection('contacts')">📞 Контакты</button>
-      <button onclick="showSection('orders')">📦 Заказы</button>
+      <button onclick="showSection('orders')"> Заказы</button>
       <button onclick="showSection('returns')">🔄 Возврат</button>
-      <button class="cart-btn" onclick="openCart()"> <span class="cart-count" id="cartCount">0</span></button>
-      <button class="theme-btn" onclick="toggleTheme()"></button>
+      <button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>
+      <button class="theme-btn" onclick="toggleTheme()">🌙</button>
       <a href="admin-login.html" class="admin-link">🔐 Админ</a>
     </nav>
   </div>
@@ -265,7 +282,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
       <img src="logo.png" class="big-owl" alt="Игривый совёнок">
       <h1>Добро пожаловать в «Игривый совёнок»!</h1>
       <p>Уютный мир игр, пособий и знаний для маленьких совят и их родителей 🌙✨</p>
-      <p style="margin-top:12px"><a href="login.html" class="btn btn-purple">🔑 Войти / Регистрация</a></p>
+      <p style="margin-top:12px"><a href="login.html" class="btn btn-purple"> Войти / Регистрация</a></p>
     </div>
 
     <div class="section" style="padding:0;overflow:hidden">
@@ -284,7 +301,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
     </div>
 
     <div class="section">
-      <h2> Товар дня</h2>
+      <h2>🎲 Товар дня</h2>
       <div id="productOfDay"></div>
     </div>
 
@@ -304,7 +321,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
     </div>
 
     <div class="section">
-      <h2> Статистика</h2>
+      <h2>📊 Статистика</h2>
       <div class="stats" id="stats"></div>
     </div>
 
@@ -335,7 +352,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
         <button class="active" onclick="filterProducts('all',this)">Все</button>
         <button onclick="filterProducts('free',this)">🎁 Бесплатные</button>
         <button onclick="filterProducts('paid',this)">💰 Платные</button>
-        <button onclick="filterProducts('sale',this)"> Со скидкой</button>
+        <button onclick="filterProducts('sale',this)">🔥 Со скидкой</button>
       </div>
       <div class="sort-box">
         <select onchange="sortProducts(this.value)">
@@ -346,7 +363,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
           <option value="rating">По рейтингу</option>
           <option value="new">Новинки</option>
         </select>
-        <input class="search-box" style="flex:1;margin:0" placeholder=" Поиск..." oninput="renderProducts(this.value)">
+        <input class="search-box" style="flex:1;margin:0" placeholder="🔍 Поиск..." oninput="renderProducts(this.value)">
       </div>
       <div class="grid" id="productsGrid"></div>
     </div>
@@ -354,7 +371,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
 
   <div id="quiz" class="page">
     <div class="section">
-      <h2>🎯 Квиз: подберём игру для вашего ребёнка</h2>
+      <h2> Квиз: подберём игру для вашего ребёнка</h2>
       <div id="quizFull"></div>
     </div>
   </div>
@@ -375,7 +392,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
 
   <div id="history" class="page">
     <div class="section">
-      <h2> История просмотров</h2>
+      <h2>👁 История просмотров</h2>
       <div id="historyList"></div>
     </div>
   </div>
@@ -448,14 +465,14 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
 
   <div id="returns" class="page">
     <div class="section">
-      <h2>🔄 Возврат товара</h2>
+      <h2> Возврат товара</h2>
       <p style="margin-bottom:18px">Вы можете вернуть товар в течение 14 дней с момента получения.</p>
       <div class="contact-form">
         <input id="r_order" placeholder="Номер заказа">
         <input id="r_name" placeholder="Ваше имя">
         <input id="r_email" type="email" placeholder="Email">
         <textarea id="r_reason" placeholder="Причина возврата"></textarea>
-        <button class="btn btn-purple" onclick="submitReturn()">Отправить заявку 🦉</button>
+        <button class="btn btn-purple" onclick="submitReturn()">Отправить заявку </button>
       </div>
       <h3 style="margin-top:22px"> Мои заявки на возврат</h3>
       <div id="returnsList"></div>
@@ -478,7 +495,7 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
 
 <div class="modal" id="checkoutModal">
   <div class="modal-content">
-    <h2> Оформление заказа</h2>
+    <h2>📝 Оформление заказа</h2>
     <div class="requisites-box" id="payRequisites"></div>
     <input id="co_name" placeholder="👤 Ваше имя" required>
     <input id="co_email" type="email" placeholder="📧 Email" required>
@@ -494,9 +511,9 @@ footer a { color:#FFD54F; font-weight:700; margin:0 6px; }
       <option value="Перевод на карту">Перевод на карту</option>
       <option value="СБП">СБП</option>
       <option value="При получении">При получении</option>
-      <option value="Бонусными баллами">🎁 Бонусными баллами</option>
+      <option value="Бонусными баллами"> Бонусными баллами</option>
     </select>
-    <input id="co_promo" placeholder=" Промокод (если есть)">
+    <input id="co_promo" placeholder="🎟 Промокод (если есть)">
     <textarea id="co_comment" placeholder="💬 Комментарий"></textarea>
     <div id="checkoutSummary" style="background:var(--card);padding:14px;border-radius:12px;margin:14px 0;border:1px solid var(--border)"></div>
     <div class="modal-actions">
@@ -544,25 +561,26 @@ const DB = {
   set(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
 };
 
-// === ПРИМЕНЕНИЕ ЦВЕТОВ ИЗ АДМИНКИ ===
-function applyAdminColors(){
+// === ПРИМЕНЕНИЕ ФОНА ИЗ АДМИНКИ ===
+(function applySiteBackground(){
   const settings = DB.get('settings', {});
   const root = document.documentElement;
+  
+  if(settings.backgroundImage){
+    if(settings.backgroundType === 'image'){
+      root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`);
+      document.body.classList.add('custom-bg-image');
+    } else {
+      root.style.setProperty('--site-bg-gradient', settings.backgroundImage);
+      document.body.classList.add('custom-bg-gradient');
+    }
+  }
   
   if(settings.headerColors){
     root.style.setProperty('--headerColor1', settings.headerColors.color1 || '#5D4037');
     root.style.setProperty('--headerColor2', settings.headerColors.color2 || '#795548');
   }
-  
-  if(settings.bodyColors){
-    root.style.setProperty('--bodyColor1', settings.bodyColors.color1 || '#FFF8E1');
-    root.style.setProperty('--bodyColor2', settings.bodyColors.color2 || '#FFE0B2');
-    root.style.setProperty('--bodyColor3', settings.bodyColors.color3 || '#FFCC80');
-  }
-}
-
-// Вызываем сразу при загрузке
-applyAdminColors();
+})();
 
 let catalogs = DB.get('catalogs', [
   {id:1, name:'Развивающие игры', desc:'Игры для малышей от 2 лет', ageMin:2, ageMax:5},
@@ -599,7 +617,7 @@ let subscribers = DB.get('subscribers', []);
 let banners = DB.get('banners', [
   {id:1, img:'https://via.placeholder.com/1200x220/673AB7/fff?text=🦉+Игривый+совёнок+—+лучшие+игры+для+детей!', link:'#products'},
   {id:2, img:'https://via.placeholder.com/1200x220/FFC107/5D4037?text=🔥+Скидка+30%+на+все+товары!', link:'#products'},
-  {id:3, img:'https://via.placeholder.com/1200x220/4CAF50/fff?text=🎁+Бесплатная+доставка+от+3000₽', link:'#products'}
+  {id:3, img:'https://via.placeholder.com/1200x220/4CAF50/fff?text=+Бесплатная+доставка+от+3000₽', link:'#products'}
 ]);
 let events = DB.get('events', [
   {id:1, title:'Мастер-класс по рисованию', date:'2026-11-01', time:'14:00', desc:'Онлайн-урок для детей 4-7 лет'},
@@ -641,7 +659,7 @@ function updateUserInfo(){
   const el = document.getElementById('userInfo');
   el.innerHTML = current
     ? `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`
-    : `👤 Гость | <a href="login.html">Войти</a>`;
+    : ` Гость | <a href="login.html">Войти</a>`;
   const pointsBox = document.getElementById('pointsBox');
   if(current && pointsBox){
     pointsBox.style.display = 'block';
@@ -658,7 +676,7 @@ function doLogout(){
 function addToCart(productId){
   const p = products.find(x=>x.id==productId);
   if(!p) return;
-  if(p.free){ showToast('Бесплатные товары не добавляются в корзину 🎁'); return; }
+  if(p.free){ showToast('Бесплатные товары не добавляются в корзину '); return; }
   const existing = cart.find(c=>c.productId==productId);
   if(existing) existing.qty++;
   else cart.push({productId, qty:1});
@@ -895,7 +913,7 @@ function renderGames(){
 }
 function renderBlog(){
   const l=document.getElementById('blogList'); if(!l) return;
-  l.innerHTML = blog.map(b=>`<div class="blog-card"><h3> ${b.title}</h3><p style="color:#8D6E63;font-size:11px">${b.date}</p><p>${b.text}</p></div>`).join('') || '<p>Нет статей</p>';
+  l.innerHTML = blog.map(b=>`<div class="blog-card"><h3>📝 ${b.title}</h3><p style="color:#8D6E63;font-size:11px">${b.date}</p><p>${b.text}</p></div>`).join('') || '<p>Нет статей</p>';
 }
 function renderFaq(){
   const l=document.getElementById('faqList'); if(!l) return;
@@ -934,7 +952,7 @@ function renderOrders(){
       <p style="font-size:11px;opacity:0.7">📅 ${o.date}</p>
       <ul style="margin:10px 0;padding-left:20px;font-size:12px">${itemsHtml}</ul>
       <p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:800">${o.total} ₽</span></p>
-      <p style="font-size:12px">🚚 ${o.delivery} | 💳 ${o.payment}</p>
+      <p style="font-size:12px"> ${o.delivery} | 💳 ${o.payment}</p>
       ${o.trackNumber?`<p style="font-size:12px;color:var(--primary)">📍 Трек-номер: <b>${o.trackNumber}</b></p>`:''}
     </div>`;
   }).join('');
@@ -950,10 +968,10 @@ function renderStats(){
   const s=document.getElementById('stats'); if(!s) return;
   s.innerHTML = `
     <div class="stat-box"><div class="num">${catalogs.length}</div><div class="lbl">📚 Каталогов</div></div>
-    <div class="stat-box"><div class="num">${products.length}</div><div class="lbl"> Товаров</div></div>
+    <div class="stat-box"><div class="num">${products.length}</div><div class="lbl">🛍 Товаров</div></div>
     <div class="stat-box"><div class="num">${products.filter(p=>p.free).length}</div><div class="lbl">🎁 Бесплатных</div></div>
     <div class="stat-box"><div class="num">${videos.length}</div><div class="lbl">🎬 Видео</div></div>
-    <div class="stat-box"><div class="num">${blog.length}</div><div class="lbl"> Статей</div></div>
+    <div class="stat-box"><div class="num">${blog.length}</div><div class="lbl">📝 Статей</div></div>
     <div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ В избранном</div></div>`;
 }
 
@@ -1076,7 +1094,7 @@ function openCheckout(){
     if(confirm('Войдите для оформления. Перейти?')) window.location.href='login.html';
     return;
   }
-  if(cart.length===0){ alert('Корзина пуста '); return; }
+  if(cart.length===0){ alert('Корзина пуста 🦉'); return; }
   const req = settings.requisites;
   const reqBox = document.getElementById('payRequisites');
   if(req.cardNumber){
@@ -1093,7 +1111,7 @@ function openCheckout(){
     const p = products.find(x=>x.id==c.productId);
     return p ? `<li>${p.name} × ${c.qty} = ${p.price*c.qty}₽</li>` : '';
   }).join('');
-  document.getElementById('checkoutSummary').innerHTML = `<h4> Ваш заказ:</h4><ul style="padding-left:20px;margin:10px 0;font-size:12px">${itemsHtml}</ul><p><b>Итого: <span style="color:#D84315">${sum} ₽</span></b></p>`;
+  document.getElementById('checkoutSummary').innerHTML = `<h4>📋 Ваш заказ:</h4><ul style="padding-left:20px;margin:10px 0;font-size:12px">${itemsHtml}</ul><p><b>Итого: <span style="color:#D84315">${sum} ₽</span></b></p>`;
   closeModal('cartModal');
   openModal('checkoutModal');
 }
@@ -1153,7 +1171,7 @@ function submitOrder(){
   cart = [];
   saveAll(); updateCartCount(); updateUserInfo();
   closeModal('checkoutModal');
-  alert(`✅ Заказ #${order.id} оформлен!\nСумма: ${total} ₽\nБаллов начислено: ${pointsEarned}\nТрек-номер: ${order.trackNumber}\n\nОплатите по реквизитам `);
+  alert(`✅ Заказ #${order.id} оформлен!\nСумма: ${total} ₽\nБаллов начислено: ${pointsEarned}\nТрек-номер: ${order.trackNumber}\n\nОплатите по реквизитам 🦉`);
   checkAchievements('first_purchase');
   showSection('orders');
 }
@@ -1170,7 +1188,7 @@ function submitReturn(){
   document.getElementById('r_name').value='';
   document.getElementById('r_email').value='';
   document.getElementById('r_reason').value='';
-  showToast('Заявка на возврат отправлена! ');
+  showToast('Заявка на возврат отправлена! 🦉');
   renderReturns();
 }
 
@@ -1206,7 +1224,7 @@ function openReviewModal(){
     <textarea id="f_text" placeholder="Ваш отзыв"></textarea>
     <div class="modal-actions">
       <button class="btn close-btn" onclick="closeModal('formModal')">Отмена</button>
-      <button class="btn btn-purple" onclick="saveReview()">Отправить 🦉</button>
+      <button class="btn btn-purple" onclick="saveReview()">Отправить </button>
     </div>`;
   openModal('formModal');
 }
@@ -1236,11 +1254,11 @@ function sendChat(){
   input.value='';
   setTimeout(()=>{
     const answers = [
-      'Спасибо за вопрос! 🦉 Наш менеджер скоро ответит.',
+      'Спасибо за вопрос!  Наш менеджер скоро ответит.',
       'Отличный вопрос! Посмотрите раздел FAQ.',
       'Мы работаем с 9:00 до 21:00. Позвоните: +7 (800) 555-35-35',
       'Доставка по всей России! 🚚',
-      'У нас много бесплатных товаров! Загляните в каталог 🎁'
+      'У нас много бесплатных товаров! Загляните в каталог '
     ];
     const answer = answers[Math.floor(Math.random()*answers.length)];
     chatMessages.push({from:'bot', text:answer, time:new Date().toLocaleTimeString('ru-RU')});
