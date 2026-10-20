@@ -50,6 +50,24 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
 .bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
 .bg-box h4 { margin-top:0; color:#5D4037; }
+.file-upload-box { background:#fff; border:2px dashed #673AB7; border-radius:12px; padding:20px; text-align:center; margin:12px 0; cursor:pointer; }
+.file-upload-box:hover { background:#F3E5F5; }
+.file-upload-box input[type="file"] { display:none; }
+.file-upload-box .upload-icon { font-size:40px; margin-bottom:8px; }
+.current-bg-img { max-width:100%; max-height:200px; border-radius:10px; margin-top:10px; }
+.bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
+.bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; }
+.bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; }
+.color-picker-group { display:flex; align-items:center; gap:10px; margin:8px 0; }
+.color-picker-group input[type="color"] { width:60px; height:40px; border:none; border-radius:8px; cursor:pointer; }
+.preview-strip { margin-top:10px; padding:15px; border-radius:10px; color:#fff; font-weight:bold; text-align:center; }
+.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.form-modal.active { display:flex; }
+.form-modal-content { background:rgba(255,248,225,0.98); padding:24px; border-radius:20px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; }
+.form-modal-content h2 { color:#2D1B4E; margin-bottom:14px; font-size:20px; font-weight:800; }
+.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
+.form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
+.form-modal-content label input { width:auto; }
 .empty-state { text-align:center; padding:30px; color:#999; font-style:italic; }
 @media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } .item-row { flex-direction:column; align-items:flex-start; } }
 </style>
@@ -64,7 +82,7 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
   <div id="loginBlock">
     <form onsubmit="doLogin(event)">
       <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
-      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required placeholder="Введите пароль"></div>
+      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required placeholder="777"></div>
       <button type="submit" class="btn-submit">Войти 🦉</button>
     </form>
   </div>
@@ -73,24 +91,66 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
     <h3>⚙️ Управление сайтом</h3>
     <div class="admin-tabs" id="adminTabs">
       <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard">📊 Дашборд</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground">🖼 Фон</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs">📚 Весь каталог</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aWorksheets',this)" data-tab="aWorksheets">📝 Рабочие листы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aThemes',this)" data-tab="aThemes">🎨 Темы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames">🔤 Игры с буквами</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aSpeechGames',this)" data-tab="aSpeechGames">🗣️ Логопедические</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSpeechGames',this)" data-tab="aSpeechGames">️ Логопедические</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree">🎁 Бесплатно</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders">📦 Заказы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aContacts',this)" data-tab="aContacts">✉️ Сообщения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSuggestions',this)" data-tab="aSuggestions">💡 Предложения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSync',this)" data-tab="aSync">🔄 Синхронизация</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">⚙️ Настройки</button></div>
     </div>
 
-    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
+    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
 
-    <div id="aCatalogs" class="admin-section"><h3>📚 Весь каталог</h3><button class="btn btn-add" onclick="openFolderModal('catalogs')">➕ Добавить папку</button><div id="adminFolders-catalogs"></div></div>
+    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4>📤 Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none">✕ Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px"> Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div></div></div><div class="bg-box"><h4> Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
+
+    <div id="aCatalogs" class="admin-section"><h3>📚 Весь каталог</h3><button class="btn btn-add" onclick="openFolderModal('catalogs')"> Добавить папку</button><div id="adminFolders-catalogs"></div></div>
     <div id="aWorksheets" class="admin-section"><h3>📝 Рабочие листы</h3><button class="btn btn-add" onclick="openFolderModal('worksheets')">➕ Добавить папку</button><div id="adminFolders-worksheets"></div></div>
     <div id="aThemes" class="admin-section"><h3>🎨 Темы</h3><button class="btn btn-add" onclick="openFolderModal('themes')">➕ Добавить папку</button><div id="adminFolders-themes"></div></div>
-    <div id="aLetterGames" class="admin-section"><h3>🔤 Игры с буквами</h3><button class="btn btn-add" onclick="openFolderModal('letter-games')">➕ Добавить папку</button><div id="adminFolders-letter-games"></div></div>
+    <div id="aLetterGames" class="admin-section"><h3> Игры с буквами</h3><button class="btn btn-add" onclick="openFolderModal('letter-games')">➕ Добавить папку</button><div id="adminFolders-letter-games"></div></div>
     <div id="aSpeechGames" class="admin-section"><h3>🗣️ Логопедические игры</h3><button class="btn btn-add" onclick="openFolderModal('speech-games')">➕ Добавить папку</button><div id="adminFolders-speech-games"></div></div>
     <div id="aFree" class="admin-section"><h3>🎁 Бесплатно</h3><button class="btn btn-add" onclick="openFolderModal('free')">➕ Добавить папку</button><div id="adminFolders-free"></div></div>
+
+    <div id="aOrders" class="admin-section"><h3>📦 Заказы</h3><div id="adminOrders"></div></div>
+    <div id="aContacts" class="admin-section"><h3>✉️ Сообщения</h3><div id="adminContacts"></div></div>
+    <div id="aSuggestions" class="admin-section"><h3>💡 Предложения</h3><div id="adminSuggestionsList"></div></div>
+
+    <div id="aSync" class="admin-section">
+      <h3>🔄 Синхронизация между устройствами</h3>
+      <div class="bg-box">
+        <h4>📤 Экспорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Скачайте файл со всеми данными (папки, материалы, заказы и т.д.)</p>
+        <button class="btn btn-purple" onclick="exportAllData()">📥 Скачать данные</button>
+      </div>
+      <div class="bg-box">
+        <h4>📥 Импорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Загрузите файл с данными, чтобы восстановить их на этом устройстве</p>
+        <input type="file" id="importFile" accept=".json" onchange="importAllData(event)" style="margin-bottom:10px;">
+      </div>
+      <div class="bg-box" style="background:#FFF3E0;border-color:#FF9800;">
+        <h4>⚠️ Как синхронизировать?</h4>
+        <ol style="font-size:12px;color:#5D4037;margin:10px 0 0 20px;line-height:1.6;">
+          <li>На <b>компьютере</b>: нажмите "📥 Скачать данные" → сохраните файл</li>
+          <li>Перенесите файл на <b>телефон</b> (через email, облако и т.д.)</li>
+          <li>На <b>телефоне</b>: откройте админку → "📥 Импорт данных" → выберите файл</li>
+          <li>Готово! Все папки и материалы появятся на телефоне!</li>
+        </ol>
+      </div>
+    </div>
+
+    <div id="aSettings" class="admin-section">
+      <h3>⚙️ Настройки</h3>
+      <div class="bg-box"><h4>🔑 Сменить пароль</h4><div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div><div class="form-group"><label>Повторите пароль</label><input type="password" id="setNewPass2"></div><button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button></div>
+      <div class="bg-box"><h4>📞 Контакты сайта</h4><div class="form-group"><label>Email</label><input id="site_email"></div><div class="form-group"><label>Телефон</label><input id="site_phone"></div><div class="form-group"><label>Адрес</label><input id="site_address"></div><div class="form-group"><label>Часы работы</label><input id="site_hours"></div><button class="btn btn-purple" onclick="saveSiteContacts()">💾 Сохранить контакты</button></div>
+      <div class="bg-box"><h4>💾 Данные</h4><button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сброс</button><button class="btn btn-del" onclick="logout()">🚪 Выйти</button></div>
+    </div>
   </div>
-  <div class="nav-links"><a href="index.html">🏠 На сайт</a></div>
+  <div class="nav-links"><a href="index.html">🏠 На сайт</a><a href="login.html">👤 Покупатель</a></div>
 </div>
 
 <div class="form-modal" id="formModal"><div class="form-modal-content" id="formContent"></div></div>
@@ -98,43 +158,55 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
 
-let admin = DB.get('admin',{login:'admin',password:'777'});
+// Сброс пароля на простой (без хеширования)
+let admin = {login:'admin', password:'777'};
+DB.set('admin', admin);
+
 let folders = DB.get('folders', {
-  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
+  'catalogs': [{id:1, name:'Развивающие игры', icon:'', items:[]}],
   'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
   'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
   'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
-  'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
+  'speech-games': [{id:1, name:'Артикуляция', icon:'', items:[]}],
   'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
 });
 let materials = DB.get('materials', []);
+let orders = DB.get('orders',[]);
+let contacts = DB.get('contacts',[]);
+let suggestions = DB.get('suggestions',[]);
+let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},backgroundImage:null,backgroundType:null,siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
-function saveAll(){
-  DB.set('folders',folders);
-  DB.set('materials',materials);
-}
+function saveAll(){DB.set('folders',folders);DB.set('materials',materials);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);DB.set('suggestions',suggestions);}
 function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
 
-async function doLogin(e) {
+function doLogin(e) {
   e.preventDefault();
   const u = document.getElementById('loginUser').value;
   const p = document.getElementById('loginPass').value;
-  if (u === admin.login && p === admin.password) {
+  if (u === 'admin' && p === '777') {
     sessionStorage.setItem('isAdmin', '1');
     document.getElementById('loginBlock').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     renderAdmin();
+    showMsg('✅ Добро пожаловать!', 'success');
   } else {
-    showMsg('❌ Неверный логин или пароль', 'error');
+    showMsg('❌ Неверный логин или пароль. Используйте: admin / 777', 'error');
   }
 }
 
+function logout() { sessionStorage.removeItem('isAdmin'); location.reload(); }
+function showAdminPanel() {
+  document.getElementById('loginBlock').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  renderAdmin();
+}
 function showTab(id, btn) {
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
+
 function openForm(){document.getElementById('formModal').classList.add('active');}
 function closeForm(){document.getElementById('formModal').classList.remove('active');}
 
@@ -143,8 +215,8 @@ function openFolderModal(sectionId, folderId) {
   const folder = folderId ? folders[sectionId].find(f => f.id == folderId) : {name:'', icon:'📁', items:[]};
   document.getElementById('formContent').innerHTML = `
     <h2>${folderId ? '✏️ Редактировать папку' : '➕ Новая папка'}</h2>
-    <div class="form-group"><label>📁 Название папки *</label><input id="f_folderName" value="${folder.name}"></div>
-    <div class="form-group"><label>🎨 Иконка (эмодзи)</label><input id="f_folderIcon" value="${folder.icon}" maxlength="4"></div>
+    <div class="form-group"><label> Название папки *</label><input id="f_folderName" value="${folder.name}"></div>
+    <div class="form-group"><label> Иконка (эмодзи)</label><input id="f_folderIcon" value="${folder.icon}" maxlength="4"></div>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
       <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})">💾 Сохранить</button>
@@ -175,7 +247,7 @@ function deleteFolder(sectionId, folderId) {
   saveAll(); renderAdmin(); showMsg('🗑 Папка удалена', 'success');
 }
 
-// === УПРАВЛЕНИЕ МАТЕРИАЛАМИ (Возвращено к простой версии) ===
+// === УПРАВЛЕНИЕ МАТЕРИАЛАМИ ===
 function openMaterialModal(sectionId, folderId, materialId) {
   const m = materialId ? materials.find(x => x.id == materialId) : {name:'', desc:'', price:0, free:false, stock:0, img:'', sale:false, salePrice:0};
   document.getElementById('formContent').innerHTML = `
@@ -194,7 +266,7 @@ function openMaterialModal(sectionId, folderId, materialId) {
     <div class="form-group"><label>💸 Цена со скидкой</label><input id="m_salePrice" type="number" value="${m.salePrice||0}" min="0"></div>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
-      <button class="btn btn-purple" onclick="saveMaterial('${sectionId}', ${folderId}, ${materialId||0})">💾 Сохранить</button>
+      <button class="btn btn-purple" onclick="saveMaterial('${sectionId}', ${folderId}, ${materialId||0})"> Сохранить</button>
     </div>`;
   openForm();
 }
@@ -234,9 +306,29 @@ function deleteMaterial(sectionId, folderId, materialId) {
 
 // === РЕНДЕР ===
 function renderAdmin() {
+  document.getElementById('statOrders').textContent = orders.length;
+  const revenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  document.getElementById('statRevenue').textContent = revenue + '₽';
   document.getElementById('statMaterials').textContent = materials.length;
   const totalFolders = Object.values(folders).reduce((sum, arr) => sum + arr.length, 0);
   document.getElementById('statFolders').textContent = totalFolders;
+  
+  document.getElementById('site_email').value = settings.siteContacts.email || '';
+  document.getElementById('site_phone').value = settings.siteContacts.phone || '';
+  document.getElementById('site_address').value = settings.siteContacts.address || '';
+  document.getElementById('site_hours').value = settings.siteContacts.hours || '';
+  
+  const ordDiv = document.getElementById('adminOrders');
+  if(orders.length===0){ordDiv.innerHTML='<div class="empty-state">Нет заказов</div>';}
+  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4>📦 Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})"> Удалить</button></div></div>`).join('');}
+
+  const contDiv = document.getElementById('adminContacts');
+  if(contacts.length===0){contDiv.innerHTML='<div class="empty-state">Нет сообщений</div>';}
+  else{contDiv.innerHTML=contacts.map(c=>`<div class="item-row"><div class="item-info"><h4>✉️ ${c.name}</h4><p>${c.msg}</p></div><div class="item-actions"><button class="btn btn-del" onclick="delContact(${c.id})">🗑 Удалить</button></div></div>`).join('');}
+
+  const sugDiv = document.getElementById('adminSuggestionsList');
+  if(suggestions.length===0){sugDiv.innerHTML='<div class="empty-state">Нет предложений</div>';}
+  else{sugDiv.innerHTML=suggestions.map(s=>`<div class="item-row"><div class="item-info"><h4>💡 ${s.title}</h4><p>👤 ${s.name} | ${s.type}</p><p>${s.text}</p></div><div class="item-actions"><button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑 Удалить</button></div></div>`).join('');}
 
   ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => {
     const div = document.getElementById(`adminFolders-${sectionId}`);
@@ -249,7 +341,7 @@ function renderAdmin() {
           <div class="item-info"><h4>${f.icon} ${f.name}</h4><p>Материалов: <b>${mats.length}</b></p></div>
           <div class="item-actions">
             <button class="btn btn-edit" onclick="openFolderModal('${sectionId}', ${f.id})">✏️</button>
-            <button class="btn btn-del" onclick="deleteFolder('${sectionId}', ${f.id})">🗑</button>
+            <button class="btn btn-del" onclick="deleteFolder('${sectionId}', ${f.id})"></button>
           </div>
         </div>
         <div style="width:100%;background:#fff;padding:10px;border-radius:8px;border:1px solid #FFE0B2;">
@@ -272,7 +364,69 @@ function renderAdmin() {
   });
 }
 
-if(sessionStorage.getItem('isAdmin')=='1'){document.getElementById('loginBlock').style.display='none';document.getElementById('adminPanel').style.display='block';renderAdmin();}
+function delOrder(id){if(!confirm('Удалить?'))return;orders=orders.filter(x=>x.id!=id);saveAll();renderAdmin();}
+function delContact(id){if(!confirm('Удалить?'))return;contacts=contacts.filter(x=>x.id!=id);saveAll();renderAdmin();}
+function deleteSuggestion(id){if(!confirm('Удалить?'))return;suggestions=suggestions.filter(x=>x.id!=id);saveAll();renderAdmin();}
+
+// === ФОН ===
+function handleFileUpload(event){const file=event.target.files[0];if(!file)return;if(file.size>2*1024*1024){showMsg('❌ Файл больше 2 МБ','error');return;}const reader=new FileReader();reader.onload=function(e){document.getElementById('bgPreviewImg').src=e.target.result;document.getElementById('bgPreviewContainer').style.display='block';document.getElementById('applyBgBtn').style.display='inline-block';document.getElementById('cancelBgBtn').style.display='inline-block';showMsg('✅ Загружен!','success');};reader.readAsDataURL(file);}
+function applyUploadedBg(){const fileInput=document.getElementById('bgFileInput');if(!fileInput.files[0]){showMsg('Выберите файл','error');return;}const reader=new FileReader();reader.onload=function(e){settings.backgroundImage=e.target.result;settings.backgroundType='image';saveAll();showMsg('✅ Фон установлен!','success');cancelUpload();renderCurrentBg();};reader.readAsDataURL(fileInput.files[0]);}
+function cancelUpload(){document.getElementById('bgFileInput').value='';document.getElementById('bgPreviewContainer').style.display='none';document.getElementById('applyBgBtn').style.display='none';document.getElementById('cancelBgBtn').style.display='none';}
+function applyPreset(type){const presets={warm:'linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)',night:'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',pink:'linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)',ocean:'linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)'};settings.backgroundImage=presets[type];settings.backgroundType='gradient';saveAll();showMsg('✅ Применён!','success');renderCurrentBg();}
+function removeBackground(){if(!confirm('Убрать фон?'))return;settings.backgroundImage=null;settings.backgroundType=null;saveAll();renderCurrentBg();showMsg('✅ Сброшен','success');}
+function renderCurrentBg(){const display=document.getElementById('currentBgDisplay');if(!settings.backgroundImage){display.innerHTML='<p style="color:#888;font-size:12px">Фон не установлен</p>';return;}if(settings.backgroundType==='image'){display.innerHTML=`<img src="${settings.backgroundImage}" class="current-bg-img"><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700"> Изображение</p>`;}else{display.innerHTML=`<div style="height:100px;border-radius:10px;background:${settings.backgroundImage};margin-top:10px"></div><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🌈 Градиент</p>`;}}
+function updateHeaderPreview(){const c1=document.getElementById('headerColor1').value;const c2=document.getElementById('headerColor2').value;document.getElementById('headerPreview').style.background=`linear-gradient(135deg,${c1},${c2})`;}
+document.addEventListener('DOMContentLoaded',function(){const hc1=document.getElementById('headerColor1');const hc2=document.getElementById('headerColor2');if(hc1)hc1.addEventListener('input',updateHeaderPreview);if(hc2)hc2.addEventListener('input',updateHeaderPreview);});
+function saveHeaderColors(){settings.headerColors={color1:document.getElementById('headerColor1').value,color2:document.getElementById('headerColor2').value};saveAll();showMsg('✅ Сохранено!','success');}
+function saveSiteContacts(){settings.siteContacts={email:document.getElementById('site_email').value.trim(),phone:document.getElementById('site_phone').value.trim(),address:document.getElementById('site_address').value.trim(),hours:document.getElementById('site_hours').value.trim()};saveAll();showMsg('✅ Сохранено!','success');}
+
+// === ЭКСПОРТ/ИМПОРТ ===
+function exportAllData() {
+  const data = { folders, materials, orders, contacts, suggestions, settings };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'owl-data-' + Date.now() + '.json';
+  a.click();
+  showMsg('✅ Данные экспортированы!', 'success');
+}
+
+function importAllData(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.folders) folders = data.folders;
+      if(data.materials) materials = data.materials;
+      if(data.orders) orders = data.orders;
+      if(data.contacts) contacts = data.contacts;
+      if(data.suggestions) suggestions = data.suggestions;
+      if(data.settings) settings = data.settings;
+      saveAll();
+      showMsg('✅ Данные импортированы!', 'success');
+      setTimeout(() => location.reload(), 1000);
+    } catch(err) {
+      alert(' Ошибка импорта: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function adminChangePass(){
+  const nw=document.getElementById('setNewPass').value;
+  const nw2=document.getElementById('setNewPass2').value;
+  if(nw!==nw2) return showMsg('❌ Пароли не совпадают','error');
+  if(nw.length<4) return showMsg('❌ Минимум 4 символа','error');
+  admin.password=nw;
+  DB.set('admin',admin);
+  showMsg('✅ Пароль изменён! Новый пароль: '+nw,'success');
+  document.getElementById('setNewPass').value='';
+  document.getElementById('setNewPass2').value='';
+}
+
+if(sessionStorage.getItem('isAdmin')=='1'){showAdminPanel();}
 </script>
 </body>
 </html>
