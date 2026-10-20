@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>🔐 Админ — Игривый совёнок</title>
+<title> Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .form-group { margin-bottom:12px; text-align:left; }
 .form-group label { display:block; color:#2D1B4E; font-weight:700; margin-bottom:5px; font-size:13px; }
 .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px; border:2px solid #FFE0B2; border-radius:12px; font-size:13px; background:#fff; font-weight:600; }
-.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
+.form-group input:focus, .form-group textarea:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
 .form-group textarea { min-height:70px; resize:vertical; }
 .btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:13px; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 4px 14px rgba(103,58,183,0.4); }
 .msg { padding:10px; border-radius:10px; margin-bottom:12px; font-size:13px; display:none; font-weight:600; }
@@ -50,6 +50,24 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
 .bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
 .bg-box h4 { margin-top:0; color:#5D4037; }
+.file-upload-box { background:#fff; border:2px dashed #673AB7; border-radius:12px; padding:20px; text-align:center; margin:12px 0; cursor:pointer; }
+.file-upload-box:hover { background:#F3E5F5; }
+.file-upload-box input[type="file"] { display:none; }
+.file-upload-box .upload-icon { font-size:40px; margin-bottom:8px; }
+.current-bg-img { max-width:100%; max-height:200px; border-radius:10px; margin-top:10px; }
+.bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
+.bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; }
+.bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; }
+.color-picker-group { display:flex; align-items:center; gap:10px; margin:8px 0; }
+.color-picker-group input[type="color"] { width:60px; height:40px; border:none; border-radius:8px; cursor:pointer; }
+.preview-strip { margin-top:10px; padding:15px; border-radius:10px; color:#fff; font-weight:bold; text-align:center; }
+.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.form-modal.active { display:flex; }
+.form-modal-content { background:rgba(255,248,225,0.98); padding:24px; border-radius:20px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; }
+.form-modal-content h2 { color:#2D1B4E; margin-bottom:14px; font-size:20px; font-weight:800; }
+.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
+.form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
+.form-modal-content label input { width:auto; }
 .empty-state { text-align:center; padding:30px; color:#999; font-style:italic; }
 @media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } .item-row { flex-direction:column; align-items:flex-start; } }
 </style>
@@ -63,9 +81,19 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
   
   <div id="loginBlock">
     <form onsubmit="doLogin(event)">
-      <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="admin"></div>
+      <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="Введите логин"></div>
       <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required placeholder="Введите пароль"></div>
       <button type="submit" class="btn-submit">Войти 🦉</button>
+    </form>
+  </div>
+
+  <div id="changePassBlock" style="display:none">
+    <h3 style="color:#2D1B4E;margin-bottom:14px;font-weight:800">🔑 Установите новый пароль</h3>
+    <p style="margin-bottom:15px;color:#673AB7;font-weight:600;">Это ваш первый вход. Установите надёжный пароль (мин. 8 символов, буквы+цифры).</p>
+    <form onsubmit="changePassword(event)">
+      <div class="form-group"><label>Новый пароль</label><input type="password" id="newPass" required minlength="8"></div>
+      <div class="form-group"><label>Повторите пароль</label><input type="password" id="newPass2" required minlength="8"></div>
+      <button type="submit" class="btn-submit">Сохранить и войти ✨</button>
     </form>
   </div>
 
@@ -73,17 +101,23 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
     <h3>⚙️ Управление сайтом</h3>
     <div class="admin-tabs" id="adminTabs">
       <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard">📊 Дашборд</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs">📚 Весь каталог</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground"> Фон</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs"> Весь каталог</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aWorksheets',this)" data-tab="aWorksheets">📝 Рабочие листы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aThemes',this)" data-tab="aThemes">🎨 Темы</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames">🔤 Игры с буквами</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames"> Игры с буквами</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aSpeechGames',this)" data-tab="aSpeechGames">🗣️ Логопедические</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree">🎁 Бесплатно</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree"> Бесплатно</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders">📦 Заказы</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aSync',this)" data-tab="aSync">🔄 Статус синхронизации</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aContacts',this)" data-tab="aContacts">✉️ Сообщения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSuggestions',this)" data-tab="aSuggestions">💡 Предложения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSync',this)" data-tab="aSync">🔄 Синхронизация</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">⚙️ Настройки</button></div>
     </div>
 
-    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
+    <div id="aDashboard" class="admin-section active"><h3> Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
+
+    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4> Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none"> Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
 
     <div id="aCatalogs" class="admin-section"><h3>📚 Весь каталог</h3><button class="btn btn-add" onclick="openFolderModal('catalogs')">➕ Добавить папку</button><div id="adminFolders-catalogs"></div></div>
     <div id="aWorksheets" class="admin-section"><h3>📝 Рабочие листы</h3><button class="btn btn-add" onclick="openFolderModal('worksheets')">➕ Добавить папку</button><div id="adminFolders-worksheets"></div></div>
@@ -93,63 +127,46 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
     <div id="aFree" class="admin-section"><h3>🎁 Бесплатно</h3><button class="btn btn-add" onclick="openFolderModal('free')">➕ Добавить папку</button><div id="adminFolders-free"></div></div>
 
     <div id="aOrders" class="admin-section"><h3>📦 Заказы</h3><div id="adminOrders"></div></div>
+    <div id="aContacts" class="admin-section"><h3>✉️ Сообщения</h3><div id="adminContacts"></div></div>
+    <div id="aSuggestions" class="admin-section"><h3>💡 Предложения</h3><div id="adminSuggestionsList"></div></div>
 
     <div id="aSync" class="admin-section">
-      <h3>🔄 Статус синхронизации с облаком</h3>
-      <div class="bg-box" id="syncStatusBox" style="background:#FFF3E0; border-color:#FF9800;">
-        <h4 id="syncTitle">⏳ Проверка подключения...</h4>
-        <p id="syncText" style="font-size:13px; color:#5D4037; margin-top:10px;">Если здесь не появится зелёная галочка, проверьте конфиг Firebase и Правила базы данных.</p>
+      <h3>🔄 Синхронизация между устройствами</h3>
+      <div class="bg-box">
+        <h4>📤 Экспорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Скачайте файл со всеми данными (папки, материалы, заказы и т.д.)</p>
+        <button class="btn btn-purple" onclick="exportAllData()">📥 Скачать данные</button>
+      </div>
+      <div class="bg-box">
+        <h4>📥 Импорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Загрузите файл с данными, чтобы восстановить их на этом устройстве</p>
+        <input type="file" id="importFile" accept=".json" onchange="importAllData(event)" style="margin-bottom:10px;">
+      </div>
+      <div class="bg-box" style="background:#FFF3E0;border-color:#FF9800;">
+        <h4>⚠️ Как синхронизировать?</h4>
+        <ol style="font-size:12px;color:#5D4037;margin:10px 0 0 20px;line-height:1.6;">
+          <li>На <b>компьютере</b>: нажмите "📥 Скачать данные" → сохраните файл</li>
+          <li>Перенесите файл на <b>телефон</b> (через email, облако и т.д.)</li>
+          <li>На <b>телефоне</b>: откройте админку → "📥 Импорт данных" → выберите файл</li>
+          <li>Готово! Все папки и материалы появятся на телефоне!</li>
+        </ol>
       </div>
     </div>
+
+    <div id="aSettings" class="admin-section">
+      <h3>⚙️ Настройки</h3>
+      <div class="bg-box"><h4>🔑 Сменить пароль</h4><div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div><div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div><button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button></div>
+      <div class="bg-box"><h4>📞 Контакты сайта</h4><div class="form-group"><label>Email</label><input id="site_email"></div><div class="form-group"><label>Телефон</label><input id="site_phone"></div><div class="form-group"><label>Адрес</label><input id="site_address"></div><div class="form-group"><label>Часы работы</label><input id="site_hours"></div><button class="btn btn-purple" onclick="saveSiteContacts()">💾 Сохранить контакты</button></div>
+      <div class="bg-box"><h4>💾 Данные</h4><button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сброс</button><button class="btn btn-del" onclick="logout()">🚪 Выйти</button></div>
+    </div>
   </div>
-  <div class="nav-links"><a href="index.html">🏠 На сайт</a></div>
+  <div class="nav-links"><a href="index.html">🏠 На сайт</a><a href="login.html">👤 Покупатель</a></div>
 </div>
 
 <div class="form-modal" id="formModal"><div class="form-modal-content" id="formContent"></div></div>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <script>
-// ⚠️ ВСТАВЬТЕ СЮДА ВАШ РЕАЛЬНЫЙ КОНФИГ. Если видите xxxxxxxxxxxx, замените на цифры из Firebase!
-const firebaseConfig = {
-  apiKey: "AIzaSyCiGJ-_spDmi0-ZrIDPL9Vtp2sjG1DGB7w",
-  authDomain: "xxxxxxxxxxxx-b92e0.firebaseapp.com",
-  databaseURL: "https://xxxxxxxxxxxx-b92e0-default-rtdb.firebaseio.com",
-  projectId: "xxxxxxxxxxxxxx-b92e0",
-  storageBucket: "xxxxxxxxxxxxxx-b92e0.firebasestorage.app",
-  messagingSenderId: "829549443395",
-  appId: "1:829549443395:web:67122143906bc30bd157f6"
-};
-
-let db;
-let useFirebase = false;
-
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  db.ref('.info/connected').on('value', (snap) => {
-    if (snap.val() === true) {
-      useFirebase = true;
-      document.getElementById('syncStatusBox').style.background = '#E8F5E9';
-      document.getElementById('syncStatusBox').style.borderColor = '#4CAF50';
-      document.getElementById('syncTitle').innerHTML = '🟢 Синхронизация с облаком РАБОТАЕТ!';
-      document.getElementById('syncText').innerHTML = 'Все созданные папки и материалы теперь мгновенно появляются на телефоне и других устройствах.';
-    }
-  });
-} catch(e) {
-  console.error("Ошибка Firebase:", e);
-  document.getElementById('syncTitle').innerHTML = '🔴 ОШИБКА ПОДКЛЮЧЕНИЯ';
-  document.getElementById('syncText').innerHTML = 'Проверьте Шаг 1: вы вставили реальный конфиг из Firebase Console? Там не должно быть слов "xxxx".';
-}
-
-const DB = { 
-  get(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } }, 
-  set(k, v) { 
-    localStorage.setItem(k, JSON.stringify(v)); 
-    if (useFirebase) db.ref('siteData/' + k).set(v).catch(e => console.error('Sync error:', e));
-  } 
-};
+const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
 
 let admin = DB.get('admin',{login:'admin',password:'777',firstLogin:true});
 let folders = DB.get('folders', {
@@ -158,153 +175,201 @@ let folders = DB.get('folders', {
   'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
   'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
   'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
+  'free': [{id:1, name:'Бесплатные материалы', icon:'', items:[]}]
 });
 let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
-let settings = DB.get('settings',{siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
+let contacts = DB.get('contacts',[]);
+let suggestions = DB.get('suggestions',[]);
+let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},backgroundImage:null,backgroundType:null,siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
-if (useFirebase) {
-  db.ref('siteData').on('value', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      if(data.folders) { folders = data.folders; localStorage.setItem('folders', JSON.stringify(folders)); }
-      if(data.materials) { materials = data.materials; localStorage.setItem('materials', JSON.stringify(materials)); }
-      if(data.orders) { orders = data.orders; localStorage.setItem('orders', JSON.stringify(orders)); }
-      if(data.settings) { settings = data.settings; localStorage.setItem('settings', JSON.stringify(settings)); }
-      renderAdmin();
-    }
-  });
-}
-
-function saveAll(){ DB.set('folders',folders); DB.set('materials',materials); DB.set('orders',orders); DB.set('settings',settings); }
+function saveAll(){DB.set('folders',folders);DB.set('materials',materials);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);DB.set('suggestions',suggestions);}
+function addLog(action){const log=DB.get('log',[]);log.push({date:new Date().toLocaleString('ru-RU'),action});if(log.length>200)log.shift();DB.set('log',log);}
 function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
+
+async function hashPassword(password, salt) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password + '::' + salt);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return 'sha256:' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function generateSalt() {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function isHashed(password) { return password && password.startsWith('sha256:'); }
 
 async function doLogin(e) {
   e.preventDefault();
   const u = document.getElementById('loginUser').value;
   const p = document.getElementById('loginPass').value;
-  if (u === 'admin' && p === '777') { // Упрощенный вход для теста
+  if (u !== admin.login) { showMsg('❌ Неверный логин или пароль', 'error'); return; }
+  if (!isHashed(admin.password)) {
+    if (!admin.salt) admin.salt = generateSalt();
+    admin.password = await hashPassword(admin.password, admin.salt);
+    DB.set('admin', admin);
+  }
+  const inputHash = await hashPassword(p, admin.salt);
+  if (inputHash === admin.password) {
+    admin.attempts = 0; admin.lockedUntil = null; DB.set('admin', admin);
     sessionStorage.setItem('isAdmin', '1');
-    document.getElementById('loginBlock').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    renderAdmin();
+    addLog('✅ Успешный вход');
+    if (admin.firstLogin) {
+      document.getElementById('loginBlock').style.display = 'none';
+      document.getElementById('changePassBlock').style.display = 'block';
+    } else { showAdminPanel(); }
   } else {
-    showMsg('❌ Неверный логин или пароль', 'error');
+    admin.attempts = (admin.attempts || 0) + 1;
+    if (admin.attempts >= 5) {
+      admin.lockedUntil = Date.now() + 5 * 60 * 1000;
+      addLog(' Аккаунт заблокирован');
+    }
+    DB.set('admin', admin);
+    showMsg(`❌ Неверный пароль. Осталось попыток: ${Math.max(0, 5 - admin.attempts)}`, 'error');
+    document.getElementById('loginPass').value = '';
   }
 }
 
+async function changePassword(e) {
+  e.preventDefault();
+  const p1 = document.getElementById('newPass').value;
+  const p2 = document.getElementById('newPass2').value;
+  if (p1 !== p2) return showMsg('❌ Пароли не совпадают', 'error');
+  if (p1.length < 8 || !/[a-zA-Z]/.test(p1) || !/\d/.test(p1)) return showMsg('❌ Мин. 8 символов, буквы+цифры', 'error');
+  const salt = generateSalt();
+  admin.password = await hashPassword(p1, salt);
+  admin.salt = salt;
+  admin.firstLogin = false;
+  admin.attempts = 0; admin.lockedUntil = null;
+  DB.set('admin', admin);
+  addLog('🔑 Пароль установлен');
+  showMsg('✅ Надёжный пароль установлен!', 'success');
+  setTimeout(() => showAdminPanel(), 1000);
+}
+
+function logout() { sessionStorage.removeItem('isAdmin'); location.reload(); }
+function showAdminPanel() {
+  document.getElementById('loginBlock').style.display = 'none';
+  document.getElementById('changePassBlock').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  renderAdmin();
+}
 function showTab(id, btn) {
   document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
+  const section = document.getElementById(id);
+  if (section) section.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
+
 function openForm(){document.getElementById('formModal').classList.add('active');}
 function closeForm(){document.getElementById('formModal').classList.remove('active');}
 
+// === УПРАВЛЕНИЕ ПАПКАМИ ===
 function openFolderModal(sectionId, folderId) {
   const folder = folderId ? folders[sectionId].find(f => f.id == folderId) : {name:'', icon:'📁', items:[]};
   document.getElementById('formContent').innerHTML = `
     <h2>${folderId ? '✏️ Редактировать папку' : '➕ Новая папка'}</h2>
-    <div class="form-group"><label>📁 Название папки *</label><input id="f_folderName" value="${folder.name}"></div>
-    <div class="form-group"><label>🎨 Иконка (эмодзи)</label><input id="f_folderIcon" value="${folder.icon}" maxlength="4"></div>
+    <div class="form-group"><label>📁 Название папки *</label><input id="f_folderName" placeholder="Например: Прописи" value="${folder.name}"></div>
+    <div class="form-group"><label>🎨 Иконка (эмодзи)</label><input id="f_folderIcon" placeholder="📁" value="${folder.icon}" maxlength="4">
+      <p style="font-size:11px;color:#888;margin-top:4px;">💡 Примеры:  📚 🎮 ️ 🎨 🗣️  🌟</p>
+    </div>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
-      <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})">💾 Сохранить</button>
-    </div>`;
+      <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})"> Сохранить</button>
+    </div>
+  `;
   openForm();
 }
 
 function saveFolder(sectionId, folderId) {
   const name = document.getElementById('f_folderName').value.trim();
   const icon = document.getElementById('f_folderIcon').value.trim() || '📁';
-  if(!name) return alert('⚠️ Введите название');
+  if(!name) return alert('⚠️ Введите название папки');
+  
   if(folderId) {
     const folder = folders[sectionId].find(f => f.id == folderId);
     if(folder) { folder.name = name; folder.icon = icon; }
+    addLog(`Папка изменена: "${name}"`);
   } else {
     folders[sectionId].push({id: Date.now(), name, icon, items:[]});
+    addLog(`Папка создана: "${name}"`);
   }
-  saveAll(); closeForm(); renderAdmin(); showMsg('✅ Папка сохранена и синхронизирована!', 'success');
+  saveAll();
+  closeForm();
+  renderAdmin();
+  showMsg('✅ Папка сохранена!', 'success');
 }
 
 function deleteFolder(sectionId, folderId) {
   if(!confirm('Удалить папку и все материалы в ней?')) return;
   const folder = folders[sectionId].find(f => f.id == folderId);
   if(folder) {
-    folder.items.forEach(itemId => { materials = materials.filter(m => m.id != itemId); });
+    folder.items.forEach(itemId => {
+      materials = materials.filter(m => m.id != itemId);
+    });
     folders[sectionId] = folders[sectionId].filter(f => f.id != folderId);
   }
-  saveAll(); renderAdmin(); showMsg('🗑 Папка удалена', 'success');
+  saveAll();
+  addLog(`Папка удалена`);
+  renderAdmin();
+  showMsg('🗑 Папка удалена', 'success');
 }
 
+// === УПРАВЛЕНИЕ МАТЕРИАЛАМИ ===
 function openMaterialModal(sectionId, folderId, materialId) {
-  const m = materialId ? materials.find(x => x.id == materialId) : {name:'', desc:'', type:'image', price:0, free:false, stock:0, img:'', fileUrl:'', videoUrl:'', sale:false, salePrice:0};
+  const material = materialId ? materials.find(m => m.id == materialId) : {name:'', desc:'', price:0, free:false, stock:0, img:'', sale:false, salePrice:0};
   document.getElementById('formContent').innerHTML = `
-    <h2>${materialId ? '✏️ Редактировать' : '➕ Новый материал'}</h2>
-    <div class="form-group"><label>📌 Название *</label><input id="m_name" value="${m.name}"></div>
-    <div class="form-group"><label>📝 Описание</label><textarea id="m_desc">${m.desc||''}</textarea></div>
-    <div class="form-group">
-      <label>📦 Тип материала *</label>
-      <select id="m_type" onchange="toggleMaterialFields()">
-        <option value="image" ${m.type==='image'?'selected':''}>🖼️ Картинка</option>
-        <option value="file" ${m.type==='file'?'selected':''}>📄 Файл для скачивания</option>
-        <option value="video" ${m.type==='video'?'selected':''}>🎬 Видео</option>
-      </select>
-    </div>
-    <div class="form-group" id="field_image" style="${m.type!=='image'?'display:none':''}">
-      <label>🔗 URL картинки</label><input id="m_img" value="${m.img||''}">
-    </div>
-    <div class="form-group" id="field_file" style="${m.type!=='file'?'display:none':''}">
-      <label>📥 Ссылка на скачивание файла</label><input id="m_fileUrl" placeholder="https://drive.google.com/..." value="${m.fileUrl||''}">
-    </div>
-    <div class="form-group" id="field_video" style="${m.type!=='video'?'display:none':''}">
-      <label>🎥 Ссылка на видео</label><input id="m_videoUrl" placeholder="https://youtube.com/..." value="${m.videoUrl||''}">
+    <h2>${materialId ? '️ Редактировать материал' : '➕ Новый материал'}</h2>
+    <div class="form-group"><label>📌 Название *</label><input id="m_name" placeholder="Название материала" value="${material.name}"></div>
+    <div class="form-group"><label>📝 Описание</label><textarea id="m_desc" placeholder="Описание" style="min-height:80px;">${material.desc||''}</textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group"><label>💵 Цена (₽)</label><input id="m_price" type="number" placeholder="0" value="${material.price}" min="0"></div>
+      <div class="form-group"><label>📦 Остаток</label><input id="m_stock" type="number" placeholder="0" value="${material.stock||0}" min="0"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="form-group"><label>💵 Цена (₽)</label><input id="m_price" type="number" value="${m.price}" min="0"></div>
-      <div class="form-group"><label>📦 Остаток</label><input id="m_stock" type="number" value="${m.stock||0}" min="0"></div>
+      <div class="form-group"><label><input type="checkbox" id="m_free" ${material.free?'checked':''}> 🎁 Бесплатный</label></div>
+      <div class="form-group"><label><input type="checkbox" id="m_sale" ${material.sale?'checked':''}> 🔥 Скидка</label></div>
     </div>
+    <div class="form-group"><label>💸 Цена со скидкой</label><input id="m_salePrice" type="number" placeholder="0" value="${material.salePrice||0}" min="0"></div>
+    <div class="form-group"><label>🔗 URL картинки</label><input id="m_img" placeholder="https://..." value="${material.img||''}"></div>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
       <button class="btn btn-purple" onclick="saveMaterial('${sectionId}', ${folderId}, ${materialId||0})">💾 Сохранить</button>
-    </div>`;
+    </div>
+  `;
   openForm();
-}
-
-function toggleMaterialFields() {
-  const type = document.getElementById('m_type').value;
-  document.getElementById('field_image').style.display = type === 'image' ? 'block' : 'none';
-  document.getElementById('field_file').style.display = type === 'file' ? 'block' : 'none';
-  document.getElementById('field_video').style.display = type === 'video' ? 'block' : 'none';
 }
 
 function saveMaterial(sectionId, folderId, materialId) {
   const name = document.getElementById('m_name').value.trim();
   const desc = document.getElementById('m_desc').value.trim();
-  const type = document.getElementById('m_type').value;
   const price = +document.getElementById('m_price').value;
   const stock = +document.getElementById('m_stock').value;
-  const img = type === 'image' ? document.getElementById('m_img').value.trim() : '';
-  const fileUrl = type === 'file' ? document.getElementById('m_fileUrl').value.trim() : '';
-  const videoUrl = type === 'video' ? document.getElementById('m_videoUrl').value.trim() : '';
+  const free = document.getElementById('m_free').checked;
+  const sale = document.getElementById('m_sale').checked;
+  const salePrice = +document.getElementById('m_salePrice').value;
+  const img = document.getElementById('m_img').value.trim();
   
   if(!name) return alert('⚠️ Введите название');
-  if(type === 'image' && !img) return alert('⚠️ Добавьте URL картинки');
-  if(type === 'file' && !fileUrl) return alert('⚠️ Добавьте ссылку на файл');
-  if(type === 'video' && !videoUrl) return alert('⚠️ Добавьте ссылку на видео');
   
   if(materialId) {
     const m = materials.find(x => x.id == materialId);
-    if(m) Object.assign(m, {name, desc, type, price, stock, img, fileUrl, videoUrl});
+    if(m) Object.assign(m, {name, desc, price, stock, free, sale, salePrice, img});
+    addLog(`Материал изменён: "${name}"`);
   } else {
-    const newM = {id: Date.now(), name, desc, type, price, stock, img, fileUrl, videoUrl};
-    materials.push(newM);
+    const newMaterial = {id: Date.now(), name, desc, price, stock, free, sale, salePrice, img};
+    materials.push(newMaterial);
     const folder = folders[sectionId].find(f => f.id == folderId);
-    if(folder) folder.items.push(newM.id);
+    if(folder) folder.items.push(newMaterial.id);
+    addLog(`Материал добавлен: "${name}"`);
   }
-  saveAll(); closeForm(); renderAdmin(); showMsg('✅ Материал сохранён и синхронизирован!', 'success');
+  saveAll();
+  closeForm();
+  renderAdmin();
+  showMsg('✅ Материал сохранён!', 'success');
 }
 
 function deleteMaterial(sectionId, folderId, materialId) {
@@ -312,54 +377,149 @@ function deleteMaterial(sectionId, folderId, materialId) {
   const folder = folders[sectionId].find(f => f.id == folderId);
   if(folder) folder.items = folder.items.filter(id => id != materialId);
   materials = materials.filter(m => m.id != materialId);
-  saveAll(); renderAdmin(); showMsg('🗑 Удалено', 'success');
+  saveAll();
+  addLog('Материал удалён');
+  renderAdmin();
+  showMsg('🗑 Удалено', 'success');
 }
+
+// === РЕНДЕР ПАПОК В АДМИНКЕ ===
+function renderAdminFolders(sectionId) {
+  const div = document.getElementById(`adminFolders-${sectionId}`);
+  if(!div) return;
+  const folderList = folders[sectionId] || [];
+  
+  if(folderList.length === 0) {
+    div.innerHTML = '<div class="empty-state">Нет папок. Нажмите " Добавить папку"</div>';
+    return;
+  }
+  
+  div.innerHTML = folderList.map(f => {
+    const materialsInFolder = f.items.map(id => materials.find(m => m.id == id)).filter(Boolean);
+    return `
+      <div class="item-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:10px;">
+          <div class="item-info">
+            <h4>${f.icon} ${f.name}</h4>
+            <p>Материалов: <b>${materialsInFolder.length}</b></p>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-edit" onclick="openFolderModal('${sectionId}', ${f.id})">✏️ Папку</button>
+            <button class="btn btn-del" onclick="deleteFolder('${sectionId}', ${f.id})">🗑 Папку</button>
+          </div>
+        </div>
+        <div style="width:100%;background:#fff;padding:10px;border-radius:8px;border:1px solid #FFE0B2;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h4 style="margin:0;font-size:13px;"> Материалы в папке:</h4>
+            <button class="btn btn-add" onclick="openMaterialModal('${sectionId}', ${f.id})" style="padding:6px 12px;font-size:11px;">➕ Добавить материал</button>
+          </div>
+          ${materialsInFolder.length ? materialsInFolder.map(m => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#FFF8E1;border-radius:6px;margin-bottom:5px;">
+              <div style="flex:1;">
+                <h4 style="margin:0;font-size:12px;">${m.name}</h4>
+                <p style="margin:2px 0 0;font-size:11px;color:#666;">${m.free?'🎁 Бесплатно':m.price+'₽'} | Остаток: ${m.stock}</p>
+              </div>
+              <div class="item-actions">
+                <button class="btn btn-edit" onclick="openMaterialModal('${sectionId}', ${f.id}, ${m.id})" style="padding:4px 8px;font-size:10px;">✏️</button>
+                <button class="btn btn-del" onclick="deleteMaterial('${sectionId}', ${f.id}, ${m.id})" style="padding:4px 8px;font-size:10px;">🗑</button>
+              </div>
+            </div>
+          `).join('') : '<p style="font-size:11px;color:#888;text-align:center;">Нет материалов</p>'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// === ЭКСПОРТ/ИМПОРТ ===
+function exportAllData() {
+  const data = {
+    folders, materials, orders, contacts, suggestions, settings, admin,
+    exportDate: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'owl-data-' + Date.now() + '.json';
+  a.click();
+  addLog('Экспорт всех данных');
+  showMsg('✅ Данные экспортированы!', 'success');
+}
+
+function importAllData(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.folders) folders = data.folders;
+      if(data.materials) materials = data.materials;
+      if(data.orders) orders = data.orders;
+      if(data.contacts) contacts = data.contacts;
+      if(data.suggestions) suggestions = data.suggestions;
+      if(data.settings) settings = data.settings;
+      saveAll();
+      addLog('Импорт всех данных');
+      showMsg('✅ Данные импортированы! Обновите страницу.', 'success');
+      setTimeout(() => location.reload(), 1500);
+    } catch(err) {
+      alert('❌ Ошибка импорта: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// === ОСТАЛЬНЫЕ ФУНКЦИИ ===
+function handleFileUpload(event){const file=event.target.files[0];if(!file)return;if(file.size>2*1024*1024){showMsg('❌ Файл больше 2 МБ','error');return;}const reader=new FileReader();reader.onload=function(e){document.getElementById('bgPreviewImg').src=e.target.result;document.getElementById('bgPreviewContainer').style.display='block';document.getElementById('applyBgBtn').style.display='inline-block';document.getElementById('cancelBgBtn').style.display='inline-block';showMsg('✅ Загружен!','success');};reader.readAsDataURL(file);}
+function applyUploadedBg(){const fileInput=document.getElementById('bgFileInput');if(!fileInput.files[0]){showMsg('Выберите файл','error');return;}const reader=new FileReader();reader.onload=function(e){settings.backgroundImage=e.target.result;settings.backgroundType='image';saveAll();addLog('Фон установлен');showMsg('✅ Фон установлен!','success');cancelUpload();renderCurrentBg();};reader.readAsDataURL(fileInput.files[0]);}
+function cancelUpload(){document.getElementById('bgFileInput').value='';document.getElementById('bgPreviewContainer').style.display='none';document.getElementById('applyBgBtn').style.display='none';document.getElementById('cancelBgBtn').style.display='none';}
+function applyPreset(type){const presets={warm:'linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)',night:'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',pink:'linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)',ocean:'linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)'};settings.backgroundImage=presets[type];settings.backgroundType='gradient';saveAll();addLog(`Градиент: ${type}`);showMsg('✅ Применён!','success');renderCurrentBg();}
+function removeBackground(){if(!confirm('Убрать фон?'))return;settings.backgroundImage=null;settings.backgroundType=null;saveAll();renderCurrentBg();addLog('Фон сброшен');showMsg('✅ Сброшен','success');}
+function renderCurrentBg(){const display=document.getElementById('currentBgDisplay');if(!settings.backgroundImage){display.innerHTML='<p style="color:#888;font-size:12px">Фон не установлен</p>';return;}if(settings.backgroundType==='image'){display.innerHTML=`<img src="${settings.backgroundImage}" class="current-bg-img"><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🖼 Изображение</p>`;}else{display.innerHTML=`<div style="height:100px;border-radius:10px;background:${settings.backgroundImage};margin-top:10px"></div><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🌈 Градиент</p>`;}}
+function loadCurrentColors(){document.getElementById('headerColor1').value=settings.headerColors?.color1||'#2D1B4E';document.getElementById('headerColor2').value=settings.headerColors?.color2||'#673AB7';updateHeaderPreview();}
+function updateHeaderPreview(){const c1=document.getElementById('headerColor1').value;const c2=document.getElementById('headerColor2').value;document.getElementById('headerPreview').style.background=`linear-gradient(135deg,${c1},${c2})`;}
+document.addEventListener('DOMContentLoaded',function(){const hc1=document.getElementById('headerColor1');const hc2=document.getElementById('headerColor2');if(hc1)hc1.addEventListener('input',updateHeaderPreview);if(hc2)hc2.addEventListener('input',updateHeaderPreview);});
+function saveHeaderColors(){settings.headerColors={color1:document.getElementById('headerColor1').value,color2:document.getElementById('headerColor2').value};saveAll();addLog('Цвет шапки изменён');showMsg('✅ Сохранено!','success');}
+function saveSiteContacts(){settings.siteContacts={email:document.getElementById('site_email').value.trim(),phone:document.getElementById('site_phone').value.trim(),address:document.getElementById('site_address').value.trim(),hours:document.getElementById('site_hours').value.trim()};saveAll();addLog('Контакты обновлены');showMsg('✅ Сохранено!','success');}
 
 function renderAdmin() {
   document.getElementById('statOrders').textContent = orders.length;
+  const revenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  document.getElementById('statRevenue').textContent = revenue + '₽';
   document.getElementById('statMaterials').textContent = materials.length;
   const totalFolders = Object.values(folders).reduce((sum, arr) => sum + arr.length, 0);
   document.getElementById('statFolders').textContent = totalFolders;
   
+  document.getElementById('site_email').value = settings.siteContacts.email || '';
+  document.getElementById('site_phone').value = settings.siteContacts.phone || '';
+  document.getElementById('site_address').value = settings.siteContacts.address || '';
+  document.getElementById('site_hours').value = settings.siteContacts.hours || '';
+  
   const ordDiv = document.getElementById('adminOrders');
-  ordDiv.innerHTML = orders.length ? orders.map(o=>`<div class="item-row"><div class="item-info"><h4>📦 Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div></div>`).join('') : '<div class="empty-state">Нет заказов</div>';
+  if(orders.length===0){ordDiv.innerHTML='<div class="empty-state">Нет заказов</div>';}
+  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4> Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
+
+  const contDiv = document.getElementById('adminContacts');
+  if(contacts.length===0){contDiv.innerHTML='<div class="empty-state">Нет сообщений</div>';}
+  else{contDiv.innerHTML=contacts.map(c=>`<div class="item-row"><div class="item-info"><h4>✉️ ${c.name}</h4><p>${c.msg}</p></div><div class="item-actions"><button class="btn btn-del" onclick="delContact(${c.id})">🗑 Удалить</button></div></div>`).join('');}
+
+  const sugDiv = document.getElementById('adminSuggestionsList');
+  if(suggestions.length===0){sugDiv.innerHTML='<div class="empty-state">Нет предложений</div>';}
+  else{sugDiv.innerHTML=suggestions.map(s=>`<div class="item-row"><div class="item-info"><h4>💡 ${s.title}</h4><p>👤 ${s.name} | ${s.type}</p><p>${s.text}</p></div><div class="item-actions"><button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑 Удалить</button></div></div>`).join('');}
 
   ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => {
-    const div = document.getElementById(`adminFolders-${sectionId}`);
-    if(!div) return;
-    const folderList = folders[sectionId] || [];
-    div.innerHTML = folderList.length ? folderList.map(f => {
-      const mats = f.items.map(id => materials.find(m => m.id == id)).filter(Boolean);
-      return `<div class="item-row" style="flex-direction:column;align-items:flex-start;">
-        <div style="display:flex;justify-content:space-between;width:100%;margin-bottom:10px;">
-          <div class="item-info"><h4>${f.icon} ${f.name}</h4><p>Материалов: <b>${mats.length}</b></p></div>
-          <div class="item-actions">
-            <button class="btn btn-edit" onclick="openFolderModal('${sectionId}', ${f.id})">✏️</button>
-            <button class="btn btn-del" onclick="deleteFolder('${sectionId}', ${f.id})">🗑</button>
-          </div>
-        </div>
-        <div style="width:100%;background:#fff;padding:10px;border-radius:8px;border:1px solid #FFE0B2;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-            <h4 style="margin:0;font-size:13px;">📂 Материалы:</h4>
-            <button class="btn btn-add" onclick="openMaterialModal('${sectionId}', ${f.id})" style="padding:4px 10px;font-size:11px;">➕ Добавить</button>
-          </div>
-          ${mats.length ? mats.map(m => {
-            let icon = m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️');
-            return `<div style="display:flex;justify-content:space-between;padding:6px;background:#FFF8E1;border-radius:6px;margin-bottom:4px;">
-              <div style="flex:1;"><h4 style="margin:0;font-size:12px;">${icon} ${m.name}</h4><p style="margin:2px 0 0;font-size:11px;color:#666;">${m.price+'₽'} | Ост: ${m.stock}</p></div>
-              <div class="item-actions">
-                <button class="btn btn-edit" onclick="openMaterialModal('${sectionId}', ${f.id}, ${m.id})" style="padding:2px 6px;font-size:10px;">✏️</button>
-                <button class="btn btn-del" onclick="deleteMaterial('${sectionId}', ${f.id}, ${m.id})" style="padding:2px 6px;font-size:10px;">🗑</button>
-              </div>
-            </div>`;
-          }).join('') : '<p style="font-size:11px;color:#888;text-align:center;">Нет материалов</p>'}
-        </div>
-      </div>`;
-    }).join('') : '<div class="empty-state">Нет папок. Нажмите "➕ Добавить папку"</div>';
+    renderAdminFolders(sectionId);
   });
 }
 
-if(sessionStorage.getItem('isAdmin')=='1'){document.getElementById('loginBlock').style.display='none';document.getElementById('adminPanel').style.display='block';renderAdmin();}
+function delOrder(id){if(!confirm('Удалить?'))return;orders=orders.filter(x=>x.id!=id);saveAll();addLog('Заказ удалён');renderAdmin();}
+function delContact(id){if(!confirm('Удалить?'))return;contacts=contacts.filter(x=>x.id!=id);saveAll();addLog('Сообщение удалено');renderAdmin();}
+function deleteSuggestion(id){if(!confirm('Удалить?'))return;suggestions=suggestions.filter(x=>x.id!=id);saveAll();addLog('Предложение удалено');renderAdmin();}
+
+async function adminChangePass(){const old=document.getElementById('setOldPass').value;const nw=document.getElementById('setNewPass').value;if(!isHashed(admin.password)){if(!admin.salt)admin.salt=generateSalt();admin.password=await hashPassword(admin.password,admin.salt);DB.set('admin',admin);}const oldHash=await hashPassword(old,admin.salt);if(oldHash!==admin.password)return showMsg('❌ Неверный текущий пароль','error');if(nw.length<8||!/[a-zA-Z]/.test(nw)||!/\d/.test(nw))return showMsg(' Мин. 8 символов, буквы+цифры','error');const salt=generateSalt();admin.password=await hashPassword(nw,salt);admin.salt=salt;saveAll();addLog('Пароль изменён');showMsg('✅ Пароль изменён!','success');document.getElementById('setOldPass').value='';document.getElementById('setNewPass').value='';}
+
+if(sessionStorage.getItem('isAdmin')=='1' && !admin.firstLogin){showAdminPanel();}
 </script>
 </body>
 </html>
