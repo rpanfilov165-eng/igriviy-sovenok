@@ -9,7 +9,7 @@
 
 <!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>  
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
@@ -140,18 +140,18 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
       <h1>Добро пожаловать!</h1>
       <p>Уютный мир игр, пособий и знаний для маленьких совят 🌙✨</p>
       <div id="loginPrompt" style="margin-top:16px;">
-        <a href="login.html" class="btn btn-purple" style="font-size:14px;padding:12px 24px;"> Войти / Регистрация</a>
+        <a href="login.html" class="btn btn-purple" style="font-size:14px;padding:12px 24px;">🔑 Войти / Регистрация</a>
       </div>
     </div>
     <div id="welcomeUser" class="welcome-user"></div>
-    <div class="section"><h2> Статистика</h2><div class="stats" id="stats"></div></div>
+    <div class="section"><h2>📊 Статистика</h2><div class="stats" id="stats"></div></div>
   </div>
   
   <div id="catalogs" class="page"><div class="section"><h2>📚 Весь каталог</h2><div class="breadcrumbs" id="breadcrumbs-catalogs"></div><div class="folders-grid" id="folders-catalogs"></div><div class="materials-grid" id="materials-catalogs"></div></div></div>
   <div id="worksheets" class="page"><div class="section"><h2>📝 Рабочие листы</h2><div class="breadcrumbs" id="breadcrumbs-worksheets"></div><div class="folders-grid" id="folders-worksheets"></div><div class="materials-grid" id="materials-worksheets"></div></div></div>
   <div id="themes" class="page"><div class="section"><h2>🎨 Темы</h2><div class="breadcrumbs" id="breadcrumbs-themes"></div><div class="folders-grid" id="folders-themes"></div><div class="materials-grid" id="materials-themes"></div></div></div>
   <div id="letter-games" class="page"><div class="section"><h2>🔤 Игры с буквами</h2><div class="breadcrumbs" id="breadcrumbs-letter-games"></div><div class="folders-grid" id="folders-letter-games"></div><div class="materials-grid" id="materials-letter-games"></div></div></div>
-  <div id="speech-games" class="page"><div class="section"><h2>️ Логопедические игры</h2><div class="breadcrumbs" id="breadcrumbs-speech-games"></div><div class="folders-grid" id="folders-speech-games"></div><div class="materials-grid" id="materials-speech-games"></div></div></div>
+  <div id="speech-games" class="page"><div class="section"><h2>🗣️ Логопедические игры</h2><div class="breadcrumbs" id="breadcrumbs-speech-games"></div><div class="folders-grid" id="folders-speech-games"></div><div class="materials-grid" id="materials-speech-games"></div></div></div>
   <div id="free" class="page"><div class="section"><h2>🎁 Бесплатно</h2><div class="breadcrumbs" id="breadcrumbs-free"></div><div class="folders-grid" id="folders-free"></div><div class="materials-grid" id="materials-free"></div></div></div>
 
   <div id="favorites" class="page"><div class="section"><h2>❤️ Избранное</h2><div class="materials-grid" id="favoritesGrid"></div></div></div>
@@ -189,7 +189,14 @@ const firebaseConfig = {
   appId: "1:972199222537:web:e389c149428d111f7987d8"
 };
 
-// 🔥 СНАЧАЛА объявляем ВСЕ переменные
+let db;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  console.log("✅ Firebase подключен на сайте");
+} catch(e) { console.error("Ошибка Firebase:", e); }
+
+// 1. СНАЧАЛА объявляем все переменные
 let folders = DB.get('folders', {
   'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
   'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
@@ -203,20 +210,12 @@ let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
 let cart = DB.get('cart',[]);
 let favorites = DB.get('favorites',[]);
-let contacts = DB.get('contacts',[]);
 let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
-let purchased = DB.get('purchased', []);
+let contacts = DB.get('contacts', []); // Добавлено
+let purchased = DB.get('purchased', []); // Добавлено
 let currentFolder = {};
-let db;
 
-// 🔥 ПОТОМ инициализируем Firebase
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  console.log("✅ Firebase подключен на сайте");
-} catch(e) { console.error("Ошибка Firebase:", e); }
-
-// 🔥 ПОТОМ слушаем изменения из облака
+// 2. ПОТОМ настраиваем слушатель Firebase
 if (db) {
   db.ref('siteData').on('value', (snapshot) => {
     const data = snapshot.val();
@@ -232,7 +231,7 @@ if (db) {
     }
   });
 }
-
+  
 (function applySiteBackground(){
   const root = document.documentElement;
   if(settings.backgroundImage){
@@ -252,10 +251,10 @@ function saveAll(){
 
 const siteTabs = [
   { "id": "home", "icon": "🏠", "label": "Главная", "action": "showSection('home')" },
-  { "id": "catalogs", "icon": "", "label": "Весь каталог", "action": "showSection('catalogs')" },
+  { "id": "catalogs", "icon": "📚", "label": "Весь каталог", "action": "showSection('catalogs')" },
   { "id": "worksheets", "icon": "📝", "label": "Рабочие листы", "action": "showSection('worksheets')" },
   { "id": "themes", "icon": "🎨", "label": "Темы", "action": "showSection('themes')" },
-  { "id": "letter-games", "icon": "", "label": "Игры с буквами", "action": "showSection('letter-games')" },
+  { "id": "letter-games", "icon": "🔤", "label": "Игры с буквами", "action": "showSection('letter-games')" },
   { "id": "speech-games", "icon": "🗣️", "label": "Логопедические игры", "action": "showSection('speech-games')" },
   { "id": "free", "icon": "🎁", "label": "Бесплатно", "action": "showSection('free')" },
   { "id": "favorites", "icon": "❤️", "label": "Избранное", "action": "showSection('favorites')" },
@@ -273,7 +272,7 @@ function renderSiteNav(){
   });
   html += `<button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>`;
   html += `<button class="theme-btn" onclick="toggleTheme()">🌙</button>`;
-  html += `<a href="admin-login.html" class="admin-link"> Админ</a>`;
+  html += `<a href="admin-login.html" class="admin-link">🔐 Админ</a>`;
   nav.innerHTML = html;
 }
 
@@ -348,7 +347,7 @@ function renderMaterialCard(m) {
     ${priceHtml}
     <p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p>
     <div class="card-actions">
-      ${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})"> В корзину</button>`:''}
+      ${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}
       ${downloadBtn}
       <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button>
     </div>
@@ -376,7 +375,7 @@ function openMaterialModal(id) {
     <p><b>Описание:</b> ${m.desc||'Нет описания'}</p>
     <p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>
     ${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}
-    ${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! </p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}
+    ${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}
     ${downloadHtml}
     <div class="modal-actions" style="margin-top:14px;">
       <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
@@ -399,7 +398,7 @@ function updateUserInfo(){
     if(loginPrompt) loginPrompt.style.display = 'none';
     if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>!`; }
   } else {
-    el.innerHTML = ` Гость | <a href="login.html">Войти</a>`;
+    el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
     if(loginPrompt) loginPrompt.style.display = 'block';
     if(welcomeUser) welcomeUser.classList.remove('active');
   }
@@ -425,38 +424,13 @@ function openCart(){
     return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽</p></div><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})">🗑</button></div>`;
   }).join('');
   const sum = cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);return s+(m.sale&&m.salePrice?m.salePrice:m.price);},0);
-  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div><button class="btn btn-purple" style="margin-top:10px;" onclick="simulatePayment(${sum})">💳 Оплатить и скачать</button></div>`;
+  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div></div>`;
 }
 function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();openCart();}
 
-function simulatePayment(sum) {
-  if(!confirm(`Подтвердить оплату на сумму ${sum} ₽? (Это демо-режим)`)) return;
-  const current = DB.get('currentUser', null);
-  const newOrder = {
-    id: Date.now(),
-    userId: current ? current.id : 'guest',
-    userName: current ? current.name : 'Гость',
-    total: sum,
-    date: new Date().toLocaleString('ru-RU'),
-    status: 'paid'
-  };
-  orders.push(newOrder);
-  
-  cart.forEach(c => {
-    if(!purchased.includes(c.productId)) purchased.push(c.productId);
-  });
-  
-  cart = [];
-  saveAll();
-  updateCartCount();
-  closeModal('cartModal');
-  alert('✅ Оплата прошла успешно! Теперь файлы доступны в разделе "Мои оплаты".');
-  showSection('payments');
-}
-
 function renderAll(){
   renderSiteNav();
-  document.getElementById('stats').innerHTML = `<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${materials.length}</div><div class="lbl"> Материалов</div></div>`;
+  document.getElementById('stats').innerHTML = `<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${materials.length}</div><div class="lbl">🛍 Материалов</div></div>`;
   ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => { renderFoldersAndMaterials(sectionId); });
   
   const favDiv=document.getElementById('favoritesGrid');
@@ -467,15 +441,18 @@ function renderAll(){
   if(ordDiv){
     if(!current){ordDiv.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра. <a href="login.html" class="btn btn-purple">Войти</a></p>`;}
     else{
-      const myOrders=orders.filter(o=>o.userId==(current.id||'guest')).sort((a,b)=>b.id-a.id);
+      const myOrders=orders.filter(o=>o.userId==(current.id || current.name)).sort((a,b)=>b.id-a.id);
       ordDiv.innerHTML=myOrders.length?myOrders.map(o=>`<div class="order-card"><h4>Заказ #${o.id} <span class="order-status status-paid">Оплачен</span></h4><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;">📅 ${o.date}</p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет заказов</p>';
     }
   }
 
   const payDiv=document.getElementById('paymentsList');
   if(payDiv){
-    const myPurchases = materials.filter(m => purchased.includes(m.id));
-    payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
+    if(!current){payDiv.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';}
+    else{
+      const myPurchases = materials.filter(m => purchased.includes(m.id));
+      payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
+    }
   }
   
   const c = settings.siteContacts || {};
@@ -498,7 +475,7 @@ function sendContact(){
   contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});
   DB.set('contacts',contacts);
   document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';
-  alert('Отправлено! ');
+  alert('Отправлено! 🦉');
 }
 function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
 
