@@ -172,6 +172,15 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
+const firebaseConfig = {
+ apiKey: "AIzaSyD-1dVfsJWpRpH3Id3XG9d02mGTBcGghak",
+ authDomain: "igriviy-sovenok-69b44.firebaseapp.com",
+ projectId: "igriviy-sovenok-69b44",
+ storageBucket: "igriviy-sovenok-69b44.firebasestorage.app",
+ messagingSenderId: "972199222537",
+ appId: "1:972199222537:web:e389c149428d111f7987d8"
+};
+
 
 (function applySiteBackground(){
   const settings = DB.get('settings', {});
