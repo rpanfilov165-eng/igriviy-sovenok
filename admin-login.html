@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title> Админ — Игривый совёнок</title>
+<title>🔐 Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 .form-group { margin-bottom:12px; text-align:left; }
 .form-group label { display:block; color:#2D1B4E; font-weight:700; margin-bottom:5px; font-size:13px; }
 .form-group input, .form-group select, .form-group textarea { width:100%; padding:11px; border:2px solid #FFE0B2; border-radius:12px; font-size:13px; background:#fff; font-weight:600; }
-.form-group input:focus, .form-group textarea:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
 .form-group textarea { min-height:70px; resize:vertical; }
 .btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:13px; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 4px 14px rgba(103,58,183,0.4); }
 .msg { padding:10px; border-radius:10px; margin-bottom:12px; font-size:13px; display:none; font-weight:600; }
@@ -101,13 +101,13 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
     <h3>⚙️ Управление сайтом</h3>
     <div class="admin-tabs" id="adminTabs">
       <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard">📊 Дашборд</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground"> Фон</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs"> Весь каталог</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground">🖼 Фон</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs">📚 Весь каталог</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aWorksheets',this)" data-tab="aWorksheets">📝 Рабочие листы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aThemes',this)" data-tab="aThemes">🎨 Темы</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames"> Игры с буквами</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames">🔤 Игры с буквами</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aSpeechGames',this)" data-tab="aSpeechGames">🗣️ Логопедические</button></div>
-      <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree"> Бесплатно</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree">🎁 Бесплатно</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders">📦 Заказы</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aContacts',this)" data-tab="aContacts">✉️ Сообщения</button></div>
       <div class="tab-wrapper"><button onclick="showTab('aSuggestions',this)" data-tab="aSuggestions">💡 Предложения</button></div>
@@ -115,9 +115,9 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
       <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">⚙️ Настройки</button></div>
     </div>
 
-    <div id="aDashboard" class="admin-section active"><h3> Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
+    <div id="aDashboard" class="admin-section active"><h3>📊 Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
 
-    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4> Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none"> Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
+    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4>📤 Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none">✕ Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
 
     <div id="aCatalogs" class="admin-section"><h3>📚 Весь каталог</h3><button class="btn btn-add" onclick="openFolderModal('catalogs')">➕ Добавить папку</button><div id="adminFolders-catalogs"></div></div>
     <div id="aWorksheets" class="admin-section"><h3>📝 Рабочие листы</h3><button class="btn btn-add" onclick="openFolderModal('worksheets')">➕ Добавить папку</button><div id="adminFolders-worksheets"></div></div>
@@ -175,7 +175,7 @@ let folders = DB.get('folders', {
   'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
   'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
   'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'', items:[]}]
+  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
 });
 let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
@@ -224,7 +224,7 @@ async function doLogin(e) {
     admin.attempts = (admin.attempts || 0) + 1;
     if (admin.attempts >= 5) {
       admin.lockedUntil = Date.now() + 5 * 60 * 1000;
-      addLog(' Аккаунт заблокирован');
+      addLog('🔒 Аккаунт заблокирован');
     }
     DB.set('admin', admin);
     showMsg(`❌ Неверный пароль. Осталось попыток: ${Math.max(0, 5 - admin.attempts)}`, 'error');
@@ -274,11 +274,11 @@ function openFolderModal(sectionId, folderId) {
     <h2>${folderId ? '✏️ Редактировать папку' : '➕ Новая папка'}</h2>
     <div class="form-group"><label>📁 Название папки *</label><input id="f_folderName" placeholder="Например: Прописи" value="${folder.name}"></div>
     <div class="form-group"><label>🎨 Иконка (эмодзи)</label><input id="f_folderIcon" placeholder="📁" value="${folder.icon}" maxlength="4">
-      <p style="font-size:11px;color:#888;margin-top:4px;">💡 Примеры:  📚 🎮 ️ 🎨 🗣️  🌟</p>
+      <p style="font-size:11px;color:#888;margin-top:4px;">💡 Примеры: 📚 🎮 ✏️ 🎨 🗣️ 🎁 🌟</p>
     </div>
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
-      <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})"> Сохранить</button>
+      <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})">💾 Сохранить</button>
     </div>
   `;
   openForm();
@@ -320,11 +320,40 @@ function deleteFolder(sectionId, folderId) {
 
 // === УПРАВЛЕНИЕ МАТЕРИАЛАМИ ===
 function openMaterialModal(sectionId, folderId, materialId) {
-  const material = materialId ? materials.find(m => m.id == materialId) : {name:'', desc:'', price:0, free:false, stock:0, img:'', sale:false, salePrice:0};
+  const material = materialId ? materials.find(m => m.id == materialId) : {name:'', desc:'', type:'image', price:0, free:false, stock:0, img:'', fileUrl:'', videoUrl:'', sale:false, salePrice:0};
+  
   document.getElementById('formContent').innerHTML = `
-    <h2>${materialId ? '️ Редактировать материал' : '➕ Новый материал'}</h2>
+    <h2>${materialId ? '✏️ Редактировать материал' : '➕ Новый материал'}</h2>
     <div class="form-group"><label>📌 Название *</label><input id="m_name" placeholder="Название материала" value="${material.name}"></div>
     <div class="form-group"><label>📝 Описание</label><textarea id="m_desc" placeholder="Описание" style="min-height:80px;">${material.desc||''}</textarea></div>
+    
+    <div class="form-group">
+      <label>📦 Тип материала *</label>
+      <select id="m_type" onchange="toggleMaterialFields()">
+        <option value="image" ${material.type==='image'?'selected':''}>🖼️ Картинка</option>
+        <option value="file" ${material.type==='file'?'selected':''}>📄 Файл для скачивания</option>
+        <option value="video" ${material.type==='video'?'selected':''}>🎬 Видео</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="field_image" style="${material.type!=='image'?'display:none':''}">
+      <label>🔗 URL картинки</label>
+      <input id="m_img" placeholder="https://..." value="${material.img||''}">
+      <small style="color:#888;font-size:11px;">💡 Вставьте прямую ссылку на изображение</small>
+    </div>
+
+    <div class="form-group" id="field_file" style="${material.type!=='file'?'display:none':''}">
+      <label>📥 Ссылка на скачивание файла</label>
+      <input id="m_fileUrl" placeholder="https://drive.google.com/... или Яндекс.Диск" value="${material.fileUrl||''}">
+      <small style="color:#888;font-size:11px;">💡 Ссылка на файл в облачном хранилище</small>
+    </div>
+
+    <div class="form-group" id="field_video" style="${material.type!=='video'?'display:none':''}">
+      <label>🎥 Ссылка на видео</label>
+      <input id="m_videoUrl" placeholder="https://youtube.com/... или Rutube" value="${material.videoUrl||''}">
+      <small style="color:#888;font-size:11px;">💡 Ссылка на YouTube, Vimeo, Rutube и т.д.</small>
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="form-group"><label>💵 Цена (₽)</label><input id="m_price" type="number" placeholder="0" value="${material.price}" min="0"></div>
       <div class="form-group"><label>📦 Остаток</label><input id="m_stock" type="number" placeholder="0" value="${material.stock||0}" min="0"></div>
@@ -334,7 +363,7 @@ function openMaterialModal(sectionId, folderId, materialId) {
       <div class="form-group"><label><input type="checkbox" id="m_sale" ${material.sale?'checked':''}> 🔥 Скидка</label></div>
     </div>
     <div class="form-group"><label>💸 Цена со скидкой</label><input id="m_salePrice" type="number" placeholder="0" value="${material.salePrice||0}" min="0"></div>
-    <div class="form-group"><label>🔗 URL картинки</label><input id="m_img" placeholder="https://..." value="${material.img||''}"></div>
+    
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeForm()">Отмена</button>
       <button class="btn btn-purple" onclick="saveMaterial('${sectionId}', ${folderId}, ${materialId||0})">💾 Сохранить</button>
@@ -343,28 +372,42 @@ function openMaterialModal(sectionId, folderId, materialId) {
   openForm();
 }
 
+function toggleMaterialFields() {
+  const type = document.getElementById('m_type').value;
+  document.getElementById('field_image').style.display = type === 'image' ? 'block' : 'none';
+  document.getElementById('field_file').style.display = type === 'file' ? 'block' : 'none';
+  document.getElementById('field_video').style.display = type === 'video' ? 'block' : 'none';
+}
+
 function saveMaterial(sectionId, folderId, materialId) {
   const name = document.getElementById('m_name').value.trim();
   const desc = document.getElementById('m_desc').value.trim();
+  const type = document.getElementById('m_type').value;
   const price = +document.getElementById('m_price').value;
   const stock = +document.getElementById('m_stock').value;
   const free = document.getElementById('m_free').checked;
   const sale = document.getElementById('m_sale').checked;
   const salePrice = +document.getElementById('m_salePrice').value;
-  const img = document.getElementById('m_img').value.trim();
+  
+  const img = type === 'image' ? document.getElementById('m_img').value.trim() : '';
+  const fileUrl = type === 'file' ? document.getElementById('m_fileUrl').value.trim() : '';
+  const videoUrl = type === 'video' ? document.getElementById('m_videoUrl').value.trim() : '';
   
   if(!name) return alert('⚠️ Введите название');
+  if(type === 'image' && !img) return alert('⚠️ Добавьте URL картинки');
+  if(type === 'file' && !fileUrl) return alert('⚠️ Добавьте ссылку на файл');
+  if(type === 'video' && !videoUrl) return alert('⚠️ Добавьте ссылку на видео');
   
   if(materialId) {
     const m = materials.find(x => x.id == materialId);
-    if(m) Object.assign(m, {name, desc, price, stock, free, sale, salePrice, img});
+    if(m) Object.assign(m, {name, desc, type, price, stock, free, sale, salePrice, img, fileUrl, videoUrl});
     addLog(`Материал изменён: "${name}"`);
   } else {
-    const newMaterial = {id: Date.now(), name, desc, price, stock, free, sale, salePrice, img};
+    const newMaterial = {id: Date.now(), name, desc, type, price, stock, free, sale, salePrice, img, fileUrl, videoUrl};
     materials.push(newMaterial);
     const folder = folders[sectionId].find(f => f.id == folderId);
     if(folder) folder.items.push(newMaterial.id);
-    addLog(`Материал добавлен: "${name}"`);
+    addLog(`Материал добавлен: "${name}" (${type})`);
   }
   saveAll();
   closeForm();
@@ -390,7 +433,7 @@ function renderAdminFolders(sectionId) {
   const folderList = folders[sectionId] || [];
   
   if(folderList.length === 0) {
-    div.innerHTML = '<div class="empty-state">Нет папок. Нажмите " Добавить папку"</div>';
+    div.innerHTML = '<div class="empty-state">Нет папок. Нажмите "➕ Добавить папку"</div>';
     return;
   }
   
@@ -410,13 +453,18 @@ function renderAdminFolders(sectionId) {
         </div>
         <div style="width:100%;background:#fff;padding:10px;border-radius:8px;border:1px solid #FFE0B2;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <h4 style="margin:0;font-size:13px;"> Материалы в папке:</h4>
+            <h4 style="margin:0;font-size:13px;">📂 Материалы в папке:</h4>
             <button class="btn btn-add" onclick="openMaterialModal('${sectionId}', ${f.id})" style="padding:6px 12px;font-size:11px;">➕ Добавить материал</button>
           </div>
-          ${materialsInFolder.length ? materialsInFolder.map(m => `
+          ${materialsInFolder.length ? materialsInFolder.map(m => {
+            let typeIcon = '📄';
+            if (m.type === 'image') typeIcon = '🖼️';
+            else if (m.type === 'video') typeIcon = '🎬';
+            
+            return `
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#FFF8E1;border-radius:6px;margin-bottom:5px;">
               <div style="flex:1;">
-                <h4 style="margin:0;font-size:12px;">${m.name}</h4>
+                <h4 style="margin:0;font-size:12px;">${typeIcon} ${m.name}</h4>
                 <p style="margin:2px 0 0;font-size:11px;color:#666;">${m.free?'🎁 Бесплатно':m.price+'₽'} | Остаток: ${m.stock}</p>
               </div>
               <div class="item-actions">
@@ -424,7 +472,7 @@ function renderAdminFolders(sectionId) {
                 <button class="btn btn-del" onclick="deleteMaterial('${sectionId}', ${f.id}, ${m.id})" style="padding:4px 8px;font-size:10px;">🗑</button>
               </div>
             </div>
-          `).join('') : '<p style="font-size:11px;color:#888;text-align:center;">Нет материалов</p>'}
+          `}).join('') : '<p style="font-size:11px;color:#888;text-align:center;">Нет материалов</p>'}
         </div>
       </div>
     `;
@@ -498,7 +546,7 @@ function renderAdmin() {
   
   const ordDiv = document.getElementById('adminOrders');
   if(orders.length===0){ordDiv.innerHTML='<div class="empty-state">Нет заказов</div>';}
-  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4> Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
+  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4>📦 Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
 
   const contDiv = document.getElementById('adminContacts');
   if(contacts.length===0){contDiv.innerHTML='<div class="empty-state">Нет сообщений</div>';}
@@ -517,7 +565,7 @@ function delOrder(id){if(!confirm('Удалить?'))return;orders=orders.filter
 function delContact(id){if(!confirm('Удалить?'))return;contacts=contacts.filter(x=>x.id!=id);saveAll();addLog('Сообщение удалено');renderAdmin();}
 function deleteSuggestion(id){if(!confirm('Удалить?'))return;suggestions=suggestions.filter(x=>x.id!=id);saveAll();addLog('Предложение удалено');renderAdmin();}
 
-async function adminChangePass(){const old=document.getElementById('setOldPass').value;const nw=document.getElementById('setNewPass').value;if(!isHashed(admin.password)){if(!admin.salt)admin.salt=generateSalt();admin.password=await hashPassword(admin.password,admin.salt);DB.set('admin',admin);}const oldHash=await hashPassword(old,admin.salt);if(oldHash!==admin.password)return showMsg('❌ Неверный текущий пароль','error');if(nw.length<8||!/[a-zA-Z]/.test(nw)||!/\d/.test(nw))return showMsg(' Мин. 8 символов, буквы+цифры','error');const salt=generateSalt();admin.password=await hashPassword(nw,salt);admin.salt=salt;saveAll();addLog('Пароль изменён');showMsg('✅ Пароль изменён!','success');document.getElementById('setOldPass').value='';document.getElementById('setNewPass').value='';}
+async function adminChangePass(){const old=document.getElementById('setOldPass').value;const nw=document.getElementById('setNewPass').value;if(!isHashed(admin.password)){if(!admin.salt)admin.salt=generateSalt();admin.password=await hashPassword(admin.password,admin.salt);DB.set('admin',admin);}const oldHash=await hashPassword(old,admin.salt);if(oldHash!==admin.password)return showMsg('❌ Неверный текущий пароль','error');if(nw.length<8||!/[a-zA-Z]/.test(nw)||!/\d/.test(nw))return showMsg('❌ Мин. 8 символов, буквы+цифры','error');const salt=generateSalt();admin.password=await hashPassword(nw,salt);admin.salt=salt;saveAll();addLog('Пароль изменён');showMsg('✅ Пароль изменён!','success');document.getElementById('setOldPass').value='';document.getElementById('setNewPass').value='';}
 
 if(sessionStorage.getItem('isAdmin')=='1' && !admin.firstLogin){showAdminPanel();}
 </script>
