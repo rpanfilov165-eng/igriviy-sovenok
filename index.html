@@ -194,7 +194,21 @@ try {
   db = firebase.database();
   console.log("✅ Firebase подключен на сайте");
 } catch(e) { console.error("Ошибка Firebase:", e); }
-
+// 🔥 СЛУШАЕМ ИЗМЕНЕНИЯ ИЗ ОБЛАКА В РЕАЛЬНОМ ВРЕМЕНИ
+if (db) {
+  db.ref('siteData').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      console.log('📥 Получены данные из облака');
+      if (data.folders) { folders = data.folders; DB.set('folders', folders); }
+      if (data.materials) { materials = data.materials; DB.set('materials', materials); }
+      if (data.orders) { orders = data.orders; DB.set('orders', orders); }
+      if (data.settings) { settings = data.settings; DB.set('settings', settings); }
+      if (data.contacts) { contacts = data.contacts; DB.set('contacts', contacts); }
+      if (typeof renderAll === 'function') renderAll();
+    }
+  });
+}
 (function applySiteBackground(){
   const settings = DB.get('settings', {});
   const root = document.documentElement;
