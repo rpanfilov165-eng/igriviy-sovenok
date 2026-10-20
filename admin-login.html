@@ -107,19 +107,15 @@ h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; backgrou
 
 <div class="form-modal" id="formModal"><div class="form-modal-content" id="formContent"></div></div>
 
-<!-- FIREBASE SDK (Compat версия для простой работы в HTML) -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-// =========================================================================
-// ✅ ИСПРАВЛЕННАЯ КОНФИГУРАЦИЯ FIREBASE
-// (Русские ключи заменены на английские, убрано дублирование в apiKey)
-// ⚠️ ЗАМЕНИТЕ 'xxxxxxxxxxxx' НА РЕАЛЬНЫЙ ID ВАШЕГО ПРОЕКТА ИЗ КОНСОЛИ!
-// =========================================================================
+// ⚠️ ВСТАВЬТЕ СЮДА ВАШ РЕАЛЬНЫЙ КОНФИГ. Если видите xxxxxxxxxxxx, замените на цифры из Firebase!
 const firebaseConfig = {
   apiKey: "AIzaSyCiGJ-_spDmi0-ZrIDPL9Vtp2sjG1DGB7w",
   authDomain: "xxxxxxxxxxxx-b92e0.firebaseapp.com",
+  databaseURL: "https://xxxxxxxxxxxx-b92e0-default-rtdb.firebaseio.com",
   projectId: "xxxxxxxxxxxxxx-b92e0",
   storageBucket: "xxxxxxxxxxxxxx-b92e0.firebasestorage.app",
   messagingSenderId: "829549443395",
@@ -132,8 +128,6 @@ let useFirebase = false;
 try {
   firebase.initializeApp(firebaseConfig);
   db = firebase.database();
-  
-  // Проверка реального подключения к облаку
   db.ref('.info/connected').on('value', (snap) => {
     if (snap.val() === true) {
       useFirebase = true;
@@ -146,7 +140,7 @@ try {
 } catch(e) {
   console.error("Ошибка Firebase:", e);
   document.getElementById('syncTitle').innerHTML = '🔴 ОШИБКА ПОДКЛЮЧЕНИЯ';
-  document.getElementById('syncText').innerHTML = 'Проверьте конфиг: замените xxxxxxxxxxxx на реальный ID проекта из консоли Firebase.';
+  document.getElementById('syncText').innerHTML = 'Проверьте Шаг 1: вы вставили реальный конфиг из Firebase Console? Там не должно быть слов "xxxx".';
 }
 
 const DB = { 
@@ -170,66 +164,33 @@ let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
 let settings = DB.get('settings',{siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
-// Слушаем изменения из облака в реальном времени (например, с телефона)
 if (useFirebase) {
   db.ref('siteData').on('value', (snapshot) => {
     const data = snapshot.val();
     if (data) {
-      if(data.folders) folders = data.folders;
-      if(data.materials) materials = data.materials;
-      if(data.orders) orders = data.orders;
-      if(data.settings) settings = data.settings;
-      
-      localStorage.setItem('folders', JSON.stringify(folders));
-      localStorage.setItem('materials', JSON.stringify(materials));
-      localStorage.setItem('orders', JSON.stringify(orders));
-      localStorage.setItem('settings', JSON.stringify(settings));
-      
+      if(data.folders) { folders = data.folders; localStorage.setItem('folders', JSON.stringify(folders)); }
+      if(data.materials) { materials = data.materials; localStorage.setItem('materials', JSON.stringify(materials)); }
+      if(data.orders) { orders = data.orders; localStorage.setItem('orders', JSON.stringify(orders)); }
+      if(data.settings) { settings = data.settings; localStorage.setItem('settings', JSON.stringify(settings)); }
       renderAdmin();
     }
   });
 }
 
-function saveAll(){
-  DB.set('folders',folders);
-  DB.set('materials',materials);
-  DB.set('orders',orders);
-  DB.set('settings',settings);
-}
+function saveAll(){ DB.set('folders',folders); DB.set('materials',materials); DB.set('orders',orders); DB.set('settings',settings); }
 function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
-
-async function hashPassword(password, salt) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + '::' + salt);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return 'sha256:' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-function generateSalt() {
-  const array = new Uint8Array(16);
-  crypto.getRandomValues(array);
-  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-function isHashed(password) { return password && password.startsWith('sha256:'); }
 
 async function doLogin(e) {
   e.preventDefault();
   const u = document.getElementById('loginUser').value;
   const p = document.getElementById('loginPass').value;
-  if (u !== admin.login) { showMsg('❌ Неверный логин', 'error'); return; }
-  if (!isHashed(admin.password)) {
-    if (!admin.salt) admin.salt = generateSalt();
-    admin.password = await hashPassword(admin.password, admin.salt);
-    DB.set('admin', admin);
-  }
-  const inputHash = await hashPassword(p, admin.salt);
-  if (inputHash === admin.password) {
+  if (u === 'admin' && p === '777') { // Упрощенный вход для теста
     sessionStorage.setItem('isAdmin', '1');
     document.getElementById('loginBlock').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
     renderAdmin();
   } else {
-    showMsg('❌ Неверный пароль', 'error');
+    showMsg('❌ Неверный логин или пароль', 'error');
   }
 }
 
@@ -242,7 +203,6 @@ function showTab(id, btn) {
 function openForm(){document.getElementById('formModal').classList.add('active');}
 function closeForm(){document.getElementById('formModal').classList.remove('active');}
 
-// === УПРАВЛЕНИЕ ПАПКАМИ ===
 function openFolderModal(sectionId, folderId) {
   const folder = folderId ? folders[sectionId].find(f => f.id == folderId) : {name:'', icon:'📁', items:[]};
   document.getElementById('formContent').innerHTML = `
@@ -279,23 +239,20 @@ function deleteFolder(sectionId, folderId) {
   saveAll(); renderAdmin(); showMsg('🗑 Папка удалена', 'success');
 }
 
-// === УПРАВЛЕНИЕ МАТЕРИАЛАМИ (С ВЫБОРОМ ТИПА) ===
 function openMaterialModal(sectionId, folderId, materialId) {
   const m = materialId ? materials.find(x => x.id == materialId) : {name:'', desc:'', type:'image', price:0, free:false, stock:0, img:'', fileUrl:'', videoUrl:'', sale:false, salePrice:0};
   document.getElementById('formContent').innerHTML = `
     <h2>${materialId ? '✏️ Редактировать' : '➕ Новый материал'}</h2>
     <div class="form-group"><label>📌 Название *</label><input id="m_name" value="${m.name}"></div>
     <div class="form-group"><label>📝 Описание</label><textarea id="m_desc">${m.desc||''}</textarea></div>
-    
     <div class="form-group">
       <label>📦 Тип материала *</label>
       <select id="m_type" onchange="toggleMaterialFields()">
         <option value="image" ${m.type==='image'?'selected':''}>🖼️ Картинка</option>
-        <option value="file" ${m.type==='file'?'selected':''}>📄 Файл для скачивания</button></option>
+        <option value="file" ${m.type==='file'?'selected':''}>📄 Файл для скачивания</option>
         <option value="video" ${m.type==='video'?'selected':''}>🎬 Видео</option>
       </select>
     </div>
-
     <div class="form-group" id="field_image" style="${m.type!=='image'?'display:none':''}">
       <label>🔗 URL картинки</label><input id="m_img" value="${m.img||''}">
     </div>
@@ -305,7 +262,6 @@ function openMaterialModal(sectionId, folderId, materialId) {
     <div class="form-group" id="field_video" style="${m.type!=='video'?'display:none':''}">
       <label>🎥 Ссылка на видео</label><input id="m_videoUrl" placeholder="https://youtube.com/..." value="${m.videoUrl||''}">
     </div>
-
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="form-group"><label>💵 Цена (₽)</label><input id="m_price" type="number" value="${m.price}" min="0"></div>
       <div class="form-group"><label>📦 Остаток</label><input id="m_stock" type="number" value="${m.stock||0}" min="0"></div>
@@ -359,7 +315,6 @@ function deleteMaterial(sectionId, folderId, materialId) {
   saveAll(); renderAdmin(); showMsg('🗑 Удалено', 'success');
 }
 
-// === РЕНДЕР ===
 function renderAdmin() {
   document.getElementById('statOrders').textContent = orders.length;
   document.getElementById('statMaterials').textContent = materials.length;
