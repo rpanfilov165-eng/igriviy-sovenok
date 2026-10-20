@@ -2,501 +2,524 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title> Игривый совёнок</title>
+<title> Админ — Игривый совёнок</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
-:root { --headerColor1:#2D1B4E; --headerColor2:#673AB7; --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E; --card:rgba(255,255,255,0.97); --border:rgba(255,255,255,0.7); }
-body { background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center/cover fixed !important; color:var(--text); min-height:100vh; padding-bottom:70px; position:relative; overflow-x:hidden; }
-body::before { content:''; position:fixed; inset:0; background:rgba(255,255,255,0.88); z-index:-1; pointer-events:none; }
-body.custom-bg-image { background-image:var(--site-bg-image)!important; background-size:cover!important; background-position:center!important; background-attachment:fixed!important; }
-body.custom-bg-gradient { background:var(--site-bg-gradient)!important; }
-body.dark { --text:#f0e6ff; --card:rgba(30,20,60,0.95); --border:rgba(255,255,255,0.1); }
-a { color:var(--primary); text-decoration:none; font-weight:700; }
-
-header { background: var(--header-bg, linear-gradient(135deg,#2D1B4E,#673AB7)); color:#FFF; padding:12px 15px; box-shadow:0 4px 20px rgba(0,0,0,0.3); position:sticky; top:0; z-index:100; border-bottom:3px solid #FFC107; }
-.header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-.logo { font-size:18px; font-weight:900; display:flex; align-items:center; gap:8px; cursor:pointer; color:#FFD54F; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-.logo-img { width:45px; height:45px; border-radius:50%; animation:float 3s ease-in-out infinite; box-shadow:0 4px 15px rgba(255,193,7,0.5); background:#fff; padding:3px; border:2px solid #FFC107; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-.user-info { background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:13px; font-weight:700; color:#FFD54F; border:1px solid rgba(255,255,255,0.3); white-space: nowrap; }
-.user-info a { color:#FFD54F; font-weight:800; margin-left:5px; text-decoration:underline; }
-
-nav { display:flex; flex-wrap:wrap; gap:6px; width:100%; justify-content:flex-start; }
-nav button, nav a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#2D1B4E; border:none; padding:8px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.2); white-space: nowrap; }
-nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(255,193,7,0.6); }
-.cart-btn { background:linear-gradient(135deg,#E53935,#EF5350)!important; color:#fff!important; }
-.cart-count { position:absolute; top:-6px; right:-6px; background:#FFC107; color:#2D1B4E; border-radius:50%; width:20px; height:20px; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid #fff; }
-.admin-link { background:linear-gradient(135deg,#9C27B0,#BA68C8)!important; color:#fff!important; }
-.theme-btn { background:linear-gradient(135deg,#37474F,#546E7A)!important; color:#fff!important; }
-.search-btn-header { background:linear-gradient(135deg,#2196F3,#42A5F5)!important; color:#fff!important; }
-
-.container { max-width:1400px; margin:20px auto; padding:0 15px; position:relative; z-index:1; }
-.section { background:var(--card); backdrop-filter:blur(20px); padding:24px; margin-bottom:20px; border-radius:24px; box-shadow:0 8px 32px rgba(103,58,183,0.2); border:2px solid rgba(255,193,7,0.3); animation:fadeUp .5s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-.section h2 { color:var(--text); margin-bottom:16px; padding-bottom:10px; border-bottom:3px solid transparent; border-image:linear-gradient(90deg,var(--accent),var(--primary)) 1; display:flex; align-items:center; gap:10px; font-size:20px; font-weight:900; }
-
-/* Папки */
-.folders-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:20px; }
-.folder-card { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border:2px solid #FFC107; border-radius:16px; padding:20px; text-align:center; cursor:pointer; transition:all .3s; position:relative; overflow:hidden; }
-.folder-card:hover { transform:translateY(-5px) scale(1.03); box-shadow:0 12px 24px rgba(255,193,7,0.4); border-color:#FF9800; }
-.folder-card .folder-icon { font-size:48px; margin-bottom:10px; display:block; }
-.folder-card .folder-name { font-size:14px; font-weight:800; color:#5D4037; }
-.folder-card .folder-count { font-size:11px; color:#888; margin-top:5px; }
-
-/* Материалы */
-.materials-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
-.material-card { background:var(--card); border:2px solid rgba(255,193,7,0.3); border-radius:20px; padding:14px; transition:all .3s; position:relative; overflow:hidden; display:flex; flex-direction:column; }
-.material-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 12px 28px rgba(103,58,183,0.3); border-color:var(--accent); }
-.material-card img { width:100%; height:140px; object-fit:cover; border-radius:14px; margin-bottom:10px; background:linear-gradient(135deg,#FFE0B2,#FFCC80); cursor:pointer; }
-.material-card h3 { color:var(--text); font-size:15px; margin-bottom:6px; font-weight:800; flex-grow:1; }
-.material-card p { font-size:12px; color:#4A3A5A; margin-bottom:6px; font-weight:600; }
-.price { color:#D84315; font-weight:900; font-size:18px; }
-.badge-free { position:absolute; top:10px; right:10px; background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.badge-paid { position:absolute; top:10px; right:10px; background:linear-gradient(135deg,#FF9800,#FFB74D); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.badge-hot { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.card-actions { display:flex; gap:6px; margin-top:auto; flex-wrap:wrap; }
-
-.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#2D1B4E; border:none; padding:8px 14px; border-radius:16px; cursor:pointer; font-weight:800; font-size:12px; text-decoration:none; display:inline-block; box-shadow:0 3px 10px rgba(255,193,7,0.4); }
-.btn:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(255,193,7,0.6); }
+body { background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+.login-wrap { background:rgba(255,248,225,0.98); backdrop-filter:blur(20px); border-radius:24px; padding:30px; max-width:1200px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,0.5); border:3px solid #FFC107; text-align:center; max-height:95vh; overflow-y:auto; }
+.owl-big { width:110px; height:110px; display:block; margin:0 auto 10px; animation:float 3s ease-in-out infinite; border-radius:50%; border:3px solid #FFC107; background:#fff; padding:5px; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+h1 { color:#2D1B4E; margin-bottom:5px; font-size:26px; font-weight:900; background:linear-gradient(135deg,#673AB7,#FFC107); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.subtitle { color:#673AB7; margin-bottom:20px; font-size:14px; font-weight:700; }
+.form-group { margin-bottom:12px; text-align:left; }
+.form-group label { display:block; color:#2D1B4E; font-weight:700; margin-bottom:5px; font-size:13px; }
+.form-group input, .form-group select, .form-group textarea { width:100%; padding:11px; border:2px solid #FFE0B2; border-radius:12px; font-size:13px; background:#fff; font-weight:600; }
+.form-group input:focus, .form-group textarea:focus { outline:none; border-color:#FFC107; box-shadow:0 0 0 3px rgba(255,193,7,0.2); }
+.form-group textarea { min-height:70px; resize:vertical; }
+.btn-submit { width:100%; background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; border:none; padding:13px; border-radius:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:10px; box-shadow:0 4px 14px rgba(103,58,183,0.4); }
+.msg { padding:10px; border-radius:10px; margin-bottom:12px; font-size:13px; display:none; font-weight:600; }
+.msg.error { background:#FFEBEE; color:#C62828; display:block; }
+.msg.success { background:#E8F5E9; color:#2E7D32; display:block; }
+.admin-panel { display:none; background:#fff; padding:20px; border-radius:18px; margin-top:12px; text-align:left; max-height:80vh; overflow-y:auto; }
+.admin-panel h3 { color:#2D1B4E; margin-bottom:12px; padding-bottom:8px; border-bottom:3px solid transparent; border-image:linear-gradient(90deg,#FFC107,#673AB7) 1; font-size:18px; font-weight:800; }
+.admin-tabs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; }
+.admin-tabs button { background:linear-gradient(135deg,#FFE0B2,#FFCC80); border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; color:#5D4037; font-size:11px; }
+.admin-tabs button:hover { transform:translateY(-2px); }
+.admin-tabs button.active { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; box-shadow:0 4px 12px rgba(103,58,183,0.4); }
+.admin-section { display:none; animation:fadeIn .3s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.admin-section.active { display:block; }
+.item-row { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px; border-radius:10px; margin:8px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border-left:4px solid #673AB7; }
+.item-info { flex:1; min-width:200px; }
+.item-info h4 { color:#5D4037; margin-bottom:5px; font-weight:700; }
+.item-actions { display:flex; gap:5px; flex-wrap:wrap; }
+.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; border:none; padding:8px 14px; border-radius:10px; cursor:pointer; font-weight:700; font-size:12px; margin:2px; }
+.btn:hover { transform:translateY(-2px); }
 .btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
+.btn-edit { background:linear-gradient(135deg,#43A047,#66BB6A); color:#fff; }
 .btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; }
-.btn-small { padding:6px 10px; font-size:11px; }
-.btn-fav { background:var(--card); border:2px solid #E53935; color:#E53935; }
-.btn-fav.active { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
-
-/* Хлебные крошки */
-.breadcrumbs { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px 16px; border-radius:12px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; }
-.breadcrumbs a { color:var(--primary); cursor:pointer; }
-.breadcrumbs a:hover { text-decoration:underline; }
-.breadcrumbs .separator { color:#888; }
-
-.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
-.modal.active { display:flex; }
-.modal-content { background:var(--card); padding:24px; border-radius:24px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; border:2px solid var(--accent); }
-.modal-content h2 { color:var(--text); margin-bottom:16px; font-weight:900; }
-.modal-content input, .modal-content textarea, .modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid var(--border); border-radius:12px; font-size:13px; background:rgba(255,255,255,0.8); color:var(--text); font-weight:700; }
-.modal-content textarea { min-height:75px; resize:vertical; }
-.modal-actions { display:flex; justify-content:flex-end; margin-top:14px; gap:8px; flex-wrap:wrap; }
-.close-btn { background:linear-gradient(135deg,#9E9E9E,#757575)!important; color:#fff!important; }
-
-.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
-.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:16px; border-radius:18px; text-align:center; }
-.stat-box .num { font-size:24px; font-weight:900; }
-.stat-box .lbl { font-size:11px; opacity:0.9; font-weight:700; }
-
-footer { background:linear-gradient(135deg,#2D1B4E,#4A2C6E); color:#FFF8E1; text-align:center; padding:20px; position:fixed; bottom:0; left:0; right:0; font-size:12px; z-index:50; font-weight:700; border-top:3px solid #FFC107; }
-footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
-
-.page { display:none; }
-.page.active { display:block; }
-.welcome { text-align:center; padding:30px 20px; position:relative; overflow:hidden; border-radius:30px; background:linear-gradient(-45deg,#FFD54F,#FFC107,#FF9800,#FFB74D,#FFE082,#FFD54F); background-size:400% 400%; animation:rainbowShift 8s ease infinite; box-shadow:0 10px 40px rgba(255,193,7,0.5); border:3px solid #FFC107; }
-@keyframes rainbowShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-.welcome h1 { color:#2D1B4E; font-size:28px; margin-bottom:10px; font-weight:900; text-shadow:2px 2px 4px rgba(255,255,255,0.8); }
-.welcome p { color:#3E2723; font-size:15px; font-weight:700; text-shadow:1px 1px 2px rgba(255,255,255,0.6); }
-.big-owl { width:200px; height:200px; display:block; margin:15px auto; animation:float 3s ease-in-out infinite; filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3)); border-radius:50%; background:transparent; padding:0; border:4px solid #fff; box-shadow:0 8px 30px rgba(255,193,7,0.6); }
-
-.welcome-user { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:16px; border-radius:16px; margin-bottom:16px; text-align:center; font-weight:800; font-size:15px; box-shadow:0 6px 20px rgba(76,175,80,0.4); display:none; }
-.welcome-user.active { display:block; }
-
-.order-card, .payment-card, .suggestion-item { background:var(--card); border:2px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; }
-.order-status { display:inline-block; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; color:#fff; }
-.status-new { background:linear-gradient(135deg,#2196F3,#42A5F5); }
-.status-paid { background:linear-gradient(135deg,#4CAF50,#66BB6A); }
-
-.contact-form input, .contact-form textarea, .suggestion-form input, .suggestion-form textarea, .suggestion-form select { width:100%; padding:12px; margin:6px 0; border:2px solid var(--border); border-radius:12px; background:rgba(255,255,255,0.8); color:var(--text); font-weight:700; font-size:13px; }
-.suggestion-form { background:linear-gradient(135deg,#E3F2FD,#BBDEFB); padding:20px; border-radius:16px; margin-bottom:20px; border:2px solid #64B5F6; }
-.suggestion-form h3 { color:#1565C0; margin-bottom:12px; font-weight:900; font-size:18px; }
-
-.search-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px); z-index:2000; justify-content:center; align-items:flex-start; padding:80px 15px 20px; overflow-y:auto; }
-.search-overlay.active { display:flex; }
-.search-container { background:var(--card); border-radius:20px; padding:20px; width:100%; max-width:600px; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid var(--accent); }
-.search-input-wrap { position:relative; margin-bottom:16px; }
-.search-input-wrap input { width:100%; padding:14px 50px 14px 16px; border:2px solid var(--accent); border-radius:14px; font-size:15px; font-weight:600; background:#fff; color:var(--text); }
-.search-close-btn { position:absolute; top:15px; right:15px; background:#E53935; color:#fff; border:none; width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; font-weight:800; }
-.search-result-item { background:#fff; border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; cursor:pointer; display:flex; gap:12px; align-items:center; }
-.search-result-item img { width:50px; height:50px; object-fit:cover; border-radius:10px; }
-.search-result-info h4 { color:var(--text); font-size:14px; margin-bottom:4px; }
-.search-result-type { display:inline-block; padding:2px 8px; border-radius:8px; font-size:10px; font-weight:700; background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; margin-top:4px; }
-
-@media (max-width:700px) { 
-  .header-inner { flex-direction:column; align-items:flex-start; } 
-  nav { overflow-x:auto; flex-wrap:nowrap; padding-bottom:5px; -webkit-overflow-scrolling: touch; }
-  nav button, nav a { flex-shrink:0; }
-  .welcome h1 { font-size:22px; } 
-  .big-owl { width:160px; height:160px; } 
-  .folders-grid { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
-  .materials-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
-}
+.btn-add { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:10px 18px; font-size:13px; margin-bottom:15px; }
+.nav-links { margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.nav-links a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#3E2723; padding:8px 14px; border-radius:12px; text-decoration:none; font-weight:700; font-size:12px; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:18px; }
+.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:14px; border-radius:14px; text-align:center; }
+.stat-box .num { font-size:24px; font-weight:800; }
+.stat-box .lbl { font-size:11px; opacity:0.9; font-weight:600; }
+.bg-box { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:20px; border-radius:14px; margin-bottom:16px; border:2px dashed #FFC107; }
+.bg-box h4 { margin-top:0; color:#5D4037; }
+.file-upload-box { background:#fff; border:2px dashed #673AB7; border-radius:12px; padding:20px; text-align:center; margin:12px 0; cursor:pointer; }
+.file-upload-box:hover { background:#F3E5F5; }
+.file-upload-box input[type="file"] { display:none; }
+.file-upload-box .upload-icon { font-size:40px; margin-bottom:8px; }
+.current-bg-img { max-width:100%; max-height:200px; border-radius:10px; margin-top:10px; }
+.bg-preview-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:12px; margin-top:12px; }
+.bg-preset { height:90px; border-radius:12px; cursor:pointer; border:3px solid transparent; transition:all .3s; }
+.bg-preset:hover { transform:translateY(-4px) scale(1.05); border-color:#FFC107; }
+.color-picker-group { display:flex; align-items:center; gap:10px; margin:8px 0; }
+.color-picker-group input[type="color"] { width:60px; height:40px; border:none; border-radius:8px; cursor:pointer; }
+.preview-strip { margin-top:10px; padding:15px; border-radius:10px; color:#fff; font-weight:bold; text-align:center; }
+.form-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
+.form-modal.active { display:flex; }
+.form-modal-content { background:rgba(255,248,225,0.98); padding:24px; border-radius:20px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; border:2px solid #FFC107; }
+.form-modal-content h2 { color:#2D1B4E; margin-bottom:14px; font-size:20px; font-weight:800; }
+.form-modal-content input, .form-modal-content textarea, .form-modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid #FFE0B2; border-radius:10px; font-size:12px; font-weight:600; }
+.form-modal-content label { display:flex; align-items:center; gap:6px; margin:8px 0; font-weight:700; color:#2D1B4E; font-size:12px; }
+.form-modal-content label input { width:auto; }
+.empty-state { text-align:center; padding:30px; color:#999; font-style:italic; }
+@media (max-width:700px) { .admin-tabs button { font-size:10px; padding:6px 8px; } .login-wrap { padding:18px; } .item-row { flex-direction:column; align-items:flex-start; } }
 </style>
 </head>
 <body>
-
-<header>
-  <div class="header-inner">
-    <div class="logo" onclick="showSection('home')">
-      <img src="logo.png" class="logo-img" alt="Игривый совёнок" draggable="false">
-      <span>Игривый совёнок</span>
-    </div>
-    <div class="user-info" id="userInfo">👤 Гость | <a href="login.html">Войти</a></div>
-    <nav id="siteNav"></nav>
-  </div>
-</header>
-
-<div class="container">
-  <div id="home" class="page active">
-    <div class="section welcome">
-      <img src="logo.png" class="big-owl" alt="Игривый совёнок" draggable="false">
-      <h1>Добро пожаловать!</h1>
-      <p>Уютный мир игр, пособий и знаний для маленьких совят 🌙✨</p>
-      <div id="loginPrompt" style="margin-top:16px;">
-        <a href="login.html" class="btn btn-purple" style="font-size:14px;padding:12px 24px;">🔑 Войти / Регистрация</a>
-      </div>
-    </div>
-    <div id="welcomeUser" class="welcome-user"></div>
-    <div class="section"><h2>📊 Статистика</h2><div class="stats" id="stats"></div></div>
-  </div>
+<div class="login-wrap">
+  <img src="logo.png" class="owl-big" alt="Игривый совёнок">
+  <h1>Админ-панель</h1>
+  <p class="subtitle">Управление сайтом 🔐</p>
+  <div id="msgBox" class="msg"></div>
   
-  <!-- Динамические страницы для каждой вкладки с папками -->
-  <div id="catalogs" class="page"><div class="section"><h2>📚 Весь каталог</h2><div class="breadcrumbs" id="breadcrumbs-catalogs"></div><div class="folders-grid" id="folders-catalogs"></div><div class="materials-grid" id="materials-catalogs"></div></div></div>
-  <div id="worksheets" class="page"><div class="section"><h2> Рабочие листы</h2><div class="breadcrumbs" id="breadcrumbs-worksheets"></div><div class="folders-grid" id="folders-worksheets"></div><div class="materials-grid" id="materials-worksheets"></div></div></div>
-  <div id="themes" class="page"><div class="section"><h2> Темы</h2><div class="breadcrumbs" id="breadcrumbs-themes"></div><div class="folders-grid" id="folders-themes"></div><div class="materials-grid" id="materials-themes"></div></div></div>
-  <div id="letter-games" class="page"><div class="section"><h2>🔤 Игры с буквами</h2><div class="breadcrumbs" id="breadcrumbs-letter-games"></div><div class="folders-grid" id="folders-letter-games"></div><div class="materials-grid" id="materials-letter-games"></div></div></div>
-  <div id="speech-games" class="page"><div class="section"><h2>🗣️ Логопедические игры</h2><div class="breadcrumbs" id="breadcrumbs-speech-games"></div><div class="folders-grid" id="folders-speech-games"></div><div class="materials-grid" id="materials-speech-games"></div></div></div>
-  <div id="free" class="page"><div class="section"><h2>🎁 Бесплатно</h2><div class="breadcrumbs" id="breadcrumbs-free"></div><div class="folders-grid" id="folders-free"></div><div class="materials-grid" id="materials-free"></div></div></div>
-
-  <div id="quiz" class="page"><div class="section"><h2>🎯 Квиз</h2><p style="text-align:center;padding:20px;">Раздел в разработке</p></div></div>
-  <div id="favorites" class="page"><div class="section"><h2>❤️ Избранное</h2><div class="materials-grid" id="favoritesGrid"></div></div></div>
-  <div id="compare" class="page"><div class="section"><h2>⚖️ Сравнение</h2><div id="compareGrid"></div></div></div>
-  <div id="history" class="page"><div class="section"><h2>👁 История</h2><div id="historyList"></div></div></div>
-  <div id="achievements" class="page"><div class="section"><h2>🏆 Достижения</h2><div id="achievementsList"></div></div></div>
-  
-  <div id="contacts" class="page">
-    <div class="section">
-      <h2> Контакты</h2>
-      <div id="siteContactsDisplay" style="margin-bottom:20px;"></div>
-      <h3 style="margin-bottom:12px;font-weight:800;">️ Напишите нам</h3>
-      <div class="contact-form">
-        <input id="c_name" placeholder="Ваше имя">
-        <input id="c_email" type="email" placeholder="Email">
-        <textarea id="c_msg" placeholder="Сообщение" style="min-height:100px;"></textarea>
-        <button class="btn btn-purple" onclick="sendContact()" style="width:100%;margin-top:10px;">Отправить 🦉</button>
-      </div>
-    </div>
+  <div id="loginBlock">
+    <form onsubmit="doLogin(event)">
+      <div class="form-group"><label>👤 Логин</label><input type="text" id="loginUser" required placeholder="Введите логин"></div>
+      <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPass" required placeholder="Введите пароль"></div>
+      <button type="submit" class="btn-submit">Войти 🦉</button>
+    </form>
   </div>
 
-  <div id="orders" class="page"><div class="section"><h2>📦 Мои заказы</h2><div id="ordersList"></div></div></div>
-  <div id="suggestions" class="page">
-    <div class="section">
-      <h2>💡 Предложения</h2>
-      <div class="suggestion-form">
-        <h3>📝 Оставить предложение</h3>
-        <input id="s_name" placeholder="Ваше имя">
-        <input id="s_email" type="email" placeholder="Email">
-        <select id="s_type">
-          <option value="Услуга"> Услуга</option>
-          <option value="Товар">🛍 Товар</option>
-          <option value="Сотрудничество"> Сотрудничество</option>
-          <option value="Другое">💭 Другое</option>
-        </select>
-        <input id="s_title" placeholder="Заголовок">
-        <textarea id="s_text" placeholder="Описание..." style="min-height:100px;"></textarea>
-        <button class="btn btn-purple" onclick="submitSuggestion()" style="width:100%;margin-top:10px;">📤 Отправить</button>
+  <div id="changePassBlock" style="display:none">
+    <h3 style="color:#2D1B4E;margin-bottom:14px;font-weight:800">🔑 Установите новый пароль</h3>
+    <p style="margin-bottom:15px;color:#673AB7;font-weight:600;">Это ваш первый вход. Установите надёжный пароль (мин. 8 символов, буквы+цифры).</p>
+    <form onsubmit="changePassword(event)">
+      <div class="form-group"><label>Новый пароль</label><input type="password" id="newPass" required minlength="8"></div>
+      <div class="form-group"><label>Повторите пароль</label><input type="password" id="newPass2" required minlength="8"></div>
+      <button type="submit" class="btn-submit">Сохранить и войти ✨</button>
+    </form>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>⚙️ Управление сайтом</h3>
+    <div class="admin-tabs" id="adminTabs">
+      <div class="tab-wrapper"><button class="active" onclick="showTab('aDashboard',this)" data-tab="aDashboard">📊 Дашборд</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aBackground',this)" data-tab="aBackground"> Фон</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aCatalogs',this)" data-tab="aCatalogs"> Весь каталог</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aWorksheets',this)" data-tab="aWorksheets">📝 Рабочие листы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aThemes',this)" data-tab="aThemes">🎨 Темы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aLetterGames',this)" data-tab="aLetterGames"> Игры с буквами</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSpeechGames',this)" data-tab="aSpeechGames">🗣️ Логопедические</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aFree',this)" data-tab="aFree"> Бесплатно</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aOrders',this)" data-tab="aOrders">📦 Заказы</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aContacts',this)" data-tab="aContacts">✉️ Сообщения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSuggestions',this)" data-tab="aSuggestions">💡 Предложения</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSync',this)" data-tab="aSync">🔄 Синхронизация</button></div>
+      <div class="tab-wrapper"><button onclick="showTab('aSettings',this)" data-tab="aSettings">⚙️ Настройки</button></div>
+    </div>
+
+    <div id="aDashboard" class="admin-section active"><h3> Статистика</h3><div class="stats"><div class="stat-box"><div class="num" id="statOrders">0</div><div class="lbl">Заказов</div></div><div class="stat-box"><div class="num" id="statRevenue">0₽</div><div class="lbl">Выручка</div></div><div class="stat-box"><div class="num" id="statMaterials">0</div><div class="lbl">Материалов</div></div><div class="stat-box"><div class="num" id="statFolders">0</div><div class="lbl">Папок</div></div></div></div>
+
+    <div id="aBackground" class="admin-section"><h3>🎨 Фон сайта</h3><div class="bg-box"><h4> Загрузить изображение</h4><label class="file-upload-box" for="bgFileInput"><div class="upload-icon">📁</div><p>Нажмите для выбора</p><input type="file" id="bgFileInput" accept="image/*" onchange="handleFileUpload(event)"></label><div id="bgPreviewContainer" style="display:none;text-align:center"><p style="color:#5D4037;font-weight:700;margin-bottom:8px">✅ Предпросмотр:</p><img id="bgPreviewImg" class="current-bg-img" alt=""></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center"><button class="btn btn-purple" onclick="applyUploadedBg()" id="applyBgBtn" style="display:none">💾 Применить</button><button class="btn btn-del" onclick="cancelUpload()" id="cancelBgBtn" style="display:none"> Отмена</button></div></div><div class="bg-box"><h4>🔄 Текущий фон</h4><div id="currentBgDisplay"><p style="color:#888;font-size:12px">Фон не установлен</p></div><button class="btn btn-del" onclick="removeBackground()" style="margin-top:12px">🗑 Убрать</button></div><div class="bg-box"><h4>🌈 Градиенты</h4><div class="bg-preview-grid"><div class="bg-preset" onclick="applyPreset('warm')" style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)"></div><div class="bg-preset" onclick="applyPreset('night')" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div><div class="bg-preset" onclick="applyPreset('pink')" style="background:linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)"></div><div class="bg-preset" onclick="applyPreset('ocean')" style="background:linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)"></div></div></div><div class="bg-box"><h4>🎨 Цвет шапки</h4><div class="color-picker-group"><input type="color" id="headerColor1" value="#2D1B4E"><span>Левый</span></div><div class="color-picker-group"><input type="color" id="headerColor2" value="#673AB7"><span>Правый</span></div><div id="headerPreview" class="preview-strip" style="background:linear-gradient(135deg,#2D1B4E,#673AB7)">Предпросмотр</div><button class="btn btn-purple" onclick="saveHeaderColors()" style="margin-top:12px">💾 Сохранить</button></div></div>
+
+    <div id="aCatalogs" class="admin-section"><h3>📚 Весь каталог</h3><button class="btn btn-add" onclick="openFolderModal('catalogs')">➕ Добавить папку</button><div id="adminFolders-catalogs"></div></div>
+    <div id="aWorksheets" class="admin-section"><h3>📝 Рабочие листы</h3><button class="btn btn-add" onclick="openFolderModal('worksheets')">➕ Добавить папку</button><div id="adminFolders-worksheets"></div></div>
+    <div id="aThemes" class="admin-section"><h3>🎨 Темы</h3><button class="btn btn-add" onclick="openFolderModal('themes')">➕ Добавить папку</button><div id="adminFolders-themes"></div></div>
+    <div id="aLetterGames" class="admin-section"><h3>🔤 Игры с буквами</h3><button class="btn btn-add" onclick="openFolderModal('letter-games')">➕ Добавить папку</button><div id="adminFolders-letter-games"></div></div>
+    <div id="aSpeechGames" class="admin-section"><h3>🗣️ Логопедические игры</h3><button class="btn btn-add" onclick="openFolderModal('speech-games')">➕ Добавить папку</button><div id="adminFolders-speech-games"></div></div>
+    <div id="aFree" class="admin-section"><h3>🎁 Бесплатно</h3><button class="btn btn-add" onclick="openFolderModal('free')">➕ Добавить папку</button><div id="adminFolders-free"></div></div>
+
+    <div id="aOrders" class="admin-section"><h3>📦 Заказы</h3><div id="adminOrders"></div></div>
+    <div id="aContacts" class="admin-section"><h3>✉️ Сообщения</h3><div id="adminContacts"></div></div>
+    <div id="aSuggestions" class="admin-section"><h3>💡 Предложения</h3><div id="adminSuggestionsList"></div></div>
+
+    <div id="aSync" class="admin-section">
+      <h3>🔄 Синхронизация между устройствами</h3>
+      <div class="bg-box">
+        <h4>📤 Экспорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Скачайте файл со всеми данными (папки, материалы, заказы и т.д.)</p>
+        <button class="btn btn-purple" onclick="exportAllData()">📥 Скачать данные</button>
       </div>
-      <h3 style="margin-top:24px;margin-bottom:14px;font-weight:800;"> Все предложения</h3>
-      <div id="suggestionsList"></div>
+      <div class="bg-box">
+        <h4>📥 Импорт данных</h4>
+        <p style="font-size:12px;color:#666;margin-bottom:10px;">Загрузите файл с данными, чтобы восстановить их на этом устройстве</p>
+        <input type="file" id="importFile" accept=".json" onchange="importAllData(event)" style="margin-bottom:10px;">
+      </div>
+      <div class="bg-box" style="background:#FFF3E0;border-color:#FF9800;">
+        <h4>⚠️ Как синхронизировать?</h4>
+        <ol style="font-size:12px;color:#5D4037;margin:10px 0 0 20px;line-height:1.6;">
+          <li>На <b>компьютере</b>: нажмите "📥 Скачать данные" → сохраните файл</li>
+          <li>Перенесите файл на <b>телефон</b> (через email, облако и т.д.)</li>
+          <li>На <b>телефоне</b>: откройте админку → "📥 Импорт данных" → выберите файл</li>
+          <li>Готово! Все папки и материалы появятся на телефоне!</li>
+        </ol>
+      </div>
+    </div>
+
+    <div id="aSettings" class="admin-section">
+      <h3>⚙️ Настройки</h3>
+      <div class="bg-box"><h4>🔑 Сменить пароль</h4><div class="form-group"><label>Текущий пароль</label><input type="password" id="setOldPass"></div><div class="form-group"><label>Новый пароль</label><input type="password" id="setNewPass"></div><button class="btn btn-purple" onclick="adminChangePass()">Сохранить пароль</button></div>
+      <div class="bg-box"><h4>📞 Контакты сайта</h4><div class="form-group"><label>Email</label><input id="site_email"></div><div class="form-group"><label>Телефон</label><input id="site_phone"></div><div class="form-group"><label>Адрес</label><input id="site_address"></div><div class="form-group"><label>Часы работы</label><input id="site_hours"></div><button class="btn btn-purple" onclick="saveSiteContacts()">💾 Сохранить контакты</button></div>
+      <div class="bg-box"><h4>💾 Данные</h4><button class="btn btn-del" onclick="if(confirm('Удалить ВСЕ данные?')){localStorage.clear();location.reload();}">🗑 Сброс</button><button class="btn btn-del" onclick="logout()">🚪 Выйти</button></div>
     </div>
   </div>
-  <div id="payments" class="page"><div class="section"><h2>💳 Мои оплаты</h2><div id="paymentsList"></div></div></div>
+  <div class="nav-links"><a href="index.html">🏠 На сайт</a><a href="login.html">👤 Покупатель</a></div>
 </div>
 
-<div class="search-overlay" id="searchOverlay">
-  <div class="search-container">
-    <button class="search-close-btn" onclick="closeSearch()">✕</button>
-    <h2>🔍 Поиск по сайту</h2>
-    <div class="search-input-wrap">
-      <input type="text" id="searchInput" placeholder="Введите название..." oninput="performSearch(this.value)">
-    </div>
-    <div id="searchResults">
-      <p style="text-align:center;color:#888;">Начните вводить текст для поиска</p>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="cartModal"><div class="modal-content" style="max-width:650px"><h2>🛒 Корзина</h2><div id="cartItems"></div><div id="cartTotal"></div><div class="modal-actions"><button class="btn close-btn" onclick="closeModal('cartModal')">Продолжить</button><button class="btn btn-purple" id="checkoutBtn" onclick="openCheckout()">Оформить</button></div></div></div>
-<div class="modal" id="checkoutModal"><div class="modal-content"><h2>📝 Оформление</h2><input id="co_name" placeholder="👤 Имя" required><input id="co_email" type="email" placeholder="📧 Email" required><input id="co_phone" placeholder="📱 Телефон" required><input id="co_city" placeholder="🏙 Город" required><textarea id="co_address" placeholder="📮 Адрес" required></textarea>
-<select id="co_delivery"><option value="Почта России (300₽)">Почта России (300₽)</option><option value="СДЭК (400₽)">СДЭК (400₽)</option><option value="Самовывоз">Самовывоз</option></select>
-<select id="co_payment"><option value="Перевод на карту">Карта</option><option value="СБП">СБП</option><option value="При получении">При получении</option></select>
-<div class="modal-actions"><button class="btn close-btn" onclick="closeModal('checkoutModal')">Отмена</button><button class="btn btn-purple" onclick="submitOrder()">✅ Подтвердить</button></div></div></div>
-<div class="modal" id="productModal"><div class="modal-content" id="productModalContent"></div></div>
-<div class="modal" id="formModal"><div class="modal-content" id="formContent"></div></div>
-
-<footer><p> © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a></p></footer>
+<div class="form-modal" id="formModal"><div class="form-modal-content" id="formContent"></div></div>
 
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
 
-(function applySiteBackground(){
-  const settings = DB.get('settings', {});
-  const root = document.documentElement;
-  if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
-    else { root.style.setProperty('--site-bg-gradient', settings.backgroundImage); document.body.classList.add('custom-bg-gradient'); }
-  }
-  if(settings.headerColors){
-    root.style.setProperty('--header-bg', `linear-gradient(135deg,${settings.headerColors.color1||'#2D1B4E'},${settings.headerColors.color2||'#673AB7'})`);
-  }
-})();
-
-// === ДАННЫЕ ===
+let admin = DB.get('admin',{login:'admin',password:'777',firstLogin:true});
 let folders = DB.get('folders', {
-  'catalogs': [{id:1, name:'Развивающие игры', icon:'', items:[]}],
+  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
   'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
   'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
   'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
   'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
+  'free': [{id:1, name:'Бесплатные материалы', icon:'', items:[]}]
 });
-
 let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
-let cart = DB.get('cart',[]);
-let favorites = DB.get('favorites',[]);
-let compareList = DB.get('compare',[]);
-let history = DB.get('history',[]);
-let achievements = DB.get('achievements',[]);
-let subscribers = DB.get('subscribers',[]);
+let contacts = DB.get('contacts',[]);
 let suggestions = DB.get('suggestions',[]);
-let chatMessages = DB.get('chatMessages',[]);
-let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
+let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},backgroundImage:null,backgroundType:null,siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
-let currentFolder = {};
-let currentProductFilter='all', currentSort='default', currentSearch='';
+function saveAll(){DB.set('folders',folders);DB.set('materials',materials);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);DB.set('suggestions',suggestions);}
+function addLog(action){const log=DB.get('log',[]);log.push({date:new Date().toLocaleString('ru-RU'),action});if(log.length>200)log.shift();DB.set('log',log);}
+function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
 
-function saveAll(){
-  DB.set('folders',folders);
-  DB.set('materials',materials);
-  DB.set('orders',orders);
-  DB.set('cart',cart);
-  DB.set('favorites',favorites);
-  DB.set('compare',compareList);
-  DB.set('history',history);
-  DB.set('achievements',achievements);
-  DB.set('subscribers',subscribers);
-  DB.set('suggestions',suggestions);
-  DB.set('chatMessages',chatMessages);
-  DB.set('settings',settings);
+async function hashPassword(password, salt) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password + '::' + salt);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return 'sha256:' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function generateSalt() {
+  const array = new Uint8Array(16);
+  crypto.getRandomValues(array);
+  return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function isHashed(password) { return password && password.startsWith('sha256:'); }
+
+async function doLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('loginUser').value;
+  const p = document.getElementById('loginPass').value;
+  if (u !== admin.login) { showMsg('❌ Неверный логин или пароль', 'error'); return; }
+  if (!isHashed(admin.password)) {
+    if (!admin.salt) admin.salt = generateSalt();
+    admin.password = await hashPassword(admin.password, admin.salt);
+    DB.set('admin', admin);
+  }
+  const inputHash = await hashPassword(p, admin.salt);
+  if (inputHash === admin.password) {
+    admin.attempts = 0; admin.lockedUntil = null; DB.set('admin', admin);
+    sessionStorage.setItem('isAdmin', '1');
+    addLog('✅ Успешный вход');
+    if (admin.firstLogin) {
+      document.getElementById('loginBlock').style.display = 'none';
+      document.getElementById('changePassBlock').style.display = 'block';
+    } else { showAdminPanel(); }
+  } else {
+    admin.attempts = (admin.attempts || 0) + 1;
+    if (admin.attempts >= 5) {
+      admin.lockedUntil = Date.now() + 5 * 60 * 1000;
+      addLog(' Аккаунт заблокирован');
+    }
+    DB.set('admin', admin);
+    showMsg(`❌ Неверный пароль. Осталось попыток: ${Math.max(0, 5 - admin.attempts)}`, 'error');
+    document.getElementById('loginPass').value = '';
+  }
 }
 
-// === МЕНЮ ===
-const siteTabs = [
-  { "id": "home", "icon": "🏠", "label": "Главная", "action": "showSection('home')" },
-  { "id": "catalogs", "icon": "📚", "label": "Весь каталог", "action": "showSection('catalogs')" },
-  { "id": "worksheets", "icon": "", "label": "Рабочие листы", "action": "showSection('worksheets')" },
-  { "id": "themes", "icon": "🎨", "label": "Темы", "action": "showSection('themes')" },
-  { "id": "letter-games", "icon": "🔤", "label": "Игры с буквами", "action": "showSection('letter-games')" },
-  { "id": "speech-games", "icon": "🗣️", "label": "Логопедические игры", "action": "showSection('speech-games')" },
-  { "id": "free", "icon": "🎁", "label": "Бесплатно", "action": "showSection('free')" },
-  { "id": "quiz", "icon": "🎯", "label": "Квиз", "action": "showSection('quiz')" },
-  { "id": "favorites", "icon": "❤️", "label": "Избранное", "action": "showSection('favorites')" },
-  { "id": "compare", "icon": "️", "label": "Сравнение", "action": "showSection('compare')", "hasCount": true },
-  { "id": "history", "icon": "👁", "label": "История", "action": "showSection('history')" },
-  { "id": "achievements", "icon": "🏆", "label": "Достижения", "action": "showSection('achievements')" },
-  { "id": "contacts", "icon": "", "label": "Контакты", "action": "showSection('contacts')" },
-  { "id": "orders", "icon": "📦", "label": "Заказы", "action": "showSection('orders')" },
-  { "id": "suggestions", "icon": "💡", "label": "Предложения", "action": "showSection('suggestions')" },
-  { "id": "payments", "icon": "💳", "label": "Оплаты", "action": "showSection('payments')" }
-];
-
-function renderSiteNav(){
-  const nav = document.getElementById('siteNav');
-  if(!nav) return;
-  let html = '';
-  siteTabs.forEach(tab => {
-    let label = `${tab.icon} ${tab.label}`;
-    if(tab.hasCount) label += ` <span id="compareCount">0</span>`;
-    html += `<button onclick="${tab.action}">${label}</button>`;
-  });
-  html += `<button class="search-btn-header" onclick="openSearch()">🔍 Поиск</button>`;
-  html += `<button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>`;
-  html += `<button class="theme-btn" onclick="toggleTheme()">🌙</button>`;
-  html += `<a href="admin-login.html" class="admin-link">🔐 Админ</a>`;
-  nav.innerHTML = html;
+async function changePassword(e) {
+  e.preventDefault();
+  const p1 = document.getElementById('newPass').value;
+  const p2 = document.getElementById('newPass2').value;
+  if (p1 !== p2) return showMsg('❌ Пароли не совпадают', 'error');
+  if (p1.length < 8 || !/[a-zA-Z]/.test(p1) || !/\d/.test(p1)) return showMsg('❌ Мин. 8 символов, буквы+цифры', 'error');
+  const salt = generateSalt();
+  admin.password = await hashPassword(p1, salt);
+  admin.salt = salt;
+  admin.firstLogin = false;
+  admin.attempts = 0; admin.lockedUntil = null;
+  DB.set('admin', admin);
+  addLog('🔑 Пароль установлен');
+  showMsg('✅ Надёжный пароль установлен!', 'success');
+  setTimeout(() => showAdminPanel(), 1000);
 }
 
-// === РЕНДЕР ПАПОК И МАТЕРИАЛОВ ===
-function renderFoldersAndMaterials(sectionId) {
-  const foldersDiv = document.getElementById(`folders-${sectionId}`);
-  const materialsDiv = document.getElementById(`materials-${sectionId}`);
-  const breadcrumbsDiv = document.getElementById(`breadcrumbs-${sectionId}`);
+function logout() { sessionStorage.removeItem('isAdmin'); location.reload(); }
+function showAdminPanel() {
+  document.getElementById('loginBlock').style.display = 'none';
+  document.getElementById('changePassBlock').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  renderAdmin();
+}
+function showTab(id, btn) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.admin-tabs button').forEach(b => b.classList.remove('active'));
+  const section = document.getElementById(id);
+  if (section) section.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+function openForm(){document.getElementById('formModal').classList.add('active');}
+function closeForm(){document.getElementById('formModal').classList.remove('active');}
+
+// === УПРАВЛЕНИЕ ПАПКАМИ ===
+function openFolderModal(sectionId, folderId) {
+  const folder = folderId ? folders[sectionId].find(f => f.id == folderId) : {name:'', icon:'📁', items:[]};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${folderId ? '✏️ Редактировать папку' : '➕ Новая папка'}</h2>
+    <div class="form-group"><label>📁 Название папки *</label><input id="f_folderName" placeholder="Например: Прописи" value="${folder.name}"></div>
+    <div class="form-group"><label>🎨 Иконка (эмодзи)</label><input id="f_folderIcon" placeholder="📁" value="${folder.icon}" maxlength="4">
+      <p style="font-size:11px;color:#888;margin-top:4px;">💡 Примеры:  📚 🎮 ️ 🎨 🗣️  🌟</p>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveFolder('${sectionId}', ${folderId||0})"> Сохранить</button>
+    </div>
+  `;
+  openForm();
+}
+
+function saveFolder(sectionId, folderId) {
+  const name = document.getElementById('f_folderName').value.trim();
+  const icon = document.getElementById('f_folderIcon').value.trim() || '📁';
+  if(!name) return alert('⚠️ Введите название папки');
   
-  if(!foldersDiv || !materialsDiv) return;
+  if(folderId) {
+    const folder = folders[sectionId].find(f => f.id == folderId);
+    if(folder) { folder.name = name; folder.icon = icon; }
+    addLog(`Папка изменена: "${name}"`);
+  } else {
+    folders[sectionId].push({id: Date.now(), name, icon, items:[]});
+    addLog(`Папка создана: "${name}"`);
+  }
+  saveAll();
+  closeForm();
+  renderAdmin();
+  showMsg('✅ Папка сохранена!', 'success');
+}
+
+function deleteFolder(sectionId, folderId) {
+  if(!confirm('Удалить папку и все материалы в ней?')) return;
+  const folder = folders[sectionId].find(f => f.id == folderId);
+  if(folder) {
+    folder.items.forEach(itemId => {
+      materials = materials.filter(m => m.id != itemId);
+    });
+    folders[sectionId] = folders[sectionId].filter(f => f.id != folderId);
+  }
+  saveAll();
+  addLog(`Папка удалена`);
+  renderAdmin();
+  showMsg('🗑 Папка удалена', 'success');
+}
+
+// === УПРАВЛЕНИЕ МАТЕРИАЛАМИ ===
+function openMaterialModal(sectionId, folderId, materialId) {
+  const material = materialId ? materials.find(m => m.id == materialId) : {name:'', desc:'', price:0, free:false, stock:0, img:'', sale:false, salePrice:0};
+  document.getElementById('formContent').innerHTML = `
+    <h2>${materialId ? '️ Редактировать материал' : '➕ Новый материал'}</h2>
+    <div class="form-group"><label>📌 Название *</label><input id="m_name" placeholder="Название материала" value="${material.name}"></div>
+    <div class="form-group"><label>📝 Описание</label><textarea id="m_desc" placeholder="Описание" style="min-height:80px;">${material.desc||''}</textarea></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group"><label>💵 Цена (₽)</label><input id="m_price" type="number" placeholder="0" value="${material.price}" min="0"></div>
+      <div class="form-group"><label>📦 Остаток</label><input id="m_stock" type="number" placeholder="0" value="${material.stock||0}" min="0"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group"><label><input type="checkbox" id="m_free" ${material.free?'checked':''}> 🎁 Бесплатный</label></div>
+      <div class="form-group"><label><input type="checkbox" id="m_sale" ${material.sale?'checked':''}> 🔥 Скидка</label></div>
+    </div>
+    <div class="form-group"><label>💸 Цена со скидкой</label><input id="m_salePrice" type="number" placeholder="0" value="${material.salePrice||0}" min="0"></div>
+    <div class="form-group"><label>🔗 URL картинки</label><input id="m_img" placeholder="https://..." value="${material.img||''}"></div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" onclick="closeForm()">Отмена</button>
+      <button class="btn btn-purple" onclick="saveMaterial('${sectionId}', ${folderId}, ${materialId||0})">💾 Сохранить</button>
+    </div>
+  `;
+  openForm();
+}
+
+function saveMaterial(sectionId, folderId, materialId) {
+  const name = document.getElementById('m_name').value.trim();
+  const desc = document.getElementById('m_desc').value.trim();
+  const price = +document.getElementById('m_price').value;
+  const stock = +document.getElementById('m_stock').value;
+  const free = document.getElementById('m_free').checked;
+  const sale = document.getElementById('m_sale').checked;
+  const salePrice = +document.getElementById('m_salePrice').value;
+  const img = document.getElementById('m_img').value.trim();
   
-  const currentFolderId = currentFolder[sectionId];
+  if(!name) return alert('⚠️ Введите название');
+  
+  if(materialId) {
+    const m = materials.find(x => x.id == materialId);
+    if(m) Object.assign(m, {name, desc, price, stock, free, sale, salePrice, img});
+    addLog(`Материал изменён: "${name}"`);
+  } else {
+    const newMaterial = {id: Date.now(), name, desc, price, stock, free, sale, salePrice, img};
+    materials.push(newMaterial);
+    const folder = folders[sectionId].find(f => f.id == folderId);
+    if(folder) folder.items.push(newMaterial.id);
+    addLog(`Материал добавлен: "${name}"`);
+  }
+  saveAll();
+  closeForm();
+  renderAdmin();
+  showMsg('✅ Материал сохранён!', 'success');
+}
+
+function deleteMaterial(sectionId, folderId, materialId) {
+  if(!confirm('Удалить материал?')) return;
+  const folder = folders[sectionId].find(f => f.id == folderId);
+  if(folder) folder.items = folder.items.filter(id => id != materialId);
+  materials = materials.filter(m => m.id != materialId);
+  saveAll();
+  addLog('Материал удалён');
+  renderAdmin();
+  showMsg('🗑 Удалено', 'success');
+}
+
+// === РЕНДЕР ПАПОК В АДМИНКЕ ===
+function renderAdminFolders(sectionId) {
+  const div = document.getElementById(`adminFolders-${sectionId}`);
+  if(!div) return;
   const folderList = folders[sectionId] || [];
   
-  // Хлебные крошки
-  if(breadcrumbsDiv) {
-    if(currentFolderId) {
-      const folder = folderList.find(f => f.id == currentFolderId);
-      breadcrumbsDiv.innerHTML = `<a onclick="exitFolder('${sectionId}')"> Все папки</a> <span class="separator">›</span> <span>${folder ? folder.icon + ' ' + folder.name : 'Папка'}</span>`;
-    } else {
-      breadcrumbsDiv.innerHTML = `<span>📁 Выберите папку</span>`;
-    }
+  if(folderList.length === 0) {
+    div.innerHTML = '<div class="empty-state">Нет папок. Нажмите " Добавить папку"</div>';
+    return;
   }
   
-  // Папки
-  if(currentFolderId) {
-    foldersDiv.style.display = 'none';
-    const folder = folderList.find(f => f.id == currentFolderId);
-    const folderMaterials = folder ? folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean) : [];
-    
-    materialsDiv.innerHTML = folderMaterials.length ? folderMaterials.map(m => renderMaterialCard(m)).join('') : '<p style="text-align:center;padding:20px;grid-column:1/-1;">В этой папке пока нет материалов</p>';
-  } else {
-    foldersDiv.style.display = 'grid';
-    materialsDiv.innerHTML = '';
-    
-    if(folderList.length === 0) {
-      foldersDiv.innerHTML = '<p style="text-align:center;padding:20px;grid-column:1/-1;">Нет папок. Администратор может добавить их в админ-панели.</p>';
-    } else {
-      foldersDiv.innerHTML = folderList.map(f => {
-        const count = f.items.length;
-        return `<div class="folder-card" onclick="enterFolder('${sectionId}', ${f.id})">
-          <span class="folder-icon">${f.icon}</span>
-          <div class="folder-name">${f.name}</div>
-          <div class="folder-count">${count} материал${count === 1 ? '' : count < 5 ? 'а' : 'ов'}</div>
-        </div>`;
-      }).join('');
+  div.innerHTML = folderList.map(f => {
+    const materialsInFolder = f.items.map(id => materials.find(m => m.id == id)).filter(Boolean);
+    return `
+      <div class="item-row" style="flex-direction:column;align-items:flex-start;">
+        <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:10px;">
+          <div class="item-info">
+            <h4>${f.icon} ${f.name}</h4>
+            <p>Материалов: <b>${materialsInFolder.length}</b></p>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-edit" onclick="openFolderModal('${sectionId}', ${f.id})">✏️ Папку</button>
+            <button class="btn btn-del" onclick="deleteFolder('${sectionId}', ${f.id})">🗑 Папку</button>
+          </div>
+        </div>
+        <div style="width:100%;background:#fff;padding:10px;border-radius:8px;border:1px solid #FFE0B2;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <h4 style="margin:0;font-size:13px;"> Материалы в папке:</h4>
+            <button class="btn btn-add" onclick="openMaterialModal('${sectionId}', ${f.id})" style="padding:6px 12px;font-size:11px;">➕ Добавить материал</button>
+          </div>
+          ${materialsInFolder.length ? materialsInFolder.map(m => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px;background:#FFF8E1;border-radius:6px;margin-bottom:5px;">
+              <div style="flex:1;">
+                <h4 style="margin:0;font-size:12px;">${m.name}</h4>
+                <p style="margin:2px 0 0;font-size:11px;color:#666;">${m.free?'🎁 Бесплатно':m.price+'₽'} | Остаток: ${m.stock}</p>
+              </div>
+              <div class="item-actions">
+                <button class="btn btn-edit" onclick="openMaterialModal('${sectionId}', ${f.id}, ${m.id})" style="padding:4px 8px;font-size:10px;">✏️</button>
+                <button class="btn btn-del" onclick="deleteMaterial('${sectionId}', ${f.id}, ${m.id})" style="padding:4px 8px;font-size:10px;">🗑</button>
+              </div>
+            </div>
+          `).join('') : '<p style="font-size:11px;color:#888;text-align:center;">Нет материалов</p>'}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// === ЭКСПОРТ/ИМПОРТ ===
+function exportAllData() {
+  const data = {
+    folders, materials, orders, contacts, suggestions, settings, admin,
+    exportDate: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'owl-data-' + Date.now() + '.json';
+  a.click();
+  addLog('Экспорт всех данных');
+  showMsg('✅ Данные экспортированы!', 'success');
+}
+
+function importAllData(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.folders) folders = data.folders;
+      if(data.materials) materials = data.materials;
+      if(data.orders) orders = data.orders;
+      if(data.contacts) contacts = data.contacts;
+      if(data.suggestions) suggestions = data.suggestions;
+      if(data.settings) settings = data.settings;
+      saveAll();
+      addLog('Импорт всех данных');
+      showMsg('✅ Данные импортированы! Обновите страницу.', 'success');
+      setTimeout(() => location.reload(), 1500);
+    } catch(err) {
+      alert('❌ Ошибка импорта: ' + err.message);
     }
-  }
-}
-
-function enterFolder(sectionId, folderId) {
-  currentFolder[sectionId] = folderId;
-  renderFoldersAndMaterials(sectionId);
-}
-
-function exitFolder(sectionId) {
-  currentFolder[sectionId] = null;
-  renderFoldersAndMaterials(sectionId);
-}
-
-function renderMaterialCard(m) {
-  const isFav = favorites.includes(m.id);
-  const isCompare = compareList.includes(m.id);
-  const badge = m.free ? '<span class="badge-free"> Бесплатно</span>' : '<span class="badge-paid">💰 Платно</span>';
-  const hotBadge = m.sale ? '<span class="badge-hot">🔥 Скидка</span>' : '';
-  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
-  
-  return `<div class="material-card">${badge}${hotBadge}<img src="${m.img||''}" alt="" onclick="openMaterialModal(${m.id})"><h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${m.name}</h3><p>${m.desc||''}</p>${priceHtml}<p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p><div class="card-actions">${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}<button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button><button class="btn btn-small" style="background:${isCompare?'#E53935':'var(--card)'};color:${isCompare?'#fff':'var(--text)'};border:1px solid var(--border)" onclick="toggleCompare(${m.id})">⚖️</button></div></div>`;
-}
-
-function openMaterialModal(id) {
-  const m = materials.find(x => x.id == id);
-  if(!m) return;
-  history = history.filter(hid => hid != id);
-  history.unshift(id);
-  if(history.length > 20) history = history.slice(0, 20);
-  saveAll();
-  
-  const price = m.sale && m.salePrice ? m.salePrice : m.price;
-  document.getElementById('productModalContent').innerHTML = `<h2>${m.name}</h2><img src="${m.img||''}" style="width:100%;border-radius:14px;margin-bottom:14px;"><p>${m.desc||''}</p><p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}<div class="modal-actions"><button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>${!m.free&&m.stock>0?`<button class="btn btn-purple" onclick="addToCart(${m.id});closeModal('productModal')">🛒 В корзину</button>`:''}</div>`;
-  openModal('productModal');
+  };
+  reader.readAsText(file);
 }
 
 // === ОСТАЛЬНЫЕ ФУНКЦИИ ===
-function updateUserInfo(){
-  const current = DB.get('currentUser', null);
-  const el = document.getElementById('userInfo');
-  const loginPrompt = document.getElementById('loginPrompt');
-  const welcomeUser = document.getElementById('welcomeUser');
-  if(current){
-    el.innerHTML = `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'none';
-    if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>! Баллов: <b>${current.points||0}</b> 🎁`; }
-  } else {
-    el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'block';
-    if(welcomeUser) welcomeUser.classList.remove('active');
-  }
-}
+function handleFileUpload(event){const file=event.target.files[0];if(!file)return;if(file.size>2*1024*1024){showMsg('❌ Файл больше 2 МБ','error');return;}const reader=new FileReader();reader.onload=function(e){document.getElementById('bgPreviewImg').src=e.target.result;document.getElementById('bgPreviewContainer').style.display='block';document.getElementById('applyBgBtn').style.display='inline-block';document.getElementById('cancelBgBtn').style.display='inline-block';showMsg('✅ Загружен!','success');};reader.readAsDataURL(file);}
+function applyUploadedBg(){const fileInput=document.getElementById('bgFileInput');if(!fileInput.files[0]){showMsg('Выберите файл','error');return;}const reader=new FileReader();reader.onload=function(e){settings.backgroundImage=e.target.result;settings.backgroundType='image';saveAll();addLog('Фон установлен');showMsg('✅ Фон установлен!','success');cancelUpload();renderCurrentBg();};reader.readAsDataURL(fileInput.files[0]);}
+function cancelUpload(){document.getElementById('bgFileInput').value='';document.getElementById('bgPreviewContainer').style.display='none';document.getElementById('applyBgBtn').style.display='none';document.getElementById('cancelBgBtn').style.display='none';}
+function applyPreset(type){const presets={warm:'linear-gradient(135deg,#FFF8E1,#FFE0B2,#FFCC80)',night:'linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)',pink:'linear-gradient(135deg,#FFE5EC,#FFC2D1,#FFB3C6)',ocean:'linear-gradient(135deg,#E0F7FA,#B2EBF2,#80DEEA)'};settings.backgroundImage=presets[type];settings.backgroundType='gradient';saveAll();addLog(`Градиент: ${type}`);showMsg('✅ Применён!','success');renderCurrentBg();}
+function removeBackground(){if(!confirm('Убрать фон?'))return;settings.backgroundImage=null;settings.backgroundType=null;saveAll();renderCurrentBg();addLog('Фон сброшен');showMsg('✅ Сброшен','success');}
+function renderCurrentBg(){const display=document.getElementById('currentBgDisplay');if(!settings.backgroundImage){display.innerHTML='<p style="color:#888;font-size:12px">Фон не установлен</p>';return;}if(settings.backgroundType==='image'){display.innerHTML=`<img src="${settings.backgroundImage}" class="current-bg-img"><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🖼 Изображение</p>`;}else{display.innerHTML=`<div style="height:100px;border-radius:10px;background:${settings.backgroundImage};margin-top:10px"></div><p style="font-size:12px;color:#5D4037;margin-top:8px;font-weight:700">🌈 Градиент</p>`;}}
+function loadCurrentColors(){document.getElementById('headerColor1').value=settings.headerColors?.color1||'#2D1B4E';document.getElementById('headerColor2').value=settings.headerColors?.color2||'#673AB7';updateHeaderPreview();}
+function updateHeaderPreview(){const c1=document.getElementById('headerColor1').value;const c2=document.getElementById('headerColor2').value;document.getElementById('headerPreview').style.background=`linear-gradient(135deg,${c1},${c2})`;}
+document.addEventListener('DOMContentLoaded',function(){const hc1=document.getElementById('headerColor1');const hc2=document.getElementById('headerColor2');if(hc1)hc1.addEventListener('input',updateHeaderPreview);if(hc2)hc2.addEventListener('input',updateHeaderPreview);});
+function saveHeaderColors(){settings.headerColors={color1:document.getElementById('headerColor1').value,color2:document.getElementById('headerColor2').value};saveAll();addLog('Цвет шапки изменён');showMsg('✅ Сохранено!','success');}
+function saveSiteContacts(){settings.siteContacts={email:document.getElementById('site_email').value.trim(),phone:document.getElementById('site_phone').value.trim(),address:document.getElementById('site_address').value.trim(),hours:document.getElementById('site_hours').value.trim()};saveAll();addLog('Контакты обновлены');showMsg('✅ Сохранено!','success');}
 
-function showSection(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  renderAll();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function doLogout(){localStorage.removeItem('currentUser');updateUserInfo();showSection('home');}
-function addToCart(productId){const m=materials.find(x=>x.id==productId);if(!m)return;if(m.free){alert('🎁 Бесплатные не в корзину');return;}const existing=cart.find(c=>c.productId==productId);if(existing)existing.qty++;else cart.push({productId,qty:1});saveAll();updateCartCount();alert(`«${m.name}» в корзине 🛒`);}
-function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
-function changeQty(productId,delta){const item=cart.find(c=>c.productId==productId);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
-function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0);}
-function getCartTotal(){return cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);if(!m)return s;const price=m.sale&&m.salePrice?m.salePrice:m.price;return s+price*c.qty;},0);}
-function openCart(){openModal('cartModal');renderCart();}
-function renderCart(){const items=document.getElementById('cartItems');const total=document.getElementById('cartTotal');const btn=document.getElementById('checkoutBtn');if(cart.length===0){items.innerHTML='<p style="text-align:center;padding:20px;">Корзина пуста</p>';total.innerHTML='';btn.style.display='none';return;}btn.style.display='inline-block';items.innerHTML=cart.map(c=>{const m=materials.find(x=>x.id==c.productId);if(!m)return '';const price=m.sale&&m.salePrice?m.salePrice:m.price;return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><img src="${m.img||''}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽ × ${c.qty}</p></div><div style="display:flex;gap:5px;align-items:center;"><button onclick="changeQty(${m.id},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${m.id},1)">+</button><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})"></button></div></div>`;}).join('');total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${getCartTotal()} ₽</div></div>`;}
-function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();}
-function toggleCompare(productId){const idx=compareList.indexOf(productId);if(idx>=0)compareList.splice(idx,1);else {if(compareList.length>=4){alert('Максимум 4 товара');return;}compareList.push(productId);}saveAll();renderAll();}
-function clearCompare(){compareList=[];saveAll();renderAll();}
-function renderCompare(){const g=document.getElementById('compareGrid');if(!g)return;if(compareList.length<2){g.innerHTML='<p style="text-align:center;padding:20px;">Добавьте 2+ товара для сравнения</p>';return;}const prods=compareList.map(id=>materials.find(x=>x.id==id)).filter(Boolean);let html='<table style="width:100%;border-collapse:collapse;"><tr><th style="padding:10px;border:1px solid var(--border);">Характеристика</th>';prods.forEach(p=>html+=`<th style="padding:10px;border:1px solid var(--border);">${p.name}</th>`);html+='</tr>';html+=`<tr><td style="padding:10px;border:1px solid var(--border);font-weight:700;">Цена</td>${prods.map(p=>`<td style="padding:10px;border:1px solid var(--border);">${p.price}₽</td>`).join('')}</tr>`;html+=`<tr><td style="padding:10px;border:1px solid var(--border);font-weight:700;">Описание</td>${prods.map(p=>`<td style="padding:10px;border:1px solid var(--border);font-size:12px;">${p.desc||'—'}</td>`).join('')}</tr></table>`;g.innerHTML=html;}
-function renderHistory(){const l=document.getElementById('historyList');if(!l)return;if(history.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">История пуста</p>';return;}l.innerHTML=history.map(id=>{const m=materials.find(x=>x.id==id);if(!m)return '';return `<div style="display:flex;gap:10px;padding:10px;background:var(--card);border-radius:10px;margin-bottom:8px;border:1px solid var(--border);"><img src="${m.img||''}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;cursor:pointer;" onclick="openMaterialModal(${m.id})"><div style="flex:1;"><h4 style="cursor:pointer;" onclick="openMaterialModal(${m.id})">${m.name}</h4><p style="font-size:12px;font-weight:700;">${m.price} ₽</p></div><button class="btn btn-small" onclick="addToCart(${m.id})">🛒</button></div>`;}).join('');}
-function renderAchievements(){const l=document.getElementById('achievementsList');if(!l)return;const allAchievements=[{id:'first_purchase',icon:'🛒',title:'Первая покупка',desc:'Совершите покупку',check:()=>orders.length>0},{id:'collector',icon:'❤️',title:'Коллекционер',desc:'5 в избранном',check:()=>favorites.length>=5},{id:'explorer',icon:'🔍',title:'Исследователь',desc:'10 просмотров',check:()=>history.length>=10}];l.innerHTML=allAchievements.map(a=>{const unlocked=achievements.includes(a.id)||a.check();if(a.check()&&!achievements.includes(a.id))achievements.push(a.id);return `<div style="background:linear-gradient(135deg,#FFD700,#FFA500);padding:16px;border-radius:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:#2D1B4E;opacity:${unlocked?1:0.4};filter:${unlocked?'none':'grayscale(1)'};"><div style="font-size:42px;">${a.icon}</div><div><h4 style="margin:0;font-weight:900;">${a.title}</h4><p style="margin:4px 0 0;">${a.desc}</p>${unlocked?'<p style="color:#2E7D32;font-weight:900;margin:4px 0 0;">✅ Получено!</p>':'<p style="margin:4px 0 0;">🔒 Заблокировано</p>'}</div></div>`;}).join('');saveAll();}
-function renderStats(){const s=document.getElementById('stats');if(!s)return;const totalMaterials = Object.values(folders).flat().reduce((sum, f) => sum + f.items.length, 0);s.innerHTML=`<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${totalMaterials}</div><div class="lbl">🛍 Материалов</div></div><div class="stat-box"><div class="num">${materials.filter(m=>m.free).length}</div><div class="lbl">🎁 Бесплатных</div></div><div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ Избранное</div></div>`;}
-function renderFavorites(){const g=document.getElementById('favoritesGrid');if(!g)return;const favMaterials=materials.filter(m=>favorites.includes(m.id));g.innerHTML=favMaterials.length?favMaterials.map(m=>renderMaterialCard(m)).join(''):'<p style="text-align:center;padding:20px;grid-column:1/-1;">Пусто</p>';}
-function renderOrders(){const l=document.getElementById('ordersList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра заказов. <a href="login.html" class="btn btn-purple">Войти</a></p>`;return;}const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);if(myOrders.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Нет заказов</p>';return;}const statusMap={new:{t:'Новый',c:'status-new'},paid:{t:'Оплачен',c:'status-paid'},sent:{t:'Отправлен',c:'status-sent'},done:{t:'Доставлен',c:'status-done'}};l.innerHTML=myOrders.map(o=>{const st=statusMap[o.status]||statusMap.new;return `<div class="order-card"><h4>Заказ #${o.id} <span class="order-status ${st.c}">${st.t}</span></h4><p style="font-size:11px;opacity:0.8;font-weight:700;"> ${o.date}</p><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;font-weight:700;">🚚 ${o.delivery} | 💳 ${o.payment}</p></div>`;}).join('');}
-function renderPayments(){const l=document.getElementById('paymentsList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';return;}const payments=DB.get('payments',[]).filter(p=>p.userId==current.id).reverse();if(payments.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Нет оплат</p>';return;}l.innerHTML=payments.map(p=>`<div class="payment-card"><h4>💳 Оплата #${p.id} <span class="order-status ${p.status==='Ожидает подтверждения'?'status-new':'status-paid'}">${p.status}</span></h4><p><b>${p.productName}</b></p><p>💰 Сумма: <b>${p.amount} ₽</b></p><p>📅 ${p.date}</p></div>`).join('');}
-function renderSuggestions(){const l=document.getElementById('suggestionsList');if(!l)return;if(suggestions.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Пока нет предложений</p>';return;}l.innerHTML=suggestions.slice().reverse().map(s=>`<div class="suggestion-item"><div style="font-weight:800;color:var(--primary);margin-bottom:6px;">👤 ${s.name} <span style="display:inline-block;background:linear-gradient(135deg,#FFD54F,#FFC107);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:800;margin-left:8px;">${s.type}</span></div><div style="font-size:11px;color:#888;margin-bottom:8px;">📅 ${s.date}</div><h4 style="margin:8px 0;color:var(--text);font-weight:800;">${s.title}</h4><div style="font-size:14px;line-height:1.5;font-weight:600;">${s.text}</div></div>`).join('');}
-function renderSiteContacts(){
-  const c = settings.siteContacts || {};
-  const display = document.getElementById('siteContactsDisplay');
-  if(!display) return;
-  display.innerHTML = `
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📧</div><div><div style="font-size:11px;color:#888;font-weight:600;">Email</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="mailto:${c.email||''}" style="color:var(--primary);text-decoration:none;">${c.email||'—'}</a></div></div></div>
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📱</div><div><div style="font-size:11px;color:#888;font-weight:600;">Телефон</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="tel:${c.phone||''}" style="color:var(--primary);text-decoration:none;">${c.phone||'—'}</a></div></div></div>
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">🕐</div><div><div style="font-size:11px;color:#888;font-weight:600;">Режим работы</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;">${c.hours||'—'}</div></div></div>
-  `;
-}
-
-function submitSuggestion(){const name=document.getElementById('s_name').value.trim();const email=document.getElementById('s_email').value.trim();const type=document.getElementById('s_type').value;const title=document.getElementById('s_title').value.trim();const text=document.getElementById('s_text').value.trim();if(!name||!email||!title||!text){alert('Заполните все поля 🦉');return;}suggestions.push({id:Date.now(),name,email,type,title,text,status:'Новое',date:new Date().toLocaleString('ru-RU')});saveAll();document.getElementById('s_name').value='';document.getElementById('s_email').value='';document.getElementById('s_title').value='';document.getElementById('s_text').value='';alert('✅ Отправлено! Спасибо! 🦉');renderSuggestions();}
-function sendContact(){const name=document.getElementById('c_name').value.trim();const email=document.getElementById('c_email').value.trim();const msg=document.getElementById('c_msg').value.trim();if(!name||!email||!msg)return alert('Заполните все поля');const contacts=DB.get('contacts',[]);contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});DB.set('contacts',contacts);document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';alert('Отправлено! 🦉');}
-function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
-function openModal(id){document.getElementById(id).classList.add('active');}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-
-function openSearch(){document.getElementById('searchOverlay').classList.add('active');setTimeout(()=>{const input=document.getElementById('searchInput');input.focus();input.value='';document.getElementById('searchResults').innerHTML='<p style="text-align:center;color:#888;">Начните вводить текст для поиска</p>';},100);}
-function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');}
-function performSearch(query){const resultsDiv=document.getElementById('searchResults');const q=query.toLowerCase().trim();if(q.length<2){resultsDiv.innerHTML='<p style="text-align:center;color:#888;">Введите минимум 2 символа</p>';return;}const results=[];materials.forEach(m=>{if(m.name.toLowerCase().includes(q)||(m.desc||'').toLowerCase().includes(q)){results.push({type:'Материал',icon:'📄',title:m.name,desc:m.desc||'',img:m.img||'',action:()=>{openMaterialModal(m.id);closeSearch();}});}});Object.keys(folders).forEach(sectionId=>{folders[sectionId].forEach(f=>{if(f.name.toLowerCase().includes(q)){results.push({type:'Папка',icon:f.icon,title:f.name,desc:`Раздел: ${sectionId}`,img:'',action:()=>{showSection(sectionId);enterFolder(sectionId,f.id);closeSearch();}});}});});if(results.length===0){resultsDiv.innerHTML='<p style="text-align:center;color:#888;">Ничего не найдено</p>';return;}resultsDiv.innerHTML=results.map((r,i)=>`<div class="search-result-item" onclick="(function(){${r.action}})()">${r.img?`<img src="${r.img}" alt="">`:''}<div style="flex:1;"><h4>${r.icon} ${r.title}</h4><p style="font-size:12px;color:#666;">${r.desc}</p><span class="search-result-type">${r.type}</span></div></div>`).join('');}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch();});
-document.getElementById('searchOverlay')?.addEventListener('click',function(e){if(e.target===this)closeSearch();});
-
-function openCheckout(){const current=DB.get('currentUser',null);if(!current){if(confirm('Войти для оформления?'))window.location.href='login.html';return;}if(cart.length===0){alert('Корзина пуста 🛒');return;}document.getElementById('co_name').value=current.name||'';document.getElementById('co_email').value=current.email||'';const sum=getCartTotal();closeModal('cartModal');openModal('checkoutModal');}
-function submitOrder(){const current=DB.get('currentUser',null);if(!current)return;const name=document.getElementById('co_name').value.trim();const email=document.getElementById('co_email').value.trim();const phone=document.getElementById('co_phone').value.trim();const city=document.getElementById('co_city').value.trim();const address=document.getElementById('co_address').value.trim();const delivery=document.getElementById('co_delivery').value;const payment=document.getElementById('co_payment').value;if(!name||!email||!phone||!city||!address){alert('Заполните все поля ');return;}let total=getCartTotal();const order={id:Date.now(),userId:current.id,userName:current.name,userEmail:current.email,items:cart.map(c=>({productId:c.productId,qty:c.qty})),total,name,email,phone,city,address,delivery,payment,status:'new',date:new Date().toLocaleString('ru-RU')};orders.push(order);cart=[];saveAll();updateCartCount();updateUserInfo();closeModal('checkoutModal');alert(`✅ Заказ #${order.id}!\nСумма: ${total} ₽`);showSection('orders');}
-
-function renderAll(){
-  renderSiteNav();
-  renderStats();
-  renderFavorites();
-  renderOrders();
-  renderPayments();
-  renderSuggestions();
-  renderSiteContacts();
-  updateUserInfo();
-  updateCartCount();
-  renderAchievements();
-  renderHistory();
-  renderCompare();
+function renderAdmin() {
+  document.getElementById('statOrders').textContent = orders.length;
+  const revenue = orders.reduce((s, o) => s + (o.total || 0), 0);
+  document.getElementById('statRevenue').textContent = revenue + '₽';
+  document.getElementById('statMaterials').textContent = materials.length;
+  const totalFolders = Object.values(folders).reduce((sum, arr) => sum + arr.length, 0);
+  document.getElementById('statFolders').textContent = totalFolders;
   
-  // Рендер папок и материалов для каждой вкладки
+  document.getElementById('site_email').value = settings.siteContacts.email || '';
+  document.getElementById('site_phone').value = settings.siteContacts.phone || '';
+  document.getElementById('site_address').value = settings.siteContacts.address || '';
+  document.getElementById('site_hours').value = settings.siteContacts.hours || '';
+  
+  const ordDiv = document.getElementById('adminOrders');
+  if(orders.length===0){ordDiv.innerHTML='<div class="empty-state">Нет заказов</div>';}
+  else{ordDiv.innerHTML=orders.map(o=>`<div class="item-row"><div class="item-info"><h4> Заказ #${o.id}</h4><p>👤 ${o.userName} | 💰 ${o.total}₽</p></div><div class="item-actions"><button class="btn btn-del" onclick="delOrder(${o.id})">🗑 Удалить</button></div></div>`).join('');}
+
+  const contDiv = document.getElementById('adminContacts');
+  if(contacts.length===0){contDiv.innerHTML='<div class="empty-state">Нет сообщений</div>';}
+  else{contDiv.innerHTML=contacts.map(c=>`<div class="item-row"><div class="item-info"><h4>✉️ ${c.name}</h4><p>${c.msg}</p></div><div class="item-actions"><button class="btn btn-del" onclick="delContact(${c.id})">🗑 Удалить</button></div></div>`).join('');}
+
+  const sugDiv = document.getElementById('adminSuggestionsList');
+  if(suggestions.length===0){sugDiv.innerHTML='<div class="empty-state">Нет предложений</div>';}
+  else{sugDiv.innerHTML=suggestions.map(s=>`<div class="item-row"><div class="item-info"><h4>💡 ${s.title}</h4><p>👤 ${s.name} | ${s.type}</p><p>${s.text}</p></div><div class="item-actions"><button class="btn btn-del" onclick="deleteSuggestion(${s.id})">🗑 Удалить</button></div></div>`).join('');}
+
   ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => {
-    renderFoldersAndMaterials(sectionId);
+    renderAdminFolders(sectionId);
   });
 }
 
-renderSiteNav();
-renderAll();
+function delOrder(id){if(!confirm('Удалить?'))return;orders=orders.filter(x=>x.id!=id);saveAll();addLog('Заказ удалён');renderAdmin();}
+function delContact(id){if(!confirm('Удалить?'))return;contacts=contacts.filter(x=>x.id!=id);saveAll();addLog('Сообщение удалено');renderAdmin();}
+function deleteSuggestion(id){if(!confirm('Удалить?'))return;suggestions=suggestions.filter(x=>x.id!=id);saveAll();addLog('Предложение удалено');renderAdmin();}
+
+async function adminChangePass(){const old=document.getElementById('setOldPass').value;const nw=document.getElementById('setNewPass').value;if(!isHashed(admin.password)){if(!admin.salt)admin.salt=generateSalt();admin.password=await hashPassword(admin.password,admin.salt);DB.set('admin',admin);}const oldHash=await hashPassword(old,admin.salt);if(oldHash!==admin.password)return showMsg('❌ Неверный текущий пароль','error');if(nw.length<8||!/[a-zA-Z]/.test(nw)||!/\d/.test(nw))return showMsg(' Мин. 8 символов, буквы+цифры','error');const salt=generateSalt();admin.password=await hashPassword(nw,salt);admin.salt=salt;saveAll();addLog('Пароль изменён');showMsg('✅ Пароль изменён!','success');document.getElementById('setOldPass').value='';document.getElementById('setNewPass').value='';}
+
+if(sessionStorage.getItem('isAdmin')=='1' && !admin.firstLogin){showAdminPanel();}
 </script>
 </body>
 </html>
