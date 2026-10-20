@@ -231,17 +231,11 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 
 <footer><p>🦉 © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a></p></footer>
 
-<!-- ======================================================================= -->
-<!-- FIREBASE SDK И НАСТРОЙКИ СИНХРОНИЗАЦИИ -->
-<!-- ======================================================================= -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-// =========================================================================
-// === ВАША КОНФИГУРАЦИЯ FIREBASE (Исправленная и очищенная от ошибок) ===
-// ⚠️ ЗАМЕНИТЕ 'xxxxxxxxxxxx' НА РЕАЛЬНЫЙ ID ВАШЕГО ПРОЕКТА, ЕСЛИ ЭТО НЕ ОН!
-// =========================================================================
+// ⚠️ ВСТАВЬТЕ СЮДА ТОТ ЖЕ САМЫЙ КОНФИГ, ЧТО И В ADMIN-LOGIN.HTML!
 const firebaseConfig = {
   apiKey: "AIzaSyCiGJ-_spDmi0-ZrIDPL9Vtp2sjG1DGB7w",
   authDomain: "xxxxxxxxxxxx-b92e0.firebaseapp.com",
@@ -252,75 +246,35 @@ const firebaseConfig = {
   appId: "1:829549443395:web:67122143906bc30bd157f6"
 };
 
-let firebaseApp, db;
+let db;
 let useFirebase = false;
-
 try {
-  firebaseApp = firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   db = firebase.database();
   useFirebase = true;
-  console.log('✅ Firebase успешно подключён!');
-} catch(e) {
-  console.error('❌ Ошибка подключения Firebase:', e);
-}
+} catch(e) { console.error("Ошибка Firebase:", e); }
 
-// === УМНОЕ ХРАНИЛИЩЕ (LocalStorage + Firebase) ===
 const DB = { 
-  get(k, def) { 
-    try { return JSON.parse(localStorage.getItem(k)) || def; } 
-    catch(e) { return def; } 
-  }, 
+  get(k, def) { try { return JSON.parse(localStorage.getItem(k)) || def; } catch(e) { return def; } }, 
   set(k, v) { 
     localStorage.setItem(k, JSON.stringify(v)); 
-    if (useFirebase) {
-      db.ref('siteData/' + k).set(v).catch(e => console.error('Ошибка синхронизации:', e));
-    }
+    if (useFirebase) db.ref('siteData/' + k).set(v).catch(e => console.error('Sync error:', e));
   } 
 };
 
-// === СЛУШАТЕЛИ ИЗМЕНЕНИЙ В РЕАЛЬНОМ ВРЕМЕНИ ===
 if (useFirebase) {
-  const keysToSync = ['folders', 'materials', 'orders', 'cart', 'favorites', 'compare', 'history', 'achievements', 'subscribers', 'suggestions', 'chatMessages', 'settings'];
-  keysToSync.forEach(key => {
-    db.ref('siteData/' + key).on('value', (snapshot) => {
-      const val = snapshot.val();
-      if (val !== null) {
-        localStorage.setItem(key, JSON.stringify(val));
-        // Обновляем глобальные переменные
-        if (key === 'folders') window.folders = val;
-        if (key === 'materials') window.materials = val;
-        if (key === 'orders') window.orders = val;
-        if (key === 'cart') window.cart = val;
-        if (key === 'favorites') window.favorites = val;
-        if (key === 'compare') window.compareList = val;
-        if (key === 'history') window.history = val;
-        if (key === 'achievements') window.achievements = val;
-        if (key === 'subscribers') window.subscribers = val;
-        if (key === 'suggestions') window.suggestions = val;
-        if (key === 'chatMessages') window.chatMessages = val;
-        if (key === 'settings') window.settings = val;
-        
-        // Перерисовываем интерфейс
-        if (typeof renderAll === 'function') renderAll();
-      }
-    });
+  db.ref('siteData').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      if(data.folders) { window.folders = data.folders; localStorage.setItem('folders', JSON.stringify(data.folders)); }
+      if(data.materials) { window.materials = data.materials; localStorage.setItem('materials', JSON.stringify(data.materials)); }
+      if(data.orders) { window.orders = data.orders; localStorage.setItem('orders', JSON.stringify(data.orders)); }
+      if(data.settings) { window.settings = data.settings; localStorage.setItem('settings', JSON.stringify(data.settings)); }
+      if (typeof renderAll === 'function') renderAll();
+    }
   });
-  console.log('🔄 Синхронизация в реальном времени активна!');
 }
 
-(function applySiteBackground(){
-  const settings = DB.get('settings', {});
-  const root = document.documentElement;
-  if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
-    else { root.style.setProperty('--site-bg-gradient', settings.backgroundImage); document.body.classList.add('custom-bg-gradient'); }
-  }
-  if(settings.headerColors){
-    root.style.setProperty('--header-bg', `linear-gradient(135deg,${settings.headerColors.color1||'#2D1B4E'},${settings.headerColors.color2||'#673AB7'})`);
-  }
-})();
-
-// === ДАННЫЕ ===
 let folders = DB.get('folders', {
   'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
   'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
@@ -329,7 +283,6 @@ let folders = DB.get('folders', {
   'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
   'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
 });
-
 let materials = DB.get('materials', []);
 let orders = DB.get('orders',[]);
 let cart = DB.get('cart',[]);
@@ -337,233 +290,70 @@ let favorites = DB.get('favorites',[]);
 let compareList = DB.get('compare',[]);
 let history = DB.get('history',[]);
 let achievements = DB.get('achievements',[]);
-let subscribers = DB.get('subscribers',[]);
 let suggestions = DB.get('suggestions',[]);
-let chatMessages = DB.get('chatMessages',[]);
-let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
+let settings = DB.get('settings',{siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
 let currentFolder = {};
-let currentProductFilter='all', currentSort='default', currentSearch='';
 
 function saveAll(){
-  DB.set('folders',folders);
-  DB.set('materials',materials);
-  DB.set('orders',orders);
-  DB.set('cart',cart);
-  DB.set('favorites',favorites);
-  DB.set('compare',compareList);
-  DB.set('history',history);
-  DB.set('achievements',achievements);
-  DB.set('subscribers',subscribers);
-  DB.set('suggestions',suggestions);
-  DB.set('chatMessages',chatMessages);
-  DB.set('settings',settings);
-}
-
-// === МЕНЮ ===
-const siteTabs = [
-  { "id": "home", "icon": "🏠", "label": "Главная", "action": "showSection('home')" },
-  { "id": "catalogs", "icon": "📚", "label": "Весь каталог", "action": "showSection('catalogs')" },
-  { "id": "worksheets", "icon": "📝", "label": "Рабочие листы", "action": "showSection('worksheets')" },
-  { "id": "themes", "icon": "🎨", "label": "Темы", "action": "showSection('themes')" },
-  { "id": "letter-games", "icon": "🔤", "label": "Игры с буквами", "action": "showSection('letter-games')" },
-  { "id": "speech-games", "icon": "🗣️", "label": "Логопедические игры", "action": "showSection('speech-games')" },
-  { "id": "free", "icon": "🎁", "label": "Бесплатно", "action": "showSection('free')" },
-  { "id": "quiz", "icon": "🎯", "label": "Квиз", "action": "showSection('quiz')" },
-  { "id": "favorites", "icon": "❤️", "label": "Избранное", "action": "showSection('favorites')" },
-  { "id": "compare", "icon": "⚖️", "label": "Сравнение", "action": "showSection('compare')", "hasCount": true },
-  { "id": "history", "icon": "👁", "label": "История", "action": "showSection('history')" },
-  { "id": "achievements", "icon": "🏆", "label": "Достижения", "action": "showSection('achievements')" },
-  { "id": "contacts", "icon": "📞", "label": "Контакты", "action": "showSection('contacts')" },
-  { "id": "orders", "icon": "📦", "label": "Заказы", "action": "showSection('orders')" },
-  { "id": "suggestions", "icon": "💡", "label": "Предложения", "action": "showSection('suggestions')" },
-  { "id": "payments", "icon": "💳", "label": "Оплаты", "action": "showSection('payments')" }
-];
-
-function renderSiteNav(){
-  const nav = document.getElementById('siteNav');
-  if(!nav) return;
-  let html = '';
-  siteTabs.forEach(tab => {
-    let label = `${tab.icon} ${tab.label}`;
-    if(tab.hasCount) label += ` <span id="compareCount">0</span>`;
-    html += `<button onclick="${tab.action}">${label}</button>`;
-  });
-  html += `<button class="search-btn-header" onclick="openSearch()">🔍 Поиск</button>`;
-  html += `<button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>`;
-  html += `<button class="theme-btn" onclick="toggleTheme()">🌙</button>`;
-  html += `<a href="admin-login.html" class="admin-link">🔐 Админ</a>`;
-  nav.innerHTML = html;
-}
-
-// === РЕНДЕР ПАПОК И МАТЕРИАЛОВ ===
-function renderFoldersAndMaterials(sectionId) {
-  const foldersDiv = document.getElementById(`folders-${sectionId}`);
-  const materialsDiv = document.getElementById(`materials-${sectionId}`);
-  const breadcrumbsDiv = document.getElementById(`breadcrumbs-${sectionId}`);
-  if(!foldersDiv || !materialsDiv) return;
-  
-  const currentFolderId = currentFolder[sectionId];
-  const folderList = folders[sectionId] || [];
-  
-  if(breadcrumbsDiv) {
-    if(currentFolderId) {
-      const folder = folderList.find(f => f.id == currentFolderId);
-      breadcrumbsDiv.innerHTML = `<a onclick="exitFolder('${sectionId}')">🏠 Все папки</a> <span class="separator">›</span> <span>${folder ? folder.icon + ' ' + folder.name : 'Папка'}</span>`;
-    } else {
-      breadcrumbsDiv.innerHTML = `<span>📁 Выберите папку</span>`;
-    }
-  }
-  
-  if(currentFolderId) {
-    foldersDiv.style.display = 'none';
-    const folder = folderList.find(f => f.id == currentFolderId);
-    const folderMaterials = folder ? folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean) : [];
-    materialsDiv.innerHTML = folderMaterials.length ? folderMaterials.map(m => renderMaterialCard(m)).join('') : '<p style="text-align:center;padding:20px;grid-column:1/-1;">В этой папке пока нет материалов</p>';
-  } else {
-    foldersDiv.style.display = 'grid';
-    materialsDiv.innerHTML = '';
-    if(folderList.length === 0) {
-      foldersDiv.innerHTML = '<p style="text-align:center;padding:20px;grid-column:1/-1;">Нет папок. Администратор может добавить их в админ-панели.</p>';
-    } else {
-      foldersDiv.innerHTML = folderList.map(f => {
-        const count = f.items.length;
-        return `<div class="folder-card" onclick="enterFolder('${sectionId}', ${f.id})">
-          <span class="folder-icon">${f.icon}</span>
-          <div class="folder-name">${f.name}</div>
-          <div class="folder-count">${count} материал${count === 1 ? '' : count < 5 ? 'а' : 'ов'}</div>
-        </div>`;
-      }).join('');
-    }
-  }
-}
-
-function enterFolder(sectionId, folderId) {
-  currentFolder[sectionId] = folderId;
-  renderFoldersAndMaterials(sectionId);
-}
-
-function exitFolder(sectionId) {
-  currentFolder[sectionId] = null;
-  renderFoldersAndMaterials(sectionId);
+  DB.set('folders',folders); DB.set('materials',materials); DB.set('orders',orders);
+  DB.set('cart',cart); DB.set('favorites',favorites); DB.set('compare',compareList);
+  DB.set('history',history); DB.set('achievements',achievements);
+  DB.set('suggestions',suggestions); DB.set('settings',settings);
 }
 
 function renderMaterialCard(m) {
   const isFav = favorites.includes(m.id);
-  const isCompare = compareList.includes(m.id);
   const badge = m.free ? '<span class="badge-free">🎁 Бесплатно</span>' : '<span class="badge-paid">💰 Платно</span>';
   const hotBadge = m.sale ? '<span class="badge-hot">🔥 Скидка</span>' : '';
-  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
+  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${p.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
+  let typeIcon = m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️');
   
-  let typeIcon = '📄';
-  if (m.type === 'image') typeIcon = '🖼️';
-  else if (m.type === 'video') typeIcon = '🎬';
-
-  return `<div class="material-card">${badge}${hotBadge}<img src="${m.img||''}" alt="" onclick="openMaterialModal(${m.id})"><h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${typeIcon} ${m.name}</h3><p>${m.desc||''}</p>${priceHtml}<p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p><div class="card-actions">${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}<button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button><button class="btn btn-small" style="background:${isCompare?'#E53935':'var(--card)'};color:${isCompare?'#fff':'var(--text)'};border:1px solid var(--border)" onclick="toggleCompare(${m.id})">⚖️</button></div></div>`;
+  return `<div class="material-card">${badge}${hotBadge}<img src="${m.img||''}" alt="" onclick="openMaterialModal(${m.id})"><h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${typeIcon} ${m.name}</h3><p>${m.desc||''}</p>${priceHtml}<p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p><div class="card-actions">${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}<button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button></div></div>`;
 }
 
 function openMaterialModal(id) {
-  const m = materials.find(x => x.id == id);
-  if(!m) return;
-  history = history.filter(hid => hid != id);
-  history.unshift(id);
+  const m = materials.find(x => x.id == id); if(!m) return;
+  history = history.filter(hid => hid != id); history.unshift(id);
   if(history.length > 20) history = history.slice(0, 20);
   saveAll();
-  
   const price = m.sale && m.salePrice ? m.salePrice : m.price;
-  let typeIcon = m.type === 'video' ? '🎬' : (m.type === 'file' ? '📥' : '🖼️');
-  
-  document.getElementById('productModalContent').innerHTML = `<h2>${typeIcon} ${m.name}</h2><img src="${m.img||''}" style="width:100%;border-radius:14px;margin-bottom:14px;"><p>${m.desc||''}</p><p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}<div class="modal-actions"><button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>${!m.free&&m.stock>0?`<button class="btn btn-purple" onclick="addToCart(${m.id});closeModal('productModal')">🛒 В корзину</button>`:''}</div>`;
+  document.getElementById('productModalContent').innerHTML = `<h2>${m.name}</h2><img src="${m.img||''}" style="width:100%;border-radius:14px;margin-bottom:14px;"><p>${m.desc||''}</p><p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}<div class="modal-actions"><button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>${!p.free&&m.stock>0?`<button class="btn btn-purple" onclick="addToCart(${m.id});closeModal('productModal')">🛒 В корзину</button>`:''}</div>`;
   openModal('productModal');
 }
 
-function updateUserInfo(){
-  const current = DB.get('currentUser', null);
-  const el = document.getElementById('userInfo');
-  const loginPrompt = document.getElementById('loginPrompt');
-  const welcomeUser = document.getElementById('welcomeUser');
-  if(current){
-    el.innerHTML = `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'none';
-    if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>! Баллов: <b>${current.points||0}</b> 🎁`; }
-  } else {
-    el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'block';
-    if(welcomeUser) welcomeUser.classList.remove('active');
-  }
-}
-
-function showSection(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  renderAll();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function doLogout(){localStorage.removeItem('currentUser');updateUserInfo();showSection('home');}
-function addToCart(productId){const m=materials.find(x=>x.id==productId);if(!m)return;if(m.free){alert('🎁 Бесплатные не в корзину');return;}const existing=cart.find(c=>c.productId==productId);if(existing)existing.qty++;else cart.push({productId,qty:1});saveAll();updateCartCount();alert(`«${m.name}» в корзине 🛒`);}
-function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
-function changeQty(productId,delta){const item=cart.find(c=>c.productId==productId);if(!item)return;item.qty+=delta;if(item.qty<=0)cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();renderCart();}
-function updateCartCount(){document.getElementById('cartCount').textContent=cart.reduce((s,c)=>s+c.qty,0);}
-function getCartTotal(){return cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);if(!m)return s;const price=m.sale&&m.salePrice?m.salePrice:m.price;return s+price*c.qty;},0);}
-function openCart(){openModal('cartModal');renderCart();}
-function renderCart(){const items=document.getElementById('cartItems');const total=document.getElementById('cartTotal');const btn=document.getElementById('checkoutBtn');if(cart.length===0){items.innerHTML='<p style="text-align:center;padding:20px;">Корзина пуста</p>';total.innerHTML='';btn.style.display='none';return;}btn.style.display='inline-block';items.innerHTML=cart.map(c=>{const m=materials.find(x=>x.id==c.productId);if(!m)return '';const price=m.sale&&m.salePrice?m.salePrice:m.price;return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><img src="${m.img||''}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽ × ${c.qty}</p></div><div style="display:flex;gap:5px;align-items:center;"><button onclick="changeQty(${m.id},-1)">−</button><span>${c.qty}</span><button onclick="changeQty(${m.id},1)">+</button><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})">🗑</button></div></div>`;}).join('');total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${getCartTotal()} ₽</div></div>`;}
-function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();}
-function toggleCompare(productId){const idx=compareList.indexOf(productId);if(idx>=0)compareList.splice(idx,1);else {if(compareList.length>=4){alert('Максимум 4 товара');return;}compareList.push(productId);}saveAll();renderAll();}
-function clearCompare(){compareList=[];saveAll();renderAll();}
-function renderCompare(){const g=document.getElementById('compareGrid');if(!g)return;if(compareList.length<2){g.innerHTML='<p style="text-align:center;padding:20px;">Добавьте 2+ товара для сравнения</p>';return;}const prods=compareList.map(id=>materials.find(x=>x.id==id)).filter(Boolean);let html='<table style="width:100%;border-collapse:collapse;"><tr><th style="padding:10px;border:1px solid var(--border);">Характеристика</th>';prods.forEach(p=>html+=`<th style="padding:10px;border:1px solid var(--border);">${p.name}</th>`);html+='</tr>';html+=`<tr><td style="padding:10px;border:1px solid var(--border);font-weight:700;">Цена</td>${prods.map(p=>`<td style="padding:10px;border:1px solid var(--border);">${p.price}₽</td>`).join('')}</tr>`;html+=`<tr><td style="padding:10px;border:1px solid var(--border);font-weight:700;">Описание</td>${prods.map(p=>`<td style="padding:10px;border:1px solid var(--border);font-size:12px;">${p.desc||'—'}</td>`).join('')}</tr></table>`;g.innerHTML=html;}
-function renderHistory(){const l=document.getElementById('historyList');if(!l)return;if(history.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">История пуста</p>';return;}l.innerHTML=history.map(id=>{const m=materials.find(x=>x.id==id);if(!m)return '';return `<div style="display:flex;gap:10px;padding:10px;background:var(--card);border-radius:10px;margin-bottom:8px;border:1px solid var(--border);"><img src="${m.img||''}" style="width:50px;height:50px;object-fit:cover;border-radius:8px;cursor:pointer;" onclick="openMaterialModal(${m.id})"><div style="flex:1;"><h4 style="cursor:pointer;" onclick="openMaterialModal(${m.id})">${m.name}</h4><p style="font-size:12px;font-weight:700;">${m.price} ₽</p></div><button class="btn btn-small" onclick="addToCart(${m.id})">🛒</button></div>`;}).join('');}
-function renderAchievements(){const l=document.getElementById('achievementsList');if(!l)return;const allAchievements=[{id:'first_purchase',icon:'🛒',title:'Первая покупка',desc:'Совершите покупку',check:()=>orders.length>0},{id:'collector',icon:'❤️',title:'Коллекционер',desc:'5 в избранном',check:()=>favorites.length>=5},{id:'explorer',icon:'🔍',title:'Исследователь',desc:'10 просмотров',check:()=>history.length>=10}];l.innerHTML=allAchievements.map(a=>{const unlocked=achievements.includes(a.id)||a.check();if(a.check()&&!achievements.includes(a.id))achievements.push(a.id);return `<div style="background:linear-gradient(135deg,#FFD700,#FFA500);padding:16px;border-radius:16px;margin-bottom:12px;display:flex;align-items:center;gap:14px;color:#2D1B4E;opacity:${unlocked?1:0.4};filter:${unlocked?'none':'grayscale(1)'};"><div style="font-size:42px;">${a.icon}</div><div><h4 style="margin:0;font-weight:900;">${a.title}</h4><p style="margin:4px 0 0;">${a.desc}</p>${unlocked?'<p style="color:#2E7D32;font-weight:900;margin:4px 0 0;">✅ Получено!</p>':'<p style="margin:4px 0 0;">🔒 Заблокировано</p>'}</div></div>`;}).join('');saveAll();}
-function renderStats(){const s=document.getElementById('stats');if(!s)return;const totalMaterials = Object.values(folders).flat().reduce((sum, f) => sum + f.items.length, 0);s.innerHTML=`<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${totalMaterials}</div><div class="lbl">🛍 Материалов</div></div><div class="stat-box"><div class="num">${materials.filter(m=>m.free).length}</div><div class="lbl">🎁 Бесплатных</div></div><div class="stat-box"><div class="num">${favorites.length}</div><div class="lbl">❤️ Избранное</div></div>`;}
-function renderFavorites(){const g=document.getElementById('favoritesGrid');if(!g)return;const favMaterials=materials.filter(m=>favorites.includes(m.id));g.innerHTML=favMaterials.length?favMaterials.map(m=>renderMaterialCard(m)).join(''):'<p style="text-align:center;padding:20px;grid-column:1/-1;">Пусто</p>';}
-function renderOrders(){const l=document.getElementById('ordersList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра заказов. <a href="login.html" class="btn btn-purple">Войти</a></p>`;return;}const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);if(myOrders.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Нет заказов</p>';return;}const statusMap={new:{t:'Новый',c:'status-new'},paid:{t:'Оплачен',c:'status-paid'},sent:{t:'Отправлен',c:'status-sent'},done:{t:'Доставлен',c:'status-done'}};l.innerHTML=myOrders.map(o=>{const st=statusMap[o.status]||statusMap.new;return `<div class="order-card"><h4>Заказ #${o.id} <span class="order-status ${st.c}">${st.t}</span></h4><p style="font-size:11px;opacity:0.8;font-weight:700;">📅 ${o.date}</p><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;font-weight:700;">🚚 ${o.delivery} | 💳 ${o.payment}</p></div>`;}).join('');}
-function renderPayments(){const l=document.getElementById('paymentsList');if(!l)return;const current=DB.get('currentUser',null);if(!current){l.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';return;}const payments=DB.get('payments',[]).filter(p=>p.userId==current.id).reverse();if(payments.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Нет оплат</p>';return;}l.innerHTML=payments.map(p=>`<div class="payment-card"><h4>💳 Оплата #${p.id} <span class="order-status ${p.status==='Ожидает подтверждения'?'status-new':'status-paid'}">${p.status}</span></h4><p><b>${p.productName}</b></p><p>💰 Сумма: <b>${p.amount} ₽</b></p><p>📅 ${p.date}</p></div>`).join('');}
-function renderSuggestions(){const l=document.getElementById('suggestionsList');if(!l)return;if(suggestions.length===0){l.innerHTML='<p style="text-align:center;padding:20px;">Пока нет предложений</p>';return;}l.innerHTML=suggestions.slice().reverse().map(s=>`<div class="suggestion-item"><div style="font-weight:800;color:var(--primary);margin-bottom:6px;">👤 ${s.name} <span style="display:inline-block;background:linear-gradient(135deg,#FFD54F,#FFC107);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:800;margin-left:8px;">${s.type}</span></div><div style="font-size:11px;color:#888;margin-bottom:8px;">📅 ${s.date}</div><h4 style="margin:8px 0;color:var(--text);font-weight:800;">${s.title}</h4><div style="font-size:14px;line-height:1.5;font-weight:600;">${s.text}</div></div>`).join('');}
-function renderSiteContacts(){
-  const c = settings.siteContacts || {};
-  const display = document.getElementById('siteContactsDisplay');
-  if(!display) return;
-  display.innerHTML = `
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📧</div><div><div style="font-size:11px;color:#888;font-weight:600;">Email</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="mailto:${c.email||''}" style="color:var(--primary);text-decoration:none;">${c.email||'—'}</a></div></div></div>
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📱</div><div><div style="font-size:11px;color:#888;font-weight:600;">Телефон</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="tel:${c.phone||''}" style="color:var(--primary);text-decoration:none;">${c.phone||'—'}</a></div></div></div>
-    <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">🕐</div><div><div style="font-size:11px;color:#888;font-weight:600;">Режим работы</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;">${c.hours||'—'}</div></div></div>
-  `;
-}
-
-function submitSuggestion(){const name=document.getElementById('s_name').value.trim();const email=document.getElementById('s_email').value.trim();const type=document.getElementById('s_type').value;const title=document.getElementById('s_title').value.trim();const text=document.getElementById('s_text').value.trim();if(!name||!email||!title||!text){alert('Заполните все поля 🦉');return;}suggestions.push({id:Date.now(),name,email,type,title,text,status:'Новое',date:new Date().toLocaleString('ru-RU')});saveAll();document.getElementById('s_name').value='';document.getElementById('s_email').value='';document.getElementById('s_title').value='';document.getElementById('s_text').value='';alert('✅ Отправлено! Спасибо! 🦉');renderSuggestions();}
-function sendContact(){const name=document.getElementById('c_name').value.trim();const email=document.getElementById('c_email').value.trim();const msg=document.getElementById('c_msg').value.trim();if(!name||!email||!msg)return alert('Заполните все поля');const contacts=DB.get('contacts',[]);contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});DB.set('contacts',contacts);document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';alert('Отправлено! 🦉');}
-function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
+function showSection(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }
 function openModal(id){document.getElementById(id).classList.add('active');}
-function closeModal(id){document.getElementById(id).classList.remove('active');}
-
-function openSearch(){document.getElementById('searchOverlay').classList.add('active');setTimeout(()=>{const input=document.getElementById('searchInput');input.focus();input.value='';document.getElementById('searchResults').innerHTML='<p style="text-align:center;color:#888;">Начните вводить текст для поиска</p>';},100);}
-function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');}
-function performSearch(query){const resultsDiv=document.getElementById('searchResults');const q=query.toLowerCase().trim();if(q.length<2){resultsDiv.innerHTML='<p style="text-align:center;color:#888;">Введите минимум 2 символа</p>';return;}const results=[];materials.forEach(m=>{if(m.name.toLowerCase().includes(q)||(m.desc||'').toLowerCase().includes(q)){results.push({type:'Материал',icon:'📄',title:m.name,desc:m.desc||'',img:m.img||'',action:()=>{openMaterialModal(m.id);closeSearch();}});}});Object.keys(folders).forEach(sectionId=>{folders[sectionId].forEach(f=>{if(f.name.toLowerCase().includes(q)){results.push({type:'Папка',icon:f.icon,title:f.name,desc:`Раздел: ${sectionId}`,img:'',action:()=>{showSection(sectionId);enterFolder(sectionId,f.id);closeSearch();}});}});});if(results.length===0){resultsDiv.innerHTML='<p style="text-align:center;color:#888;">Ничего не найдено</p>';return;}resultsDiv.innerHTML=results.map((r,i)=>`<div class="search-result-item" onclick="(function(){${r.action}})()">${r.img?`<img src="${r.img}" alt="">`:''}<div style="flex:1;"><h4>${r.icon} ${r.title}</h4><p style="font-size:12px;color:#666;">${r.desc}</p><span class="search-result-type">${r.type}</span></div></div>`).join('');}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeSearch();});
-document.getElementById('searchOverlay')?.addEventListener('click',function(e){if(e.target===this)closeSearch();});
-
-function openCheckout(){const current=DB.get('currentUser',null);if(!current){if(confirm('Войти для оформления?'))window.location.href='login.html';return;}if(cart.length===0){alert('Корзина пуста 🛒');return;}document.getElementById('co_name').value=current.name||'';document.getElementById('co_email').value=current.email||'';const sum=getCartTotal();closeModal('cartModal');openModal('checkoutModal');}
-function submitOrder(){const current=DB.get('currentUser',null);if(!current)return;const name=document.getElementById('co_name').value.trim();const email=document.getElementById('co_email').value.trim();const phone=document.getElementById('co_phone').value.trim();const city=document.getElementById('co_city').value.trim();const address=document.getElementById('co_address').value.trim();const delivery=document.getElementById('co_delivery').value;const payment=document.getElementById('co_payment').value;if(!name||!email||!phone||!city||!address){alert('Заполните все поля 🦉');return;}let total=getCartTotal();const order={id:Date.now(),userId:current.id,userName:current.name,userEmail:current.email,items:cart.map(c=>({productId:c.productId,qty:c.qty})),total,name,email,phone,city,address,delivery,payment,status:'new',date:new Date().toLocaleString('ru-RU')};orders.push(order);cart=[];saveAll();updateCartCount();updateUserInfo();closeModal('checkoutModal');alert(`✅ Заказ #${order.id}!\nСумма: ${total} ₽`);showSection('orders');}
+function closeModal(id){document.getElementById('formModal').classList.remove('active');document.getElementById('cartModal').classList.remove('active');document.getElementById('checkoutModal').classList.remove('active');document.getElementById('productModal').classList.remove('active');}
+function addToCart(productId){const m=materials.find(x=>x.id==productId);if(!m)return;cart.push({productId,qty:1});saveAll();updateCartCount();alert(`«${m.name}» в корзине 🛒`);}
+function updateCartCount(){document.getElementById('cartCount').textContent=cart.length;}
+function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();}
 
 function renderAll(){
-  renderSiteNav();
-  renderStats();
-  renderFavorites();
-  renderOrders();
-  renderPayments();
-  renderSuggestions();
-  renderSiteContacts();
-  updateUserInfo();
-  updateCartCount();
-  renderAchievements();
-  renderHistory();
-  renderCompare();
+  document.getElementById('stats').innerHTML = `<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${materials.length}</div><div class="lbl">🛍 Материалов</div></div>`;
+  
   ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => {
-    renderFoldersAndMaterials(sectionId);
+    const fDiv = document.getElementById(`folders-${sectionId}`);
+    const mDiv = document.getElementById(`materials-${sectionId}`);
+    if(!fDiv || !mDiv) return;
+    const folderList = folders[sectionId] || [];
+    const currentFolderId = window.currentFolder ? window.currentFolder[sectionId] : null;
+    
+    if(currentFolderId) {
+      fDiv.style.display = 'none';
+      const folder = folderList.find(f => f.id == currentFolderId);
+      const folderMaterials = folder ? folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean) : [];
+      mDiv.innerHTML = folderMaterials.length ? folderMaterials.map(m => renderMaterialCard(m)).join('') : '<p style="text-align:center;padding:20px;">В этой папке пока нет материалов</p>';
+    } else {
+      fDiv.style.display = 'grid';
+      mDiv.innerHTML = '';
+      fDiv.innerHTML = folderList.map(f => `<div class="folder-card" onclick="window.currentFolder=window.currentFolder||{};window.currentFolder['${sectionId}']=${f.id};renderAll();"><span class="folder-icon">${f.icon}</span><div class="folder-name">${f.name}</div><div class="folder-count">${f.items.length} материалов</div></div>`).join('');
+    }
   });
 }
 
-renderSiteNav();
+// Простая инициализация при загрузке
+window.currentFolder = {};
 renderAll();
 </script>
 </body>
