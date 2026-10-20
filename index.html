@@ -170,41 +170,72 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
 
 <footer><p>🦉 © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a></p></footer>
 
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 <script>
-const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
+// ✅ ВАШ КОНФИГ FIREBASE
+const firebaseConfig = {
+  apiKey: "AIzaSyD-1dVfsJWpRpH3Id3XG9d02mGTBcGghak",
+  authDomain: "igriviy-sovenok-69b44.firebaseapp.com",
+  databaseURL: "https://igriviy-sovenok-69b44-default-rtdb.firebaseio.com",
+  projectId: "igriviy-sovenok-69b44",
+  storageBucket: "igriviy-sovenok-69b44.firebasestorage.app",
+  messagingSenderId: "972199222537",
+  appId: "1:972199222537:web:e389c149428d111f7987d8"
+};
 
-(function applySiteBackground(){
-  const settings = DB.get('settings', {});
-  const root = document.documentElement;
-  if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
-    else { root.style.setProperty('--site-bg-gradient', settings.backgroundImage); document.body.classList.add('custom-bg-gradient'); }
-  }
-  if(settings.headerColors){
-    root.style.setProperty('--header-bg', `linear-gradient(135deg,${settings.headerColors.color1||'#2D1B4E'},${settings.headerColors.color2||'#673AB7'})`);
-  }
-})();
+let db;
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch(e) { console.error("Ошибка Firebase:", e); }
 
-let folders = DB.get('folders', {
-  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
-  'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
-  'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
-  'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
-  'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
-});
-
-let materials = DB.get('materials', []);
-let orders = DB.get('orders',[]);
-let cart = DB.get('cart',[]);
-let favorites = DB.get('favorites',[]);
-let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
-
+let folders = {};
+let materials = [];
+let orders = [];
+let cart = [];
+let favorites = [];
+let settings = {};
+let purchased = [];
 let currentFolder = {};
 
-function saveAll(){
-  DB.set('folders',folders); DB.set('materials',materials); DB.set('orders',orders);
-  DB.set('cart',cart); DB.set('favorites',favorites); DB.set('settings',settings);
+function saveLocal() {
+  const data = { folders, materials, orders, cart, favorites, settings, purchased };
+  localStorage.setItem('siteData', JSON.stringify(data));
+}
+
+// 🔥 АВТОМАТИЧЕСКАЯ СИНХРОНИЗАЦИЯ: слушаем изменения из облака
+if (db) {
+  db.ref('siteData').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      folders = data.folders || {};
+      materials = data.materials || [];
+      orders = data.orders || [];
+      settings = data.settings || {};
+      purchased = data.purchased || [];
+      saveLocal();
+      renderAll();
+    }
+  });
+} else {
+  const saved = localStorage.getItem('siteData');
+  if(saved) {
+    const data = JSON.parse(saved);
+    folders = data.folders || {}; materials = data.materials || [];
+    orders = data.orders || []; cart = data.cart || [];
+    favorites = data.favorites || []; settings = data.settings || {};
+    purchased = data.purchased || [];
+  }
+}
+
+function saveAll() {
+  saveLocal();
+  if (db) {
+    db.ref('siteData').update({ folders, materials, orders, settings, purchased });
+  }
 }
 
 const siteTabs = [
@@ -284,8 +315,8 @@ function renderMaterialCard(m) {
   const hotBadge = m.sale ? '<span class="badge-hot">🔥 Скидка</span>' : '';
   const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
   
-  const purchased = DB.get('purchased', []).includes(m.id);
-  const canDownload = m.free || purchased;
+  const isPurchased = purchased.includes(m.id);
+  const canDownload = m.free || isPurchased;
   
   let downloadBtn = '';
   if (m.type === 'file' || m.type === 'video') {
@@ -315,8 +346,8 @@ function renderMaterialCard(m) {
 function openMaterialModal(id) {
   const m = materials.find(x => x.id == id); if(!m) return;
   const price = m.sale && m.salePrice ? m.salePrice : m.price;
-  const purchased = DB.get('purchased', []).includes(m.id);
-  const canDownload = m.free || purchased;
+  const isPurchased = purchased.includes(m.id);
+  const canDownload = m.free || isPurchased;
   
   let downloadHtml = '';
   if ((m.type === 'file' || m.type === 'video') && canDownload) {
@@ -343,11 +374,11 @@ function openMaterialModal(id) {
 }
 
 function showSection(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }
-function openModal(id){document.getElementById('formModal').classList.add('active');document.getElementById('productModal').classList.add('active');}
-function closeModal(id){document.getElementById('formModal').classList.remove('active');document.getElementById('productModal').classList.remove('active');document.getElementById('cartModal').classList.remove('active');}
+function openModal(id){document.getElementById('productModal').classList.add('active');document.getElementById('cartModal').classList.add('active');}
+function closeModal(id){document.getElementById('productModal').classList.remove('active');document.getElementById('cartModal').classList.remove('active');}
 
 function updateUserInfo(){
-  const current = DB.get('currentUser', null);
+  const current = JSON.parse(localStorage.getItem('currentUser') || 'null');
   const el = document.getElementById('userInfo');
   const loginPrompt = document.getElementById('loginPrompt');
   const welcomeUser = document.getElementById('welcomeUser');
@@ -382,9 +413,32 @@ function openCart(){
     return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽</p></div><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})">🗑</button></div>`;
   }).join('');
   const sum = cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);return s+(m.sale&&m.salePrice?m.salePrice:m.price);},0);
-  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div></div>`;
+  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div><button class="btn btn-purple" style="margin-top:10px;" onclick="simulatePayment(${sum})">💳 Оплатить и скачать</button></div>`;
 }
 function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();openCart();}
+
+function simulatePayment(sum) {
+  if(!confirm(`Подтвердить оплату на сумму ${sum} ₽? (Это демо-режим)`)) return;
+  const current = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const newOrder = {
+    id: Date.now(),
+    userId: current ? current.name : 'Гость',
+    total: sum,
+    date: new Date().toLocaleString('ru-RU')
+  };
+  orders.push(newOrder);
+  
+  cart.forEach(c => {
+    if(!purchased.includes(c.productId)) purchased.push(c.productId);
+  });
+  
+  cart = [];
+  saveAll();
+  updateCartCount();
+  closeModal('cartModal');
+  alert('✅ Оплата прошла успешно! Теперь файлы доступны в разделе "Мои оплаты".');
+  showSection('payments');
+}
 
 function renderAll(){
   renderSiteNav();
@@ -395,23 +449,19 @@ function renderAll(){
   if(favDiv) favDiv.innerHTML=favorites.length?favorites.map(id=>{const m=materials.find(x=>x.id==id);return m?renderMaterialCard(m):'';}).join(''):'<p style="text-align:center;padding:20px;grid-column:1/-1;">Пусто</p>';
 
   const ordDiv=document.getElementById('ordersList');
-  const current=DB.get('currentUser',null);
+  const current = JSON.parse(localStorage.getItem('currentUser') || 'null');
   if(ordDiv){
     if(!current){ordDiv.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра. <a href="login.html" class="btn btn-purple">Войти</a></p>`;}
     else{
-      const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);
+      const myOrders=orders.filter(o=>o.userId==current.name).sort((a,b)=>b.id-a.id);
       ordDiv.innerHTML=myOrders.length?myOrders.map(o=>`<div class="order-card"><h4>Заказ #${o.id} <span class="order-status status-paid">Оплачен</span></h4><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;">📅 ${o.date}</p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет заказов</p>';
     }
   }
 
   const payDiv=document.getElementById('paymentsList');
   if(payDiv){
-    if(!current){payDiv.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';}
-    else{
-      const purchased = DB.get('purchased', []);
-      const myPurchases = materials.filter(m => purchased.includes(m.id));
-      payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
-    }
+    const myPurchases = materials.filter(m => purchased.includes(m.id));
+    payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
   }
   
   const c = settings.siteContacts || {};
@@ -431,13 +481,10 @@ function sendContact(){
   const email=document.getElementById('c_email').value.trim();
   const msg=document.getElementById('c_msg').value.trim();
   if(!name||!email||!msg)return alert('Заполните все поля');
-  const contacts=DB.get('contacts',[]);
-  contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});
-  DB.set('contacts',contacts);
+  alert('Отправлено! 🦉 (Демо-режим)');
   document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';
-  alert('Отправлено! 🦉');
 }
-function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
+function toggleTheme(){document.body.classList.toggle('dark');}
 
 renderAll();
 </script>
