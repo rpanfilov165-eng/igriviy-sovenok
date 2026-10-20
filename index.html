@@ -173,10 +173,39 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
   </div>
 </div>
 
+<!-- ДОБАВЛЕНО: Модальные окна, которых не хватало -->
+<div id="productModal" class="modal">
+  <div class="modal-content" id="productModalContent">
+    <h2>Загрузка...</h2>
+    <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
+  </div>
+</div>
+
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <h2>🛒 Корзина</h2>
+    <div id="cartItems" style="max-height:400px; overflow-y:auto; margin-bottom:10px;"></div>
+    <div id="cartTotal"></div>
+    <div class="modal-actions">
+      <button class="btn close-btn" onclick="closeModal('cartModal')">Закрыть</button>
+      <button class="btn btn-purple" onclick="alert('Оформление заказа пока в разработке')">Оформить заказ</button>
+    </div>
+  </div>
+</div>
+
+<div id="formModal" class="modal">
+  <div class="modal-content">
+    <h2>Форма</h2>
+    <p>Здесь будет форма входа или регистрации</p>
+    <button class="btn close-btn" onclick="closeModal('formModal')">Закрыть</button>
+  </div>
+</div>
+
 <footer><p>🦉 © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a></p></footer>
 
 <script>
 const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
+
 // ✅ ВАШ КОНФИГ FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyD-1dVfsJWpRpH3Id3XG9d02mGTBcGghak",
@@ -215,7 +244,7 @@ if (db) {
   const settings = DB.get('settings', {});
   const root = document.documentElement;
   if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
+    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(\${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
     else { root.style.setProperty('--site-bg-gradient', settings.backgroundImage); document.body.classList.add('custom-bg-gradient'); }
   }
   if(settings.headerColors){
@@ -224,18 +253,18 @@ if (db) {
 })();
 
 let folders = DB.get('folders', {
-  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
-  'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
-  'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
-  'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
-  'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
+  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:}],
+  'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:}],
+  'themes': [{id:1, name:'Животные', icon:'🦁', items:}],
+  'letter-games': [{id:1, name:'Гласные', icon:'А', items:}],
+  'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:}],
+  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:}]
 });
 
-let materials = DB.get('materials', []);
-let orders = DB.get('orders',[]);
-let cart = DB.get('cart',[]);
-let favorites = DB.get('favorites',[]);
+let materials = DB.get('materials', );
+let orders = DB.get('orders',);
+let cart = DB.get('cart',);
+let favorites = DB.get('favorites',);
 let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
 
 let currentFolder = {};
@@ -264,7 +293,7 @@ function renderSiteNav(){
   if(!nav) return;
   let html = '';
   siteTabs.forEach(tab => {
-    html += `<button onclick="${tab.action}">${tab.icon} ${tab.label}</button>`;
+    html += `<button onclick="${tab.action}">${tab.icon} \${tab.label}</button>`;
   });
   html += `<button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>`;
   html += `<button class="theme-btn" onclick="toggleTheme()">🌙</button>`;
@@ -273,39 +302,56 @@ function renderSiteNav(){
 }
 
 function renderFoldersAndMaterials(sectionId) {
-  const foldersDiv = document.getElementById(`folders-${sectionId}`);
-  const materialsDiv = document.getElementById(`materials-${sectionId}`);
-  const breadcrumbsDiv = document.getElementById(`breadcrumbs-${sectionId}`);
+  const foldersDiv = document.getElementById(`folders-\${sectionId}`);
+  const materialsDiv = document.getElementById(`materials-\${sectionId}`);
+  const breadcrumbsDiv = document.getElementById(`breadcrumbs-\${sectionId}`);
+  
+  // Проверка на существование элементов DOM
   if(!foldersDiv || !materialsDiv) return;
   
   const currentFolderId = currentFolder[sectionId];
-  const folderList = folders[sectionId] || [];
+  // ИСПРАВЛЕНИЕ: Безопасное получение списка папок
+  const folderList = folders[sectionId] || ;
   
+  // Рендер хлебных крошек
   if(breadcrumbsDiv) {
     if(currentFolderId) {
       const folder = folderList.find(f => f.id == currentFolderId);
-      breadcrumbsDiv.innerHTML = `<a onclick="exitFolder('${sectionId}')">🏠 Все папки</a> <span class="separator">›</span> <span>${folder ? folder.icon + ' ' + folder.name : 'Папка'}</span>`;
+      breadcrumbsDiv.innerHTML = folder 
+        ? `<a onclick="exitFolder('${sectionId}')">🏠 Все папки</a> <span class="separator">›</span> <span>${folder.icon} \${folder.name}</span>`
+        : `<span>📁 Выберите папку</span>`;
     } else {
       breadcrumbsDiv.innerHTML = `<span>📁 Выберите папку</span>`;
     }
   }
   
+  // Логика отображения: Папки ИЛИ Материалы
   if(currentFolderId) {
     foldersDiv.style.display = 'none';
     const folder = folderList.find(f => f.id == currentFolderId);
-    const folderMaterials = folder ? folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean) : [];
-    materialsDiv.innerHTML = folderMaterials.length ? folderMaterials.map(m => renderMaterialCard(m)).join('') : '<p style="text-align:center;padding:20px;grid-column:1/-1;">В этой папке пока нет материалов</p>';
+    
+    let folderMaterials = ;
+    if (folder && folder.items) {
+        folderMaterials = folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean);
+    }
+    
+    if(folderMaterials.length > 0) {
+        materialsDiv.innerHTML = folderMaterials.map(m => renderMaterialCard(m)).join('');
+    } else {
+        materialsDiv.innerHTML = '<p style="text-align:center;padding:20px;grid-column:1/-1;">В этой папке пока нет материалов</p>';
+    }
   } else {
     foldersDiv.style.display = 'grid';
     materialsDiv.innerHTML = '';
-    if(folderList.length === 0) {
+    
+    if(!folderList || folderList.length === 0) {
       foldersDiv.innerHTML = '<p style="text-align:center;padding:20px;grid-column:1/-1;">Нет папок. Администратор может добавить их в админ-панели.</p>';
     } else {
       foldersDiv.innerHTML = folderList.map(f => {
-        const count = f.items.length;
+        const count = f.items ? f.items.length : 0;
         return `<div class="folder-card" onclick="enterFolder('${sectionId}', ${f.id})">
-          <span class="folder-icon">${f.icon}</span>
-          <div class="folder-name">${f.name}</div>
+          <span class="folder-icon">\${f.icon}</span>
+          <div class="folder-name">\${f.name}</div>
           <div class="folder-count">${count} материал${count === 1 ? '' : count < 5 ? 'а' : 'ов'}</div>
         </div>`;
       }).join('');
@@ -313,22 +359,29 @@ function renderFoldersAndMaterials(sectionId) {
   }
 }
 
-function enterFolder(sectionId, folderId) { currentFolder[sectionId] = folderId; renderFoldersAndMaterials(sectionId); }
-function exitFolder(sectionId) { currentFolder[sectionId] = null; renderFoldersAndMaterials(sectionId); }
+function enterFolder(sectionId, folderId) { 
+    currentFolder[sectionId] = folderId; 
+    renderFoldersAndMaterials(sectionId); 
+}
+function exitFolder(sectionId) { 
+    currentFolder[sectionId] = null; 
+    renderFoldersAndMaterials(sectionId); 
+}
 
 function renderMaterialCard(m) {
+  if (!m) return '';
   const isFav = favorites.includes(m.id);
   const badge = m.free ? '<span class="badge-free">🎁 Бесплатно</span>' : '<span class="badge-paid">💰 Платно</span>';
   const hotBadge = m.sale ? '<span class="badge-hot">🔥 Скидка</span>' : '';
-  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
+  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">\${m.price} ₽</p>`);
   
-  const purchased = DB.get('purchased', []).includes(m.id);
+  const purchased = DB.get('purchased', ).includes(m.id);
   const canDownload = m.free || purchased;
   
   let downloadBtn = '';
   if (m.type === 'file' || m.type === 'video') {
     if (canDownload) {
-      downloadBtn = `<a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;">📥 Скачать</a>`;
+      downloadBtn = `<a href="\${m.url||''}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;">📥 Скачать</a>`;
     } else {
       downloadBtn = `<button class="btn btn-small" onclick="alert('Сначала оплатите товар в корзине!')" style="opacity:0.7;cursor:not-allowed;">🔒 Скачать</button>`;
     }
@@ -337,52 +390,77 @@ function renderMaterialCard(m) {
   const icon = m.icon || (m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️'));
 
   return `<div class="material-card">${badge}${hotBadge}
-    ${m.type === 'image' ? `<img src="${m.url||''}" alt="" onclick="openMaterialModal(${m.id})">` : `<div style="width:100%;height:140px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:48px;border-radius:14px;margin-bottom:10px;cursor:pointer;" onclick="openMaterialModal(${m.id})">${icon}</div>`}
-    <h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${icon} ${m.name}</h3>
-    <p>${m.desc||''}</p>
-    ${priceHtml}
+    ${m.type === 'image' ? `<img src="${m.url||''}" alt="" onclick="openMaterialModal(${m.id})">` : `<div style="width:100%;height:140px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:48px;border-radius:14px;margin-bottom:10px;cursor:pointer;" onclick="openMaterialModal(${m.id})">\${icon}</div>`}
+    <h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${icon} \${m.name}</h3>
+    <p>\${m.desc||''}</p>
+    \${priceHtml}
     <p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p>
     <div class="card-actions">
       ${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}
-      ${downloadBtn}
-      <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button>
+      \${downloadBtn}
+      <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">\${isFav?'❤️':'♡'}</button>
     </div>
   </div>`;
 }
 
 function openMaterialModal(id) {
-  const m = materials.find(x => x.id == id); if(!m) return;
+  const m = materials.find(x => x.id == id); 
+  if(!m) {
+      alert('Материал не найден');
+      return;
+  }
   const price = m.sale && m.salePrice ? m.salePrice : m.price;
-  const purchased = DB.get('purchased', []).includes(m.id);
+  const purchased = DB.get('purchased', ).includes(m.id);
   const canDownload = m.free || purchased;
   
   let downloadHtml = '';
   if ((m.type === 'file' || m.type === 'video') && canDownload) {
-    downloadHtml = `<a href="${m.url}" target="_blank" class="btn btn-purple" style="text-decoration:none;margin-top:10px;display:inline-block;">📥 Скачать / Открыть</a>`;
+    downloadHtml = `<a href="\${m.url||''}" target="_blank" class="btn btn-purple" style="text-decoration:none;margin-top:10px;display:inline-block;">📥 Скачать / Открыть</a>`;
   } else if (m.type === 'file' || m.type === 'video') {
     downloadHtml = `<button class="btn" disabled style="margin-top:10px;opacity:0.6;">🔒 Доступно после оплаты</button>`;
   }
 
   const icon = m.icon || (m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️'));
 
-  document.getElementById('productModalContent').innerHTML = `
+  const modalContent = document.getElementById('productModalContent');
+  if (!modalContent) return;
+
+  modalContent.innerHTML = `
     <h2>${icon} ${m.name}</h2>
-    ${m.type === 'image' ? `<img src="${m.url||''}" style="width:100%;border-radius:14px;margin-bottom:14px;">` : `<div style="width:100%;height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:64px;border-radius:14px;margin-bottom:14px;">${icon}</div>`}
-    <p><b>Описание:</b> ${m.desc||'Нет описания'}</p>
-    <p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>
-    ${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}
+    ${m.type === 'image' ? `<img src="${m.url||''}" style="width:100%;border-radius:14px;margin-bottom:14px;">` : `<div style="width:100%;height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:64px;border-radius:14px;margin-bottom:14px;">\${icon}</div>`}
+    <p><b>Описание:</b> \${m.desc||'Нет описания'}</p>
+    <p><b>Наличие:</b> \${m.stock>0?m.stock+' шт.':'нет'}</p>
+    \${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}
     ${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}
-    ${downloadHtml}
+    \${downloadHtml}
     <div class="modal-actions" style="margin-top:14px;">
       <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
       ${!m.free&&m.stock>0?`<button class="btn btn-purple" onclick="addToCart(${m.id});closeModal('productModal')">🛒 В корзину</button>`:''}
     </div>`;
-  openModal('productModal');
+  
+  // Открываем модальное окно
+  const modal = document.getElementById('productModal');
+  if(modal) modal.classList.add('active');
 }
 
-function showSection(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }
-function openModal(id){document.getElementById('formModal').classList.add('active');document.getElementById('productModal').classList.add('active');}
-function closeModal(id){document.getElementById('formModal').classList.remove('active');document.getElementById('productModal').classList.remove('active');document.getElementById('cartModal').classList.remove('active');}
+function showSection(id){ 
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); 
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active'); 
+    renderAll(); 
+    window.scrollTo({top:0,behavior:'smooth'}); 
+}
+
+// Исправленная функция открытия/закрытия модалок
+function openModal(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.add('active');
+}
+function closeModal(id){
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('active');
+    // Также закрываем другие типы модалок если нужно, но лучше закрывать конкретную
+}
 
 function updateUserInfo(){
   const current = DB.get('currentUser', null);
@@ -390,9 +468,9 @@ function updateUserInfo(){
   const loginPrompt = document.getElementById('loginPrompt');
   const welcomeUser = document.getElementById('welcomeUser');
   if(current){
-    el.innerHTML = `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
+    el.innerHTML = `🦉 \${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
     if(loginPrompt) loginPrompt.style.display = 'none';
-    if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>!`; }
+    if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>\${current.name}</b>!`; }
   } else {
     el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
     if(loginPrompt) loginPrompt.style.display = 'block';
@@ -402,87 +480,69 @@ function updateUserInfo(){
 function doLogout(){localStorage.removeItem('currentUser');updateUserInfo();showSection('home');}
 
 function addToCart(productId){
-  const m=materials.find(x=>x.id==productId);if(!m)return;
+  const m=materials.find(x=>x.id==productId);
+  if(!m)return;
   if(m.free){alert('🎁 Бесплатные товары не добавляются в корзину, нажмите "Скачать" сразу!');return;}
-  cart.push({productId,qty:1});saveAll();updateCartCount();alert(`«${m.name}» в корзине 🛒`);
+  cart.push({productId,qty:1});
+  saveAll();
+  updateCartCount();
+  alert(`«\${m.name}» в корзине 🛒`);
 }
-function updateCartCount(){document.getElementById('cartCount').textContent=cart.length;}
-function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();}
+function updateCartCount(){
+    const el = document.getElementById('cartCount');
+    if(el) el.textContent = cart.length;
+}
+function toggleFavorite(productId){
+    const idx=favorites.indexOf(productId);
+    if(idx>=0)favorites.splice(idx,1);
+    else favorites.push(productId);
+    saveAll();
+    renderAll();
+}
 
 function openCart(){
-  document.getElementById('cartModal').classList.add('active');
+  const modal = document.getElementById('cartModal');
   const items=document.getElementById('cartItems');
   const total=document.getElementById('cartTotal');
-  if(cart.length===0){items.innerHTML='<p style="text-align:center;padding:20px;">Корзина пуста</p>';total.innerHTML='';return;}
+  
+  if(!modal || !items || !total) return;
+
+  if(cart.length===0){
+    items.innerHTML='<p style="text-align:center;padding:20px;">Корзина пуста</p>';
+    total.innerHTML='';
+    modal.classList.add('active');
+    return;
+  }
+  
   items.innerHTML=cart.map(c=>{
-    const m=materials.find(x=>x.id==c.productId);if(!m)return '';
+    const m=materials.find(x=>x.id==c.productId);
+    if(!m)return '';
     const price=m.sale&&m.salePrice?m.salePrice:m.price;
-    return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽</p></div><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})">🗑</button></div>`;
+    return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽</p></div><button class="btn btn-del btn-small" onclick="removeFromCart(\${m.id})">🗑</button></div>`;
   }).join('');
-  const sum = cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);return s+(m.sale&&m.salePrice?m.salePrice:m.price);},0);
-  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div></div>`;
+  
+  const sum = cart.reduce((s,c)=>{
+      const m=materials.find(x=>x.id==c.productId);
+      return s+(m ? (m.sale&&m.salePrice?m.salePrice:m.price) : 0);
+  },0);
+  
+  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">\${sum} ₽</div></div>`;
+  
+  modal.classList.add('active');
 }
-function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();openCart();}
+
+function removeFromCart(productId){
+    cart=cart.filter(c=>c.productId!=productId);
+    saveAll();
+    updateCartCount();
+    openCart();
+}
 
 function renderAll(){
   renderSiteNav();
-  document.getElementById('stats').innerHTML = `<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${materials.length}</div><div class="lbl">🛍 Материалов</div></div>`;
-  ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => { renderFoldersAndMaterials(sectionId); });
   
-  const favDiv=document.getElementById('favoritesGrid');
-  if(favDiv) favDiv.innerHTML=favorites.length?favorites.map(id=>{const m=materials.find(x=>x.id==id);return m?renderMaterialCard(m):'';}).join(''):'<p style="text-align:center;padding:20px;grid-column:1/-1;">Пусто</p>';
+  // Безопасный подсчет статистики
+  const totalFolders = Object.keys(folders).reduce((acc, key) => acc + (folders[key] ? folders[key].length : 0), 0);
+  const totalMaterials = materials ? materials.length : 0;
 
-  const ordDiv=document.getElementById('ordersList');
-  const current=DB.get('currentUser',null);
-  if(ordDiv){
-    if(!current){ordDiv.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра. <a href="login.html" class="btn btn-purple">Войти</a></p>`;}
-    else{
-      const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);
-      ordDiv.innerHTML=myOrders.length?myOrders.map(o=>`<div class="order-card"><h4>Заказ #${o.id} <span class="order-status status-paid">Оплачен</span></h4><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;">📅 ${o.date}</p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет заказов</p>';
-    }
-  }
-
-  const payDiv=document.getElementById('paymentsList');
-  if(payDiv){
-    if(!current){payDiv.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';}
-    else{
-      const purchased = DB.get('purchased', []);
-      const myPurchases = materials.filter(m => purchased.includes(m.id));
-      payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
-    }
-  }
-  
-  const c = settings.siteContacts || {};
-  const display = document.getElementById('siteContactsDisplay');
-  if(display) {
-    display.innerHTML = `
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📧</div><div><div style="font-size:11px;color:#888;font-weight:600;">Email</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="mailto:${c.email||''}" style="color:var(--primary);text-decoration:none;">${c.email||'—'}</a></div></div></div>
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📱</div><div><div style="font-size:11px;color:#888;font-weight:600;">Телефон</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="tel:${c.phone||''}" style="color:var(--primary);text-decoration:none;">${c.phone||'—'}</a></div></div></div>
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">🕐</div><div><div style="font-size:11px;color:#888;font-weight:600;">Режим работы</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;">${c.hours||'—'}</div></div></div>
-    `;
-  }
-  updateUserInfo();
-}
-
-function sendContact(){
-  const name=document.getElementById('c_name').value.trim();
-  const email=document.getElementById('c_email').value.trim();
-  const msg=document.getElementById('c_msg').value.trim();
-  if(!name||!email||!msg)return alert('Заполните все поля');
-  const contacts=DB.get('contacts',[]);
-  contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});
-  DB.set('contacts',contacts);
-  document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';
-  alert('Отправлено! 🦉');
-}
-function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
-
-renderAll();
-</script>
-
-<div class="modal" id="productModal"><div class="modal-content" id="productModalContent"></div></div>
-<div class="modal" id="cartModal"><div class="modal-content" style="max-width:650px"><h2>🛒 Корзина</h2><div id="cartItems"></div><div id="cartTotal"></div><div class="modal-actions"><button class="btn close-btn" onclick="closeModal('cartModal')">Закрыть</button></div></div></div>
-<!-- FIREBASE SDK -->
-  
-</body>
-</html>
+  document.getElementById('stats').innerHTML = `<div class="stat-
