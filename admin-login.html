@@ -193,7 +193,22 @@ let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7
 // Палитра эмодзи для папок
 const EMOJI_PALETTE = ['📁','📚','✏️','🎨','🦁','🐻','🐰','🦊','🐸','🦉','🐼','🐨','🐯','🦄','🐝','🐞','🌸','🌻','🌈','⭐','🌟','✨','🎈','🎁','🎀','🎮','🎲','🧩','🎯','🏆','🔤','🔢','📝','📖','📕','📗','📘','📙','🎵','🎶','👄','👅','👂','👁️','🖐️','🌍','🚀','🏠','🚗','🍎','🍌','🍓','🍉','🥕','🌽','🍞','🥛','☀️','🌙','⛅','❄️','🔥','💧','🌊'];
 
-function saveAll(){DB.set('folders',folders);DB.set('materials',materials);DB.set('orders',orders);DB.set('contacts',contacts);DB.set('settings',settings);}
+function saveAll() {
+  // Сохраняем локально
+  DB.set('folders', folders);
+  DB.set('materials', materials);
+  DB.set('orders', orders);
+  DB.set('contacts', contacts);
+  DB.set('settings', settings);
+  
+  // Отправляем в Firebase
+  if (db) {
+    const data = { folders, materials, orders, contacts, settings };
+    db.ref('siteData').set(data)
+      .then(() => console.log('✅ Данные отправлены в облако'))
+      .catch(e => console.error('❌ Ошибка отправки:', e));
+  }
+}
 function addLog(action){const log=DB.get('log',[]);log.push({date:new Date().toLocaleString('ru-RU'),action});if(log.length>200)log.shift();DB.set('log',log);}
 function showMsg(text,type='error'){const box=document.getElementById('msgBox');box.textContent=text;box.className='msg '+type;setTimeout(()=>{box.className='msg';},3000);}
 
