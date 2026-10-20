@@ -194,6 +194,7 @@ try {
   db = firebase.database();
   console.log("✅ Firebase подключен на сайте");
 } catch(e) { console.error("Ошибка Firebase:", e); }
+  
 // 🔥 СЛУШАЕМ ИЗМЕНЕНИЯ ИЗ ОБЛАКА В РЕАЛЬНОМ ВРЕМЕНИ
 if (db) {
   db.ref('siteData').on('value', (snapshot) => {
@@ -209,6 +210,7 @@ if (db) {
     }
   });
 }
+  
 (function applySiteBackground(){
   const settings = DB.get('settings', {});
   const root = document.documentElement;
