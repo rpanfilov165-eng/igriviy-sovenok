@@ -1,124 +1,906 @@
 <!DOCTYPE html>
 <html lang="ru">
-<!-- FIREBASE SDK -->
 <head>
-<meta charset="UTF-8">
-<title>🦉 Игривый совёнок</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="logo.png">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Nunito',sans-serif; transition:all .3s; }
-:root { --headerColor1:#2D1B4E; --headerColor2:#673AB7; --accent:#FFC107; --primary:#673AB7; --text:#2D1B4E; --card:rgba(255,255,255,0.97); --border:rgba(255,255,255,0.7); }
-body { background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center/cover fixed !important; color:var(--text); min-height:100vh; padding-bottom:70px; position:relative; overflow-x:hidden; }
-body::before { content:''; position:fixed; inset:0; background:rgba(255,255,255,0.88); z-index:-1; pointer-events:none; }
-body.custom-bg-image { background-image:var(--site-bg-image)!important; background-size:cover!important; background-position:center!important; background-attachment:fixed!important; }
-body.custom-bg-gradient { background:var(--site-bg-gradient)!important; }
-body.dark { --text:#f0e6ff; --card:rgba(30,20,60,0.95); --border:rgba(255,255,255,0.1); }
-a { color:var(--primary); text-decoration:none; font-weight:700; }
-
-header { background: var(--header-bg, linear-gradient(135deg,#2D1B4E,#673AB7)); color:#FFF; padding:12px 15px; box-shadow:0 4px 20px rgba(0,0,0,0.3); position:sticky; top:0; z-index:100; border-bottom:3px solid #FFC107; }
-.header-inner { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
-.logo { font-size:18px; font-weight:900; display:flex; align-items:center; gap:8px; cursor:pointer; color:#FFD54F; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-.logo-img { width:45px; height:45px; border-radius:50%; animation:float 3s ease-in-out infinite; box-shadow:0 4px 15px rgba(255,193,7,0.5); background:#fff; padding:3px; border:2px solid #FFC107; }
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
-.user-info { background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px; font-size:13px; font-weight:700; color:#FFD54F; border:1px solid rgba(255,255,255,0.3); white-space: nowrap; }
-.user-info a { color:#FFD54F; font-weight:800; margin-left:5px; text-decoration:underline; }
-
-nav { display:flex; flex-wrap:wrap; gap:6px; width:100%; justify-content:flex-start; }
-nav button, nav a { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#2D1B4E; border:none; padding:8px 12px; border-radius:20px; cursor:pointer; font-size:12px; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.2); white-space: nowrap; }
-nav button:hover, nav a:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(255,193,7,0.6); }
-.cart-btn { background:linear-gradient(135deg,#E53935,#EF5350)!important; color:#fff!important; }
-.cart-count { position:absolute; top:-6px; right:-6px; background:#FFC107; color:#2D1B4E; border-radius:50%; width:20px; height:20px; font-size:10px; display:flex; align-items:center; justify-content:center; font-weight:900; border:2px solid #fff; }
-.admin-link { background:linear-gradient(135deg,#9C27B0,#BA68C8)!important; color:#fff!important; }
-.theme-btn { background:linear-gradient(135deg,#37474F,#546E7A)!important; color:#fff!important; }
-
-.container { max-width:1400px; margin:20px auto; padding:0 15px; position:relative; z-index:1; }
-.section { background:var(--card); backdrop-filter:blur(20px); padding:24px; margin-bottom:20px; border-radius:24px; box-shadow:0 8px 32px rgba(103,58,183,0.2); border:2px solid rgba(255,193,7,0.3); animation:fadeUp .5s ease; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-.section h2 { color:var(--text); margin-bottom:16px; padding-bottom:10px; border-bottom:3px solid transparent; border-image:linear-gradient(90deg,var(--accent),var(--primary)) 1; display:flex; align-items:center; gap:10px; font-size:20px; font-weight:900; }
-
-.folders-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:20px; }
-.folder-card { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); border:2px solid #FFC107; border-radius:16px; padding:20px; text-align:center; cursor:pointer; transition:all .3s; position:relative; overflow:hidden; }
-.folder-card:hover { transform:translateY(-5px) scale(1.03); box-shadow:0 12px 24px rgba(255,193,7,0.4); border-color:#FF9800; }
-.folder-card .folder-icon { font-size:48px; margin-bottom:10px; display:block; }
-.folder-card .folder-name { font-size:14px; font-weight:800; color:#5D4037; }
-.folder-card .folder-count { font-size:11px; color:#888; margin-top:5px; }
-
-.materials-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; }
-.material-card { background:var(--card); border:2px solid rgba(255,193,7,0.3); border-radius:20px; padding:14px; transition:all .3s; position:relative; overflow:hidden; display:flex; flex-direction:column; }
-.material-card:hover { transform:translateY(-6px) scale(1.02); box-shadow:0 12px 28px rgba(103,58,183,0.3); border-color:var(--accent); }
-.material-card img { width:100%; height:140px; object-fit:cover; border-radius:14px; margin-bottom:10px; background:linear-gradient(135deg,#FFE0B2,#FFCC80); cursor:pointer; }
-.material-card h3 { color:var(--text); font-size:15px; margin-bottom:6px; font-weight:800; flex-grow:1; }
-.material-card p { font-size:12px; color:#4A3A5A; margin-bottom:6px; font-weight:600; }
-.price { color:#D84315; font-weight:900; font-size:18px; }
-.badge-free { position:absolute; top:10px; right:10px; background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.badge-paid { position:absolute; top:10px; right:10px; background:linear-gradient(135deg,#FF9800,#FFB74D); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.badge-hot { position:absolute; top:10px; left:10px; background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; }
-.card-actions { display:flex; gap:6px; margin-top:auto; flex-wrap:wrap; }
-
-.btn { background:linear-gradient(135deg,#FFD54F,#FFC107); color:#2D1B4E; border:none; padding:8px 14px; border-radius:16px; cursor:pointer; font-weight:800; font-size:12px; text-decoration:none; display:inline-block; box-shadow:0 3px 10px rgba(255,193,7,0.4); }
-.btn:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(255,193,7,0.6); }
-.btn-del { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
-.btn-purple { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; }
-.btn-small { padding:6px 10px; font-size:11px; }
-.btn-fav { background:var(--card); border:2px solid #E53935; color:#E53935; }
-.btn-fav.active { background:linear-gradient(135deg,#E53935,#EF5350); color:#fff; }
-
-.breadcrumbs { background:linear-gradient(135deg,#FFF8E1,#FFE0B2); padding:12px 16px; border-radius:12px; margin-bottom:16px; display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; }
-.breadcrumbs a { color:var(--primary); cursor:pointer; }
-.breadcrumbs a:hover { text-decoration:underline; }
-.breadcrumbs .separator { color:#888; }
-
-.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:1000; justify-content:center; align-items:center; padding:15px; }
-.modal.active { display:flex; }
-.modal-content { background:var(--card); padding:24px; border-radius:24px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; border:2px solid var(--accent); }
-.modal-content h2 { color:var(--text); margin-bottom:16px; font-weight:900; }
-.modal-content input, .modal-content textarea, .modal-content select { width:100%; padding:10px; margin:6px 0; border:2px solid var(--border); border-radius:12px; font-size:13px; background:rgba(255,255,255,0.8); color:var(--text); font-weight:700; }
-.modal-content textarea { min-height:75px; resize:vertical; }
-.modal-actions { display:flex; justify-content:flex-end; margin-top:14px; gap:8px; flex-wrap:wrap; }
-.close-btn { background:linear-gradient(135deg,#9E9E9E,#757575)!important; color:#fff!important; }
-
-.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:10px; }
-.stat-box { background:linear-gradient(135deg,#673AB7,#7E57C2); color:#fff; padding:16px; border-radius:18px; text-align:center; }
-.stat-box .num { font-size:24px; font-weight:900; }
-.stat-box .lbl { font-size:11px; opacity:0.9; font-weight:700; }
-
-footer { background:linear-gradient(135deg,#2D1B4E,#4A2C6E); color:#FFF8E1; text-align:center; padding:20px; position:fixed; bottom:0; left:0; right:0; font-size:12px; z-index:50; font-weight:700; border-top:3px solid #FFC107; }
-footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
-
-.page { display:none; }
-.page.active { display:block; }
-.welcome { text-align:center; padding:30px 20px; position:relative; overflow:hidden; border-radius:30px; background:linear-gradient(-45deg,#FFD54F,#FFC107,#FF9800,#FFB74D,#FFE082,#FFD54F); background-size:400% 400%; animation:rainbowShift 8s ease infinite; box-shadow:0 10px 40px rgba(255,193,7,0.5); border:3px solid #FFC107; }
-@keyframes rainbowShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-.welcome h1 { color:#2D1B4E; font-size:28px; margin-bottom:10px; font-weight:900; text-shadow:2px 2px 4px rgba(255,255,255,0.8); }
-.welcome p { color:#3E2723; font-size:15px; font-weight:700; text-shadow:1px 1px 2px rgba(255,255,255,0.6); }
-.big-owl { width:200px; height:200px; display:block; margin:15px auto; animation:float 3s ease-in-out infinite; filter:drop-shadow(0 8px 20px rgba(0,0,0,0.3)); border-radius:50%; background:transparent; padding:0; border:4px solid #fff; box-shadow:0 8px 30px rgba(255,193,7,0.6); }
-
-.welcome-user { background:linear-gradient(135deg,#4CAF50,#66BB6A); color:#fff; padding:16px; border-radius:16px; margin-bottom:16px; text-align:center; font-weight:800; font-size:15px; box-shadow:0 6px 20px rgba(76,175,80,0.4); display:none; }
-.welcome-user.active { display:block; }
-
-.order-card, .payment-card { background:var(--card); border:2px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; }
-.order-status { display:inline-block; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:800; color:#fff; }
-.status-new { background:linear-gradient(135deg,#2196F3,#42A5F5); }
-.status-paid { background:linear-gradient(135deg,#4CAF50,#66BB6A); }
-
-.contact-form input, .contact-form textarea { width:100%; padding:12px; margin:6px 0; border:2px solid var(--border); border-radius:12px; background:rgba(255,255,255,0.8); color:var(--text); font-weight:700; font-size:13px; }
-
-@media (max-width:700px) { 
-  .header-inner { flex-direction:column; align-items:flex-start; } 
-  nav { overflow-x:auto; flex-wrap:nowrap; padding-bottom:5px; -webkit-overflow-scrolling: touch; }
-  nav button, nav a { flex-shrink:0; }
-  .welcome h1 { font-size:22px; } 
-  .big-owl { width:160px; height:160px; } 
-  .folders-grid { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; }
-  .materials-grid { grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; }
-}
-</style>
-
-<!-- FIREBASE SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>  
+  <meta charset="UTF-8">
+  <title>🦉 Игривый совёнок</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="logo.png">
+  <!-- Подключение шрифтов -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Nunito', sans-serif;
+      transition: all .3s ease-in-out;
+    }
+    
+    body {
+      background: url('https://i.ibb.co/1tKFvpnC/1792417758.png') center/cover fixed !important;
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 70px;
+      position: relative;
+      overflow-x: hidden;
+      animation: fadeInBody 1s forwards;
+    }
+    
+    @keyframes fadeInBody {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Основная обёртка */
+    :root {
+      --headerColor1:#2D1B4E;
+      --headerColor2:#673AB7;
+      --accent:#FFC107;
+      --primary:#673AB7;
+      --text:#2D1B4E;
+      --card:rgba(255,255,255,0.97);
+      --border:rgba(255,255,255,0.7);
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.88);
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    body.custom-bg-image {
+      background-image: var(--site-bg-image) !important;
+      background-size: cover !important;
+      background-position: center !important;
+      background-attachment: fixed !important;
+    }
+    
+    body.custom-bg-gradient {
+      background: var(--site-bg-gradient) !important;
+    }
+    
+    body.dark {
+      --text:#f0e6ff;
+      --card:rgba(30,20,60,0.95);
+      --border:rgba(255,255,255,0.1);
+    }
+    
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    
+    header {
+      background: linear-gradient(135deg,#2D1B4E,#673AB7);
+      color: #FFF;
+      padding: 12px 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 3px solid #FFC107;
+    }
+    
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .logo {
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: #FFD54F;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .logo-img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      animation: float 3s ease-in-out infinite;
+      box-shadow: 0 4px 15px rgba(255,193,7,0.5);
+      background: #fff;
+      padding: 3px;
+      border: 2px solid #FFC107;
+    }
+    
+    @keyframes float {
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+    
+    .user-info {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFD54F;
+      border: 1px solid rgba(255,255,255,0.3);
+      white-space: nowrap;
+    }
+    
+    .user-info a {
+      color: #FFD54F;
+      font-weight: 800;
+      margin-left: 5px;
+      text-decoration: underline;
+    }
+    
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    
+    nav button,
+    nav a {
+      background: linear-gradient(135deg,#FFD54F,#FFC107);
+      color: #2D1B4E;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      white-space: nowrap;
+    }
+    
+    nav button:hover,
+    nav a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,193,7,0.6);
+    }
+    
+    .cart-btn {
+      background: linear-gradient(135deg,#E53935,#EF5350)!important;
+      color: #fff!important;
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #FFC107;
+      color: #2D1B4E;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      border: 2px solid #fff;
+    }
+    
+    .admin-link {
+      background: linear-gradient(135deg,#9C27B0,#BA68C8)!important;
+      color: #fff!important;
+    }
+    
+    .theme-btn {
+      background: linear-gradient(135deg,#37474F,#546E7A)!important;
+      color: #fff!important;
+    }
+    
+    .search-btn-header {
+      background: linear-gradient(135deg,#2196F3,#42A5F5)!important;
+      color: #fff!important;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 0 15px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .section {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      padding: 24px;
+      margin-bottom: 20px;
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(103,58,183,0.2);
+      border: 2px solid rgba(255,193,7,0.3);
+      animation: fadeUp .5s ease;
+    }
+    
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .section h2 {
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid transparent;
+      border-image: linear-gradient(90deg,var(--accent),var(--primary)) 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 900;
+    }
+    
+    .folders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .folder-card {
+      background: linear-gradient(135deg,#FFF8E1,#FFE0B2);
+      border: 2px solid #FFC107;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .folder-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(255,193,7,0.4);
+      border-color: #FF9800;
+    }
+    
+    .folder-card .folder-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    .folder-card .folder-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #5D4037;
+    }
+    
+    .folder-card .folder-count {
+      font-size: 11px;
+      color: #888;
+      margin-top: 5px;
+    }
+    
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    
+    .material-card {
+      background: var(--card);
+      border: 2px solid rgba(255,193,7,0.3);
+      border-radius: 20px;
+      padding: 14px;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .material-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(103,58,183,0.3);
+      border-color: var(--accent);
+    }
+    
+    .material-card img,
+    .material-card .video-preview {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg,#FFE0B2,#FFCC80);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    
+    .material-card .video-preview {
+      background: linear-gradient(135deg,#2D1B4E,#673AB7);
+      color: #fff;
+    }
+    
+    .material-card .file-preview {
+      width: 100%;
+      height: 140px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg,#E1BEE7,#CE93D8);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+    
+    .material-card h3 {
+      color: var(--text);
+      font-size: 15px;
+      margin-bottom: 6px;
+      font-weight: 800;
+      flex-grow: 1;
+    }
+    
+    .material-card p {
+      font-size: 12px;
+      color: #4A3A5A;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    
+    .price {
+      color: #D84315;
+      font-weight: 900;
+      font-size: 18px;
+    }
+    
+    .badge-free {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg,#4CAF50,#66BB6A);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
+      z-index: 2;
+    }
+    
+    .badge-paid {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg,#FF9800,#FFB74D);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
+      z-index: 2;
+    }
+    
+    .badge-hot {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: linear-gradient(135deg,#E53935,#EF5350);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
+      z-index: 2;
+    }
+    
+    .badge-type {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 14px;
+      z-index: 2;
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      background: linear-gradient(135deg,#FFD54F,#FFC107);
+      color: #2D1B4E;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 12px;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 3px 10px rgba(255,193,7,0.4);
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(255,193,7,0.6);
+    }
+    
+    .btn-del {
+      background: linear-gradient(135deg,#E53935,#EF5350);
+      color: #fff;
+    }
+    
+    .btn-purple {
+      background: linear-gradient(135deg,#673AB7,#7E57C2);
+      color: #fff;
+    }
+    
+    .btn-green {
+      background: linear-gradient(135deg,#4CAF50,#66BB6A);
+      color: #fff;
+    }
+    
+    .btn-small {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    
+    .btn-fav {
+      background: var(--card);
+      border: 2px solid #E53935;
+      color: #E53935;
+    }
+    
+    .btn-fav.active {
+      background: linear-gradient(135deg,#E53935,#EF5350);
+      color: #fff;
+    }
+    
+    .breadcrumbs {
+      background: linear-gradient(135deg,#FFF8E1,#FFE0B2);
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    
+    .breadcrumbs a {
+      color: var(--primary);
+      cursor: pointer;
+    }
+    
+    .breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+    
+    .breadcrumbs .separator {
+      color: #888;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 2px solid var(--accent);
+    }
+    
+    .modal-content h2 {
+      color: var(--text);
+      margin-bottom: 16px;
+      font-weight: 900;
+    }
+    
+    .modal-content input,
+    .modal-content textarea,
+    .modal-content select {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      background: rgba(255,255,255,0.8);
+      color: var(--text);
+      font-weight: 700;
+    }
+    
+    .modal-content textarea {
+      min-height: 75px;
+      resize: vertical;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 14px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .close-btn {
+      background: linear-gradient(135deg,#9E9E9E,#757575)!important;
+      color: #fff!important;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    
+    .stat-box {
+      background: linear-gradient(135deg,#673AB7,#7E57C2);
+      color: #fff;
+      padding: 16px;
+      border-radius: 18px;
+      text-align: center;
+    }
+    
+    .stat-box .num {
+      font-size: 24px;
+      font-weight: 900;
+    }
+    
+    .stat-box .lbl {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: 700;
+    }
+    
+    footer {
+      background: linear-gradient(135deg,#2D1B4E,#4A2C6E);
+      color: #FFF8E1;
+      text-align: center;
+      padding: 20px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      font-size: 12px;
+      z-index: 50;
+      font-weight: 700;
+      border-top: 3px solid #FFC107;
+    }
+    
+    footer a {
+      color: #FFD54F;
+      font-weight: 800;
+      margin: 0 6px;
+    }
+    
+    .page {
+      display: none;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    .welcome {
+      text-align: center;
+      padding: 30px 20px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      background: linear-gradient(
+        -45deg,
+        #FFD54F,
+        #FFC107,
+        #FF9800,
+        #FFB74D,
+        #FFE082,
+        #FFD54F
+      );
+      background-size: 400% 400%;
+      animation: rainbowShift 8s ease infinite;
+      box-shadow: 0 10px 40px rgba(255,193,7,0.5);
+      border: 3px solid #FFC107;
+    }
+    
+    @keyframes rainbowShift {
+      0% {background-position:0% 50%}
+      50% {background-position:100% 50%}
+      100% {background-position:0% 50%}
+    }
+    
+    .welcome h1 {
+      color: #2D1B4E;
+      font-size: 28px;
+      margin-bottom: 10px;
+      font-weight: 900;
+      text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    }
+    
+    .welcome p {
+      color: #3E2723;
+      font-size: 15px;
+      font-weight: 700;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
+    }
+    
+    .big-owl {
+      width: 200px;
+      height: 200px;
+      display: block;
+      margin: 15px auto;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.3));
+      border-radius: 50%;
+      background: transparent;
+      padding: 0;
+      border: 4px solid #fff;
+      box-shadow: 0 8px 30px rgba(255,193,7,0.6);
+    }
+    
+    .welcome-user {
+      background: linear-gradient(135deg,#4CAF50,#66BB6A);
+      color: #fff;
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 15px;
+      box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+      display: none;
+    }
+    
+    .welcome-user.active {
+      display: block;
+    }
+    
+    .order-card,
+    .payment-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    
+    .order-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+    }
+    
+    .status-new {
+      background: linear-gradient(135deg,#2196F3,#42A5F5);
+    }
+    
+    .status-paid {
+      background: linear-gradient(135deg,#4CAF50,#66BB6A);
+    }
+    
+    .status-sent {
+      background: linear-gradient(135deg,#FF9800,#FFB74D);
+    }
+    
+    .status-done {
+      background: linear-gradient(135deg,#9C27B0,#BA68C8);
+    }
+    
+    .order-item {
+      background: #FFF8E1;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.8);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13px;
+    }
+    
+    .search-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 15px 20px;
+      overflow-y: auto;
+    }
+    
+    .search-overlay.active {
+      display: flex;
+    }
+    
+    .search-container {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      border: 2px solid var(--accent);
+    }
+    
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    
+    .search-input-wrap input {
+      width: 100%;
+      padding: 14px 50px 14px 16px;
+      border: 2px solid var(--accent);
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      background: #fff;
+      color: var(--text);
+    }
+    
+    .search-close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #E53935;
+      color: #fff;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 900;
+    }
+    
+    .search-result-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .search-result-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    
+    .search-result-info h4 {
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .search-result-type {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      background: linear-gradient(135deg,#FFD54F,#FFC107);
+      color: #3E2723;
+      margin-top: 4px;
+    }
+    
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      background: #000;
+    }
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    
+    @media (max-width: 700px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      nav {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      nav button,
+      nav a {
+        flex-shrink: 0;
+      }
+      
+      .welcome h1 {
+        font-size: 22px;
+      }
+      
+      .big-owl {
+        width: 160px;
+        height: 160px;
+      }
+      
+      .folders-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      
+      .materials-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -154,9 +936,11 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
   <div id="speech-games" class="page"><div class="section"><h2>🗣️ Логопедические игры</h2><div class="breadcrumbs" id="breadcrumbs-speech-games"></div><div class="folders-grid" id="folders-speech-games"></div><div class="materials-grid" id="materials-speech-games"></div></div></div>
   <div id="free" class="page"><div class="section"><h2>🎁 Бесплатно</h2><div class="breadcrumbs" id="breadcrumbs-free"></div><div class="folders-grid" id="folders-free"></div><div class="materials-grid" id="materials-free"></div></div></div>
 
+  <div id="quiz" class="page"><div class="section"><h2>🎯 Квиз</h2><p style="text-align:center;padding:20px;">Раздел в разработке</p></div></div>
   <div id="favorites" class="page"><div class="section"><h2>❤️ Избранное</h2><div class="materials-grid" id="favoritesGrid"></div></div></div>
-  <div id="orders" class="page"><div class="section"><h2>📦 Мои заказы</h2><div id="ordersList"></div></div></div>
-  <div id="payments" class="page"><div class="section"><h2>💳 Мои оплаты</h2><div id="paymentsList"></div></div></div>
+  <div id="compare" class="page"><div class="section"><h2>⚖️ Сравнение</h2><div id="compareGrid"></div></div></div>
+  <div id="history" class="page"><div class="section"><h2>👁 История</h2><div id="historyList"></div></div></div>
+  <div id="achievements" class="page"><div class="section"><h2>🏆 Достижения</h2><div id="achievementsList"></div></div></div>
   
   <div id="contacts" class="page">
     <div class="section">
@@ -171,318 +955,13 @@ footer a { color:#FFD54F; font-weight:800; margin:0 6px; }
       </div>
     </div>
   </div>
+
+  <div id="orders" class="page"><div class="section"><h2>📦 Мои заказы</h2><div id="ordersList"></div></div></div>
+  <div id="payments" class="page"><div class="section"><h2>💳 Мои оплаты</h2><div id="paymentsList"></div></div></div>
 </div>
 
-<footer><p>🦉 © 2026 «Игривый совёнок» | <a href="login.html">Вход</a> | <a href="admin-login.html">Админ</a></p></footer>
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-container">
+    <button
 
-<script>
-const DB = { get(k,def){try{return JSON.parse(localStorage.getItem(k))||def}catch(e){return def}}, set(k,v){localStorage.setItem(k,JSON.stringify(v))} };
-// ✅ ВАШ КОНФИГ FIREBASE
-const firebaseConfig = {
-  apiKey: "AIzaSyD-1dVfsJWpRpH3Id3XG9d02mGTBcGghak",
-  authDomain: "igriviy-sovenok-69b44.firebaseapp.com",
-  databaseURL: "https://igriviy-sovenok-69b44-default-rtdb.firebaseio.com",
-  projectId: "igriviy-sovenok-69b44",
-  storageBucket: "igriviy-sovenok-69b44.firebasestorage.app",
-  messagingSenderId: "972199222537",
-  appId: "1:972199222537:web:e389c149428d111f7987d8"
-};
-
-let db;
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  console.log("✅ Firebase подключен на сайте");
-} catch(e) { console.error("Ошибка Firebase:", e); }
-  
-// 🔥 СЛУШАЕМ ИЗМЕНЕНИЯ ИЗ ОБЛАКА В РЕАЛЬНОМ ВРЕМЕНИ
-if (db) {
-  db.ref('siteData').on('value', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-      console.log('📥 Получены данные из облака');
-      if (data.folders) { folders = data.folders; DB.set('folders', folders); }
-      if (data.materials) { materials = data.materials; DB.set('materials', materials); }
-      if (data.orders) { orders = data.orders; DB.set('orders', orders); }
-      if (data.settings) { settings = data.settings; DB.set('settings', settings); }
-      if (data.contacts) { contacts = data.contacts; DB.set('contacts', contacts); }
-      if (typeof renderAll === 'function') renderAll();
-    }
-  });
-}
-  
-(function applySiteBackground(){
-  const settings = DB.get('settings', {});
-  const root = document.documentElement;
-  if(settings.backgroundImage){
-    if(settings.backgroundType === 'image'){ root.style.setProperty('--site-bg-image', `url(${settings.backgroundImage})`); document.body.classList.add('custom-bg-image'); }
-    else { root.style.setProperty('--site-bg-gradient', settings.backgroundImage); document.body.classList.add('custom-bg-gradient'); }
-  }
-  if(settings.headerColors){
-    root.style.setProperty('--header-bg', `linear-gradient(135deg,${settings.headerColors.color1||'#2D1B4E'},${settings.headerColors.color2||'#673AB7'})`);
-  }
-})();
-
-let folders = DB.get('folders', {
-  'catalogs': [{id:1, name:'Развивающие игры', icon:'📚', items:[]}],
-  'worksheets': [{id:1, name:'Прописи', icon:'✏️', items:[]}],
-  'themes': [{id:1, name:'Животные', icon:'🦁', items:[]}],
-  'letter-games': [{id:1, name:'Гласные', icon:'А', items:[]}],
-  'speech-games': [{id:1, name:'Артикуляция', icon:'👄', items:[]}],
-  'free': [{id:1, name:'Бесплатные материалы', icon:'🎁', items:[]}]
-});
-
-let materials = DB.get('materials', []);
-let orders = DB.get('orders',[]);
-let cart = DB.get('cart',[]);
-let favorites = DB.get('favorites',[]);
-let settings = DB.get('settings',{headerColors:{color1:'#2D1B4E',color2:'#673AB7'},siteContacts:{email:'info@owl-site.ru',phone:'+7 (800) 555-35-35',address:'г. Москва',hours:'Пн-Вс 9:00-21:00'}});
-
-let currentFolder = {};
-
-function saveAll(){
-  DB.set('folders',folders); DB.set('materials',materials); DB.set('orders',orders);
-  DB.set('cart',cart); DB.set('favorites',favorites); DB.set('settings',settings);
-}
-
-const siteTabs = [
-  { "id": "home", "icon": "🏠", "label": "Главная", "action": "showSection('home')" },
-  { "id": "catalogs", "icon": "📚", "label": "Весь каталог", "action": "showSection('catalogs')" },
-  { "id": "worksheets", "icon": "📝", "label": "Рабочие листы", "action": "showSection('worksheets')" },
-  { "id": "themes", "icon": "🎨", "label": "Темы", "action": "showSection('themes')" },
-  { "id": "letter-games", "icon": "🔤", "label": "Игры с буквами", "action": "showSection('letter-games')" },
-  { "id": "speech-games", "icon": "🗣️", "label": "Логопедические игры", "action": "showSection('speech-games')" },
-  { "id": "free", "icon": "🎁", "label": "Бесплатно", "action": "showSection('free')" },
-  { "id": "favorites", "icon": "❤️", "label": "Избранное", "action": "showSection('favorites')" },
-  { "id": "orders", "icon": "📦", "label": "Мои заказы", "action": "showSection('orders')" },
-  { "id": "payments", "icon": "💳", "label": "Мои оплаты", "action": "showSection('payments')" },
-  { "id": "contacts", "icon": "📞", "label": "Контакты", "action": "showSection('contacts')" }
-];
-
-function renderSiteNav(){
-  const nav = document.getElementById('siteNav');
-  if(!nav) return;
-  let html = '';
-  siteTabs.forEach(tab => {
-    html += `<button onclick="${tab.action}">${tab.icon} ${tab.label}</button>`;
-  });
-  html += `<button class="cart-btn" onclick="openCart()">🛒 <span class="cart-count" id="cartCount">0</span></button>`;
-  html += `<button class="theme-btn" onclick="toggleTheme()">🌙</button>`;
-  html += `<a href="admin-login.html" class="admin-link">🔐 Админ</a>`;
-  nav.innerHTML = html;
-}
-
-function renderFoldersAndMaterials(sectionId) {
-  const foldersDiv = document.getElementById(`folders-${sectionId}`);
-  const materialsDiv = document.getElementById(`materials-${sectionId}`);
-  const breadcrumbsDiv = document.getElementById(`breadcrumbs-${sectionId}`);
-  if(!foldersDiv || !materialsDiv) return;
-  
-  const currentFolderId = currentFolder[sectionId];
-  const folderList = folders[sectionId] || [];
-  
-  if(breadcrumbsDiv) {
-    if(currentFolderId) {
-      const folder = folderList.find(f => f.id == currentFolderId);
-      breadcrumbsDiv.innerHTML = `<a onclick="exitFolder('${sectionId}')">🏠 Все папки</a> <span class="separator">›</span> <span>${folder ? folder.icon + ' ' + folder.name : 'Папка'}</span>`;
-    } else {
-      breadcrumbsDiv.innerHTML = `<span>📁 Выберите папку</span>`;
-    }
-  }
-  
-  if(currentFolderId) {
-    foldersDiv.style.display = 'none';
-    const folder = folderList.find(f => f.id == currentFolderId);
-    const folderMaterials = folder ? folder.items.map(itemId => materials.find(m => m.id == itemId)).filter(Boolean) : [];
-    materialsDiv.innerHTML = folderMaterials.length ? folderMaterials.map(m => renderMaterialCard(m)).join('') : '<p style="text-align:center;padding:20px;grid-column:1/-1;">В этой папке пока нет материалов</p>';
-  } else {
-    foldersDiv.style.display = 'grid';
-    materialsDiv.innerHTML = '';
-    if(folderList.length === 0) {
-      foldersDiv.innerHTML = '<p style="text-align:center;padding:20px;grid-column:1/-1;">Нет папок. Администратор может добавить их в админ-панели.</p>';
-    } else {
-      foldersDiv.innerHTML = folderList.map(f => {
-        const count = f.items.length;
-        return `<div class="folder-card" onclick="enterFolder('${sectionId}', ${f.id})">
-          <span class="folder-icon">${f.icon}</span>
-          <div class="folder-name">${f.name}</div>
-          <div class="folder-count">${count} материал${count === 1 ? '' : count < 5 ? 'а' : 'ов'}</div>
-        </div>`;
-      }).join('');
-    }
-  }
-}
-
-function enterFolder(sectionId, folderId) { currentFolder[sectionId] = folderId; renderFoldersAndMaterials(sectionId); }
-function exitFolder(sectionId) { currentFolder[sectionId] = null; renderFoldersAndMaterials(sectionId); }
-
-function renderMaterialCard(m) {
-  const isFav = favorites.includes(m.id);
-  const badge = m.free ? '<span class="badge-free">🎁 Бесплатно</span>' : '<span class="badge-paid">💰 Платно</span>';
-  const hotBadge = m.sale ? '<span class="badge-hot">🔥 Скидка</span>' : '';
-  const priceHtml = m.free ? '<p class="price" style="color:#4CAF50">Бесплатно!</p>' : (m.sale && m.salePrice ? `<p class="price">${m.salePrice} ₽ <s style="font-size:12px;color:#999">${m.price}₽</s></p>` : `<p class="price">${m.price} ₽</p>`);
-  
-  const purchased = DB.get('purchased', []).includes(m.id);
-  const canDownload = m.free || purchased;
-  
-  let downloadBtn = '';
-  if (m.type === 'file' || m.type === 'video') {
-    if (canDownload) {
-      downloadBtn = `<a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;">📥 Скачать</a>`;
-    } else {
-      downloadBtn = `<button class="btn btn-small" onclick="alert('Сначала оплатите товар в корзине!')" style="opacity:0.7;cursor:not-allowed;">🔒 Скачать</button>`;
-    }
-  }
-
-  const icon = m.icon || (m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️'));
-
-  return `<div class="material-card">${badge}${hotBadge}
-    ${m.type === 'image' ? `<img src="${m.url||''}" alt="" onclick="openMaterialModal(${m.id})">` : `<div style="width:100%;height:140px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:48px;border-radius:14px;margin-bottom:10px;cursor:pointer;" onclick="openMaterialModal(${m.id})">${icon}</div>`}
-    <h3 onclick="openMaterialModal(${m.id})" style="cursor:pointer">${icon} ${m.name}</h3>
-    <p>${m.desc||''}</p>
-    ${priceHtml}
-    <p style="font-size:11px;color:${m.stock>0?'#4CAF50':'#E53935'};font-weight:700;">${m.stock>0?'В наличии: '+m.stock+' шт.':'Нет в наличии'}</p>
-    <div class="card-actions">
-      ${!m.free&&m.stock>0?`<button class="btn btn-small" onclick="addToCart(${m.id})">🛒 В корзину</button>`:''}
-      ${downloadBtn}
-      <button class="btn btn-fav btn-small ${isFav?'active':''}" onclick="toggleFavorite(${m.id})">${isFav?'❤️':'♡'}</button>
-    </div>
-  </div>`;
-}
-
-function openMaterialModal(id) {
-  const m = materials.find(x => x.id == id); if(!m) return;
-  const price = m.sale && m.salePrice ? m.salePrice : m.price;
-  const purchased = DB.get('purchased', []).includes(m.id);
-  const canDownload = m.free || purchased;
-  
-  let downloadHtml = '';
-  if ((m.type === 'file' || m.type === 'video') && canDownload) {
-    downloadHtml = `<a href="${m.url}" target="_blank" class="btn btn-purple" style="text-decoration:none;margin-top:10px;display:inline-block;">📥 Скачать / Открыть</a>`;
-  } else if (m.type === 'file' || m.type === 'video') {
-    downloadHtml = `<button class="btn" disabled style="margin-top:10px;opacity:0.6;">🔒 Доступно после оплаты</button>`;
-  }
-
-  const icon = m.icon || (m.type === 'video' ? '🎬' : (m.type === 'file' ? '📄' : '🖼️'));
-
-  document.getElementById('productModalContent').innerHTML = `
-    <h2>${icon} ${m.name}</h2>
-    ${m.type === 'image' ? `<img src="${m.url||''}" style="width:100%;border-radius:14px;margin-bottom:14px;">` : `<div style="width:100%;height:200px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:64px;border-radius:14px;margin-bottom:14px;">${icon}</div>`}
-    <p><b>Описание:</b> ${m.desc||'Нет описания'}</p>
-    <p><b>Наличие:</b> ${m.stock>0?m.stock+' шт.':'нет'}</p>
-    ${m.sale?`<p style="color:#E53935;font-weight:900">🔥 Скидка!</p>`:''}
-    ${m.free?'<p class="price" style="color:#4CAF50;font-size:28px;margin:14px 0">Бесплатно! 🎁</p>':`<p class="price" style="font-size:28px;margin:14px 0">${price} ₽</p>`}
-    ${downloadHtml}
-    <div class="modal-actions" style="margin-top:14px;">
-      <button class="btn close-btn" onclick="closeModal('productModal')">Закрыть</button>
-      ${!m.free&&m.stock>0?`<button class="btn btn-purple" onclick="addToCart(${m.id});closeModal('productModal')">🛒 В корзину</button>`:''}
-    </div>`;
-  openModal('productModal');
-}
-
-function showSection(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); renderAll(); window.scrollTo({top:0,behavior:'smooth'}); }
-function openModal(id){document.getElementById('formModal').classList.add('active');document.getElementById('productModal').classList.add('active');}
-function closeModal(id){document.getElementById('formModal').classList.remove('active');document.getElementById('productModal').classList.remove('active');document.getElementById('cartModal').classList.remove('active');}
-
-function updateUserInfo(){
-  const current = DB.get('currentUser', null);
-  const el = document.getElementById('userInfo');
-  const loginPrompt = document.getElementById('loginPrompt');
-  const welcomeUser = document.getElementById('welcomeUser');
-  if(current){
-    el.innerHTML = `🦉 ${current.name} | <a href="#" onclick="doLogout();return false;">Выйти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'none';
-    if(welcomeUser){ welcomeUser.classList.add('active'); welcomeUser.innerHTML = `🎉 Добро пожаловать, <b>${current.name}</b>!`; }
-  } else {
-    el.innerHTML = `👤 Гость | <a href="login.html">Войти</a>`;
-    if(loginPrompt) loginPrompt.style.display = 'block';
-    if(welcomeUser) welcomeUser.classList.remove('active');
-  }
-}
-function doLogout(){localStorage.removeItem('currentUser');updateUserInfo();showSection('home');}
-
-function addToCart(productId){
-  const m=materials.find(x=>x.id==productId);if(!m)return;
-  if(m.free){alert('🎁 Бесплатные товары не добавляются в корзину, нажмите "Скачать" сразу!');return;}
-  cart.push({productId,qty:1});saveAll();updateCartCount();alert(`«${m.name}» в корзине 🛒`);
-}
-function updateCartCount(){document.getElementById('cartCount').textContent=cart.length;}
-function toggleFavorite(productId){const idx=favorites.indexOf(productId);if(idx>=0)favorites.splice(idx,1);else favorites.push(productId);saveAll();renderAll();}
-
-function openCart(){
-  document.getElementById('cartModal').classList.add('active');
-  const items=document.getElementById('cartItems');
-  const total=document.getElementById('cartTotal');
-  if(cart.length===0){items.innerHTML='<p style="text-align:center;padding:20px;">Корзина пуста</p>';total.innerHTML='';return;}
-  items.innerHTML=cart.map(c=>{
-    const m=materials.find(x=>x.id==c.productId);if(!m)return '';
-    const price=m.sale&&m.salePrice?m.salePrice:m.price;
-    return `<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;"><div style="flex:1;"><h4>${m.name}</h4><p style="color:#D84315;font-weight:900">${price} ₽</p></div><button class="btn btn-del btn-small" onclick="removeFromCart(${m.id})">🗑</button></div>`;
-  }).join('');
-  const sum = cart.reduce((s,c)=>{const m=materials.find(x=>x.id==c.productId);return s+(m.sale&&m.salePrice?m.salePrice:m.price);},0);
-  total.innerHTML=`<div style="background:linear-gradient(135deg,#673AB7,#7E57C2);color:#fff;padding:16px;border-radius:16px;margin-top:14px;text-align:center;"><div>Итого:</div><div style="font-size:28px;font-weight:900;">${sum} ₽</div></div>`;
-}
-function removeFromCart(productId){cart=cart.filter(c=>c.productId!=productId);saveAll();updateCartCount();openCart();}
-
-function renderAll(){
-  renderSiteNav();
-  document.getElementById('stats').innerHTML = `<div class="stat-box"><div class="num">${Object.keys(folders).length}</div><div class="lbl">📚 Разделов</div></div><div class="stat-box"><div class="num">${materials.length}</div><div class="lbl">🛍 Материалов</div></div>`;
-  ['catalogs','worksheets','themes','letter-games','speech-games','free'].forEach(sectionId => { renderFoldersAndMaterials(sectionId); });
-  
-  const favDiv=document.getElementById('favoritesGrid');
-  if(favDiv) favDiv.innerHTML=favorites.length?favorites.map(id=>{const m=materials.find(x=>x.id==id);return m?renderMaterialCard(m):'';}).join(''):'<p style="text-align:center;padding:20px;grid-column:1/-1;">Пусто</p>';
-
-  const ordDiv=document.getElementById('ordersList');
-  const current=DB.get('currentUser',null);
-  if(ordDiv){
-    if(!current){ordDiv.innerHTML=`<p style="text-align:center;padding:20px;">Войдите для просмотра. <a href="login.html" class="btn btn-purple">Войти</a></p>`;}
-    else{
-      const myOrders=orders.filter(o=>o.userId==current.id).sort((a,b)=>b.id-a.id);
-      ordDiv.innerHTML=myOrders.length?myOrders.map(o=>`<div class="order-card"><h4>Заказ #${o.id} <span class="order-status status-paid">Оплачен</span></h4><p><b>Итого:</b> <span style="color:#D84315;font-size:18px;font-weight:900">${o.total} ₽</span></p><p style="font-size:12px;">📅 ${o.date}</p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет заказов</p>';
-    }
-  }
-
-  const payDiv=document.getElementById('paymentsList');
-  if(payDiv){
-    if(!current){payDiv.innerHTML='<p style="text-align:center;padding:20px;">Войдите для просмотра</p>';}
-    else{
-      const purchased = DB.get('purchased', []);
-      const myPurchases = materials.filter(m => purchased.includes(m.id));
-      payDiv.innerHTML=myPurchases.length?myPurchases.map(m=>`<div class="payment-card"><h4>${m.icon||'📄'} ${m.name}</h4><p><a href="${m.url}" target="_blank" class="btn btn-small btn-purple" style="text-decoration:none;margin-top:8px;">📥 Скачать / Открыть</a></p></div>`).join(''):'<p style="text-align:center;padding:20px;">Нет оплаченных материалов</p>';
-    }
-  }
-  
-  const c = settings.siteContacts || {};
-  const display = document.getElementById('siteContactsDisplay');
-  if(display) {
-    display.innerHTML = `
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📧</div><div><div style="font-size:11px;color:#888;font-weight:600;">Email</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="mailto:${c.email||''}" style="color:var(--primary);text-decoration:none;">${c.email||'—'}</a></div></div></div>
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">📱</div><div><div style="font-size:11px;color:#888;font-weight:600;">Телефон</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;"><a href="tel:${c.phone||''}" style="color:var(--primary);text-decoration:none;">${c.phone||'—'}</a></div></div></div>
-      <div style="background:linear-gradient(135deg,#FFF8E1,#FFE0B2);padding:14px;border-radius:14px;margin-bottom:10px;border-left:4px solid #FFC107;display:flex;align-items:center;gap:12px;"><div style="font-size:24px;">🕐</div><div><div style="font-size:11px;color:#888;font-weight:600;">Режим работы</div><div style="font-size:15px;color:#2D1B4E;font-weight:800;">${c.hours||'—'}</div></div></div>
-    `;
-  }
-  updateUserInfo();
-}
-
-function sendContact(){
-  const name=document.getElementById('c_name').value.trim();
-  const email=document.getElementById('c_email').value.trim();
-  const msg=document.getElementById('c_msg').value.trim();
-  if(!name||!email||!msg)return alert('Заполните все поля');
-  const contacts=DB.get('contacts',[]);
-  contacts.push({id:Date.now(),name,email,msg,date:new Date().toLocaleString('ru-RU')});
-  DB.set('contacts',contacts);
-  document.getElementById('c_name').value='';document.getElementById('c_email').value='';document.getElementById('c_msg').value='';
-  alert('Отправлено! 🦉');
-}
-function toggleTheme(){document.body.classList.toggle('dark');settings.theme=document.body.classList.contains('dark')?'dark':'light';saveAll();}
-
-renderAll();
-</script>
-
-<div class="modal" id="productModal"><div class="modal-content" id="productModalContent"></div></div>
-<div class="modal" id="cartModal"><div class="modal-content" style="max-width:650px"><h2>🛒 Корзина</h2><div id="cartItems"></div><div id="cartTotal"></div><div class="modal-actions"><button class="btn close-btn" onclick="closeModal('cartModal')">Закрыть</button></div></div></div>
-<!-- FIREBASE SDK -->
-  
-</body>
-</html>
+<img id="01a1965f-8bde-786b-92c2-b7786b2feb15"/>
