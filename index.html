@@ -187,7 +187,7 @@ footer a:hover { text-decoration: underline; }
 </div>
 
 <div class="cart-sidebar" id="cartSidebar">
-  <div class="cart-header"><h2>🛒 Корзина (<span id="cartCountSidebar">0</span>)</h2><button class="close-cart" onclick="closeCart()">✕</button></div>
+  <div class="cart-header"><h2 id="cartTitle">🛒 Корзина (0)</h2><button class="close-cart" onclick="closeCart()">✕</button></div>
   <div id="cartItems"></div>
   <div class="cart-total">
     <h3>Итого: <span id="cartTotal">0</span>₽</h3>
@@ -206,7 +206,6 @@ footer a:hover { text-decoration: underline; }
         <input type="text" id="checkoutName" placeholder="Ваше имя" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
         <input type="email" id="checkoutEmail" placeholder="Email (для получения файлов)" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
         <input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-        <!-- Поля доставки (показываются только если есть физические товары) -->
         <div id="deliveryFields" style="display:none;">
           <input type="text" id="checkoutAddress" placeholder="Адрес доставки" style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
           <select id="checkoutDelivery" style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
@@ -227,43 +226,17 @@ footer a:hover { text-decoration: underline; }
       </div>
       <input type="hidden" id="checkoutPayment" required>
       
-      <!-- ПОЛЯ ДЛЯ КАРТЫ -->
+      <!-- РЕКВИЗИТЫ КАРТЫ (из админки) -->
       <div id="cardFields" style="display:none; background:#fff8e1; padding:20px; border-radius:10px; margin-top:15px; border:2px solid #f0c040;">
-        <h4 style="margin-bottom:15px; color:#5a4000;">💳 Данные банковской карты</h4>
-        <div style="display:grid; gap:12px;">
-          <input type="text" id="cardNumber" placeholder="Номер карты: 0000 0000 0000 0000" maxlength="19" 
-                 style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px; letter-spacing:2px;"
-                 oninput="formatCardNumber(this)">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-            <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5"
-                   style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px;"
-                   oninput="formatExpiry(this)">
-            <input type="password" id="cardCVV" placeholder="CVV" maxlength="3"
-                   style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px;">
-          </div>
-          <input type="text" id="cardHolder" placeholder="Имя владельца (латиницей, как на карте)"
-                 style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px; text-transform:uppercase;">
-        </div>
-        <p style="margin-top:10px; font-size:12px; color:#999;">🔒 Данные используются только для демонстрации</p>
+        <h4 style="margin-bottom:15px; color:#5a4000;">💳 Реквизиты для оплаты</h4>
+        <div id="cardRequisitesDisplay"></div>
       </div>
       
-      <!-- QR-КОД СБП -->
+      <!-- QR-КОД СБП (из админки) -->
       <div id="qrBlock" style="display:none; text-align:center; background:#e8f5e9; padding:20px; border-radius:10px; margin-top:15px; border:2px solid #4CAF50;">
-  <h4 style="margin-bottom:15px; color:#2e7d32;">📱 Оплата через СБП</h4>
-  <p style="margin-bottom:15px; color:#555;">Отсканируйте QR-код в приложении вашего банка:</p>
-  <div style="background:white; padding:15px; border-radius:10px; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-    <!-- ⚠️ ВСТАВЬ СЮДА СВОЙ QR-КОД -->
-    <img src="qr-code.png" alt="QR-код для оплаты" style="width:200px; height:200px; border-radius:5px;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'width:200px; height:200px; background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 15px 15px; border-radius:5px;\'></div><p style=\'margin-top:10px; font-size:12px; color:#666;\'>QR-код не загружен</p>';">
-    <p style="margin-top:10px; font-size:12px; color:#666; font-weight:bold;">Сумма: <span id="qrAmount">0</span>₽</p>
-  </div>
-  <p style="margin-top:15px; color:#555; font-size:14px;">После оплаты в приложении нажмите "Подтвердить"</p>
-</div>
         <h4 style="margin-bottom:15px; color:#2e7d32;">📱 Оплата через СБП</h4>
         <p style="margin-bottom:15px; color:#555;">Отсканируйте QR-код в приложении вашего банка:</p>
-        <div style="background:white; padding:15px; border-radius:10px; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-          <div style="width:180px; height:180px; background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 15px 15px; border-radius:5px;"></div>
-          <p style="margin-top:10px; font-size:12px; color:#666; font-weight:bold;">Сумма: <span id="qrAmount">0</span>₽</p>
-        </div>
+        <div id="qrDisplay"></div>
         <p style="margin-top:15px; color:#555; font-size:14px;">После оплаты в приложении нажмите "Подтвердить"</p>
       </div>
       
@@ -453,16 +426,12 @@ function updateCartCount() {
   if (navCount) navCount.textContent = count;
   
   // Обновляем счётчик в заголовке корзины
-  const sidebarCount = document.getElementById('cartCountSidebar');
-  if (sidebarCount) sidebarCount.textContent = count;
+  const cartTitle = document.getElementById('cartTitle');
+  if (cartTitle) cartTitle.innerHTML = '🛒 Корзина (' + count + ')';
   
   // Обновляем старый счётчик если есть
   const oldCount = document.getElementById('cartCount');
   if (oldCount) oldCount.textContent = count;
-  
-  // Обновляем заголовок боковой панели
-  const cartTitle = document.querySelector('.cart-sidebar h2');
-  if (cartTitle) cartTitle.innerHTML = '🛒 Корзина (' + count + ')';
 }
 
 function openCart() { renderCart(); document.getElementById('cartSidebar').classList.add('active'); }
@@ -481,43 +450,68 @@ function selectPayment(method) {
   document.querySelectorAll('.payment-method').forEach(el => { el.style.borderColor = '#e0e0e0'; el.style.background = 'white'; });
   if (event && event.target) { event.target.style.borderColor = '#4CAF50'; event.target.style.background = '#f1f8e9'; }
   document.getElementById('checkoutPayment').value = method;
+  
   const cardFields = document.getElementById('cardFields');
   const qrBlock = document.getElementById('qrBlock');
-  if (cardFields) cardFields.style.display = (method === 'Карта') ? 'block' : 'none';
+  const total = document.getElementById('cartTotal').textContent;
+  
+  if (cardFields) {
+    cardFields.style.display = (method === 'Карта') ? 'block' : 'none';
+    if (method === 'Карта') showCardRequisites(total);
+  }
   if (qrBlock) {
     qrBlock.style.display = (method === 'СБП') ? 'block' : 'none';
-    const qrAmount = document.getElementById('qrAmount');
-    if (qrAmount) { const total = document.getElementById('cartTotal'); qrAmount.textContent = total ? total.textContent : '0'; }
+    if (method === 'СБП') showQrCode(total);
   }
 }
 
-function formatCardNumber(input) {
-  let value = input.value.replace(/\D/g, '');
-  value = value.substring(0, 16);
-  let formatted = value.match(/.{1,4}/g);
-  input.value = formatted ? formatted.join(' ') : value;
+function showCardRequisites(total) {
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  const display = document.getElementById('cardRequisitesDisplay');
+  if (payment.cardHolder || payment.cardNumber) {
+    display.innerHTML = `
+      <div style="background:white; padding:15px; border-radius:8px; border:1px solid #f0c040;">
+        <p style="margin-bottom:8px; font-size:14px; color:#666;"><strong>Получатель:</strong></p>
+        <p style="font-size:16px; font-weight:bold; color:#5a4000; margin-bottom:10px;">${payment.cardHolder || 'Не указано'}</p>
+        <p style="margin-bottom:8px; font-size:14px; color:#666;"><strong>Номер карты:</strong></p>
+        <p style="font-size:18px; font-weight:bold; color:#5a4000; letter-spacing:2px; margin-bottom:10px;">${payment.cardNumber || 'Не указано'}</p>
+        ${payment.cardBank ? `<p style="margin-bottom:8px; font-size:14px; color:#666;"><strong>Банк:</strong></p><p style="font-size:14px; color:#333; margin-bottom:10px;">${payment.cardBank}</p>` : ''}
+        <p style="margin-bottom:8px; font-size:14px; color:#666;"><strong>Сумма к оплате:</strong></p>
+        <p style="font-size:24px; font-weight:bold; color:#4CAF50;">${total}₽</p>
+      </div>
+      <p style="font-size:12px; color:#999; margin-top:10px;">📱 Переведите указанную сумму по реквизитам выше, затем нажмите "Подтвердить"</p>
+    `;
+  } else {
+    display.innerHTML = '<p style="color:#ff9800; text-align:center; padding:20px;">⚠️ Реквизиты не настроены. Обратитесь к администратору.</p>';
+  }
 }
 
-function formatExpiry(input) {
-  let value = input.value.replace(/\D/g, '');
-  if (value.length >= 2) { value = value.substring(0, 2) + '/' + value.substring(2, 4); }
-  input.value = value;
+function showQrCode(total) {
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  const display = document.getElementById('qrDisplay');
+  if (payment.qrCode) {
+    display.innerHTML = `
+      <div style="background:white; padding:15px; border-radius:10px; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+        <img src="${payment.qrCode}" alt="QR-код для оплаты" style="width:200px; height:200px; border-radius:5px;">
+        <p style="margin-top:10px; font-size:12px; color:#666; font-weight:bold;">Сумма: ${total}₽</p>
+      </div>
+    `;
+  } else {
+    display.innerHTML = '<p style="color:#ff9800; text-align:center; padding:20px;">⚠️ QR-код не загружен. Обратитесь к администратору.</p>';
+  }
 }
 
 function openCheckout() {
   if (cart.length === 0) { alert('Корзина пуста'); return; }
   if (!currentUser) { alert('Пожалуйста, войдите в систему'); window.location.href = 'login.html'; return; }
   
-  // Определяем тип заказа
   const hasPhysical = cart.some(item => item.itemType === 'physical');
   const hasDigital = cart.some(item => item.itemType === 'digital');
   const orderType = hasPhysical ? 'physical' : 'digital';
   
-  // Показываем/скрываем поля доставки
   const deliveryFields = document.getElementById('deliveryFields');
   if (deliveryFields) deliveryFields.style.display = hasPhysical ? 'block' : 'none';
   
-  // Информация о типе заказа
   const orderTypeInfo = document.getElementById('orderTypeInfo');
   if (hasPhysical && hasDigital) {
     orderTypeInfo.style.background = '#fff3e0';
@@ -543,16 +537,6 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const paymentMethod = document.getElementById('checkoutPayment').value;
   if (!paymentMethod) { alert('Выберите способ оплаты'); return; }
-  if (paymentMethod === 'Карта') {
-    const cardNum = document.getElementById('cardNumber').value.replace(/\s/g, '');
-    const cardExp = document.getElementById('cardExpiry').value;
-    const cardCvv = document.getElementById('cardCVV').value;
-    const cardHolder = document.getElementById('cardHolder').value;
-    if (cardNum.length < 16 || !cardExp || cardCvv.length < 3 || !cardHolder) {
-      alert('Заполните все поля карты');
-      return;
-    }
-  }
   
   const hasPhysical = cart.some(item => item.itemType === 'physical');
   const orderType = hasPhysical ? 'physical' : 'digital';
@@ -582,12 +566,32 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
 
 function processPayment(order) {
   const paymentContent = document.getElementById('paymentContent');
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  
   if (order.payment === 'При получении') {
     paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #ff9800; margin-bottom: 20px;">⏳ Заказ оформлен</h2><p>Номер заказа: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color: #ff9800; margin-top: 15px;">⚠️ ${order.orderType === 'digital' ? 'Файлы станут доступны после оплаты' : 'Товар будет отправлен после оплаты'}</p><button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button></div>`;
   } else if (order.payment === 'Карта') {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #5a4000; margin-bottom: 20px;">💳 Оплата картой</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p><div style="background: #fff8e1; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #f0c040;"><p style="margin-bottom: 10px;">✅ Данные карты приняты</p><p style="margin-bottom: 15px; color: #666; font-size: 14px;">Нажмите кнопку для подтверждения оплаты</p><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%;">✅ Оплатить ${order.total}₽</button></div><p style="color: #999; font-size: 12px;">${order.orderType === 'digital' ? 'После оплаты файлы станут доступны автоматически' : 'После оплаты товар будет отправлен'}</p></div>`;
+    let cardInfo = '';
+    if (payment.cardHolder || payment.cardNumber) {
+      cardInfo = `
+        <div style="background:#fff8e1; padding:20px; border-radius:10px; margin:20px 0; border:2px solid #f0c040; text-align:left;">
+          <p style="margin-bottom:8px;"><strong>Получатель:</strong> ${payment.cardHolder || '—'}</p>
+          <p style="margin-bottom:8px;"><strong>Карта:</strong> ${payment.cardNumber || '—'}</p>
+          ${payment.cardBank ? `<p style="margin-bottom:8px;"><strong>Банк:</strong> ${payment.cardBank}</p>` : ''}
+        </div>
+      `;
+    } else {
+      cardInfo = '<p style="color:#ff9800; margin:20px 0;">⚠️ Реквизиты не настроены администратором</p>';
+    }
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #5a4000; margin-bottom: 20px;">💳 Оплата картой</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p>${cardInfo}<button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%;">✅ Я перевёл — Подтвердить</button><p style="color: #999; font-size: 12px; margin-top:15px;">${order.orderType === 'digital' ? 'После подтверждения файлы станут доступны' : 'После подтверждения товар будет отправлен'}</p></div>`;
   } else if (order.payment === 'СБП') {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #2e7d32; margin-bottom: 20px;">📱 Оплата по СБП</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p><div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #4CAF50;"><p style="margin-bottom: 15px;">Отсканируйте QR-код в приложении банка</p><div style="background:white; padding:15px; border-radius:10px; display:inline-block; margin-bottom:15px;"><div style="width:150px; height:150px; background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 12px 12px; border-radius:5px;"></div></div><p style="margin-bottom: 15px; color: #666;">После оплаты в приложении нажмите кнопку:</p><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%;">✅ Я оплатил — Подтвердить</button></div></div>`;
+    let qrInfo = '';
+    if (payment.qrCode) {
+      qrInfo = `<div style="background:white; padding:15px; border-radius:10px; display:inline-block; margin:20px 0;"><img src="${payment.qrCode}" style="width:200px; height:200px; border-radius:5px;"><p style="margin-top:10px; font-weight:bold;">Сумма: ${order.total}₽</p></div>`;
+    } else {
+      qrInfo = '<p style="color:#ff9800; margin:20px 0;">⚠️ QR-код не загружен администратором</p>';
+    }
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #2e7d32; margin-bottom: 20px;">📱 Оплата по СБП</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p>${qrInfo}<button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%; margin-top:15px;">✅ Я оплатил — Подтвердить</button></div>`;
   }
   document.getElementById('paymentModal').classList.add('active');
 }
