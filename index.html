@@ -26,7 +26,7 @@
     z-index: 100;
   }
   .logo { font-size: 1.5em; font-weight: bold; color: #6a4c93; }
-  .user-area { display: flex; gap: 10px; align-items: center; }
+  .user-area { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
   .btn {
     padding: 10px 18px;
     border: none;
@@ -52,6 +52,21 @@
     box-shadow: 0 5px 25px rgba(0,0,0,0.1);
   }
   .welcome h1 { color: #6a4c93; margin-bottom: 10px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.95);
+    padding: 15px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  }
+  .stat-card .num { font-size: 1.8em; font-weight: bold; color: #6a4c93; }
+  .stat-card .lbl { color: #666; font-size: 0.9em; }
   .nav-tabs {
     display: flex;
     flex-wrap: wrap;
@@ -166,6 +181,32 @@
     border: 2px dashed #dee2e6;
     margin-top: 10px;
   }
+  .search-box {
+    background: rgba(255,255,255,0.95);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1em;
+  }
+  .contact-form {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+  }
+  .contact-form input, .contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+  }
   .toast {
     position: fixed;
     bottom: 20px;
@@ -184,6 +225,7 @@
     color: white;
     margin-top: 40px;
   }
+  footer a { color: white; }
   @media (max-width: 600px) {
     header { flex-direction: column; gap: 10px; }
     .nav-tab { flex: 1 1 auto; text-align: center; }
@@ -208,15 +250,32 @@
     <p>Уютный мир игр, пособий и знаний для маленьких совят 🌙✨</p>
   </div>
 
+  <div class="stats-grid">
+    <div class="stat-card"><div class="num" id="stTotal">0</div><div class="lbl">📚 Материалов</div></div>
+    <div class="stat-card"><div class="num" id="stFree">0</div><div class="lbl">🎁 Бесплатных</div></div>
+    <div class="stat-card"><div class="num" id="stFolders">0</div><div class="lbl">📁 Папок</div></div>
+    <div class="stat-card"><div class="num" id="stUsers">0</div><div class="lbl">👥 Пользователей</div></div>
+  </div>
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Поиск по сайту..." oninput="doSearch()">
+  </div>
+
   <div class="nav-tabs">
     <div class="nav-tab active" data-section="all">📚 Весь каталог</div>
     <div class="nav-tab" data-section="worksheets">📝 Рабочие листы</div>
     <div class="nav-tab" data-section="themes">🎨 Темы</div>
     <div class="nav-tab" data-section="letters">🔤 Игры с буквами</div>
-    <div class="nav-tab" data-section="speech">🗣️ Логопедические</div>
+    <div class="nav-tab" data-section="speech">🗣️ Логопедические игры</div>
     <div class="nav-tab" data-section="free">🎁 Бесплатно</div>
-    <div class="nav-tab" data-section="orders">📦 Мои заказы</div>
+    <div class="nav-tab" data-section="quiz">🎯 Квиз</div>
+    <div class="nav-tab" data-section="favorites">❤️ Избранное</div>
+    <div class="nav-tab" data-section="compare">⚖️ Сравнение</div>
+    <div class="nav-tab" data-section="history">👁 История</div>
+    <div class="nav-tab" data-section="achievements">🏆 Достижения</div>
     <div class="nav-tab" data-section="contacts">📞 Контакты</div>
+    <div class="nav-tab" data-section="orders">📦 Мои заказы</div>
+    <div class="nav-tab" data-section="payments">💳 Мои оплаты</div>
   </div>
 
   <div id="section-all" class="section active"></div>
@@ -225,15 +284,26 @@
   <div id="section-letters" class="section"></div>
   <div id="section-speech" class="section"></div>
   <div id="section-free" class="section"></div>
-  <div id="section-orders" class="section"></div>
+  <div id="section-quiz" class="section">
+    <div style="background:white;padding:30px;border-radius:15px;text-align:center">
+      <h2 style="color:#6a4c93">🎯 Квиз</h2>
+      <p style="color:#999;margin-top:10px">Раздел в разработке</p>
+    </div>
+  </div>
+  <div id="section-favorites" class="section"></div>
+  <div id="section-compare" class="section"></div>
+  <div id="section-history" class="section"></div>
+  <div id="section-achievements" class="section"></div>
   <div id="section-contacts" class="section"></div>
+  <div id="section-orders" class="section"></div>
+  <div id="section-payments" class="section"></div>
 </main>
 
 <!-- Модалка входа/регистрации -->
 <div class="modal-bg" id="loginModal">
   <div class="modal">
     <span class="close-x" onclick="closeModal('loginModal')">✕</span>
-    <h2 id="loginTitle">Вход</h2>
+    <h2 id="loginTitle">🔑 Вход / Регистрация</h2>
     <div id="loginForm">
       <label>Email</label>
       <input type="email" id="loginEmail" placeholder="you@mail.ru">
@@ -262,7 +332,7 @@
     <h2>🛒 Корзина</h2>
     <div id="cartItems"></div>
     <div id="cartTotal" style="font-size:1.2em;font-weight:bold;margin:15px 0;text-align:right"></div>
-    <button class="btn btn-success" style="width:100%" onclick="openCheckout()">Оформить заказ</button>
+    <button class="btn btn-success" style="width:100%" onclick="openCheckout()">Оформить</button>
   </div>
 </div>
 
@@ -270,13 +340,22 @@
 <div class="modal-bg" id="checkoutModal">
   <div class="modal">
     <span class="close-x" onclick="closeModal('checkoutModal')">✕</span>
-    <h2>📝 Оформление заказа</h2>
+    <h2>📝 Оформление</h2>
+
     <label>Способ доставки</label>
     <select id="deliveryMethod">
-      <option value="post" data-price="300">Почта России — 300₽</option>
-      <option value="cdek" data-price="400">СДЭК — 400₽</option>
-      <option value="pickup" data-price="0">Самовывоз — бесплатно</option>
+      <option value="post" data-price="300">Почта России (300₽)</option>
+      <option value="cdek" data-price="400">СДЭК (400₽)</option>
+      <option value="pickup" data-price="0">Самовывоз (бесплатно)</option>
     </select>
+
+    <label>Способ оплаты</label>
+    <select id="payMethod">
+      <option value="card">💳 Карта</option>
+      <option value="sbp">📱 СБП</option>
+      <option value="cash">💵 При получении</option>
+    </select>
+
     <label>Адрес доставки</label>
     <input type="text" id="deliveryAddress" placeholder="Город, улица, дом, квартира">
     <label>Телефон</label>
@@ -284,20 +363,18 @@
     <label>Комментарий</label>
     <textarea id="deliveryComment" rows="2"></textarea>
 
-    <div class="payment-info" id="paymentInfo">
-      <h4>💳 Реквизиты для оплаты</h4>
-      <p><b>Карта:</b> <span id="payCard">—</span></p>
-      <p><b>Получатель:</b> <span id="payName">—</span></p>
-      <p><b>Банк:</b> <span id="payBank">—</span></p>
-      <p style="margin-top:10px;color:#c0392b"><b>⚠️ После перевода укажи номер чека/транзакции ниже</b></p>
+    <div class="payment-info" id="paymentInfo" style="display:none">
+      <h4 id="payMethodTitle">💳 Реквизиты для оплаты</h4>
+      <div id="payDetails"></div>
+      <p style="margin-top:10px;color:#c0392b"><b>⚠️ После перевода укажи номер чека ниже</b></p>
     </div>
 
     <label>Номер чека / последние 4 цифры транзакции *</label>
-    <input type="text" id="paymentReceipt" placeholder="Например: 4521" required>
+    <input type="text" id="paymentReceipt" placeholder="Например: 4521">
 
     <div id="checkoutTotal" style="font-size:1.2em;font-weight:bold;margin:15px 0;text-align:right"></div>
 
-    <button class="btn btn-success" style="width:100%" onclick="submitOrder()">Подтвердить заказ</button>
+    <button class="btn btn-success" style="width:100%" onclick="submitOrder()">✅ Подтвердить</button>
   </div>
 </div>
 
@@ -313,7 +390,31 @@
   🦉 © 2026 «Игривый совёнок»
 </footer>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
 <script>
+/* ============ FIREBASE КОНФИГ ============ */
+/* Замени на свой конфиг из Firebase Console (см. инструкцию в конце) */
+const firebaseConfig = {
+  apiKey: "ВАШ_API_KEY",
+  authDomain: "ВАШ_PROJECT.firebaseapp.com",
+  databaseURL: "https://ВАШ_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "ВАШ_PROJECT",
+  storageBucket: "ВАШ_PROJECT.appspot.com",
+  messagingSenderId: "XXX",
+  appId: "XXX"
+};
+
+let db = null;
+try {
+  if (firebaseConfig.apiKey !== "ВАШ_API_KEY") {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  }
+} catch(e) { console.warn('Firebase init error', e); }
+
 /* ============ ХРАНИЛИЩЕ ============ */
 const LS = {
   get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
@@ -322,35 +423,40 @@ const LS = {
 
 let state = {
   catalog: LS.get('owl_catalog', []),
-  settings: LS.get('owl_settings', { card: '', name: '', bank: '', email: '', phone: '', address: '', hours: '' }),
+  settings: LS.get('owl_settings', { card: '', name: '', bank: '', sbp: '', email: '', phone: '', address: '', hours: '' }),
   users: LS.get('owl_users', []),
   orders: LS.get('owl_orders', []),
+  messages: LS.get('owl_messages', []),
   currentUser: LS.get('owl_current_user', null),
   cart: LS.get('owl_cart', []),
-  dataVersion: LS.get('owl_data_version', 0)
+  favorites: LS.get('owl_favorites', []),
+  history: LS.get('owl_history', []),
+  achievements: LS.get('owl_achievements', [])
 };
 
-/* ============ СИНХРОНИЗАЦИЯ МЕЖДУ ВКЛАДКАМИ ============ */
-let lastVersion = state.dataVersion;
-setInterval(() => {
-  const v = LS.get('owl_data_version', 0);
-  if (v !== lastVersion) {
-    lastVersion = v;
-    state.catalog = LS.get('owl_catalog', []);
-    state.settings = LS.get('owl_settings', state.settings);
-    state.orders = LS.get('owl_orders', []);
+/* ============ FIREBASE СИНХРОНИЗАЦИЯ ============ */
+function syncFromFirebase() {
+  if (!db) return;
+  db.ref('owl_data').on('value', snap => {
+    const d = snap.val();
+    if (!d) return;
+    if (d.catalog) { state.catalog = d.catalog; LS.set('owl_catalog', d.catalog); }
+    if (d.settings) { state.settings = d.settings; LS.set('owl_settings', d.settings); }
+    if (d.orders) { state.orders = d.orders; LS.set('owl_orders', d.orders); }
+    if (d.users) { state.users = d.users; LS.set('owl_users', d.users); }
     renderAll();
-  }
-}, 2500);
-window.addEventListener('storage', (e) => {
-  if (e.key && e.key.startsWith('owl_')) {
-    lastVersion = LS.get('owl_data_version', 0);
-    state.catalog = LS.get('owl_catalog', []);
-    state.settings = LS.get('owl_settings', state.settings);
-    state.orders = LS.get('owl_orders', []);
-    renderAll();
-  }
-});
+  });
+}
+function syncToFirebase() {
+  if (!db) return;
+  db.ref('owl_data').set({
+    catalog: state.catalog,
+    settings: state.settings,
+    orders: state.orders,
+    users: state.users
+  });
+}
+syncFromFirebase();
 
 /* ============ ФОН ============ */
 function applyBackground() {
@@ -374,10 +480,6 @@ function toast(msg) {
 }
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-function saveVersion() {
-  state.dataVersion++;
-  LS.set('owl_data_version', state.dataVersion);
-}
 
 /* ============ АВТОРИЗАЦИЯ ============ */
 function updateAuthUI() {
@@ -395,12 +497,12 @@ function openLogin() { showLogin(); openModal('loginModal'); }
 function showLogin() {
   document.getElementById('loginForm').style.display = 'block';
   document.getElementById('registerForm').style.display = 'none';
-  document.getElementById('loginTitle').textContent = 'Вход';
+  document.getElementById('loginTitle').textContent = '🔑 Вход';
 }
 function showRegister() {
   document.getElementById('loginForm').style.display = 'none';
   document.getElementById('registerForm').style.display = 'block';
-  document.getElementById('loginTitle').textContent = 'Регистрация';
+  document.getElementById('loginTitle').textContent = '✨ Регистрация';
 }
 function doRegister() {
   const name = document.getElementById('regName').value.trim();
@@ -411,11 +513,13 @@ function doRegister() {
   const user = { id: Date.now(), name, email, password: pwd };
   state.users.push(user);
   LS.set('owl_users', state.users);
+  syncToFirebase();
   state.currentUser = user;
   LS.set('owl_current_user', user);
   updateAuthUI();
   closeModal('loginModal');
   toast('Добро пожаловать, ' + name + '!');
+  renderStats();
 }
 function doLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -437,19 +541,26 @@ function logout() {
   toast('Вы вышли');
 }
 
+/* ============ СТАТИСТИКА ============ */
+function renderStats() {
+  document.getElementById('stTotal').textContent = state.catalog.length;
+  document.getElementById('stFree').textContent = state.catalog.filter(p => Number(p.price) === 0).length;
+  const folders = new Set(state.catalog.map(p => p.section + '|' + (p.folder || '')));
+  document.getElementById('stFolders').textContent = folders.size;
+  document.getElementById('stUsers').textContent = state.users.length;
+}
+
 /* ============ КАТАЛОГ ============ */
 const SECTIONS = {
   worksheets: '📝 Рабочие листы',
   themes: '🎨 Темы',
   letters: '🔤 Игры с буквами',
-  speech: '🗣️ Логопедические',
+  speech: '🗣️ Логопедические игры',
   free: '🎁 Бесплатно'
 };
 
 function renderCatalog() {
-  // Все товары
   renderSection('all', state.catalog);
-  // По разделам
   Object.keys(SECTIONS).forEach(key => {
     const items = state.catalog.filter(p => p.section === key);
     renderSection(key, items);
@@ -463,7 +574,6 @@ function renderSection(key, items) {
     el.innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center;color:#999">Товаров пока нет</div>';
     return;
   }
-  // Группируем по папкам
   const folders = {};
   items.forEach(p => {
     const f = p.folder || 'Без папки';
@@ -491,8 +601,14 @@ function renderSection(key, items) {
 function openProduct(id) {
   const p = state.catalog.find(x => x.id === id);
   if (!p) return;
+  // Добавляем в историю
+  if (!state.history.find(h => h.id === id)) {
+    state.history.push({ id, date: Date.now() });
+    LS.set('owl_history', state.history);
+  }
   const isFree = Number(p.price) === 0;
   const inCart = state.cart.find(c => c.id === id);
+  const isFav = state.favorites.includes(id);
   let actions = '';
   if (isFree) {
     actions = `<button class="btn btn-success" style="width:100%" onclick="downloadFree(${p.id})">⬇️ Скачать бесплатно</button>`;
@@ -506,6 +622,9 @@ function openProduct(id) {
     <h2>${p.name}</h2>
     <p style="color:#666;margin:10px 0">${p.description || ''}</p>
     <div style="font-size:1.3em;font-weight:bold;color:#27ae60;margin:15px 0">${isFree ? 'Бесплатно' : p.price + '₽'}</div>
+    <button class="btn ${isFav ? 'btn-danger' : 'btn-secondary'}" style="width:100%;margin-bottom:10px" onclick="toggleFav(${p.id})">
+      ${isFav ? '❤️ В избранном' : '🤍 В избранное'}
+    </button>
     ${actions}
   `;
   openModal('productModal');
@@ -516,6 +635,15 @@ function downloadFree(id) {
   if (!p || !p.fileUrl) return toast('Файл не найден');
   window.open(p.fileUrl, '_blank');
   toast('Скачивание началось 🦉');
+}
+
+function toggleFav(id) {
+  const idx = state.favorites.indexOf(id);
+  if (idx >= 0) state.favorites.splice(idx, 1);
+  else state.favorites.push(id);
+  LS.set('owl_favorites', state.favorites);
+  openProduct(id);
+  renderFavorites();
 }
 
 /* ============ КОРЗИНА ============ */
@@ -566,12 +694,8 @@ function renderCart() {
 function openCheckout() {
   if (state.cart.length === 0) return toast('Корзина пуста');
   closeModal('cartModal');
-  // Подставляем реквизиты
-  document.getElementById('payCard').textContent = state.settings.card || 'не указаны';
-  document.getElementById('payName').textContent = state.settings.name || 'не указан';
-  document.getElementById('payBank').textContent = state.settings.bank || 'не указан';
-  // Считаем сумму с доставкой
   updateCheckoutTotal();
+  updatePayDetails();
   openModal('checkoutModal');
 }
 function updateCheckoutTotal() {
@@ -584,13 +708,42 @@ function updateCheckoutTotal() {
   document.getElementById('checkoutTotal').textContent =
     'Товары: ' + productsSum + '₽ + Доставка: ' + deliveryPrice + '₽ = ' + (productsSum + deliveryPrice) + '₽';
 }
+function updatePayDetails() {
+  const method = document.getElementById('payMethod').value;
+  const info = document.getElementById('paymentInfo');
+  const title = document.getElementById('payMethodTitle');
+  const details = document.getElementById('payDetails');
+  const s = state.settings;
+  if (method === 'card') {
+    info.style.display = 'block';
+    title.textContent = '💳 Оплата по карте';
+    details.innerHTML = `
+      <p><b>Номер карты:</b> ${s.card || 'не указан'}</p>
+      <p><b>Получатель:</b> ${s.name || 'не указан'}</p>
+      <p><b>Банк:</b> ${s.bank || 'не указан'}</p>
+    `;
+  } else if (method === 'sbp') {
+    info.style.display = 'block';
+    title.textContent = '📱 Оплата через СБП';
+    details.innerHTML = `
+      <p><b>Телефон:</b> ${s.phone || 'не указан'}</p>
+      <p><b>Получатель:</b> ${s.name || 'не указан'}</p>
+      <p><b>Банк:</b> ${s.bank || 'не указан'}</p>
+    `;
+  } else {
+    info.style.display = 'none';
+  }
+}
 document.getElementById('deliveryMethod').addEventListener('change', updateCheckoutTotal);
+document.getElementById('payMethod').addEventListener('change', updatePayDetails);
 
 function submitOrder() {
+  const payMethod = document.getElementById('payMethod').value;
   const receipt = document.getElementById('paymentReceipt').value.trim();
   const address = document.getElementById('deliveryAddress').value.trim();
   const phone = document.getElementById('deliveryPhone').value.trim();
-  if (!receipt) return toast('Укажи номер чека после оплаты');
+
+  if ((payMethod === 'card' || payMethod === 'sbp') && !receipt) return toast('Укажи номер чека после оплаты');
   if (!address) return toast('Укажи адрес');
   if (!phone) return toast('Укажи телефон');
 
@@ -618,20 +771,22 @@ function submitOrder() {
       address, phone,
       comment: document.getElementById('deliveryComment').value
     },
+    payMethod,
+    payMethodLabel: document.getElementById('payMethod').options[document.getElementById('payMethod').selectedIndex].textContent,
     total: productsSum + deliveryPrice,
-    receipt,
-    status: 'pending', // pending | paid | rejected
+    receipt: receipt || '—',
+    status: payMethod === 'cash' ? 'pending' : 'pending',
     createdAt: new Date().toISOString()
   };
 
   state.orders.push(order);
   LS.set('owl_orders', state.orders);
+  syncToFirebase();
   state.cart = [];
   LS.set('owl_cart', state.cart);
   updateCartBadge();
-  saveVersion();
   closeModal('checkoutModal');
-  toast('Заказ принят! Ожидай подтверждения оплаты 🦉');
+  toast('Заказ принят! Ожидай подтверждения 🦉');
   showSection('orders');
 }
 
@@ -649,19 +804,13 @@ function renderOrders() {
   }
   el.innerHTML = myOrders.map(o => {
     const statusMap = {
-      pending: ['Ожидает оплаты', 'status-pending'],
+      pending: ['Ожидает подтверждения', 'status-pending'],
       paid: ['Оплачен ✓', 'status-paid'],
       rejected: ['Отклонён', 'status-rejected']
     };
     const [sText, sClass] = statusMap[o.status] || ['—', ''];
     const itemsHtml = o.items.map(it => {
-      let dl = '';
-      if (o.status === 'paid' && it.fileUrl) {
-        dl = `<a href="${it.fileUrl}" target="_blank" class="btn btn-small btn-success" style="margin-left:10px">⬇️ Скачать</a>`;
-      } else if (Number(it.price) > 0) {
-        dl = `<span style="color:#999;font-size:0.85em;margin-left:10px">🔒 после оплаты</span>`;
-      }
-      return `<div style="padding:6px 0;border-bottom:1px dashed #eee">${it.name} — ${it.price}₽ ${dl}</div>`;
+      return `<div style="padding:6px 0;border-bottom:1px dashed #eee">${it.name} — ${it.price}₽</div>`;
     }).join('');
     return `
       <div style="background:white;padding:20px;border-radius:15px;margin-bottom:15px;box-shadow:0 3px 15px rgba(0,0,0,0.08)">
@@ -673,26 +822,132 @@ function renderOrders() {
         ${itemsHtml}
         <div style="margin-top:10px;padding-top:10px;border-top:2px solid #eee">
           <div>Доставка: ${o.delivery.methodLabel}</div>
+          <div>Оплата: ${o.payMethodLabel}</div>
           <div>Адрес: ${o.delivery.address}</div>
           <div>Тел: ${o.delivery.phone}</div>
           <div style="font-weight:bold;margin-top:8px">Итого: ${o.total}₽</div>
-          ${o.status === 'pending' ? `<div style="margin-top:8px;color:#e67e22;font-size:0.9em">Чек: ${o.receipt} — ожидает подтверждения админом</div>` : ''}
         </div>
       </div>`;
   }).join('');
 }
 
-/* ============ КОНТАКТЫ ============ */
+/* ============ МОИ ОПЛАТЫ (скачивание платных товаров) ============ */
+function renderPayments() {
+  const el = document.getElementById('section-payments');
+  if (!state.currentUser) {
+    el.innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">Войди, чтобы видеть оплаты</div>';
+    return;
+  }
+  const myPaidOrders = state.orders.filter(o => o.userId === state.currentUser.id && o.status === 'paid').reverse();
+  if (myPaidOrders.length === 0) {
+    el.innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">У тебя пока нет оплаченных товаров</div>';
+    return;
+  }
+  el.innerHTML = '<h2 style="color:white;margin-bottom:15px">💳 Мои оплаченные материалы</h2>' +
+    myPaidOrders.map(o => {
+      const itemsHtml = o.items.map(it => {
+        if (Number(it.price) > 0 && it.fileUrl) {
+          return `<div style="padding:10px;background:white;border-radius:10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+            <b>${it.name}</b>
+            <a href="${it.fileUrl}" target="_blank" class="btn btn-small btn-success">⬇️ Скачать</a>
+          </div>`;
+        }
+        return '';
+      }).join('');
+      return `<div style="background:rgba(255,255,255,0.95);padding:20px;border-radius:15px;margin-bottom:15px">
+        <h3 style="color:#6a4c93;margin-bottom:10px">Заказ №${o.id}</h3>
+        ${itemsHtml}
+      </div>`;
+    }).join('');
+}
+
+/* ============ ИЗБРАННОЕ ============ */
+function renderFavorites() {
+  const el = document.getElementById('section-favorites');
+  if (state.favorites.length === 0) {
+    el.innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">Избранное пусто</div>';
+    return;
+  }
+  const items = state.favorites.map(id => state.catalog.find(p => p.id === id)).filter(Boolean);
+  let html = '<div class="products-grid">';
+  items.forEach(p => {
+    html += `<div class="product-card" onclick="openProduct(${p.id})">
+      <img src="${p.image || 'https://via.placeholder.com/220x140?text=🦉'}" alt="">
+      <h4>${p.name}</h4>
+      <div class="price ${Number(p.price)===0?'free':''}">${Number(p.price)===0?'Бесплатно':p.price+'₽'}</div>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* ============ СРАВНЕНИЕ ============ */
+function renderCompare() {
+  document.getElementById('section-compare').innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">⚖️ Сравнение в разработке</div>';
+}
+
+/* ============ ИСТОРИЯ ============ */
+function renderHistory() {
+  const el = document.getElementById('section-history');
+  if (state.history.length === 0) {
+    el.innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">История пуста</div>';
+    return;
+  }
+  const items = state.history.slice().reverse().map(h => state.catalog.find(p => p.id === h.id)).filter(Boolean);
+  let html = '<div class="products-grid">';
+  items.forEach(p => {
+    html += `<div class="product-card" onclick="openProduct(${p.id})">
+      <img src="${p.image || 'https://via.placeholder.com/220x140?text=🦉'}" alt="">
+      <h4>${p.name}</h4>
+    </div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+/* ============ ДОСТИЖЕНИЯ ============ */
+function renderAchievements() {
+  document.getElementById('section-achievements').innerHTML = '<div style="background:white;padding:30px;border-radius:15px;text-align:center">🏆 Достижения в разработке</div>';
+}
+
+/* ============ КОНТАКТЫ + ФОРМА ============ */
 function renderContacts() {
   const s = state.settings;
   document.getElementById('section-contacts').innerHTML = `
-    <div style="background:white;padding:30px;border-radius:15px">
+    <div style="background:white;padding:30px;border-radius:15px;margin-bottom:20px">
       <h2 style="color:#6a4c93;margin-bottom:15px">📞 Контакты</h2>
       <p><b>Email:</b> ${s.email || '—'}</p>
       <p><b>Телефон:</b> ${s.phone || '—'}</p>
       <p><b>Адрес:</b> ${s.address || '—'}</p>
       <p><b>Часы работы:</b> ${s.hours || '—'}</p>
+    </div>
+    <div class="contact-form">
+      <h2 style="color:#6a4c93;margin-bottom:15px">✉️ Напишите нам</h2>
+      <input type="email" id="msgEmail" placeholder="Твой email">
+      <textarea id="msgText" rows="4" placeholder="Сообщение..."></textarea>
+      <button class="btn" onclick="sendMessage()">Отправить 🦉</button>
     </div>`;
+}
+function sendMessage() {
+  const email = document.getElementById('msgEmail').value.trim();
+  const text = document.getElementById('msgText').value.trim();
+  if (!email || !text) return toast('Заполни все поля');
+  state.messages.push({ email, text, date: Date.now() });
+  LS.set('owl_messages', state.messages);
+  syncToFirebase();
+  document.getElementById('msgEmail').value = '';
+  document.getElementById('msgText').value = '';
+  toast('Сообщение отправлено 🦉');
+}
+
+/* ============ ПОИСК ============ */
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) { renderCatalog(); return; }
+  const found = state.catalog.filter(p =>
+    p.name.toLowerCase().includes(q) || (p.description || '').toLowerCase().includes(q)
+  );
+  renderSection('all', found);
 }
 
 /* ============ НАВИГАЦИЯ ============ */
@@ -700,7 +955,12 @@ function showSection(key) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.section === key));
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'section-' + key));
   if (key === 'orders') renderOrders();
+  if (key === 'payments') renderPayments();
   if (key === 'contacts') renderContacts();
+  if (key === 'favorites') renderFavorites();
+  if (key === 'history') renderHistory();
+  if (key === 'compare') renderCompare();
+  if (key === 'achievements') renderAchievements();
 }
 document.querySelectorAll('.nav-tab').forEach(t => {
   t.addEventListener('click', () => showSection(t.dataset.section));
@@ -709,10 +969,11 @@ document.querySelectorAll('.nav-tab').forEach(t => {
 /* ============ РЕНДЕР ВСЕГО ============ */
 function renderAll() {
   renderCatalog();
+  renderStats();
   updateCartBadge();
   updateAuthUI();
-  if (document.getElementById('section-orders').classList.contains('active')) renderOrders();
-  if (document.getElementById('section-contacts').classList.contains('active')) renderContacts();
+  const active = document.querySelector('.nav-tab.active');
+  if (active) showSection(active.dataset.section);
 }
 renderAll();
 </script>
