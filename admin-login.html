@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Админ — Игривый совёнок</title>
 <style>
-/* ВАШ СУЩЕСТВУЮЩИЙ CSS ОСТАЛСЯ БЕЗ ИЗМЕНЕНИЙ */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
 .container { max-width: 1200px; margin: 0 auto; }
@@ -102,7 +101,7 @@ button:hover { transform: translateY(-2px); }
   <div id="adminPanel" class="admin-panel hidden">
     <div class="tabs">
       <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
-      <button class="tab" data-tab="users">👥 Пользователи</button> <!-- ПУНКТ 3 -->
+      <button class="tab" data-tab="users">👥 Пользователи</button>
       <button class="tab" data-tab="background">🎨 Фон</button>
       <button class="tab" data-tab="catalog">📚 Весь каталог</button>
       <button class="tab" data-tab="worksheets">📝 Рабочие листы</button>
@@ -127,7 +126,6 @@ button:hover { transform: translateY(-2px); }
       </div>
     </div>
 
-    <!-- ПУНКТ 3: Вкладка Пользователи -->
     <div id="users" class="tab-content">
       <h2>👥 Пользователи и оплаты</h2>
       <div id="usersList"></div>
@@ -215,7 +213,7 @@ button:hover { transform: translateY(-2px); }
     <form id="itemForm">
       <div class="form-group"><label>Название товара</label><input type="text" id="itemName" required></div>
       <div class="form-group"><label>Описание</label><textarea id="itemDescription" rows="3"></textarea></div>
-      <div class="form-group"><label>Цена (₽)</label><input type="number" id="itemPrice" min="0" step="0.01" required></div>
+      <div class="form-group"><label>Цена (₽, 0 = бесплатно)</label><input type="number" id="itemPrice" min="0" step="0.01" required></div>
       <div class="form-group">
         <label>Файл для скачивания</label>
         <div class="file-upload" onclick="document.getElementById('itemFileInput').click()"><p>📎 Нажмите для выбора файла</p><input type="file" id="itemFileInput" style="display: none;" onchange="handleFileSelect(event)"></div>
@@ -242,19 +240,18 @@ function init() {
     document.getElementById('setupSection').classList.remove('hidden');
   }
   loadDashboard();
-  loadUsers(); // ПУНКТ 3
+  loadUsers();
   loadBackground();
   loadCatalog();
   loadOrders();
   loadMessages();
   loadContacts();
-  
-  // ПУНКТ 4: Синхронизация с другими вкладками
   window.addEventListener('storage', (e) => {
     if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
       loadDashboard(); loadUsers(); loadCatalog(); loadOrders();
     }
   });
+  setInterval(() => { loadDashboard(); loadUsers(); loadOrders(); }, 5000);
 }
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -304,7 +301,6 @@ function loadDashboard() {
   document.getElementById('totalFolders').textContent = totalFolders;
 }
 
-// ПУНКТ 3: Отображение пользователей, их оплат и покупок
 function loadUsers() {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const usersList = document.getElementById('usersList');
@@ -315,11 +311,7 @@ function loadUsers() {
     if (order.paid) { users[order.email].paid++; users[order.email].totalSpent += order.total; } else { users[order.email].unpaid++; }
     order.items.forEach(item => { users[order.email].items.push(item.name); });
   });
-  
-  if (Object.keys(users).length === 0) {
-    usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>';
-    return;
-  }
+  if (Object.keys(users).length === 0) { usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; return; }
   usersList.innerHTML = Object.values(users).map(user => `
     <div class="user-card ${user.paid > 0 ? 'paid' : 'unpaid'}">
       <div class="user-name">👤 ${user.name}</div>
