@@ -421,19 +421,19 @@ function saveCartToAllCarts() {
 function updateCartCount() {
   const count = cart.length;
   
-  // Обновляем счётчик в шапке (красная кнопка)
+  // 1. Счётчик в красной кнопке шапки
   const navCount = document.getElementById('cartCountNav');
   if (navCount) navCount.textContent = count;
   
-  // Обновляем счётчик в заголовке корзины
+  // 2. Заголовок боковой панели корзины (самое важное!)
   const cartTitle = document.getElementById('cartTitle');
   if (cartTitle) cartTitle.innerHTML = '🛒 Корзина (' + count + ')';
   
-  // Обновляем старый счётчик если есть
+  // 3. Старый счётчик (если есть)
   const oldCount = document.getElementById('cartCount');
   if (oldCount) oldCount.textContent = count;
   
-  // Сохраняем корзину для админа
+  // 4. Сохраняем корзину для админа
   saveCartToAllCarts();
 }
 
