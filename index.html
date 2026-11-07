@@ -102,7 +102,6 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 .btn:hover{transform:translateY(-2px)}
 .btn-secondary{background:#f0f0f0;color:#333}
 .btn-success{background:linear-gradient(135deg,#4CAF50,#388E3C)}
-.btn-warning{background:linear-gradient(135deg,#ff9800,#f57c00)}
 .payment-method{padding:15px;border:2px solid #e0e0e0;border-radius:10px;cursor:pointer;margin-bottom:10px;text-align:center;transition:all .3s}
 .payment-method:hover{border-color:#f0c040;background:#fffef5}
 footer{background:linear-gradient(135deg,#2c2c54,#474787);color:#fff;padding:25px;border-radius:15px;text-align:center;margin-top:20px}
@@ -258,9 +257,9 @@ footer a:hover{text-decoration:underline}
 <div id="checkoutSummary" style="background:#f9f9f9;padding:20px;border-radius:10px;margin-bottom:25px"></div>
 <div id="orderTypeInfo" style="padding:10px;border-radius:8px;margin-bottom:20px;font-size:14px"></div>
 <div style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
-<h4 style="margin-bottom:10px;color:#e65100">📎 Чек об оплате</h4>
-<p style="font-size:13px;color:#666;margin-bottom:10px">Прикрепите скриншот чека. После проверки админом файлы станут доступны.</p>
-<input type="file" id="receiptFile" accept="image/*,application/pdf,.pdf,.doc,.docx,.txt,.zip,.rar" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
+<h4 style="margin-bottom:10px;color:#e65100">📎 Чек об оплате (любой формат)</h4>
+<p style="font-size:13px;color:#666;margin-bottom:10px">Прикрепите скриншот, PDF, DOC или фото чека. После проверки админом файлы станут доступны.</p>
+<input type="file" id="receiptFile" accept="image/*,application/pdf,.pdf,.doc,.docx,.txt,.zip,.rar,.jpg,.jpeg,.png" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
 <div id="receiptPreview" style="margin-top:10px"></div>
 </div>
 <h3 style="margin-bottom:15px;color:#5a4000">💳 Способ оплаты:</h3>
@@ -416,12 +415,14 @@ function showCategory(category){
         }else if(item.file.name.match(/\.(mp4|webm|mov)$/i)){
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
         }else if(item.file.name.match(/\.pdf$/i)){
-          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Только просмотр</button></div>`
         }else if(item.file.name.match(/\.(mp3|wav|ogg)$/i)){
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🎵</div><div style="font-size:11px;color:#666">${item.file.name}</div><audio src="${item.file.data}" controls style="width:100%;margin-top:5px"></audio></div>`
         }else{
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📎</div><div style="font-size:11px;color:#666">${item.file.name}</div><div style="font-size:10px;color:#999">${(item.file.size/1024).toFixed(1)} КБ</div></div>`
         }
+      }else if(item.fileUrl){
+        prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🔗</div><div style="font-size:11px;color:#666">Файл по ссылке</div><a href="${item.fileUrl}" target="_blank" style="font-size:11px;color:#1976d2">Открыть ссылку</a></div>`
       }else if(it==='physical'){prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`}
       else{prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`}
       let actionBtn='';
@@ -449,7 +450,7 @@ function addToCart(category,fi,ii){
   if(!cat[category]||!cat[category][fi]||!cat[category][fi].items[ii]){alert('❌ Товар не найден');return}
   const item=cat[category][fi].items[ii];
   if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}
-  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});
+  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,fileUrl:item.fileUrl||null,quantity:1});
   localStorage.setItem('cart',JSON.stringify(cart));
   saveCartToAllCarts();
   updateCartCount();
@@ -514,7 +515,6 @@ document.getElementById('receiptFile').addEventListener('change',e=>{
     const reader=new FileReader();
     reader.onload=ev=>{
       receiptData=ev.target.result;
-      const isImage=file.type.startsWith('image/');
       const icon=file.type==='application/pdf'?'📄':file.name.endsWith('.doc')||file.name.endsWith('.docx')?'📝':file.name.endsWith('.zip')||file.name.endsWith('.rar')?'📦':'📎';
       document.getElementById('receiptPreview').innerHTML=`<div style="background:#e8f5e9;padding:12px;border-radius:8px;border:2px solid #4CAF50;display:flex;align-items:center;gap:10px">
         <span style="font-size:24px">${icon}</span>
@@ -566,15 +566,9 @@ function downloadFreeItem(category,fi,ii){
   const item=cat[category][fi].items[ii];
   if(!item){alert('❌ Товар не найден');return}
   if(item.file&&item.file.data){
-    const link=document.createElement('a');
-    link.href=item.file.data;
-    link.download=item.file.name;
-    document.body.appendChild(link);link.click();document.body.removeChild(link);
-    alert('✅ Файл скачан!')
-  }else if(item.fileUrl){
-    window.open(item.fileUrl,'_blank');
-    alert('✅ Файл открыт по ссылке!')
-  }else{alert('❌ Файл не найден')}
+    const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')
+  }else if(item.fileUrl){window.open(item.fileUrl,'_blank');alert('✅ Файл открыт по ссылке!')}
+  else{alert('❌ Файл не найден')}
 }
 
 function downloadPurchasedItem(category,fi,ii){
@@ -583,15 +577,9 @@ function downloadPurchasedItem(category,fi,ii){
   const item=cat[category][fi].items[ii];
   if(!item){alert('❌ Товар не найден');return}
   if(item.file&&item.file.data){
-    const link=document.createElement('a');
-    link.href=item.file.data;
-    link.download=item.file.name;
-    document.body.appendChild(link);link.click();document.body.removeChild(link);
-    alert('✅ Файл скачан!')
-  }else if(item.fileUrl){
-    window.open(item.fileUrl,'_blank');
-    alert('✅ Файл открыт по ссылке!')
-  }else{alert('❌ Файл не найден')}
+    const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')
+  }else if(item.fileUrl){window.open(item.fileUrl,'_blank');alert('✅ Файл открыт по ссылке!')}
+  else{alert('❌ Файл не найден')}
 }
 
 function showMyPurchases(){
@@ -678,6 +666,7 @@ function previewFile(fileData,fileName,fileType){
   title.textContent='👁 Предпросмотр: '+fileName;
   title.style.cssText='margin-bottom:15px;padding-right:100px;color:#5a4000';
   const viewer=document.createElement('div');
+  viewer.style.cssText='position:relative';
   if(fileType==='video'||fileName.match(/\.(mp4|webm|mov)$/i)){
     const video=document.createElement('video');
     video.src=fileData;video.controls=true;
@@ -689,10 +678,25 @@ function previewFile(fileData,fileName,fileType){
     img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px';
     viewer.appendChild(img)
   }else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){
-    const embed=document.createElement('embed');
-    embed.src=fileData;embed.type='application/pdf';
-    embed.style.cssText='width:100%;height:70vh;border-radius:8px';
-    viewer.appendChild(embed)
+    const iframe=document.createElement('iframe');
+    iframe.src=fileData+'#toolbar=0&navpanes=0&scrollbar=0&view=FitH';
+    iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:8px;pointer-events:none';
+    iframe.setAttribute('sandbox','allow-same-origin');
+    iframe.onload=function(){
+      try{
+        const doc=iframe.contentDocument||iframe.contentWindow.document;
+        doc.addEventListener('contextmenu',e=>e.preventDefault());
+        doc.addEventListener('selectstart',e=>e.preventDefault());
+        doc.addEventListener('dragstart',e=>e.preventDefault());
+        doc.addEventListener('copy',e=>e.preventDefault());
+        doc.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='p'))e.preventDefault()});
+      }catch(e){}
+    };
+    viewer.appendChild(iframe);
+    const overlay=document.createElement('div');
+    overlay.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;background:transparent;z-index:5';
+    overlay.oncontextmenu=e=>{e.preventDefault();alert('🔒 Скачивание только после оплаты')};
+    viewer.appendChild(overlay)
   }else if(fileType==='audio'||fileName.match(/\.(mp3|wav|ogg)$/i)){
     const audio=document.createElement('audio');
     audio.src=fileData;audio.controls=true;
@@ -703,7 +707,7 @@ function previewFile(fileData,fileName,fileType){
     viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
   }
   const warning=document.createElement('p');
-  warning.textContent='⚠️ Скачивание только после оплаты';
+  warning.textContent='⚠️ Только просмотр. Скачивание после оплаты';
   warning.style.cssText='text-align:center;color:#ff9800;margin-top:15px;font-weight:600;font-size:14px';
   content.appendChild(closeBtn);content.appendChild(title);content.appendChild(viewer);content.appendChild(warning);
   modal.appendChild(content);
