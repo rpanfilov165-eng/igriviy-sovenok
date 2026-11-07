@@ -50,6 +50,8 @@
     color: white;
     width: 100%;
     margin-top: 10px;
+    text-decoration: none;
+    display: inline-block;
   }
   .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
   .btn-success { background: #27ae60; }
@@ -91,7 +93,7 @@
     padding: 15px;
     margin-bottom: 15px;
   }
-  .folder-block h3 { color: #6a4c93; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .folder-block h3 { color: #6a4c93; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
   .product-row {
     background: white;
     padding: 10px;
@@ -268,8 +270,8 @@
       <input type="file" id="restoreFile" accept=".json">
       <button class="btn" onclick="restoreBackup()">⬆️ Восстановить</button>
 
-      <h3 style="margin:25px 0 10px">💾 Данные</h3>
-      <button class="btn btn-danger" onclick="resetAll()">🗑 Сброс</button>
+      <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
+      <button class="btn btn-danger" onclick="resetAll()">🗑 Сбросить все данные</button>
     </div>
 
     <!-- Журнал -->
@@ -305,29 +307,24 @@
   </div>
 </div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+<footer style="text-align:center;padding:20px;color:white;margin-top:40px">
+  <a href="index.html" style="color:white;margin:0 10px">🏠 На сайт</a>
+  <a href="login.html" style="color:white;margin:0 10px">👤 Покупатель</a>
+</footer>
+
+<!-- GunDB — бесплатная синхронизация -->
+<script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gun/sea.js"></script>
 
 <script>
-/* ============ FIREBASE КОНФИГ (тот же, что в index.html) ============ */
-const firebaseConfig = {
-  apiKey: "ВАШ_API_KEY",
-  authDomain: "ВАШ_PROJECT.firebaseapp.com",
-  databaseURL: "https://ВАШ_PROJECT-default-rtdb.firebaseio.com",
-  projectId: "ВАШ_PROJECT",
-  storageBucket: "ВАШ_PROJECT.appspot.com",
-  messagingSenderId: "XXX",
-  appId: "XXX"
-};
-
-let db = null;
-try {
-  if (firebaseConfig.apiKey !== "ВАШ_API_KEY") {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.database();
-  }
-} catch(e) { console.warn('Firebase init error', e); }
+/* ============ GUNDB ============ */
+const gun = Gun({
+  peers: [
+    'https://gun-manhattan.herokuapp.com/gun',
+    'https://gun-us.herokuapp.com/gun'
+  ]
+});
+const owlData = gun.get('owl_shop_data_v1');
 
 /* ============ ХРАНИЛИЩЕ ============ */
 const LS = {
@@ -352,30 +349,30 @@ function addLog(action) {
   LS.set('owl_log', state.log);
 }
 
-function syncToFirebase() {
-  if (!db) return;
-  db.ref('owl_data').set({
-    catalog: state.catalog,
-    settings: state.settings,
-    orders: state.orders,
-    users: state.users,
-    messages: state.messages
+function syncToGun() {
+  owlData.put({
+    catalog: JSON.stringify(state.catalog),
+    settings: JSON.stringify(state.settings),
+    orders: JSON.stringify(state.orders),
+    users: JSON.stringify(state.users),
+    messages: JSON.stringify(state.messages),
+    updated: Date.now()
   });
 }
-function syncFromFirebase() {
-  if (!db) return;
-  db.ref('owl_data').on('value', snap => {
-    const d = snap.val();
-    if (!d) return;
-    if (d.catalog) { state.catalog = d.catalog; LS.set('owl_catalog', d.catalog); }
-    if (d.settings) { state.settings = d.settings; LS.set('owl_settings', d.settings); }
-    if (d.orders) { state.orders = d.orders; LS.set('owl_orders', d.orders); }
-    if (d.users) { state.users = d.users; LS.set('owl_users', d.users); }
-    if (d.messages) { state.messages = d.messages; LS.set('owl_messages', d.messages); }
-    renderAll();
+function syncFromGun() {
+  owlData.on((data) => {
+    if (!data) return;
+    try {
+      if (data.catalog) { state.catalog = JSON.parse(data.catalog); LS.set('owl_catalog', state.catalog); }
+      if (data.settings) { state.settings = JSON.parse(data.settings); LS.set('owl_settings', state.settings); }
+      if (data.orders) { state.orders = JSON.parse(data.orders); LS.set('owl_orders', state.orders); }
+      if (data.users) { state.users = JSON.parse(data.users); LS.set('owl_users', state.users); }
+      if (data.messages) { state.messages = JSON.parse(data.messages); LS.set('owl_messages', state.messages); }
+      renderAll();
+    } catch(e) { console.warn('Sync error', e); }
   });
 }
-syncFromFirebase();
+syncFromGun();
 
 /* ============ АВТОРИЗАЦИЯ ============ */
 function initLoginScreen() {
@@ -473,6 +470,7 @@ document.getElementById('bgFile').addEventListener('change', async e => {
 function applyBgImage() {
   if (!pendingBgImage) return toast('Выберите изображение');
   LS.set('owl_background', { type: 'image', url: pendingBgImage });
+  syncToGun();
   addLog('Установлен фон-изображение');
   toast('Фон применён');
   document.getElementById('bgPreview').innerHTML = '';
@@ -480,6 +478,7 @@ function applyBgImage() {
 }
 function removeBg() {
   LS.set('owl_background', null);
+  syncToGun();
   addLog('Убран фон');
   toast('Фон убран');
 }
@@ -487,6 +486,7 @@ function applyGradient() {
   const l = document.getElementById('gradLeft').value;
   const r = document.getElementById('gradRight').value;
   LS.set('owl_background', { type: 'gradient', left: l, right: r });
+  syncToGun();
   addLog('Установлен градиент');
   toast('Градиент применён');
 }
@@ -610,7 +610,7 @@ function saveProduct() {
     addLog('Добавлен товар: ' + name);
   }
   LS.set('owl_catalog', state.catalog);
-  syncToFirebase();
+  syncToGun();
   closeModal('productModal');
   renderAll();
   toast('Сохранено — у покупателей обновится автоматически');
@@ -621,7 +621,7 @@ function deleteProduct(id) {
   const p = state.catalog.find(x => x.id === id);
   state.catalog = state.catalog.filter(p => p.id !== id);
   LS.set('owl_catalog', state.catalog);
-  syncToFirebase();
+  syncToGun();
   addLog('Удалён товар: ' + (p ? p.name : id));
   renderAll();
 }
@@ -629,7 +629,7 @@ function deleteFolder(section, fname) {
   if (!confirm('Удалить папку "' + fname + '" и все товары в ней?')) return;
   state.catalog = state.catalog.filter(p => !(p.section === section && (p.folder || 'Без папки') === fname));
   LS.set('owl_catalog', state.catalog);
-  syncToFirebase();
+  syncToGun();
   addLog('Удалена папка: ' + fname);
   renderAll();
 }
@@ -670,7 +670,7 @@ function setOrderStatus(id, status) {
   if (!o) return;
   o.status = status;
   LS.set('owl_orders', state.orders);
-  syncToFirebase();
+  syncToGun();
   addLog('Заказ №' + id + ' → ' + status);
   renderAll();
   toast('Статус обновлён — у клиента появится мгновенно');
@@ -729,7 +729,7 @@ function saveSettings() {
     hours: document.getElementById('setHours').value.trim()
   };
   LS.set('owl_settings', state.settings);
-  syncToFirebase();
+  syncToGun();
   addLog('Обновлены настройки');
   toast('Настройки сохранены — обновятся у всех покупателей');
 }
@@ -793,7 +793,7 @@ function restoreBackup() {
       if (d.orders) { state.orders = d.orders; LS.set('owl_orders', d.orders); }
       if (d.messages) { state.messages = d.messages; LS.set('owl_messages', d.messages); }
       if (d.users) { state.users = d.users; LS.set('owl_users', d.users); }
-      syncToFirebase();
+      syncToGun();
       addLog('Восстановлена резервная копия');
       renderAll();
       toast('Восстановлено');
@@ -807,7 +807,7 @@ function resetAll() {
   ['owl_catalog','owl_settings','owl_orders','owl_messages','owl_users'].forEach(k => localStorage.removeItem(k));
   state.catalog = []; state.settings = {card:'',name:'',bank:'',sbp:'',email:'',phone:'',address:'',hours:''};
   state.orders = []; state.messages = []; state.users = [];
-  syncToFirebase();
+  syncToGun();
   addLog('Сброшены все данные');
   renderAll();
   toast('Данные сброшены');
