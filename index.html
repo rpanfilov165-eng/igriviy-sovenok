@@ -198,22 +198,21 @@ footer a:hover{text-decoration:underline}
 <textarea id="contactMessage" placeholder="Сообщение" rows="4" required></textarea>
 <button type="submit" class="btn">Отправить 🦉</button>
 </form>
-<h3 style="margin-top:30px;margin-bottom:15px;color:#5a4000">❓ Задать вопрос по продукту или проблеме</h3>
-<p style="color:#666;font-size:14px;margin-bottom:15px">Опишите проблему с товаром или задайте вопрос — мы ответим в течение 24 часов</p>
+<h3 style="margin-top:30px;margin-bottom:15px;color:#5a4000">❓ Задать вопрос</h3>
 <form class="contact-form" id="questionForm">
 <input type="text" id="questionName" placeholder="Ваше имя" required>
-<input type="email" id="questionEmail" placeholder="Email для ответа" required>
+<input type="email" id="questionEmail" placeholder="Email" required>
 <select id="questionType" required>
-<option value="">Выберите тип вопроса</option>
-<option value="product">❓ Вопрос по продукту</option>
-<option value="download">⬇️ Проблема со скачиванием</option>
-<option value="payment">💳 Проблема с оплатой</option>
-<option value="bug">🐛 Ошибка на сайте</option>
+<option value="">Тип вопроса</option>
+<option value="product">❓ По продукту</option>
+<option value="download">⬇️ Скачивание</option>
+<option value="payment">💳 Оплата</option>
+<option value="bug">🐛 Ошибка</option>
 <option value="other">💬 Другое</option>
 </select>
-<input type="text" id="questionProduct" placeholder="Название продукта (если есть проблема с ним)">
-<textarea id="questionText" placeholder="Опишите ваш вопрос или проблему подробно..." rows="5" required></textarea>
-<button type="submit" class="btn">Отправить вопрос ❓</button>
+<input type="text" id="questionProduct" placeholder="Название продукта">
+<textarea id="questionText" placeholder="Опишите вопрос..." rows="5" required></textarea>
+<button type="submit" class="btn">Отправить ❓</button>
 </form>
 </div>
 
@@ -240,16 +239,16 @@ footer a:hover{text-decoration:underline}
 
 <div id="checkoutModal" class="modal">
 <div class="modal-content">
-<div class="modal-header"><h2>📝 Оформление заказа</h2><button class="close-modal" onclick="closeCheckout()">×</button></div>
+<div class="modal-header"><h2>📝 Оформление</h2><button class="close-modal" onclick="closeCheckout()">×</button></div>
 <form id="checkoutForm">
 <div style="display:grid;gap:15px;margin-bottom:25px">
-<input type="text" id="checkoutName" placeholder="Ваше имя" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px">
-<input type="email" id="checkoutEmail" placeholder="Email" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px">
-<input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px">
+<input type="text" id="checkoutName" placeholder="Имя" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px">
+<input type="email" id="checkoutEmail" placeholder="Email" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px">
+<input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:14px;border:2px solid #e0e0e0;border-radius:10px">
 <div id="deliveryFields" style="display:none">
-<input type="text" id="checkoutAddress" placeholder="Адрес доставки" style="padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px">
-<select id="checkoutDelivery" style="padding:14px;border:2px solid #e0e0e0;border-radius:10px;font-size:15px">
-<option value="">Выберите доставку</option>
+<input type="text" id="checkoutAddress" placeholder="Адрес" style="padding:14px;border:2px solid #e0e0e0;border-radius:10px">
+<select id="checkoutDelivery" style="padding:14px;border:2px solid #e0e0e0;border-radius:10px">
+<option value="">Доставка</option>
 <option value="Почта России (300₽)">Почта России (300₽)</option>
 <option value="СДЭК (400₽)">СДЭК (400₽)</option>
 <option value="Самовывоз">Самовывоз</option>
@@ -259,27 +258,26 @@ footer a:hover{text-decoration:underline}
 <div id="checkoutSummary" style="background:#f9f9f9;padding:20px;border-radius:10px;margin-bottom:25px"></div>
 <div id="orderTypeInfo" style="padding:10px;border-radius:8px;margin-bottom:20px;font-size:14px"></div>
 <div style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
-<h4 style="margin-bottom:10px;color:#e65100">📎 Прикрепите чек об оплате</h4>
-<p style="font-size:13px;color:#666;margin-bottom:10px">Загрузите скриншот или фото чека. После проверки администратором файлы станут доступны для скачивания.</p>
-<input type="file" id="receiptFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%;font-size:14px">
+<h4 style="margin-bottom:10px;color:#e65100">📎 Чек об оплате</h4>
+<p style="font-size:13px;color:#666;margin-bottom:10px">Прикрепите скриншот чека. После проверки админом файлы станут доступны.</p>
+<input type="file" id="receiptFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
 <div id="receiptPreview" style="margin-top:10px"></div>
 </div>
-<h3 style="margin-bottom:15px;color:#5a4000">💳 Выберите способ оплаты:</h3>
+<h3 style="margin-bottom:15px;color:#5a4000">💳 Способ оплаты:</h3>
 <div>
-<div class="payment-method" onclick="selectPayment('Карта')">💳 Банковская карта</div>
+<div class="payment-method" onclick="selectPayment('Карта')">💳 Карта</div>
 <div class="payment-method" onclick="selectPayment('СБП')">📱 СБП</div>
 <div class="payment-method" onclick="selectPayment('При получении')">💵 При получении</div>
 </div>
-<input type="hidden" id="checkoutPayment" required>
+<input type="hidden" id="checkoutPayment">
 <div id="cardFields" style="display:none;background:#fff8e1;padding:20px;border-radius:10px;margin-top:15px;border:2px solid #f0c040">
-<h4 style="margin-bottom:15px;color:#5a4000">💳 Реквизиты для оплаты</h4>
+<h4 style="margin-bottom:15px;color:#5a4000">💳 Реквизиты</h4>
 <div id="cardRequisitesDisplay"></div>
 </div>
 <div id="qrBlock" style="display:none;text-align:center;background:#e8f5e9;padding:20px;border-radius:10px;margin-top:15px;border:2px solid #4CAF50">
-<h4 style="margin-bottom:15px;color:#2e7d32">📱 Оплата через СБП</h4>
-<p style="margin-bottom:15px;color:#555">Отсканируйте QR-код в приложении банка:</p>
+<h4 style="margin-bottom:15px;color:#2e7d32">📱 СБП</h4>
+<p style="margin-bottom:15px;color:#555">Отсканируйте QR в приложении банка:</p>
 <div id="qrDisplay"></div>
-<p style="margin-top:15px;color:#555;font-size:14px">После оплаты прикрепите чек выше</p>
 </div>
 <div style="display:flex;gap:10px;margin-top:20px">
 <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1">Отмена</button>
@@ -319,7 +317,7 @@ footer a:hover{text-decoration:underline}
 
 <div id="videoModal" class="modal">
 <div class="modal-content large">
-<div class="modal-header"><h2 id="videoModalTitle">🎬 Просмотр видео</h2><button class="close-modal" onclick="closeVideo()">×</button></div>
+<div class="modal-header"><h2 id="videoModalTitle">🎬 Видео</h2><button class="close-modal" onclick="closeVideo()">×</button></div>
 <div id="videoPlayer"></div>
 </div>
 </div>
@@ -350,11 +348,7 @@ let receiptData=null;
 function init(){
   cart=JSON.parse(localStorage.getItem('cart')||'[]');
   purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
-  loadContacts();
-  updateStats();
-  updateCartCount();
-  updateUserDisplay();
-  loadVideoSection();
+  loadContacts();updateStats();updateCartCount();updateUserDisplay();loadVideoSection();
   window.addEventListener('storage',e=>{
     if(e.key==='cart'){cart=JSON.parse(localStorage.getItem('cart')||'[]');updateCartCount();renderCart()}
     if(e.key==='catalogData'){updateStats();loadVideoSection();if(currentCategory)showCategory(currentCategory)}
@@ -377,16 +371,9 @@ function loadVideoSection(){
   const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
   const videos=[];
   ['catalog','worksheets','themes','letterGames','speechGames','free'].forEach(c=>{
-    (cat[c]||[]).forEach((folder,fi)=>{
-      (folder.items||[]).forEach((item,ii)=>{
-        if(item.itemType==='video'&&item.file){
-          videos.push({...item,category:c,folderIndex:fi,itemIndex:ii})
-        }
-      })
-    })
+    (cat[c]||[]).forEach((folder,fi)=>{(folder.items||[]).forEach((item,ii)=>{if(item.itemType==='video'&&item.file)videos.push({...item,category:c,folderIndex:fi,itemIndex:ii})})})
   });
-  const section=document.getElementById('videoSection');
-  const grid=document.getElementById('videoGrid');
+  const section=document.getElementById('videoSection');const grid=document.getElementById('videoGrid');
   if(videos.length===0){section.style.display='none';return}
   section.style.display='block';
   grid.innerHTML=videos.map(v=>{
@@ -403,7 +390,7 @@ function playVideo(category,fi,ii){
   const item=cat[category]?.[fi]?.items?.[ii];
   if(!item||!item.file){alert('Видео не найдено');return}
   const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
-  if(item.price>0&&!isP){alert('⛔ Сначала оплатите товар');return}
+  if(item.price>0&&!isP){alert('⛔ Сначала оплатите');return}
   document.getElementById('videoModalTitle').textContent='🎬 '+item.name;
   document.getElementById('videoPlayer').innerHTML=`<video src="${item.file.data}" controls style="width:100%;max-height:70vh;border-radius:10px;background:#000"></video>`;
   document.getElementById('videoModal').classList.add('active')
@@ -416,9 +403,8 @@ function showCategory(category){
   const folders=cat[category]||[];
   const titles={'catalog':'📚 Весь каталог','worksheets':'📝 Рабочие листы','themes':'🎨 Темы','letterGames':'🔤 Игры с буквами','speechGames':'🗣️ Логопедические игры','free':'🎁 Бесплатно'};
   document.getElementById('categoryTitle').textContent=titles[category];
-  if(folders.length===0){
-    document.getElementById('foldersList').innerHTML='<p style="color:#999;text-align:center;padding:30px">В этой категории пока нет материалов</p>'
-  }else{
+  if(folders.length===0){document.getElementById('foldersList').innerHTML='<p style="color:#999;text-align:center;padding:30px">В этой категории пока нет материалов</p>'}
+  else{
     document.getElementById('foldersList').innerHTML=folders.map((folder,fi)=>`<div style="margin-bottom:30px"><h3 style="margin-bottom:15px;color:#5a4000">📁 ${folder.name}</h3><div class="items-grid">${(folder.items||[]).map((item,ii)=>{
       const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
       const it=item.itemType||'digital';
@@ -426,7 +412,7 @@ function showCategory(category){
       let prev='';
       if(item.file){
         if(item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
-          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px;pointer-events:none" oncontextmenu="return false" alt=""></div>`
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px" alt=""></div>`
         }else if(item.file.name.match(/\.(mp4|webm|mov)$/i)){
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
         }else if(item.file.name.match(/\.pdf$/i)){
@@ -436,15 +422,12 @@ function showCategory(category){
         }else{
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📎</div><div style="font-size:11px;color:#666">${item.file.name}</div><div style="font-size:10px;color:#999">${(item.file.size/1024).toFixed(1)} КБ</div></div>`
         }
-      }else if(it==='physical'){
-        prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`
-      }else{
-        prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`
-      }
+      }else if(it==='physical'){prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`}
+      else{prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`}
       let actionBtn='';
-      if(item.price===0&&(it==='digital'||it==='video')){
+      if(item.price===0&&(it==='digital'||it==='video'||it==='audio')){
         actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadFreeItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
-      }else if(isP&&(it==='digital'||it==='video')){
+      }else if(isP&&(it==='digital'||it==='video'||it==='audio')){
         actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadPurchasedItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
       }else{
         actionBtn=`<button class="btn" onclick="addToCart('${category}',${fi},${ii})">🛒 В корзину</button>`
@@ -473,12 +456,7 @@ function addToCart(category,fi,ii){
   alert('✅ "'+item.name+'" добавлен в корзину!')
 }
 
-function saveCartToAllCarts(){
-  const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');
-  if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}
-  else{ac['guest_'+Date.now()]={items:cart,userName:'Гость'}}
-  localStorage.setItem('allCarts',JSON.stringify(ac))
-}
+function saveCartToAllCarts(){const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}else{ac['guest_'+Date.now()]={items:cart,userName:'Гость'}}localStorage.setItem('allCarts',JSON.stringify(ac))}
 
 function updateCartCount(){
   const count=cart.length;
@@ -509,19 +487,9 @@ function selectPayment(method){
   if(qb){qb.style.display=method==='СБП'?'block':'none';if(method==='СБП')showQrCode(total)}
 }
 
-function showCardRequisites(total){
-  const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
-  const d=document.getElementById('cardRequisitesDisplay');
-  if(p.cardHolder||p.cardNumber){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:8px;border:1px solid #f0c040"><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Получатель:</strong></p><p style="font-size:16px;font-weight:bold;color:#5a4000;margin-bottom:10px">${p.cardHolder||'—'}</p><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Карта:</strong></p><p style="font-size:18px;font-weight:bold;color:#5a4000;letter-spacing:2px;margin-bottom:10px">${p.cardNumber||'—'}</p>${p.cardBank?`<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Банк:</strong></p><p style="font-size:14px;color:#333;margin-bottom:10px">${p.cardBank}</p>`:''}<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Сумма:</strong></p><p style="font-size:24px;font-weight:bold;color:#4CAF50">${total}₽</p></div><p style="font-size:12px;color:#999;margin-top:10px">📱 Переведите сумму и прикрепите чек выше</p>`}
-  else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ Реквизиты не настроены</p>'}
-}
+function showCardRequisites(total){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');const d=document.getElementById('cardRequisitesDisplay');if(p.cardHolder||p.cardNumber){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:8px;border:1px solid #f0c040"><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Получатель:</strong></p><p style="font-size:16px;font-weight:bold;color:#5a4000;margin-bottom:10px">${p.cardHolder||'—'}</p><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Карта:</strong></p><p style="font-size:18px;font-weight:bold;color:#5a4000;letter-spacing:2px;margin-bottom:10px">${p.cardNumber||'—'}</p>${p.cardBank?`<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Банк:</strong></p><p style="font-size:14px;color:#333;margin-bottom:10px">${p.cardBank}</p>`:''}<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Сумма:</strong></p><p style="font-size:24px;font-weight:bold;color:#4CAF50">${total}₽</p></div><p style="font-size:12px;color:#999;margin-top:10px">📱 Переведите и прикрепите чек</p>`}else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ Реквизиты не настроены</p>'}}
 
-function showQrCode(total){
-  const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
-  const d=document.getElementById('qrDisplay');
-  if(p.qrCode){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:10px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,.1)"><img src="${p.qrCode}" style="width:200px;height:200px;border-radius:5px"><p style="margin-top:10px;font-size:12px;color:#666;font-weight:bold">Сумма: ${total}₽</p></div>`}
-  else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ QR-код не загружен</p>'}
-}
+function showQrCode(total){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');const d=document.getElementById('qrDisplay');if(p.qrCode){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:10px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,.1)"><img src="${p.qrCode}" style="width:200px;height:200px;border-radius:5px"><p style="margin-top:10px;font-size:12px;color:#666;font-weight:bold">Сумма: ${total}₽</p></div>`}else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ QR не загружен</p>'}}
 
 function openCheckout(){
   if(cart.length===0){alert('Корзина пуста');return}
@@ -530,23 +498,16 @@ function openCheckout(){
   const df=document.getElementById('deliveryFields');if(df)df.style.display=hp?'block':'none';
   const oi=document.getElementById('orderTypeInfo');
   const hasVideo=cart.some(i=>i.itemType==='video');
-  if(hp){oi.style.background='#fff3e0';oi.style.color='#e65100';oi.innerHTML='📦 Есть товары с доставкой. Заполните адрес.'}
-  else if(hasVideo){oi.style.background='#f3e5f5';oi.style.color='#7b1fa2';oi.innerHTML='🎬 Есть видео-товары. После проверки чека они станут доступны.'}
-  else{oi.style.background='#e3f2fd';oi.style.color='#1976d2';oi.innerHTML='📥 Цифровые товары. После проверки чека файлы станут доступны.'}
+  if(hp){oi.style.background='#fff3e0';oi.style.color='#e65100';oi.innerHTML='📦 Есть товары с доставкой'}
+  else if(hasVideo){oi.style.background='#f3e5f5';oi.style.color='#7b1fa2';oi.innerHTML='🎬 Есть видео-товары'}
+  else{oi.style.background='#e3f2fd';oi.style.color='#1976d2';oi.innerHTML='📥 Цифровые товары'}
   const total=cart.reduce((s,i)=>s+i.price,0);
   document.getElementById('checkoutSummary').innerHTML=`<h3 style="margin-bottom:12px">Ваш заказ (${cart.length} тов.):</h3>${cart.map(i=>`<div>${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}<div style="margin-top:12px;font-weight:bold;font-size:20px">Итого: ${total}₽</div>`;
   document.getElementById('checkoutModal').classList.add('active')
 }
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
 
-document.getElementById('receiptFile').addEventListener('change',e=>{
-  if(e.target.files[0]){
-    if(e.target.files[0].size>5*1024*1024){alert('⚠️ Файл слишком большой (макс. 5 МБ). Сожмите изображение.');e.target.value='';return}
-    const reader=new FileReader();
-    reader.onload=ev=>{receiptData=ev.target.result;document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`};
-    reader.readAsDataURL(e.target.files[0])
-  }
-});
+document.getElementById('receiptFile').addEventListener('change',e=>{if(e.target.files[0]){if(e.target.files[0].size>10*1024*1024){alert('⚠️ Файл слишком большой (макс. 10 МБ для чека)');e.target.value='';return}const reader=new FileReader();reader.onload=ev=>{receiptData=ev.target.result;document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`};reader.readAsDataURL(e.target.files[0])}});
 
 document.getElementById('checkoutForm').addEventListener('submit',e=>{
   e.preventDefault();
@@ -571,9 +532,9 @@ document.getElementById('checkoutForm').addEventListener('submit',e=>{
 function showOrderResult(order,hasReceipt){
   const pc=document.getElementById('paymentContent');
   if(hasReceipt){
-    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#1976d2;margin-bottom:20px">📎 Чек отправлен на проверку</h2><p>Номер заказа: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e3f2fd;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #1976d2"><p style="color:#1976d2;font-weight:600;margin-bottom:10px">⏳ Ожидает проверки администратором</p><p style="color:#666;font-size:14px">Мы проверим ваш чек в течение 24 часов. После подтверждения файлы станут доступны для скачивания в разделе "Мои покупки".</p></div><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#1976d2;margin-bottom:20px">📎 Чек отправлен на проверку</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e3f2fd;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #1976d2"><p style="color:#1976d2;font-weight:600;margin-bottom:10px">⏳ Ожидает проверки администратором</p><p style="color:#666;font-size:14px">После подтверждения файлы станут доступны в "Мои покупки".</p></div><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
   }else{
-    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#ff9800;margin-top:15px">⚠️ Прикрепите чек об оплате в оформлении заказа, чтобы получить доступ к файлам</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#ff9800;margin-top:15px">⚠️ Прикрепите чек для получения доступа к файлам</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
   }
   document.getElementById('paymentModal').classList.add('active')
 }
@@ -583,14 +544,34 @@ function closePayment(){document.getElementById('paymentModal').classList.remove
 function downloadFreeItem(category,fi,ii){
   const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
   const item=cat[category][fi].items[ii];
-  if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}
+  if(!item){alert('❌ Товар не найден');return}
+  if(item.file&&item.file.data){
+    const link=document.createElement('a');
+    link.href=item.file.data;
+    link.download=item.file.name;
+    document.body.appendChild(link);link.click();document.body.removeChild(link);
+    alert('✅ Файл скачан!')
+  }else if(item.fileUrl){
+    window.open(item.fileUrl,'_blank');
+    alert('✅ Файл открыт по ссылке!')
+  }else{alert('❌ Файл не найден')}
 }
 
 function downloadPurchasedItem(category,fi,ii){
-  if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите товар');return}
+  if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите');return}
   const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
   const item=cat[category][fi].items[ii];
-  if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}
+  if(!item){alert('❌ Товар не найден');return}
+  if(item.file&&item.file.data){
+    const link=document.createElement('a');
+    link.href=item.file.data;
+    link.download=item.file.name;
+    document.body.appendChild(link);link.click();document.body.removeChild(link);
+    alert('✅ Файл скачан!')
+  }else if(item.fileUrl){
+    window.open(item.fileUrl,'_blank');
+    alert('✅ Файл открыт по ссылке!')
+  }else{alert('❌ Файл не найден')}
 }
 
 function showMyPurchases(){
@@ -614,7 +595,7 @@ function addPurchasedToCart(category,fi,ii){
   const item=cat[category]?.[fi]?.items?.[ii];
   if(!item){alert('❌ Товар не найден');return}
   if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}
-  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});
+  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,fileUrl:item.fileUrl||null,quantity:1});
   localStorage.setItem('cart',JSON.stringify(cart));
   saveCartToAllCarts();
   updateCartCount();
@@ -645,8 +626,8 @@ function showQuestions(){
   const myQuestions=currentUser?questions.filter(q=>q.email===currentUser.email):[];
   const qc=document.getElementById('questionsContent');
   const typeNames={product:'❓ Продукт',download:'⬇️ Скачивание',payment:'💳 Оплата',bug:'🐛 Ошибка',other:'💬 Другое'};
-  if(myQuestions.length===0){qc.innerHTML='<p style="text-align:center;color:#999;padding:30px">У вас нет вопросов. Задайте вопрос в разделе Контакты ниже.</p>'}
-  else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает ответа'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${q.product}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${q.text}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${q.answer}</div>`:''}</div>`).join('')}
+  if(myQuestions.length===0){qc.innerHTML='<p style="text-align:center;color:#999;padding:30px">У вас нет вопросов. Задайте вопрос в разделе Контакты.</p>'}
+  else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${q.product}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${q.text}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${q.answer}</div>`:''}</div>`).join('')}
   document.getElementById('questionsModal').classList.add('active')
 }
 function closeQuestions(){document.getElementById('questionsModal').classList.remove('active')}
@@ -679,15 +660,13 @@ function previewFile(fileData,fileName,fileType){
   const viewer=document.createElement('div');
   if(fileType==='video'||fileName.match(/\.(mp4|webm|mov)$/i)){
     const video=document.createElement('video');
-    video.src=fileData;
-    video.controls=true;
+    video.src=fileData;video.controls=true;
     video.style.cssText='width:100%;max-height:70vh;border-radius:8px;background:#000';
     viewer.appendChild(video)
   }else if(fileType&&fileType.startsWith('image/')){
     const img=document.createElement('img');
     img.src=fileData;
-    img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-drag:none;pointer-events:none';
-    img.oncontextmenu=e=>{e.preventDefault();alert('🔒 Скачивание только после оплаты')};
+    img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px';
     viewer.appendChild(img)
   }else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){
     const embed=document.createElement('embed');
@@ -714,7 +693,7 @@ function previewFile(fileData,fileName,fileType){
 
 document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');messages.push({name:document.getElementById('contactName').value,email:document.getElementById('contactEmail').value,text:document.getElementById('contactMessage').value,date:new Date().toISOString()});localStorage.setItem('messagesData',JSON.stringify(messages));document.getElementById('contactForm').reset();alert('Сообщение отправлено! 🦉')});
 
-document.getElementById('questionForm').addEventListener('submit',e=>{e.preventDefault();const question={id:Date.now(),name:document.getElementById('questionName').value,email:document.getElementById('questionEmail').value,type:document.getElementById('questionType').value,product:document.getElementById('questionProduct').value,text:document.getElementById('questionText').value,date:new Date().toISOString(),answered:false,answer:''};const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.push(question);localStorage.setItem('questionsData',JSON.stringify(questions));document.getElementById('questionForm').reset();alert('✅ Вопрос отправлен! Мы ответим вам на '+question.email+' в течение 24 часов.')});
+document.getElementById('questionForm').addEventListener('submit',e=>{e.preventDefault();const question={id:Date.now(),name:document.getElementById('questionName').value,email:document.getElementById('questionEmail').value,type:document.getElementById('questionType').value,product:document.getElementById('questionProduct').value,text:document.getElementById('questionText').value,date:new Date().toISOString(),answered:false,answer:''};const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.push(question);localStorage.setItem('questionsData',JSON.stringify(questions));document.getElementById('questionForm').reset();alert('✅ Вопрос отправлен!')});
 
 init();
 </script>
