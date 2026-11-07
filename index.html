@@ -371,12 +371,50 @@ function showCategory(category) {
 }
 
 function addToCart(category, folderIndex, itemIndex) {
+  // Получаем актуальный каталог
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
+  
+  // Проверяем, существует ли товар
+  if (!catalog[category] || !catalog[category][folderIndex] || !catalog[category][folderIndex].items[itemIndex]) {
+    alert('❌ Ошибка: товар не найден в каталоге');
+    return;
+  }
+  
   const item = catalog[category][folderIndex].items[itemIndex];
-  cart.push({ ...item, category, folderIndex, itemIndex, quantity: 1 });
+  
+  // Проверяем, нет ли уже в корзине
+  const alreadyInCart = cart.some(c => 
+    c.category === category && 
+    c.folderIndex === folderIndex && 
+    c.itemIndex === itemIndex
+  );
+  
+  if (alreadyInCart) {
+    alert('⚠️ Этот товар уже в корзине!');
+    return;
+  }
+  
+  // Добавляем товар в корзину
+  cart.push({
+    id: item.id || Date.now(),
+    name: item.name,
+    description: item.description || '',
+    price: item.price,
+    category: category,
+    folderIndex: folderIndex,
+    itemIndex: itemIndex,
+    file: item.file || null,
+    quantity: 1
+  });
+  
+  // Сохраняем корзину в память браузера
   localStorage.setItem('cart', JSON.stringify(cart));
+  
+  // Обновляем счётчик на экране
   updateCartCount();
-  alert('Товар добавлен в корзину! 🛒');
+  
+  // Показываем сообщение
+  alert('✅ Товар "' + item.name + '" добавлен в корзину!');
 }
 
 function updateCartCount() { document.getElementById('cartCountNav').textContent = cart.length; }
