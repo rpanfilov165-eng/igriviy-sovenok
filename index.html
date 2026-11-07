@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Игривый совёнок</title>
 <style>
+/* ВАШ СУЩЕСТВУЮЩИЙ CSS ОСТАЛСЯ БЕЗ ИЗМЕНЕНИЙ */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%); min-height: 100vh; padding: 15px; }
 .container { max-width: 1300px; margin: 0 auto; }
@@ -113,11 +114,11 @@ footer a:hover { text-decoration: underline; }
       <button class="nav-btn" onclick="showCategory('themes')">🎨 Темы</button>
       <button class="nav-btn" onclick="showCategory('letterGames')">🔤 Игры с буквами</button>
       <button class="nav-btn" onclick="showCategory('speechGames')">🗣️ Логопедические</button>
-      <button class="nav-btn" onclick="showCategory('free')"> Бесплатно</button>
-      <button class="nav-btn" onclick="showMyPurchases()"> Мои покупки</button>
-      <button class="nav-btn" onclick="showMyOrders()"> Мои заказы</button>
+      <button class="nav-btn" onclick="showCategory('free')">🎁 Бесплатно</button>
+      <button class="nav-btn" onclick="showMyPurchases()">📥 Мои покупки</button>
+      <button class="nav-btn" onclick="showMyOrders()">📦 Мои заказы</button>
       <button class="nav-btn search-btn" onclick="openSearch()">🔍 Поиск</button>
-      <button class="nav-btn cart-btn" onclick="openCart()"> <span id="cartCountNav">0</span></button>
+      <button class="nav-btn cart-btn" onclick="openCart()">🛒 <span id="cartCountNav">0</span></button>
     </div>
   </nav>
 
@@ -141,7 +142,7 @@ footer a:hover { text-decoration: underline; }
   </div>
 
   <div class="categories-grid" id="categoriesGrid">
-    <div class="category-card" onclick="showCategory('catalog')"><div class="category-icon"></div><div class="category-title">Весь каталог</div><div class="category-count" id="countCatalog">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('catalog')"><div class="category-icon">📚</div><div class="category-title">Весь каталог</div><div class="category-count" id="countCatalog">0 материалов</div></div>
     <div class="category-card" onclick="showCategory('worksheets')"><div class="category-icon">📝</div><div class="category-title">Рабочие листы</div><div class="category-count" id="countWorksheets">0 материалов</div></div>
     <div class="category-card" onclick="showCategory('themes')"><div class="category-icon">🎨</div><div class="category-title">Темы</div><div class="category-count" id="countThemes">0 материалов</div></div>
     <div class="category-card" onclick="showCategory('letterGames')"><div class="category-icon">🔤</div><div class="category-title">Игры с буквами</div><div class="category-count" id="countLetterGames">0 материалов</div></div>
@@ -246,7 +247,7 @@ footer a:hover { text-decoration: underline; }
 <div class="search-overlay" id="searchOverlay">
   <div class="search-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h3> Поиск по сайту</h3>
+      <h3>🔍 Поиск по сайту</h3>
       <button class="close-modal" onclick="closeSearch()">×</button>
     </div>
     <input type="text" id="searchInput" placeholder="Начните вводить текст для поиска..." oninput="performSearch()">
@@ -270,12 +271,21 @@ function init() {
   updateStats();
   updateCartCount();
   updateUserDisplay();
+  
+  // ПУНКТ 4: Мгновенная синхронизация между вкладками одного браузера
   window.addEventListener('storage', (e) => {
     if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
+      purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
       updateStats();
       if (currentCategory) showCategory(currentCategory);
     }
   });
+  
+  // ПУНКТ 4: Проверка обновлений каждые 3 секунды (для надежности)
+  setInterval(() => {
+    updateStats();
+    if (currentCategory) showCategory(currentCategory);
+  }, 3000);
 }
 
 function loadContacts() {
@@ -346,7 +356,11 @@ function showCategory(category) {
   if (folders.length === 0) {
     document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">В этой категории пока нет материалов</p>';
   } else {
-    document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `<div style="margin-bottom: 30px;"><h3 style="margin-bottom: 15px; color: #5a4000;"> ${folder.name}</h3><div class="items-grid">${(folder.items || []).map((item, ii) => { const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii); return `<div class="item-card"><div class="item-name">${item.name}</div><div class="item-description">${item.description || ''}</div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div><div class="item-actions">${item.price === 0 ? `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : isPurchased ? `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})"> В корзину</button>`}</div></div>`; }).join('')}</div></div>`).join('');
+    document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `<div style="margin-bottom: 30px;"><h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3><div class="items-grid">${(folder.items || []).map((item, ii) => { 
+      // ПУНКТ 2: Проверка, куплен ли товар
+      const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii); 
+      return `<div class="item-card"><div class="item-name">${item.name}</div><div class="item-description">${item.description || ''}</div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div><div class="item-actions">${item.price === 0 ? `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : isPurchased ? `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">🛒 В корзину</button>`}</div></div>`; 
+    }).join('')}</div></div>`).join('');
   }
   document.getElementById('mainBanner').style.display = 'none';
   document.getElementById('statsSection').style.display = 'none';
@@ -362,21 +376,12 @@ function addToCart(category, folderIndex, itemIndex) {
   cart.push({ ...item, category, folderIndex, itemIndex, quantity: 1 });
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
-  alert('Товар добавлен в корзину! ');
+  alert('Товар добавлен в корзину! 🛒');
 }
 
-function updateCartCount() {
-  document.getElementById('cartCountNav').textContent = cart.length;
-}
-
-function openCart() {
-  renderCart();
-  document.getElementById('cartSidebar').classList.add('active');
-}
-
-function closeCart() {
-  document.getElementById('cartSidebar').classList.remove('active');
-}
+function updateCartCount() { document.getElementById('cartCountNav').textContent = cart.length; }
+function openCart() { renderCart(); document.getElementById('cartSidebar').classList.add('active'); }
+function closeCart() { document.getElementById('cartSidebar').classList.remove('active'); }
 
 function renderCart() {
   const cartItems = document.getElementById('cartItems');
@@ -385,7 +390,7 @@ function renderCart() {
     document.getElementById('cartTotal').textContent = '0';
     return;
   }
-  cartItems.innerHTML = cart.map((item, index) => `<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding: 4px 8px; font-size: 12px;"></button></div><div>${item.price}₽</div></div>`).join('');
+  cartItems.innerHTML = cart.map((item, index) => `<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding: 4px 8px; font-size: 12px;">✕</button></div><div>${item.price}₽</div></div>`).join('');
   document.getElementById('cartTotal').textContent = cart.reduce((sum, item) => sum + item.price, 0);
 }
 
@@ -410,7 +415,6 @@ function openCheckout() {
   document.getElementById('checkoutSummary').innerHTML = `<h3 style="margin-bottom: 12px;">Ваш заказ:</h3>${cart.map(item => `<div>${item.name} - ${item.price}₽</div>`).join('')}<div style="margin-top: 12px; font-weight: bold; font-size: 20px;">Итого: ${total}₽</div>`;
   document.getElementById('checkoutModal').classList.add('active');
 }
-
 function closeCheckout() { document.getElementById('checkoutModal').classList.remove('active'); }
 
 document.getElementById('checkoutForm').addEventListener('submit', (e) => {
@@ -431,9 +435,9 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
 function processPayment(order) {
   const paymentContent = document.getElementById('paymentContent');
   if (order.payment === 'При получении') {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Заказ оформлен!</h2><p>Номер заказа: #${order.id}</p><p>Сумма: ${order.total}₽</p><p>Оплата при получении</p><p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы будут доступны после оплаты</p><button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button></div>`;
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Заказ оформлен!</h2><p>Номер заказа: #${order.id}</p><p>Сумма: ${order.total}₽</p><p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы будут доступны только после фактической оплаты</p><button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button></div>`;
   } else {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h3 style="margin-bottom: 20px;">Оплата заказа #${order.id}</h3><p style="margin-bottom: 20px; font-size: 18px;">Сумма: <strong>${order.total}₽</strong></p><p style="margin-bottom: 20px;">Метод: ${order.payment}</p><div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;"><p style="margin-bottom: 15px;">Нажмите кнопку для подтверждения оплаты</p><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px;">💳 Оплатить ${order.total}₽</button></div><p style="color: #999; font-size: 12px;">После оплаты файлы станут доступны для скачивания</p></div>`;
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h3 style="margin-bottom: 20px;">Оплата заказа #${order.id}</h3><p style="margin-bottom: 20px; font-size: 18px;">Сумма: <strong>${order.total}₽</strong></p><div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;"><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px;">💳 Подтвердить оплату ${order.total}₽</button></div></div>`;
   }
   document.getElementById('paymentModal').classList.add('active');
 }
@@ -442,7 +446,6 @@ function confirmPayment(orderId) {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const order = orders.find(o => o.id === orderId);
   if (order) {
-    order.status = 'completed';
     order.paid = true;
     order.paymentDate = new Date().toISOString();
     localStorage.setItem('ordersData', JSON.stringify(orders));
@@ -454,18 +457,17 @@ function confirmPayment(orderId) {
     localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
     closePayment();
     const paymentContent = document.getElementById('paymentContent');
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Оплата прошла успешно!</h2><p>Заказ #${orderId} оплачен</p><p style="color: #4CAF50; font-weight: bold; margin: 15px 0;">Теперь вы можете скачать купленные материалы</p><button class="btn btn-success" onclick="showMyPurchases()" style="margin-top: 20px;">📥 Перейти к покупкам</button><button class="btn btn-secondary" onclick="closePayment()" style="margin-top: 10px;">Закрыть</button></div>`;
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Оплата прошла успешно!</h2><p>Теперь вы можете скачать купленные материалы</p><button class="btn btn-success" onclick="showMyPurchases()" style="margin-top: 20px;">📥 Перейти к покупкам</button><button class="btn btn-secondary" onclick="closePayment()" style="margin-top: 10px;">Закрыть</button></div>`;
     document.getElementById('paymentModal').classList.add('active');
     updateStats();
   }
 }
-
 function closePayment() { document.getElementById('paymentModal').classList.remove('active'); }
 
 function downloadFreeItem(category, folderIndex, itemIndex) {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const item = catalog[category][folderIndex].items[itemIndex];
-  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; link.click(); alert('Файл скачан! '); } else { alert('Файл не найден'); }
+  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; link.click(); alert('Файл скачан! 📥'); } else { alert('Файл не найден'); }
 }
 
 function downloadPurchasedItem(category, folderIndex, itemIndex) {
@@ -484,7 +486,6 @@ function showMyPurchases() {
   }
   document.getElementById('purchasesModal').classList.add('active');
 }
-
 function closePurchases() { document.getElementById('purchasesModal').classList.remove('active'); }
 
 function showMyOrders() {
@@ -493,10 +494,9 @@ function showMyOrders() {
   const myOrders = orders.filter(o => o.email === currentUser.email).reverse();
   const ordersContent = document.getElementById('ordersContent');
   if (myOrders.length === 0) { ordersContent.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">Заказов пока нет</p>'; }
-  else { ordersContent.innerHTML = myOrders.map(o => `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><strong>Заказ #${o.id}</strong><span style="color: ${o.paid ? '#4CAF50' : '#ff9800'}; font-weight: bold;">${o.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div><div style="color: #666; font-size: 13px; margin-bottom: 10px;">${new Date(o.date).toLocaleString('ru-RU')}</div><div style="margin-bottom: 10px;">${o.items.map(item => `<div style="font-size: 13px;">${item.name} - ${item.price}₽</div>`).join('')}</div><div style="font-weight: bold; font-size: 16px;">Итого: ${o.total}₽</div><div style="font-size: 12px; color: #666; margin-top: 5px;">Оплата: ${o.payment}</div></div>`).join(''); }
+  else { ordersContent.innerHTML = myOrders.map(o => `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><strong>Заказ #${o.id}</strong><span style="color: ${o.paid ? '#4CAF50' : '#ff9800'}; font-weight: bold;">${o.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div><div style="margin-bottom: 10px;">${o.items.map(item => `<div style="font-size: 13px;">${item.name} - ${item.price}₽</div>`).join('')}</div><div style="font-weight: bold; font-size: 16px;">Итого: ${o.total}₽</div></div>`).join(''); }
   document.getElementById('ordersModal').classList.add('active');
 }
-
 function closeOrders() { document.getElementById('ordersModal').classList.remove('active'); }
 
 function openSearch() { document.getElementById('searchOverlay').classList.add('active'); document.getElementById('searchInput').focus(); }
@@ -508,15 +508,14 @@ function performSearch() {
   if (query.length < 2) { results.innerHTML = ''; return; }
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   let found = [];
-  Object.keys(catalog).forEach(cat => { (catalog[cat] || []).forEach((folder, fi) => { (folder.items || []).forEach((item, ii) => { if (item.name.toLowerCase().includes(query) || (item.description || '').toLowerCase().includes(query)) { found.push({ ...item, category: cat, folderIndex: fi, itemIndex: ii }); } }); }); });
+  Object.keys(catalog).forEach(cat => { (catalog[cat] || []).forEach((folder, fi) => { (folder.items || []).forEach((item, ii) => { if (item.name.toLowerCase().includes(query)) { found.push({ ...item, category: cat, folderIndex: fi, itemIndex: ii }); } }); }); });
   results.innerHTML = found.length === 0 ? '<p style="color: #999;">Ничего не найдено</p>' : found.map(item => `<div class="search-result-item" onclick="closeSearch(); showCategory('${item.category}');"><strong>${item.name}</strong> — ${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>`).join('');
 }
 
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const message = { name: document.getElementById('contactName').value, email: document.getElementById('contactEmail').value, text: document.getElementById('contactMessage').value, date: new Date().toISOString() };
   const messages = JSON.parse(localStorage.getItem('messagesData') || '[]');
-  messages.push(message);
+  messages.push({ name: document.getElementById('contactName').value, email: document.getElementById('contactEmail').value, text: document.getElementById('contactMessage').value, date: new Date().toISOString() });
   localStorage.setItem('messagesData', JSON.stringify(messages));
   document.getElementById('contactForm').reset();
   alert('Сообщение отправлено! 🦉');
