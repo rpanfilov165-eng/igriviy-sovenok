@@ -6,444 +6,100 @@
 <title>Игривый совёнок</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-body {
-  background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%);
-  min-height: 100vh;
-  padding: 15px;
-}
-
-body.dark-mode {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-}
-
+body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%); min-height: 100vh; padding: 15px; }
 .container { max-width: 1300px; margin: 0 auto; }
-
-/* Навигация */
-.top-nav {
-  background: white;
-  padding: 15px 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.nav-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #f5e6a3, #d4a017);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.logo-text {
-  font-size: 22px;
-  font-weight: bold;
-  color: #8B7355;
-}
-
-.user-area {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 15px;
-  color: #666;
-}
-
-.user-area a {
-  color: #8B7355;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.nav-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-.nav-btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #f0c040, #e8a820);
-  color: #5a4000;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.nav-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
+.top-nav { background: white; padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px; }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-img { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f5e6a3, #d4a017); display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+.logo-text { font-size: 22px; font-weight: bold; color: #8B7355; }
+.user-area { display: flex; align-items: center; gap: 15px; font-size: 15px; color: #666; }
+.user-area a { color: #8B7355; text-decoration: none; font-weight: 600; }
+.nav-buttons { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.nav-btn { padding: 10px 18px; background: linear-gradient(135deg, #f0c040, #e8a820); color: #5a4000; border: none; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.nav-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 .nav-btn.search-btn { background: linear-gradient(135deg, #4CAF50, #388E3C); color: white; }
 .nav-btn.cart-btn { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
-.nav-btn.theme-btn { background: linear-gradient(135deg, #333, #555); color: white; }
-.nav-btn.admin-btn { background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: white; }
-
-/* Баннер */
-.banner {
-  background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 50%, #d4c06a 100%);
-  border-radius: 20px;
-  padding: 50px 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  position: relative;
-}
-
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" x="10" font-size="40" opacity="0.05">🦉</text><text y="80" x="60" font-size="30" opacity="0.05">🌙</text><text y="30" x="70" font-size="25" opacity="0.05">✨</text></svg>');
-  pointer-events: none;
-}
-
-.banner-logo {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 25px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  font-size: 80px;
-  border: 5px solid #f0c040;
-}
-
-.banner h1 {
-  font-size: 36px;
-  color: #5a4000;
-  margin-bottom: 15px;
-}
-
-.banner p {
-  color: #8B7355;
-  font-size: 18px;
-  margin-bottom: 25px;
-}
-
-.banner-btn {
-  padding: 14px 35px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.2s;
-}
-
+.banner { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 50%, #d4c06a 100%); border-radius: 20px; padding: 50px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.banner-logo { width: 150px; height: 150px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); font-size: 80px; border: 5px solid #f0c040; }
+.banner h1 { font-size: 36px; color: #5a4000; margin-bottom: 15px; }
+.banner p { color: #8B7355; font-size: 18px; margin-bottom: 25px; }
+.banner-btn { padding: 14px 35px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 25px; font-size: 17px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: transform 0.2s; }
 .banner-btn:hover { transform: translateY(-2px); }
-
-/* Приветствие */
-.welcome-bar {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
-  color: white;
-  padding: 14px 20px;
-  border-radius: 12px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-  font-size: 16px;
-  display: none;
-}
-
+.welcome-bar { background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; padding: 14px 20px; border-radius: 12px; text-align: center; margin-bottom: 20px; font-weight: 600; font-size: 16px; display: none; }
 .welcome-bar.show { display: block; }
-
-/* Статистика */
-.stats-section {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.stats-section h2 {
-  color: #5a4000;
-  margin-bottom: 20px;
-  font-size: 22px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-}
-
-.stat-card {
-  background: linear-gradient(135deg, #5c4db7, #4a3fa0);
-  color: white;
-  padding: 25px;
-  border-radius: 12px;
-  text-align: center;
-}
-
+.stats-section { background: white; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.stats-section h2 { color: #5a4000; margin-bottom: 20px; font-size: 22px; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
+.stat-card { background: linear-gradient(135deg, #5c4db7, #4a3fa0); color: white; padding: 25px; border-radius: 12px; text-align: center; }
 .stat-value { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
 .stat-label { font-size: 14px; opacity: 0.9; }
-
-/* Категории */
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.category-card {
-  background: white;
-  padding: 30px 20px;
-  border-radius: 15px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
-.category-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
+.categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.category-card { background: white; padding: 30px 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+.category-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
 .category-icon { font-size: 45px; margin-bottom: 12px; }
 .category-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 16px; }
 .category-count { color: #999; font-size: 14px; }
-
-/* Фичи */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.feature-card {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.feature-card { background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
 .feature-icon { font-size: 36px; margin-bottom: 10px; }
 .feature-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 15px; }
 .feature-desc { color: #999; font-size: 13px; }
-
-/* Контакты */
-.contacts-section {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-}
-
+.contacts-section { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
 .contacts-section h2 { color: #5a4000; margin-bottom: 20px; font-size: 22px; }
-
 .contact-form { display: grid; gap: 15px; margin-top: 20px; }
-.contact-form input, .contact-form textarea {
-  padding: 14px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 15px;
-}
-.contact-form input:focus, .contact-form textarea:focus {
-  outline: none;
-  border-color: #f0c040;
-}
-
+.contact-form input, .contact-form textarea { padding: 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; }
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #f0c040; }
 .contact-info { display: grid; gap: 10px; margin-top: 20px; }
 .contact-item { display: flex; align-items: center; gap: 10px; color: #555; font-size: 15px; }
-
-/* Корзина */
-.cart-sidebar {
-  position: fixed;
-  right: -420px;
-  top: 0;
-  width: 400px;
-  height: 100vh;
-  background: white;
-  box-shadow: -5px 0 20px rgba(0,0,0,0.2);
-  transition: right 0.3s;
-  z-index: 1000;
-  padding: 25px;
-  overflow-y: auto;
-}
+.cart-sidebar { position: fixed; right: -420px; top: 0; width: 400px; height: 100vh; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.2); transition: right 0.3s; z-index: 1000; padding: 25px; overflow-y: auto; }
 .cart-sidebar.active { right: 0; }
 .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
 .close-cart { background: none; border: none; font-size: 28px; cursor: pointer; }
 .cart-item { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
 .cart-item-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
 .cart-total { border-top: 2px solid #e0e0e0; padding-top: 20px; margin-top: 20px; }
-
-/* Модальные окна */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-}
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
 .modal.active { display: flex; }
-.modal-content {
-  background: white;
-  padding: 35px;
-  border-radius: 15px;
-  max-width: 500px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.modal-content { background: white; padding: 35px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
 .close-modal { background: none; border: none; font-size: 28px; cursor: pointer; }
-
-/* Поиск */
-.search-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 3000;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 100px;
-}
+.search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; align-items: flex-start; justify-content: center; padding-top: 100px; }
 .search-overlay.active { display: flex; }
-.search-box {
-  background: white;
-  padding: 35px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 600px;
-}
-.search-box input {
-  width: 100%;
-  padding: 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  font-size: 16px;
-}
+.search-box { background: white; padding: 35px; border-radius: 15px; width: 90%; max-width: 600px; }
+.search-box input { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; }
 .search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; }
-.search-result-item {
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
-}
+.search-result-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; }
 .search-result-item:hover { background: #f5f5f5; }
-
-/* Просмотр категории */
-.category-view {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  display: none;
-}
+.category-view { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; }
 .category-view.active { display: block; }
-.category-view-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-.item-card {
-  background: #f9f9f9;
-  padding: 20px;
-  border-radius: 12px;
-  transition: transform 0.2s;
-}
+.category-view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.item-card { background: #f9f9f9; padding: 20px; border-radius: 12px; transition: transform 0.2s; }
 .item-card:hover { transform: translateY(-3px); }
 .item-name { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
 .item-description { color: #666; font-size: 13px; margin-bottom: 12px; }
 .item-price { font-size: 20px; font-weight: bold; color: #5c4db7; margin-bottom: 12px; }
 .item-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-.btn {
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
+.btn { padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
 .btn:hover { transform: translateY(-2px); }
 .btn-secondary { background: #f0f0f0; color: #333; }
 .btn-success { background: linear-gradient(135deg, #4CAF50, #388E3C); }
-
-/* Футер */
-footer {
-  background: linear-gradient(135deg, #2c2c54, #474787);
-  color: white;
-  padding: 25px;
-  border-radius: 15px;
-  text-align: center;
-  margin-top: 20px;
-}
+.btn-warning { background: linear-gradient(135deg, #ff9800, #f57c00); }
+footer { background: linear-gradient(135deg, #2c2c54, #474787); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 20px; }
 footer a { color: #f0c040; text-decoration: none; margin: 0 12px; font-size: 15px; }
 footer a:hover { text-decoration: underline; }
-
 .payment-success { text-align: center; padding: 25px; }
 .payment-success h2 { color: #4CAF50; margin-bottom: 20px; }
-
-@media (max-width: 768px) {
-  .cart-sidebar { width: 100%; right: -100%; }
-  .banner h1 { font-size: 28px; }
-  .banner-logo { width: 100px; height: 100px; font-size: 60px; }
-}
+.payment-methods { display: grid; gap: 10px; margin: 20px 0; }
+.payment-method { padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.3s; text-align: center; }
+.payment-method:hover { border-color: #f0c040; background: #fffef5; }
+.payment-method.selected { border-color: #4CAF50; background: #f1f8e9; }
+@media (max-width: 768px) { .cart-sidebar { width: 100%; right: -100%; } .banner h1 { font-size: 28px; } .banner-logo { width: 100px; height: 100px; font-size: 60px; } }
 </style>
 </head>
 <body>
 <div class="container">
-
-  <!-- Навигация -->
   <nav class="top-nav">
     <div class="nav-header">
       <div class="logo-area">
@@ -463,21 +119,13 @@ footer a:hover { text-decoration: underline; }
       <button class="nav-btn" onclick="showCategory('letterGames')">🔤 Игры с буквами</button>
       <button class="nav-btn" onclick="showCategory('speechGames')">🗣️ Логопедические</button>
       <button class="nav-btn" onclick="showCategory('free')">🎁 Бесплатно</button>
-      <button class="nav-btn" onclick="showFavorites()">❤️ Избранное</button>
-      <button class="nav-btn" onclick="alert('Раздел в разработке')">⚖️ Сравнение <span id="compareCount">0</span></button>
-      <button class="nav-btn" onclick="showHistory()">👁 История</button>
-      <button class="nav-btn" onclick="showAchievements()">🏆 Достижения</button>
-      <button class="nav-btn" onclick="showContacts()">📞 Контакты</button>
+      <button class="nav-btn" onclick="showMyPurchases()">📥 Мои покупки</button>
       <button class="nav-btn" onclick="showMyOrders()">📦 Мои заказы</button>
-      <button class="nav-btn" onclick="showMyPayments()">💳 Оплаты</button>
       <button class="nav-btn search-btn" onclick="openSearch()">🔍 Поиск</button>
       <button class="nav-btn cart-btn" onclick="openCart()">🛒 <span id="cartCountNav">0</span></button>
-      <button class="nav-btn theme-btn" onclick="toggleTheme()">🌙</button>
-      <button class="nav-btn admin-btn" onclick="showAdminHint()">🔐 Админ</button>
     </div>
   </nav>
 
-  <!-- Баннер -->
   <div class="banner" id="mainBanner">
     <div class="banner-logo">🦉</div>
     <h1>Добро пожаловать!</h1>
@@ -485,96 +133,35 @@ footer a:hover { text-decoration: underline; }
     <a href="login.html" class="banner-btn" id="bannerLoginBtn">🔑 Войти / Регистрация</a>
   </div>
 
-  <!-- Приветствие -->
   <div class="welcome-bar" id="welcomeBar"></div>
 
-  <!-- Статистика -->
   <div class="stats-section" id="statsSection">
     <h2>📊 Статистика</h2>
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-value" id="statSections">6</div>
-        <div class="stat-label">📚 Разделов</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statItems">0</div>
-        <div class="stat-label">📄 Материалов</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statFree">0</div>
-        <div class="stat-label">🎁 Бесплатных</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="statFavorites">0</div>
-        <div class="stat-label">❤️ Избранное</div>
-      </div>
+      <div class="stat-card"><div class="stat-value" id="statSections">6</div><div class="stat-label">📚 Разделов</div></div>
+      <div class="stat-card"><div class="stat-value" id="statItems">0</div><div class="stat-label">📄 Материалов</div></div>
+      <div class="stat-card"><div class="stat-value" id="statFree">0</div><div class="stat-label">🎁 Бесплатных</div></div>
+      <div class="stat-card"><div class="stat-value" id="statPurchased">0</div><div class="stat-label">✅ Куплено</div></div>
     </div>
   </div>
 
-  <!-- Категории -->
   <div class="categories-grid" id="categoriesGrid">
-    <div class="category-card" onclick="showCategory('catalog')">
-      <div class="category-icon">📚</div>
-      <div class="category-title">Весь каталог</div>
-      <div class="category-count" id="countCatalog">0 материалов</div>
-    </div>
-    <div class="category-card" onclick="showCategory('worksheets')">
-      <div class="category-icon">📝</div>
-      <div class="category-title">Рабочие листы</div>
-      <div class="category-count" id="countWorksheets">0 материалов</div>
-    </div>
-    <div class="category-card" onclick="showCategory('themes')">
-      <div class="category-icon">🎨</div>
-      <div class="category-title">Темы</div>
-      <div class="category-count" id="countThemes">0 материалов</div>
-    </div>
-    <div class="category-card" onclick="showCategory('letterGames')">
-      <div class="category-icon">🔤</div>
-      <div class="category-title">Игры с буквами</div>
-      <div class="category-count" id="countLetterGames">0 материалов</div>
-    </div>
-    <div class="category-card" onclick="showCategory('speechGames')">
-      <div class="category-icon">🗣️</div>
-      <div class="category-title">Логопедические игры</div>
-      <div class="category-count" id="countSpeechGames">0 материалов</div>
-    </div>
-    <div class="category-card" onclick="showCategory('free')">
-      <div class="category-icon">🎁</div>
-      <div class="category-title">Бесплатно</div>
-      <div class="category-count" id="countFree">0 материалов</div>
-    </div>
+    <div class="category-card" onclick="showCategory('catalog')"><div class="category-icon">📚</div><div class="category-title">Весь каталог</div><div class="category-count" id="countCatalog">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('worksheets')"><div class="category-icon">📝</div><div class="category-title">Рабочие листы</div><div class="category-count" id="countWorksheets">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('themes')"><div class="category-icon">🎨</div><div class="category-title">Темы</div><div class="category-count" id="countThemes">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('letterGames')"><div class="category-icon">🔤</div><div class="category-title">Игры с буквами</div><div class="category-count" id="countLetterGames">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('speechGames')"><div class="category-icon">🗣️</div><div class="category-title">Логопедические игры</div><div class="category-count" id="countSpeechGames">0 материалов</div></div>
+    <div class="category-card" onclick="showCategory('free')"><div class="category-icon">🎁</div><div class="category-title">Бесплатно</div><div class="category-count" id="countFree">0 материалов</div></div>
   </div>
 
-  <!-- Фичи -->
   <div class="features-grid" id="featuresGrid">
-    <div class="feature-card">
-      <div class="feature-icon">🎯</div>
-      <div class="feature-title">Квиз</div>
-      <div class="feature-desc">Раздел в разработке</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">❤️</div>
-      <div class="feature-title">Избранное</div>
-      <div class="feature-desc">Сохраняйте любимое</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">⚖️</div>
-      <div class="feature-title">Сравнение</div>
-      <div class="feature-desc">Сравнивайте товары</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">👁️</div>
-      <div class="feature-title">История</div>
-      <div class="feature-desc">Просмотренные товары</div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon">🏆</div>
-      <div class="feature-title">Достижения</div>
-      <div class="feature-desc">Зарабатывайте награды</div>
-    </div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-title">Квиз</div><div class="feature-desc">Раздел в разработке</div></div>
+    <div class="feature-card"><div class="feature-icon">❤️</div><div class="feature-title">Избранное</div><div class="feature-desc">Сохраняйте любимое</div></div>
+    <div class="feature-card"><div class="feature-icon">⚖️</div><div class="feature-title">Сравнение</div><div class="feature-desc">Сравнивайте товары</div></div>
+    <div class="feature-card"><div class="feature-icon">👁️</div><div class="feature-title">История</div><div class="feature-desc">Просмотренные товары</div></div>
+    <div class="feature-card"><div class="feature-icon">🏆</div><div class="feature-title">Достижения</div><div class="feature-desc">Зарабатывайте награды</div></div>
   </div>
 
-  <!-- Контакты -->
   <div class="contacts-section" id="contactsSection">
     <h2>📞 Контакты</h2>
     <div class="contact-info" id="contactInfo"></div>
@@ -587,7 +174,6 @@ footer a:hover { text-decoration: underline; }
     </form>
   </div>
 
-  <!-- Просмотр категории -->
   <div class="category-view" id="categoryView">
     <div class="category-view-header">
       <h2 id="categoryTitle"></h2>
@@ -595,10 +181,8 @@ footer a:hover { text-decoration: underline; }
     </div>
     <div id="foldersList"></div>
   </div>
-
 </div>
 
-<!-- Корзина -->
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
     <h2>🛒 Корзина</h2>
@@ -614,11 +198,10 @@ footer a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<!-- Оформление заказа -->
 <div id="checkoutModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>📝 Оформление</h2>
+      <h2>📝 Оформление заказа</h2>
       <button class="close-modal" onclick="closeCheckout()">×</button>
     </div>
     <form id="checkoutForm">
@@ -633,23 +216,23 @@ footer a:hover { text-decoration: underline; }
           <option value="СДЭК (400₽)">СДЭК (400₽)</option>
           <option value="Самовывоз">Самовывоз</option>
         </select>
-        <select id="checkoutPayment" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-          <option value="">Выберите оплату</option>
-          <option value="Карта">Карта</option>
-          <option value="СБП">СБП</option>
-          <option value="При получении">При получении</option>
-        </select>
       </div>
       <div id="checkoutSummary" style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px;"></div>
-      <div style="display: flex; gap: 10px;">
+      <h3 style="margin-bottom: 15px; color: #5a4000;">💳 Выберите способ оплаты:</h3>
+      <div class="payment-methods">
+        <div class="payment-method" onclick="selectPayment('Карта')">💳 Банковская карта</div>
+        <div class="payment-method" onclick="selectPayment('СБП')">📱 СБП (Система быстрых платежей)</div>
+        <div class="payment-method" onclick="selectPayment('При получении')">💵 При получении</div>
+      </div>
+      <input type="hidden" id="checkoutPayment" required>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
         <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1;">Отмена</button>
-        <button type="submit" class="btn btn-success" style="flex:1;">✅ Подтвердить</button>
+        <button type="submit" class="btn btn-success" style="flex:1;">✅ Оплатить и скачать</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- Оплата -->
 <div id="paymentModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -660,18 +243,26 @@ footer a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<!-- Мои покупки -->
-<div id="downloadModal" class="modal">
+<div id="purchasesModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
       <h2>📥 Мои покупки</h2>
-      <button class="close-modal" onclick="closeDownload()">×</button>
+      <button class="close-modal" onclick="closePurchases()">×</button>
     </div>
-    <div id="downloadContent"></div>
+    <div id="purchasesContent"></div>
   </div>
 </div>
 
-<!-- Поиск -->
+<div id="ordersModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>📦 Мои заказы</h2>
+      <button class="close-modal" onclick="closeOrders()">×</button>
+    </div>
+    <div id="ordersContent"></div>
+  </div>
+</div>
+
 <div class="search-overlay" id="searchOverlay">
   <div class="search-box">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -683,12 +274,10 @@ footer a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<!-- Футер -->
 <footer>
   <p>🦉 © 2026 «Игривый совёнок»</p>
   <p style="margin-top: 12px;">
-    <a href="login.html">Вход</a> |
-    <a href="#" onclick="showAdminHint(); return false;">Админ</a>
+    <a href="login.html">Вход</a>
   </p>
 </footer>
 
@@ -697,39 +286,33 @@ let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 let currentCategory = '';
 let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
-let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-let history = JSON.parse(localStorage.getItem('viewHistory') || '[]');
+let lastCatalogUpdate = localStorage.getItem('lastCatalogUpdate') || '0';
 
 function init() {
-  loadBackground();
-  loadGradient();
   loadContacts();
   updateStats();
   updateCartCount();
   updateUserDisplay();
-
+  syncCatalog();
+  
   window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData') {
+    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
       updateStats();
       if (currentCategory) showCategory(currentCategory);
+      if (document.getElementById('purchasesModal').classList.contains('active')) showMyPurchases();
+      if (document.getElementById('ordersModal').classList.contains('active')) showMyOrders();
     }
   });
+  
+  setInterval(syncCatalog, 3000);
+}
 
-  setInterval(() => {
+function syncCatalog() {
+  const currentUpdate = localStorage.getItem('lastCatalogUpdate') || '0';
+  if (currentUpdate !== lastCatalogUpdate) {
+    lastCatalogUpdate = currentUpdate;
     updateStats();
     if (currentCategory) showCategory(currentCategory);
-  }, 3000);
-}
-
-function loadBackground() {
-  const bg = localStorage.getItem('siteBackground');
-  if (bg) document.body.style.background = `url(${bg}) center/cover`;
-}
-
-function loadGradient() {
-  const gradient = JSON.parse(localStorage.getItem('siteGradient') || 'null');
-  if (gradient) {
-    document.body.style.background = `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)`;
   }
 }
 
@@ -750,13 +333,12 @@ function loadContacts() {
 
 function updateStats() {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  let totalItems = 0, totalFolders = 0, freeItems = 0;
+  let totalItems = 0, freeItems = 0;
   const categories = ['catalog', 'worksheets', 'themes', 'letterGames', 'speechGames', 'free'];
-
+  
   categories.forEach(category => {
     const folders = catalog[category] || [];
     let categoryItems = 0;
-    totalFolders += folders.length;
     folders.forEach(folder => {
       const items = folder.items || [];
       categoryItems += items.length;
@@ -766,10 +348,10 @@ function updateStats() {
     const countEl = document.getElementById('count' + category.charAt(0).toUpperCase() + category.slice(1));
     if (countEl) countEl.textContent = `${categoryItems} материалов`;
   });
-
+  
   document.getElementById('statItems').textContent = totalItems;
   document.getElementById('statFree').textContent = freeItems;
-  document.getElementById('statFavorites').textContent = favorites.length;
+  document.getElementById('statPurchased').textContent = purchasedItems.length;
 }
 
 function updateUserDisplay() {
@@ -779,7 +361,7 @@ function updateUserDisplay() {
     document.getElementById('loginBtn').onclick = logout;
     document.getElementById('bannerLoginBtn').style.display = 'none';
     const wb = document.getElementById('welcomeBar');
-    wb.textContent = `🎉 Добро пожаловать, ${currentUser.name}! Баллов: ${currentUser.points || 0} 🎁`;
+    wb.textContent = `🎉 Добро пожаловать, ${currentUser.name}!`;
     wb.classList.add('show');
   }
 }
@@ -804,7 +386,7 @@ function showCategory(category) {
   currentCategory = category;
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const folders = catalog[category] || [];
-
+  
   const titles = {
     'catalog': '📚 Весь каталог',
     'worksheets': '📝 Рабочие листы',
@@ -813,9 +395,9 @@ function showCategory(category) {
     'speechGames': '🗣️ Логопедические игры',
     'free': '🎁 Бесплатно'
   };
-
+  
   document.getElementById('categoryTitle').textContent = titles[category];
-
+  
   if (folders.length === 0) {
     document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">В этой категории пока нет материалов</p>';
   } else {
@@ -823,25 +405,29 @@ function showCategory(category) {
       <div style="margin-bottom: 30px;">
         <h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3>
         <div class="items-grid">
-          ${(folder.items || []).map((item, ii) => `
-            <div class="item-card">
-              <div class="item-name">${item.name}</div>
-              <div class="item-description">${item.description || ''}</div>
-              <div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>
-              <div class="item-actions">
-                ${item.price > 0 ?
-                  `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">В корзину 🛒</button>` :
-                  `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">Скачать 📥</button>`
-                }
-                <button class="btn btn-secondary" onclick="toggleFavorite('${category}', ${fi}, ${ii})">❤️</button>
+          ${(folder.items || []).map((item, ii) => {
+            const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii);
+            return `
+              <div class="item-card">
+                <div class="item-name">${item.name}</div>
+                <div class="item-description">${item.description || ''}</div>
+                <div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>
+                <div class="item-actions">
+                  ${item.price === 0 ?
+                    `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` :
+                    isPurchased ?
+                      `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` :
+                      `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">🛒 В корзину</button>`
+                  }
+                </div>
               </div>
-            </div>
-          `).join('')}
+            `;
+          }).join('')}
         </div>
       </div>
     `).join('');
   }
-
+  
   document.getElementById('mainBanner').style.display = 'none';
   document.getElementById('statsSection').style.display = 'none';
   document.getElementById('categoriesGrid').style.display = 'none';
@@ -898,6 +484,12 @@ function removeFromCart(index) {
   renderCart();
 }
 
+function selectPayment(method) {
+  document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+  event.target.classList.add('selected');
+  document.getElementById('checkoutPayment').value = method;
+}
+
 function openCheckout() {
   if (cart.length === 0) { alert('Корзина пуста'); return; }
   if (!currentUser) { alert('Пожалуйста, войдите в систему'); window.location.href = 'login.html'; return; }
@@ -914,6 +506,9 @@ function closeCheckout() { document.getElementById('checkoutModal').classList.re
 
 document.getElementById('checkoutForm').addEventListener('submit', (e) => {
   e.preventDefault();
+  const paymentMethod = document.getElementById('checkoutPayment').value;
+  if (!paymentMethod) { alert('Выберите способ оплаты'); return; }
+  
   const order = {
     id: Date.now(),
     customerName: document.getElementById('checkoutName').value,
@@ -921,31 +516,38 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
     phone: document.getElementById('checkoutPhone').value,
     address: document.getElementById('checkoutAddress').value,
     delivery: document.getElementById('checkoutDelivery').value,
-    payment: document.getElementById('checkoutPayment').value,
+    payment: paymentMethod,
     items: cart.map(item => ({ name: item.name, price: item.price, category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex })),
     total: cart.reduce((sum, item) => sum + item.price, 0),
     status: 'new',
+    paid: false,
     date: new Date().toISOString()
   };
+  
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   orders.push(order);
   localStorage.setItem('ordersData', JSON.stringify(orders));
-  closeCheckout(); closeCart();
+  
+  closeCheckout();
+  closeCart();
   cart = [];
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
+  
   processPayment(order);
 });
 
 function processPayment(order) {
   const paymentContent = document.getElementById('paymentContent');
+  
   if (order.payment === 'При получении') {
     paymentContent.innerHTML = `
       <div class="payment-success">
         <h2>✅ Заказ оформлен!</h2>
         <p>Номер заказа: #${order.id}</p>
+        <p>Сумма: ${order.total}₽</p>
         <p>Оплата при получении</p>
-        <p>Мы свяжемся с вами для подтверждения</p>
+        <p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы будут доступны после оплаты</p>
         <button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button>
       </div>
     `;
@@ -953,43 +555,57 @@ function processPayment(order) {
     paymentContent.innerHTML = `
       <div style="text-align: center;">
         <h3 style="margin-bottom: 20px;">Оплата заказа #${order.id}</h3>
-        <p style="margin-bottom: 20px;">Сумма: <strong>${order.total}₽</strong></p>
+        <p style="margin-bottom: 20px; font-size: 18px;">Сумма: <strong>${order.total}₽</strong></p>
         <p style="margin-bottom: 20px;">Метод: ${order.payment}</p>
         <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-          <p style="margin-bottom: 12px;">Для тестирования нажмите кнопку ниже</p>
-          <button class="btn" onclick="simulatePayment(${order.id})">💳 Оплатить ${order.total}₽</button>
+          <p style="margin-bottom: 15px;">Нажмите кнопку для подтверждения оплаты</p>
+          <button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px;">💳 Оплатить ${order.total}₽</button>
         </div>
-        <p style="color: #999; font-size: 12px;">Демонстрационная версия. В реальном магазине — интеграция с платежной системой.</p>
+        <p style="color: #999; font-size: 12px;">После оплаты файлы станут доступны для скачивания</p>
       </div>
     `;
   }
   document.getElementById('paymentModal').classList.add('active');
 }
 
-function simulatePayment(orderId) {
+function confirmPayment(orderId) {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const order = orders.find(o => o.id === orderId);
+  
   if (order) {
     order.status = 'completed';
     order.paid = true;
     order.paymentDate = new Date().toISOString();
     localStorage.setItem('ordersData', JSON.stringify(orders));
+    
     order.items.forEach(item => {
-      purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
+      if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
+        purchasedItems.push({
+          category: item.category,
+          folderIndex: item.folderIndex,
+          itemIndex: item.itemIndex,
+          orderId: orderId,
+          purchaseDate: new Date().toISOString()
+        });
+      }
     });
     localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+    localStorage.setItem('lastCatalogUpdate', Date.now().toString());
+    
     closePayment();
+    
     const paymentContent = document.getElementById('paymentContent');
     paymentContent.innerHTML = `
       <div class="payment-success">
         <h2>✅ Оплата прошла успешно!</h2>
         <p>Заказ #${orderId} оплачен</p>
-        <p>Теперь вы можете скачать купленные материалы</p>
-        <button class="btn" onclick="showPurchasedItems()" style="margin-top: 20px;">📥 Скачать материалы</button>
+        <p style="color: #4CAF50; font-weight: bold; margin: 15px 0;">Теперь вы можете скачать купленные материалы</p>
+        <button class="btn btn-success" onclick="showMyPurchases()" style="margin-top: 20px;">📥 Перейти к покупкам</button>
         <button class="btn btn-secondary" onclick="closePayment()" style="margin-top: 10px;">Закрыть</button>
       </div>
     `;
     document.getElementById('paymentModal').classList.add('active');
+    updateStats();
   }
 }
 
@@ -1003,7 +619,10 @@ function downloadFreeItem(category, folderIndex, itemIndex) {
     link.href = item.file.data;
     link.download = item.file.name;
     link.click();
-  } else { alert('Файл не найден'); }
+    alert('Файл скачан! 📥');
+  } else {
+    alert('Файл не найден');
+  }
 }
 
 function downloadPurchasedItem(category, folderIndex, itemIndex) {
@@ -1018,126 +637,66 @@ function downloadPurchasedItem(category, folderIndex, itemIndex) {
     link.href = item.file.data;
     link.download = item.file.name;
     link.click();
-  } else { alert('Файл не найден'); }
+    alert('Файл скачан! 📥');
+  } else {
+    alert('Файл не найден');
+  }
 }
 
-function showPurchasedItems() {
-  closePayment();
-  const downloadContent = document.getElementById('downloadContent');
+function showMyPurchases() {
+  const purchasesContent = document.getElementById('purchasesContent');
+  
   if (purchasedItems.length === 0) {
-    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">У вас пока нет купленных материалов</p>';
+    purchasesContent.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">У вас пока нет купленных материалов</p>';
   } else {
     const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    downloadContent.innerHTML = `<h3 style="margin-bottom: 20px;">Ваши материалы:</h3>` +
-      purchasedItems.map(p => {
-        const item = catalog[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
-        if (!item) return '';
-        return `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <div><strong>${item.name}</strong><div style="color: #666; font-size: 12px;">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div>
-          <button class="btn" onclick="downloadPurchasedItem('${p.category}', ${p.folderIndex}, ${p.itemIndex})">📥 Скачать</button>
-        </div>`;
-      }).join('');
-  }
-  document.getElementById('downloadModal').classList.add('active');
-}
-
-function closeDownload() { document.getElementById('downloadModal').classList.remove('active'); }
-
-function toggleFavorite(category, folderIndex, itemIndex) {
-  const key = `${category}-${folderIndex}-${itemIndex}`;
-  const idx = favorites.indexOf(key);
-  if (idx > -1) { favorites.splice(idx, 1); alert('Удалено из избранного'); }
-  else { favorites.push(key); alert('Добавлено в избранное ❤️'); }
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-  updateStats();
-}
-
-function showFavorites() {
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  const downloadContent = document.getElementById('downloadContent');
-  document.getElementById('downloadModal').querySelector('h2').textContent = '❤️ Избранное';
-
-  if (favorites.length === 0) {
-    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">Избранное пусто</p>';
-  } else {
-    downloadContent.innerHTML = favorites.map(key => {
-      const [cat, fi, ii] = key.split('-');
-      const item = catalog[cat]?.[parseInt(fi)]?.items?.[parseInt(ii)];
+    purchasesContent.innerHTML = purchasedItems.map(p => {
+      const item = catalog[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
       if (!item) return '';
-      return `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-        <div><strong>${item.name}</strong><div style="color: #666; font-size: 12px;">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div></div>
-        ${item.price > 0 ? `<button class="btn" onclick="addToCart('${cat}', ${fi}, ${ii})">В корзину</button>` : `<button class="btn btn-success" onclick="downloadFreeItem('${cat}', ${fi}, ${ii})">📥</button>`}
-      </div>`;
+      return `
+        <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <strong>${item.name}</strong>
+            <div style="color: #666; font-size: 12px;">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div>
+          </div>
+          <button class="btn btn-success" onclick="downloadPurchasedItem('${p.category}', ${p.folderIndex}, ${p.itemIndex})">📥 Скачать</button>
+        </div>
+      `;
     }).join('');
   }
-  document.getElementById('downloadModal').classList.add('active');
+  document.getElementById('purchasesModal').classList.add('active');
 }
 
-function showHistory() {
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  const downloadContent = document.getElementById('downloadContent');
-  document.getElementById('downloadModal').querySelector('h2').textContent = '👁 История просмотров';
-  if (history.length === 0) {
-    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">История пуста</p>';
-  } else {
-    downloadContent.innerHTML = history.map(h => {
-      const item = catalog[h.category]?.[h.folderIndex]?.items?.[h.itemIndex];
-      if (!item) return '';
-      return `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;"><strong>${item.name}</strong><div style="color: #999; font-size: 12px;">${new Date(h.date).toLocaleString('ru-RU')}</div></div>`;
-    }).join('');
-  }
-  document.getElementById('downloadModal').classList.add('active');
-}
-
-function showAchievements() {
-  const downloadContent = document.getElementById('downloadContent');
-  document.getElementById('downloadModal').querySelector('h2').textContent = '🏆 Достижения';
-  downloadContent.innerHTML = '<p style="text-align: center; color: #999;">Раздел в разработке 🚧</p>';
-  document.getElementById('downloadModal').classList.add('active');
-}
+function closePurchases() { document.getElementById('purchasesModal').classList.remove('active'); }
 
 function showMyOrders() {
   if (!currentUser) { alert('Войдите в систему'); return; }
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
-  const myOrders = orders.filter(o => o.email === currentUser.email);
-  const downloadContent = document.getElementById('downloadContent');
-  document.getElementById('downloadModal').querySelector('h2').textContent = '📦 Мои заказы';
+  const myOrders = orders.filter(o => o.email === currentUser.email).reverse();
+  const ordersContent = document.getElementById('ordersContent');
+  
   if (myOrders.length === 0) {
-    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">Заказов пока нет</p>';
+    ordersContent.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">Заказов пока нет</p>';
   } else {
-    downloadContent.innerHTML = myOrders.map(o => `
+    ordersContent.innerHTML = myOrders.map(o => `
       <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-        <strong>Заказ #${o.id}</strong> — ${o.total}₽
-        <div style="color: #666; font-size: 12px;">${new Date(o.date).toLocaleString('ru-RU')} | Статус: ${o.status}</div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <strong>Заказ #${o.id}</strong>
+          <span style="color: ${o.paid ? '#4CAF50' : '#ff9800'}; font-weight: bold;">${o.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span>
+        </div>
+        <div style="color: #666; font-size: 13px; margin-bottom: 10px;">${new Date(o.date).toLocaleString('ru-RU')}</div>
+        <div style="margin-bottom: 10px;">
+          ${o.items.map(item => `<div style="font-size: 13px;">${item.name} - ${item.price}₽</div>`).join('')}
+        </div>
+        <div style="font-weight: bold; font-size: 16px;">Итого: ${o.total}₽</div>
+        <div style="font-size: 12px; color: #666; margin-top: 5px;">Оплата: ${o.payment}</div>
       </div>
     `).join('');
   }
-  document.getElementById('downloadModal').classList.add('active');
+  document.getElementById('ordersModal').classList.add('active');
 }
 
-function showMyPayments() {
-  if (!currentUser) { alert('Войдите в систему'); return; }
-  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
-  const paid = orders.filter(o => o.email === currentUser.email && o.paid);
-  const downloadContent = document.getElementById('downloadContent');
-  document.getElementById('downloadModal').querySelector('h2').textContent = '💳 Мои оплаты';
-  if (paid.length === 0) {
-    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">Оплат пока нет</p>';
-  } else {
-    downloadContent.innerHTML = paid.map(o => `
-      <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-        <strong>Оплата #${o.id}</strong> — ${o.total}₽
-        <div style="color: #4CAF50; font-size: 12px;">✅ Оплачено ${new Date(o.paymentDate).toLocaleString('ru-RU')}</div>
-      </div>
-    `).join('');
-  }
-  document.getElementById('downloadModal').classList.add('active');
-}
-
-function showContacts() {
-  showHome();
-  document.getElementById('contactsSection').scrollIntoView({ behavior: 'smooth' });
-}
+function closeOrders() { document.getElementById('ordersModal').classList.remove('active'); }
 
 function openSearch() { document.getElementById('searchOverlay').classList.add('active'); document.getElementById('searchInput').focus(); }
 function closeSearch() { document.getElementById('searchOverlay').classList.remove('active'); document.getElementById('searchInput').value = ''; document.getElementById('searchResults').innerHTML = ''; }
@@ -1146,7 +705,7 @@ function performSearch() {
   const query = document.getElementById('searchInput').value.toLowerCase().trim();
   const results = document.getElementById('searchResults');
   if (query.length < 2) { results.innerHTML = ''; return; }
-
+  
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   let found = [];
   Object.keys(catalog).forEach(cat => {
@@ -1158,16 +717,11 @@ function performSearch() {
       });
     });
   });
-
+  
   results.innerHTML = found.length === 0 ? '<p style="color: #999;">Ничего не найдено</p>' :
     found.map(item => `<div class="search-result-item" onclick="closeSearch(); showCategory('${item.category}');">
       <strong>${item.name}</strong> — ${item.price > 0 ? item.price + '₽' : 'Бесплатно'}
     </div>`).join('');
-}
-
-function toggleTheme() {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
 }
 
 document.getElementById('contactForm').addEventListener('submit', (e) => {
@@ -1184,12 +738,6 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
   document.getElementById('contactForm').reset();
   alert('Сообщение отправлено! 🦉');
 });
-
-function showAdminHint() {
-  alert('🔐 Вход в админ-панель:\n\n🔗 Ссылка: admin-login.html\n👤 Логин: admin\n🔒 Пароль: ваш установленный пароль');
-}
-
-if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark-mode');
 
 init();
 </script>
