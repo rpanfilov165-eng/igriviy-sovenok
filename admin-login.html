@@ -37,23 +37,26 @@ button:hover { transform: translateY(-2px); }
 .color-input { display: flex; flex-direction: column; gap: 5px; }
 .gradient-preview { height: 100px; border-radius: 10px; margin-top: 20px; }
 .folder { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
-.folder-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.folder-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
 .folder-name { font-weight: 600; color: #333; }
-.item { background: white; border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
-.item-info { flex: 1; }
+.item { background: white; border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.item-info { flex: 1; min-width: 200px; }
 .item-name { font-weight: 500; margin-bottom: 5px; }
 .item-price { color: #667eea; font-weight: 600; }
+.item-type { font-size: 12px; padding: 3px 8px; border-radius: 10px; display: inline-block; margin-left: 8px; }
+.type-digital { background: #e3f2fd; color: #1976d2; }
+.type-physical { background: #fff3e0; color: #e65100; }
 .item-actions { display: flex; gap: 10px; }
 .btn-small { padding: 6px 12px; font-size: 12px; width: auto; }
 .btn-edit { background: #4CAF50; }
 .btn-delete { background: #f44336; }
-.order-card, .message-card, .user-card { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+.order-card, .message-card, .user-card, .cart-card { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
 .user-card { border-left: 4px solid #667eea; }
 .user-card.paid { border-left-color: #4CAF50; }
 .user-card.unpaid { border-left-color: #ff9800; }
 .user-name { font-weight: 600; margin-bottom: 8px; color: #667eea; }
 .user-stat { display: flex; justify-content: space-between; margin: 5px 0; font-size: 14px; }
-.order-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.order-header { display: flex; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
 .order-id { font-weight: 600; color: #667eea; }
 .order-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; }
 .status-new { background: #ff9800; color: white; }
@@ -72,6 +75,8 @@ button:hover { transform: translateY(-2px); }
 .file-upload { border: 2px dashed #667eea; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 15px; }
 .file-list { margin-top: 15px; }
 .file-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.cart-item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+.cart-user-name { font-weight: 600; color: #667eea; margin-bottom: 10px; }
 @media (max-width: 768px) { .tabs { flex-direction: column; } .stats-grid { grid-template-columns: 1fr; } .gradient-picker { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -102,6 +107,7 @@ button:hover { transform: translateY(-2px); }
     <div class="tabs">
       <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
       <button class="tab" data-tab="users">👥 Пользователи</button>
+      <button class="tab" data-tab="carts">🛒 Корзины</button>
       <button class="tab" data-tab="background">🎨 Фон</button>
       <button class="tab" data-tab="catalog">📚 Весь каталог</button>
       <button class="tab" data-tab="worksheets">📝 Рабочие листы</button>
@@ -129,6 +135,11 @@ button:hover { transform: translateY(-2px); }
     <div id="users" class="tab-content">
       <h2>👥 Пользователи и оплаты</h2>
       <div id="usersList"></div>
+    </div>
+
+    <div id="carts" class="tab-content">
+      <h2>🛒 Корзины пользователей</h2>
+      <div id="cartsList"></div>
     </div>
 
     <div id="background" class="tab-content">
@@ -215,7 +226,14 @@ button:hover { transform: translateY(-2px); }
       <div class="form-group"><label>Описание</label><textarea id="itemDescription" rows="3"></textarea></div>
       <div class="form-group"><label>Цена (₽, 0 = бесплатно)</label><input type="number" id="itemPrice" min="0" step="0.01" required></div>
       <div class="form-group">
-        <label>Файл для скачивания</label>
+        <label>Тип товара</label>
+        <select id="itemType" required>
+          <option value="digital">📥 Цифровой (скачивание файла)</option>
+          <option value="physical">📦 Физический (доставка)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Файл для скачивания (только для цифровых товаров)</label>
         <div class="file-upload" onclick="document.getElementById('itemFileInput').click()"><p>📎 Нажмите для выбора файла</p><input type="file" id="itemFileInput" style="display: none;" onchange="handleFileSelect(event)"></div>
         <div id="fileList" class="file-list"></div>
       </div>
@@ -241,17 +259,18 @@ function init() {
   }
   loadDashboard();
   loadUsers();
+  loadCarts();
   loadBackground();
   loadCatalog();
   loadOrders();
   loadMessages();
   loadContacts();
   window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
-      loadDashboard(); loadUsers(); loadCatalog(); loadOrders();
+    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems' || e.key === 'cart') {
+      loadDashboard(); loadUsers(); loadCarts(); loadCatalog(); loadOrders();
     }
   });
-  setInterval(() => { loadDashboard(); loadUsers(); loadOrders(); }, 5000);
+  setInterval(() => { loadDashboard(); loadUsers(); loadCarts(); loadOrders(); }, 5000);
 }
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -309,7 +328,7 @@ function loadUsers() {
     if (!users[order.email]) users[order.email] = { name: order.customerName, email: order.email, phone: order.phone, orders: 0, paid: 0, unpaid: 0, totalSpent: 0, items: [] };
     users[order.email].orders++;
     if (order.paid) { users[order.email].paid++; users[order.email].totalSpent += order.total; } else { users[order.email].unpaid++; }
-    order.items.forEach(item => { users[order.email].items.push(item.name); });
+    order.items.forEach(item => { users[order.email].items.push(item.name + (item.itemType === 'physical' ? ' 📦' : ' 📥')); });
   });
   if (Object.keys(users).length === 0) { usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; return; }
   usersList.innerHTML = Object.values(users).map(user => `
@@ -324,6 +343,33 @@ function loadUsers() {
       <div style="margin-top: 10px; font-size: 12px; color: #666;"><strong>Купленные товары:</strong><br>${user.items.length > 0 ? user.items.join(', ') : 'Нет'}</div>
     </div>
   `).join('');
+}
+
+function loadCarts() {
+  const cartsList = document.getElementById('cartsList');
+  const allCarts = JSON.parse(localStorage.getItem('allCarts') || '{}');
+  const cartKeys = Object.keys(allCarts);
+  if (cartKeys.length === 0) {
+    cartsList.innerHTML = '<p style="color: #999; text-align: center;">Корзины пока пусты</p>';
+    return;
+  }
+  cartsList.innerHTML = cartKeys.map(email => {
+    const cart = allCarts[email];
+    const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
+    return `
+      <div class="cart-card">
+        <div class="cart-user-name">👤 ${cart.userName || 'Неизвестно'} (${email})</div>
+        <div style="margin-bottom: 10px;"><strong>Товаров в корзине: ${cart.length}</strong></div>
+        ${cart.map(item => `
+          <div class="cart-item-row">
+            <span>${item.name} ${item.itemType === 'physical' ? '📦' : '📥'}</span>
+            <span>${item.price}₽</span>
+          </div>
+        `).join('')}
+        <div style="margin-top: 10px; font-weight: bold; font-size: 16px; color: #667eea;">Итого: ${total}₽</div>
+      </div>
+    `;
+  }).join('');
 }
 
 function loadBackground() {
@@ -370,7 +416,7 @@ function loadCatalog() {
     list.innerHTML = folders.map((folder, fi) => `
       <div class="folder">
         <div class="folder-header"><span class="folder-name">📁 ${folder.name}</span><div><button class="btn-small btn-edit" onclick="openAddItemModal('${category}', ${fi})">➕ Товар</button><button class="btn-small btn-delete" onclick="deleteFolder('${category}', ${fi})">🗑</button></div></div>
-        ${(folder.items || []).map((item, ii) => `<div class="item"><div class="item-info"><div class="item-name">${item.name}</div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div></div><div class="item-actions"><button class="btn-small btn-edit" onclick="editItem('${category}', ${fi}, ${ii})">✏️</button><button class="btn-small btn-delete" onclick="deleteItem('${category}', ${fi}, ${ii})">🗑</button></div></div>`).join('')}
+        ${(folder.items || []).map((item, ii) => `<div class="item"><div class="item-info"><div class="item-name">${item.name} <span class="item-type ${item.itemType === 'physical' ? 'type-physical' : 'type-digital'}">${item.itemType === 'physical' ? '📦 Доставка' : '📥 Скачивание'}</span></div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div></div><div class="item-actions"><button class="btn-small btn-edit" onclick="editItem('${category}', ${fi}, ${ii})">✏️</button><button class="btn-small btn-delete" onclick="deleteItem('${category}', ${fi}, ${ii})">🗑</button></div></div>`).join('')}
       </div>
     `).join('');
   });
@@ -398,6 +444,7 @@ function openAddItemModal(category, fi) {
   document.getElementById('itemModalTitle').textContent = 'Добавить товар';
   document.getElementById('itemModal').classList.add('active');
   document.getElementById('itemForm').reset(); document.getElementById('fileList').innerHTML = ''; selectedFile = null;
+  document.getElementById('itemType').value = 'digital';
 }
 function closeItemModal() { document.getElementById('itemModal').classList.remove('active'); document.getElementById('itemForm').reset(); document.getElementById('fileList').innerHTML = ''; selectedFile = null; editingItemId = null; }
 function handleFileSelect(event) {
@@ -416,9 +463,10 @@ document.getElementById('itemForm').addEventListener('submit', (e) => {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const folder = catalog[currentCategory][editingItemId];
   if (!folder.items) folder.items = [];
-  folder.items.push({ id: Date.now(), name: document.getElementById('itemName').value, description: document.getElementById('itemDescription').value, price: parseFloat(document.getElementById('itemPrice').value), file: selectedFile });
+  const itemType = document.getElementById('itemType').value;
+  folder.items.push({ id: Date.now(), name: document.getElementById('itemName').value, description: document.getElementById('itemDescription').value, price: parseFloat(document.getElementById('itemPrice').value), itemType: itemType, file: itemType === 'digital' ? selectedFile : null });
   localStorage.setItem('catalogData', JSON.stringify(catalog));
-  closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен!');
+  closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен! Тип: ' + (itemType === 'digital' ? '📥 Скачивание' : '📦 Доставка'));
 });
 function editItem(category, fi, ii) {
   currentCategory = category; editingItemId = fi;
@@ -427,6 +475,7 @@ function editItem(category, fi, ii) {
   document.getElementById('itemName').value = item.name;
   document.getElementById('itemDescription').value = item.description || '';
   document.getElementById('itemPrice').value = item.price;
+  document.getElementById('itemType').value = item.itemType || 'digital';
   if (item.file) { selectedFile = item.file; document.getElementById('fileList').innerHTML = `<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`; }
   document.getElementById('itemModal').classList.add('active');
 }
@@ -447,7 +496,9 @@ function loadOrders() {
     <div class="order-card">
       <div class="order-header"><span class="order-id">Заказ #${order.id}</span><span class="order-status ${order.paid ? 'status-completed' : 'status-new'}">${order.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div>
       <p><strong>Клиент:</strong> ${order.customerName} | <strong>Email:</strong> ${order.email} | <strong>Телефон:</strong> ${order.phone}</p>
-      <p><strong>Товары:</strong> ${order.items.map(item => `${item.name} (${item.price}₽)`).join(', ')}</p>
+      <p><strong>Тип заказа:</strong> ${order.orderType === 'digital' ? '📥 Только скачивание' : '📦 С доставкой'}</p>
+      ${order.orderType === 'physical' ? `<p><strong>Адрес:</strong> ${order.address} | <strong>Доставка:</strong> ${order.delivery}</p>` : ''}
+      <p><strong>Товары:</strong> ${order.items.map(item => `${item.name} (${item.price}₽) ${item.itemType === 'physical' ? '📦' : '📥'}`).join(', ')}</p>
       <p><strong>Итого:</strong> ${order.total}₽ | <strong>Оплата:</strong> ${order.payment}</p>
       ${!order.paid ? `<button class="btn-small btn-edit" onclick="markAsPaid(${order.id})" style="margin-top: 10px;">✅ Отметить оплаченным</button>` : ''}
     </div>
@@ -459,11 +510,13 @@ function markAsPaid(orderId) {
   if (order) {
     order.paid = true; order.paymentDate = new Date().toISOString();
     order.items.forEach(item => {
-      const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
-      if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
-        purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
+      if (item.itemType === 'digital') {
+        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
+        if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
+          purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
+        }
+        localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
       }
-      localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
     });
     localStorage.setItem('ordersData', JSON.stringify(orders));
     loadOrders(); loadDashboard(); loadUsers(); alert('Заказ отмечен как оплаченный!');
@@ -526,7 +579,7 @@ function restoreBackup(event) {
         if (backup.contacts) localStorage.setItem('siteContacts', backup.contacts);
         if (backup.background) localStorage.setItem('siteBackground', backup.background);
         if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient);
-        loadDashboard(); loadUsers(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
+        loadDashboard(); loadUsers(); loadCarts(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
         alert('Резервная копия восстановлена!');
       } catch (error) { alert('Ошибка при восстановлении копии'); }
     };
