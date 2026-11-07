@@ -64,9 +64,6 @@ button:hover { transform: translateY(-2px); }
 .message-from { font-weight: 600; margin-bottom: 5px; }
 .message-date { color: #999; font-size: 12px; margin-bottom: 10px; }
 .message-text { color: #333; line-height: 1.5; }
-.log-entry { background: #f9f9f9; border-left: 3px solid #667eea; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-.log-time { color: #999; font-size: 12px; }
-.log-action { color: #333; margin-top: 5px; }
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal.active { display: flex; }
 .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -77,6 +74,9 @@ button:hover { transform: translateY(-2px); }
 .file-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
 .cart-item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
 .cart-user-name { font-weight: 600; color: #667eea; margin-bottom: 10px; }
+.payment-settings-box { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #667eea; }
+.payment-settings-box h3 { color: #667eea; margin-bottom: 15px; }
+.qr-preview { max-width: 200px; border-radius: 10px; margin-top: 10px; }
 @media (max-width: 768px) { .tabs { flex-direction: column; } .stats-grid { grid-template-columns: 1fr; } .gradient-picker { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -108,8 +108,9 @@ button:hover { transform: translateY(-2px); }
       <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
       <button class="tab" data-tab="users">👥 Пользователи</button>
       <button class="tab" data-tab="carts">🛒 Корзины</button>
+      <button class="tab" data-tab="payment">💳 Реквизиты оплаты</button>
       <button class="tab" data-tab="background">🎨 Фон</button>
-      <button class="tab" data-tab="catalog">📚 Весь каталог</button>
+      <button class="tab" data-tab="catalog">📚 Каталог</button>
       <button class="tab" data-tab="worksheets">📝 Рабочие листы</button>
       <button class="tab" data-tab="themes">🎨 Темы</button>
       <button class="tab" data-tab="letterGames">🔤 Игры с буквами</button>
@@ -142,6 +143,55 @@ button:hover { transform: translateY(-2px); }
       <div id="cartsList"></div>
     </div>
 
+    <!-- НОВАЯ ВКЛАДКА: РЕКВИЗИТЫ ОПЛАТЫ -->
+    <div id="payment" class="tab-content">
+      <h2>💳 Реквизиты для оплаты</h2>
+      <p style="color: #666; margin-bottom: 20px;">Здесь вы указываете свои реквизиты. Они будут показываться покупателям при оформлении заказа.</p>
+      
+      <div class="payment-settings-box">
+        <h3>💳 Реквизиты банковской карты</h3>
+        <form id="cardRequisitesForm">
+          <div class="form-group">
+            <label>ФИО получателя (как на карте)</label>
+            <input type="text" id="cardHolder" placeholder="ИВАНОВ ИВАН ИВАНОВИЧ">
+          </div>
+          <div class="form-group">
+            <label>Номер карты</label>
+            <input type="text" id="cardNumber" placeholder="2200 0000 0000 0000" maxlength="19">
+          </div>
+          <div class="form-group">
+            <label>Банк</label>
+            <input type="text" id="cardBank" placeholder="Сбербанк">
+          </div>
+          <button type="submit">💾 Сохранить реквизиты карты</button>
+        </form>
+      </div>
+
+      <div class="payment-settings-box">
+        <h3>📱 QR-код для СБП</h3>
+        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Загрузите QR-код из вашего банковского приложения. Покупатели будут сканировать его для оплаты.</p>
+        <div class="upload-area" id="qrUploadArea" onclick="document.getElementById('qrInput').click()">
+          <p>📤 Нажмите для загрузки QR-кода</p>
+          <input type="file" id="qrInput" accept="image/*" style="display: none;">
+        </div>
+        <div id="qrPreview"></div>
+        <div id="currentQrDisplay" style="margin-top: 15px;"></div>
+        <button id="saveQrBtn" class="hidden" style="margin-top: 15px;">💾 Сохранить QR-код</button>
+        <button id="removeQrBtn" class="btn-secondary hidden" style="margin-top: 10px;">🗑 Удалить QR-код</button>
+      </div>
+
+      <div class="payment-settings-box">
+        <h3>📧 Email для уведомлений</h3>
+        <form id="notificationEmailForm">
+          <div class="form-group">
+            <label>Email, на который будут приходить уведомления о заказах</label>
+            <input type="email" id="notificationEmail" placeholder="your@email.com">
+          </div>
+          <button type="submit">💾 Сохранить email</button>
+        </form>
+      </div>
+    </div>
+
     <div id="background" class="tab-content">
       <h2>🎨 Фон сайта</h2>
       <div class="upload-area" id="uploadArea"><p>📤 Загрузить изображение</p><input type="file" id="bgImageInput" accept="image/*" style="display: none;"></div>
@@ -161,7 +211,7 @@ button:hover { transform: translateY(-2px); }
     </div>
 
     <div id="catalog" class="tab-content">
-      <h2>📚 Весь каталог</h2>
+      <h2>📚 Каталог</h2>
       <button onclick="openAddFolderModal('catalog')" style="margin-bottom: 20px;">➕ Добавить папку</button>
       <div id="catalogList"></div>
     </div>
@@ -233,7 +283,7 @@ button:hover { transform: translateY(-2px); }
         </select>
       </div>
       <div class="form-group">
-        <label>Файл для скачивания (только для цифровых товаров)</label>
+        <label>Файл для скачивания (только для цифровых)</label>
         <div class="file-upload" onclick="document.getElementById('itemFileInput').click()"><p>📎 Нажмите для выбора файла</p><input type="file" id="itemFileInput" style="display: none;" onchange="handleFileSelect(event)"></div>
         <div id="fileList" class="file-list"></div>
       </div>
@@ -250,6 +300,7 @@ button:hover { transform: translateY(-2px); }
 let currentCategory = '';
 let editingItemId = null;
 let selectedFile = null;
+let selectedQrFile = null;
 
 function init() {
   const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
@@ -260,6 +311,7 @@ function init() {
   loadDashboard();
   loadUsers();
   loadCarts();
+  loadPaymentSettings();
   loadBackground();
   loadCatalog();
   loadOrders();
@@ -349,28 +401,97 @@ function loadCarts() {
   const cartsList = document.getElementById('cartsList');
   const allCarts = JSON.parse(localStorage.getItem('allCarts') || '{}');
   const cartKeys = Object.keys(allCarts);
-  if (cartKeys.length === 0) {
-    cartsList.innerHTML = '<p style="color: #999; text-align: center;">Корзины пока пусты</p>';
-    return;
-  }
+  if (cartKeys.length === 0) { cartsList.innerHTML = '<p style="color: #999; text-align: center;">Корзины пока пусты</p>'; return; }
   cartsList.innerHTML = cartKeys.map(email => {
     const cart = allCarts[email];
     const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
     return `
       <div class="cart-card">
-        <div class="cart-user-name">👤 ${cart.userName || 'Неизвестно'} (${email})</div>
+        <div class="cart-user-name">👤 ${cart.userName || 'Гость'} (${email})</div>
         <div style="margin-bottom: 10px;"><strong>Товаров в корзине: ${cart.length}</strong></div>
-        ${cart.map(item => `
-          <div class="cart-item-row">
-            <span>${item.name} ${item.itemType === 'physical' ? '📦' : '📥'}</span>
-            <span>${item.price}₽</span>
-          </div>
-        `).join('')}
+        ${cart.map(item => `<div class="cart-item-row"><span>${item.name} ${item.itemType === 'physical' ? '📦' : '📥'}</span><span>${item.price}₽</span></div>`).join('')}
         <div style="margin-top: 10px; font-weight: bold; font-size: 16px; color: #667eea;">Итого: ${total}₽</div>
       </div>
     `;
   }).join('');
 }
+
+// ЗАГРУЗКА РЕКВИЗИТОВ ОПЛАТЫ
+function loadPaymentSettings() {
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  document.getElementById('cardHolder').value = payment.cardHolder || '';
+  document.getElementById('cardNumber').value = payment.cardNumber || '';
+  document.getElementById('cardBank').value = payment.cardBank || '';
+  document.getElementById('notificationEmail').value = payment.notificationEmail || '';
+  
+  if (payment.qrCode) {
+    document.getElementById('currentQrDisplay').innerHTML = `
+      <p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p>
+      <img src="${payment.qrCode}" class="qr-preview" alt="QR-код">
+    `;
+    document.getElementById('removeQrBtn').classList.remove('hidden');
+  }
+}
+
+// СОХРАНЕНИЕ РЕКВИЗИТОВ КАРТЫ
+document.getElementById('cardRequisitesForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  payment.cardHolder = document.getElementById('cardHolder').value;
+  payment.cardNumber = document.getElementById('cardNumber').value;
+  payment.cardBank = document.getElementById('cardBank').value;
+  localStorage.setItem('paymentSettings', JSON.stringify(payment));
+  alert('✅ Реквизиты карты сохранены! Теперь они будут показываться покупателям.');
+});
+
+// ЗАГРУЗКА QR-КОДА
+document.getElementById('qrInput').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      selectedQrFile = event.target.result;
+      document.getElementById('qrPreview').innerHTML = `<img src="${selectedQrFile}" class="qr-preview" alt="Предпросмотр QR">`;
+      document.getElementById('saveQrBtn').classList.remove('hidden');
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
+});
+
+// СОХРАНЕНИЕ QR-КОДА
+document.getElementById('saveQrBtn').addEventListener('click', () => {
+  if (selectedQrFile) {
+    const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+    payment.qrCode = selectedQrFile;
+    localStorage.setItem('paymentSettings', JSON.stringify(payment));
+    document.getElementById('currentQrDisplay').innerHTML = `<p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p><img src="${selectedQrFile}" class="qr-preview" alt="QR-код">`;
+    document.getElementById('removeQrBtn').classList.remove('hidden');
+    document.getElementById('saveQrBtn').classList.add('hidden');
+    document.getElementById('qrPreview').innerHTML = '';
+    selectedQrFile = null;
+    alert('✅ QR-код сохранён! Теперь покупатели будут видеть его при оплате через СБП.');
+  }
+});
+
+// УДАЛЕНИЕ QR-КОДА
+document.getElementById('removeQrBtn').addEventListener('click', () => {
+  if (confirm('Удалить QR-код?')) {
+    const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+    delete payment.qrCode;
+    localStorage.setItem('paymentSettings', JSON.stringify(payment));
+    document.getElementById('currentQrDisplay').innerHTML = '';
+    document.getElementById('removeQrBtn').classList.add('hidden');
+    alert('QR-код удалён');
+  }
+});
+
+// СОХРАНЕНИЕ EMAIL ДЛЯ УВЕДОМЛЕНИЙ
+document.getElementById('notificationEmailForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
+  payment.notificationEmail = document.getElementById('notificationEmail').value;
+  localStorage.setItem('paymentSettings', JSON.stringify(payment));
+  alert('✅ Email для уведомлений сохранён!');
+});
 
 function loadBackground() {
   const bg = localStorage.getItem('siteBackground');
@@ -563,7 +684,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', (e) => 
 });
 
 function downloadBackup() {
-  const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), date: new Date().toISOString() };
+  const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), payment: localStorage.getItem('paymentSettings'), date: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click();
 }
@@ -579,7 +700,8 @@ function restoreBackup(event) {
         if (backup.contacts) localStorage.setItem('siteContacts', backup.contacts);
         if (backup.background) localStorage.setItem('siteBackground', backup.background);
         if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient);
-        loadDashboard(); loadUsers(); loadCarts(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
+        if (backup.payment) localStorage.setItem('paymentSettings', backup.payment);
+        loadDashboard(); loadUsers(); loadCarts(); loadPaymentSettings(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
         alert('Резервная копия восстановлена!');
       } catch (error) { alert('Ошибка при восстановлении копии'); }
     };
