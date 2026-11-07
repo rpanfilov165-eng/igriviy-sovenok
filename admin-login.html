@@ -120,6 +120,7 @@
   .modal-bg.show { display:flex; }
   .modal { background:white; border-radius:20px; padding:25px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
   .close-x { float:right; cursor:pointer; font-size:1.5em; color:#999; }
+  .log-item { background:#f8f9fa; padding:10px; border-radius:8px; margin-bottom:5px; font-size:0.9em; }
   @media (max-width: 768px) {
     .admin-layout.show { flex-direction: column; }
     .sidebar { width: 100%; }
@@ -136,7 +137,7 @@
 
     <div id="firstLoginBox" style="display:none">
       <p style="background:#fff3cd;padding:12px;border-radius:10px;margin-bottom:15px;color:#856404">
-        🦉 Это первый вход. Установите надёжный пароль (мин. 8 символов, буквы+цифры).
+        🔑 Установите новый пароль (мин. 8 символов, буквы+цифры).
       </p>
       <label>Новый пароль</label>
       <input type="password" id="newPwd">
@@ -158,7 +159,7 @@
 <!-- АДМИНКА -->
 <div class="admin-layout" id="adminPanel">
   <aside class="sidebar">
-    <h2>⚙️ Админ-панель</h2>
+    <h2>⚙️ Управление сайтом</h2>
     <div class="sidebar-item active" data-panel="dashboard">📊 Дашборд</div>
     <div class="sidebar-item" data-panel="background">🎨 Фон</div>
     <div class="sidebar-item" data-panel="catalog-all">📚 Весь каталог</div>
@@ -171,6 +172,7 @@
     <div class="sidebar-item" data-panel="messages">✉️ Сообщения</div>
     <div class="sidebar-item" data-panel="settings">⚙️ Настройки</div>
     <div class="sidebar-item" data-panel="backup">💾 Резервная копия</div>
+    <div class="sidebar-item" data-panel="log">🕘 Журнал действий</div>
     <div class="sidebar-item" onclick="logoutAdmin()" style="color:#e74c3c">🚪 Выйти</div>
   </aside>
 
@@ -181,7 +183,7 @@
       <div class="stats-grid">
         <div class="stat-card"><div class="num" id="stOrders">0</div><div class="lbl">Заказов</div></div>
         <div class="stat-card"><div class="num" id="stRevenue">0₽</div><div class="lbl">Выручка</div></div>
-        <div class="stat-card"><div class="num" id="stProducts">0</div><div class="lbl">Товаров</div></div>
+        <div class="stat-card"><div class="num" id="stProducts">0</div><div class="lbl">Материалов</div></div>
         <div class="stat-card"><div class="num" id="stFolders">0</div><div class="lbl">Папок</div></div>
       </div>
       <h3 style="margin:20px 0 10px">Последние заказы</h3>
@@ -191,29 +193,26 @@
     <!-- Фон -->
     <div class="panel" id="panel-background">
       <h2>🎨 Фон сайта</h2>
-      <label>Загрузить изображение</label>
+      <label>📤 Загрузить изображение</label>
       <input type="file" id="bgFile" accept="image/*">
       <div id="bgPreview" style="margin:15px 0"></div>
       <button class="btn btn-success" onclick="applyBgImage()">💾 Применить</button>
       <button class="btn btn-danger" onclick="removeBg()">🗑 Убрать фон</button>
 
-      <h3 style="margin:25px 0 10px">🌈 Градиент</h3>
+      <h3 style="margin:25px 0 10px">🌈 Градиенты</h3>
       <label>Цвет слева</label>
       <input type="color" id="gradLeft" value="#667eea">
       <label>Цвет справа</label>
       <input type="color" id="gradRight" value="#764ba2">
-      <button class="btn btn-success" onclick="applyGradient()">💾 Применить градиент</button>
+      <button class="btn btn-success" onclick="applyGradient()">💾 Сохранить</button>
     </div>
 
-    <!-- КАТАЛОГ (общий шаблон) -->
-    <div class="panel" id="panel-catalog-all">
-      <h2>📚 Весь каталог</h2>
-      <div id="catalog-all-content"></div>
-    </div>
+    <!-- КАТАЛОГ -->
+    <div class="panel" id="panel-catalog-all"><h2>📚 Весь каталог</h2><div id="catalog-all-content"></div></div>
     <div class="panel" id="panel-catalog-worksheets"><h2>📝 Рабочие листы</h2><div id="catalog-worksheets-content"></div></div>
     <div class="panel" id="panel-catalog-themes"><h2>🎨 Темы</h2><div id="catalog-themes-content"></div></div>
     <div class="panel" id="panel-catalog-letters"><h2>🔤 Игры с буквами</h2><div id="catalog-letters-content"></div></div>
-    <div class="panel" id="panel-catalog-speech"><h2>🗣️ Логопедические</h2><div id="catalog-speech-content"></div></div>
+    <div class="panel" id="panel-catalog-speech"><h2>🗣️ Логопедические игры</h2><div id="catalog-speech-content"></div></div>
     <div class="panel" id="panel-catalog-free"><h2>🎁 Бесплатно</h2><div id="catalog-free-content"></div></div>
 
     <!-- Заказы -->
@@ -232,7 +231,7 @@
     <div class="panel" id="panel-settings">
       <h2>⚙️ Настройки</h2>
 
-      <h3 style="margin:15px 0 10px">💳 Реквизиты для оплаты (отображаются покупателю)</h3>
+      <h3 style="margin:15px 0 10px">💳 Реквизиты для оплаты</h3>
       <label>Номер карты</label>
       <input type="text" id="setCard" placeholder="0000 0000 0000 0000">
       <label>Получатель (ФИО)</label>
@@ -250,7 +249,7 @@
       <label>Часы работы</label>
       <input type="text" id="setHours">
 
-      <button class="btn btn-success" onclick="saveSettings()">💾 Сохранить</button>
+      <button class="btn btn-success" onclick="saveSettings()">💾 Сохранить контакты</button>
 
       <h3 style="margin:25px 0 10px">🔑 Сменить пароль</h3>
       <label>Текущий пароль</label>
@@ -269,13 +268,19 @@
       <input type="file" id="restoreFile" accept=".json">
       <button class="btn" onclick="restoreBackup()">⬆️ Восстановить</button>
 
-      <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
-      <button class="btn btn-danger" onclick="resetAll()">🗑 Сбросить все данные</button>
+      <h3 style="margin:25px 0 10px">💾 Данные</h3>
+      <button class="btn btn-danger" onclick="resetAll()">🗑 Сброс</button>
+    </div>
+
+    <!-- Журнал -->
+    <div class="panel" id="panel-log">
+      <h2>🕘 Журнал действий</h2>
+      <div id="logList"></div>
     </div>
   </main>
 </div>
 
-<!-- Модалка добавления/редактирования товара -->
+<!-- Модалка товара -->
 <div class="modal-bg" id="productModal">
   <div class="modal">
     <span class="close-x" onclick="closeModal('productModal')">✕</span>
@@ -300,7 +305,30 @@
   </div>
 </div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
 <script>
+/* ============ FIREBASE КОНФИГ (тот же, что в index.html) ============ */
+const firebaseConfig = {
+  apiKey: "ВАШ_API_KEY",
+  authDomain: "ВАШ_PROJECT.firebaseapp.com",
+  databaseURL: "https://ВАШ_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "ВАШ_PROJECT",
+  storageBucket: "ВАШ_PROJECT.appspot.com",
+  messagingSenderId: "XXX",
+  appId: "XXX"
+};
+
+let db = null;
+try {
+  if (firebaseConfig.apiKey !== "ВАШ_API_KEY") {
+    firebase.initializeApp(firebaseConfig);
+    db = firebase.database();
+  }
+} catch(e) { console.warn('Firebase init error', e); }
+
 /* ============ ХРАНИЛИЩЕ ============ */
 const LS = {
   get: (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
@@ -311,18 +339,45 @@ let state = {
   adminPwd: LS.get('owl_admin_pwd', null),
   isAuth: LS.get('owl_admin_auth', false),
   catalog: LS.get('owl_catalog', []),
-  settings: LS.get('owl_settings', { card:'', name:'', bank:'', email:'', phone:'', address:'', hours:'' }),
+  settings: LS.get('owl_settings', { card:'', name:'', bank:'', sbp:'', email:'', phone:'', address:'', hours:'' }),
   orders: LS.get('owl_orders', []),
   messages: LS.get('owl_messages', []),
-  dataVersion: LS.get('owl_data_version', 0)
+  users: LS.get('owl_users', []),
+  log: LS.get('owl_log', [])
 };
 
-function saveVersion() {
-  state.dataVersion++;
-  LS.set('owl_data_version', state.dataVersion);
+function addLog(action) {
+  state.log.push({ action, date: new Date().toISOString() });
+  if (state.log.length > 200) state.log = state.log.slice(-200);
+  LS.set('owl_log', state.log);
 }
 
-/* ============ АВТОРИЗАЦИЯ АДМИНА ============ */
+function syncToFirebase() {
+  if (!db) return;
+  db.ref('owl_data').set({
+    catalog: state.catalog,
+    settings: state.settings,
+    orders: state.orders,
+    users: state.users,
+    messages: state.messages
+  });
+}
+function syncFromFirebase() {
+  if (!db) return;
+  db.ref('owl_data').on('value', snap => {
+    const d = snap.val();
+    if (!d) return;
+    if (d.catalog) { state.catalog = d.catalog; LS.set('owl_catalog', d.catalog); }
+    if (d.settings) { state.settings = d.settings; LS.set('owl_settings', d.settings); }
+    if (d.orders) { state.orders = d.orders; LS.set('owl_orders', d.orders); }
+    if (d.users) { state.users = d.users; LS.set('owl_users', d.users); }
+    if (d.messages) { state.messages = d.messages; LS.set('owl_messages', d.messages); }
+    renderAll();
+  });
+}
+syncFromFirebase();
+
+/* ============ АВТОРИЗАЦИЯ ============ */
 function initLoginScreen() {
   if (!state.adminPwd) {
     document.getElementById('firstLoginBox').style.display = 'block';
@@ -342,6 +397,7 @@ function setFirstPassword() {
   LS.set('owl_admin_pwd', p1);
   state.isAuth = true;
   LS.set('owl_admin_auth', true);
+  addLog('Первый вход — установлен пароль');
   showAdmin();
 }
 function doAdminLogin() {
@@ -349,6 +405,7 @@ function doAdminLogin() {
   if (p !== state.adminPwd) return toast('Неверный пароль');
   state.isAuth = true;
   LS.set('owl_admin_auth', true);
+  addLog('Вход в админку');
   showAdmin();
 }
 function logoutAdmin() {
@@ -372,6 +429,7 @@ function changePassword() {
   LS.set('owl_admin_pwd', newP);
   document.getElementById('oldPwd').value = '';
   document.getElementById('newAdminPwd').value = '';
+  addLog('Сменён пароль админа');
   toast('Пароль изменён');
 }
 
@@ -415,21 +473,21 @@ document.getElementById('bgFile').addEventListener('change', async e => {
 function applyBgImage() {
   if (!pendingBgImage) return toast('Выберите изображение');
   LS.set('owl_background', { type: 'image', url: pendingBgImage });
-  saveVersion();
+  addLog('Установлен фон-изображение');
   toast('Фон применён');
   document.getElementById('bgPreview').innerHTML = '';
   pendingBgImage = null;
 }
 function removeBg() {
   LS.set('owl_background', null);
-  saveVersion();
+  addLog('Убран фон');
   toast('Фон убран');
 }
 function applyGradient() {
   const l = document.getElementById('gradLeft').value;
   const r = document.getElementById('gradRight').value;
   LS.set('owl_background', { type: 'gradient', left: l, right: r });
-  saveVersion();
+  addLog('Установлен градиент');
   toast('Градиент применён');
 }
 
@@ -438,7 +496,7 @@ const SECTIONS = {
   worksheets: '📝 Рабочие листы',
   themes: '🎨 Темы',
   letters: '🔤 Игры с буквами',
-  speech: '🗣️ Логопедические',
+  speech: '🗣️ Логопедические игры',
   free: '🎁 Бесплатно'
 };
 
@@ -537,37 +595,42 @@ function saveProduct() {
   const fileUrl = pendingProductFile || document.getElementById('pmFile').value.trim();
 
   if (!name) return toast('Введите название');
-  if (price > 0 && !fileUrl) return toast('Для платного товара нужен файл для скачивания');
+  if (price > 0 && !fileUrl) return toast('Для платного товара нужен файл');
 
   if (id) {
     const p = state.catalog.find(x => x.id === Number(id));
     Object.assign(p, { name, folder, price, description, image: imageUrl || p.image, fileUrl: fileUrl || p.fileUrl });
+    addLog('Изменён товар: ' + name);
   } else {
     state.catalog.push({
       id: Date.now(),
       section, name, folder, price, description,
       image: imageUrl, fileUrl
     });
+    addLog('Добавлен товар: ' + name);
   }
   LS.set('owl_catalog', state.catalog);
-  saveVersion();
+  syncToFirebase();
   closeModal('productModal');
   renderAll();
-  toast('Сохранено');
+  toast('Сохранено — у покупателей обновится автоматически');
 }
 
 function deleteProduct(id) {
   if (!confirm('Удалить товар?')) return;
+  const p = state.catalog.find(x => x.id === id);
   state.catalog = state.catalog.filter(p => p.id !== id);
   LS.set('owl_catalog', state.catalog);
-  saveVersion();
+  syncToFirebase();
+  addLog('Удалён товар: ' + (p ? p.name : id));
   renderAll();
 }
 function deleteFolder(section, fname) {
   if (!confirm('Удалить папку "' + fname + '" и все товары в ней?')) return;
   state.catalog = state.catalog.filter(p => !(p.section === section && (p.folder || 'Без папки') === fname));
   LS.set('owl_catalog', state.catalog);
-  saveVersion();
+  syncToFirebase();
+  addLog('Удалена папка: ' + fname);
   renderAll();
 }
 
@@ -579,7 +642,7 @@ function renderOrders() {
     return;
   }
   const sorted = [...state.orders].reverse();
-  box.innerHTML = '<table><thead><tr><th>№</th><th>Клиент</th><th>Сумма</th><th>Чек</th><th>Статус</th><th>Действия</th></tr></thead><tbody>' +
+  box.innerHTML = '<table><thead><tr><th>№</th><th>Клиент</th><th>Сумма</th><th>Оплата</th><th>Чек</th><th>Статус</th><th>Действия</th></tr></thead><tbody>' +
     sorted.map(o => {
       const statusMap = {
         pending: ['Ожидает', 'status-pending'],
@@ -591,6 +654,7 @@ function renderOrders() {
         <td>${o.id}<br><small style="color:#999">${new Date(o.createdAt).toLocaleString('ru-RU')}</small></td>
         <td>${o.userName}<br><small>${o.userEmail}</small></td>
         <td><b>${o.total}₽</b></td>
+        <td>${o.payMethodLabel || '—'}</td>
         <td>${o.receipt}</td>
         <td><span class="${sClass}">${sText}</span></td>
         <td>
@@ -606,9 +670,10 @@ function setOrderStatus(id, status) {
   if (!o) return;
   o.status = status;
   LS.set('owl_orders', state.orders);
-  saveVersion();
+  syncToFirebase();
+  addLog('Заказ №' + id + ' → ' + status);
   renderAll();
-  toast('Статус обновлён — у клиента сразу отобразится');
+  toast('Статус обновлён — у клиента появится мгновенно');
 }
 function viewOrder(id) {
   const o = state.orders.find(x => x.id === id);
@@ -618,6 +683,7 @@ function viewOrder(id) {
     'Клиент: ' + o.userName + ' (' + o.userEmail + ')\n' +
     'Товары:\n' + o.items.map(i => '  • ' + i.name + ' — ' + i.price + '₽').join('\n') + '\n' +
     'Доставка: ' + o.delivery.methodLabel + '\n' +
+    'Оплата: ' + (o.payMethodLabel || '—') + '\n' +
     'Адрес: ' + o.delivery.address + '\n' +
     'Тел: ' + o.delivery.phone + '\n' +
     'Комментарий: ' + (o.delivery.comment || '—') + '\n' +
@@ -656,14 +722,16 @@ function saveSettings() {
     card: document.getElementById('setCard').value.trim(),
     name: document.getElementById('setName').value.trim(),
     bank: document.getElementById('setBank').value.trim(),
+    sbp: document.getElementById('setPhone').value.trim(),
     email: document.getElementById('setEmail').value.trim(),
     phone: document.getElementById('setPhone').value.trim(),
     address: document.getElementById('setAddress').value.trim(),
     hours: document.getElementById('setHours').value.trim()
   };
   LS.set('owl_settings', state.settings);
-  saveVersion();
-  toast('Настройки сохранены');
+  syncToFirebase();
+  addLog('Обновлены настройки');
+  toast('Настройки сохранены — обновятся у всех покупателей');
 }
 
 /* ============ ДАШБОРД ============ */
@@ -685,6 +753,18 @@ function renderDashboard() {
     }).join('') + '</tbody></table>';
 }
 
+/* ============ ЖУРНАЛ ============ */
+function renderLog() {
+  const box = document.getElementById('logList');
+  if (state.log.length === 0) {
+    box.innerHTML = '<p style="color:#999">Журнал пуст</p>';
+    return;
+  }
+  box.innerHTML = state.log.slice().reverse().map(l =>
+    `<div class="log-item">${new Date(l.date).toLocaleString('ru-RU')} — <b>${l.action}</b></div>`
+  ).join('');
+}
+
 /* ============ БЕКАП ============ */
 function downloadBackup() {
   const data = {
@@ -692,6 +772,7 @@ function downloadBackup() {
     settings: state.settings,
     orders: state.orders,
     messages: state.messages,
+    users: state.users,
     date: new Date().toISOString()
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -711,7 +792,9 @@ function restoreBackup() {
       if (d.settings) { state.settings = d.settings; LS.set('owl_settings', d.settings); }
       if (d.orders) { state.orders = d.orders; LS.set('owl_orders', d.orders); }
       if (d.messages) { state.messages = d.messages; LS.set('owl_messages', d.messages); }
-      saveVersion();
+      if (d.users) { state.users = d.users; LS.set('owl_users', d.users); }
+      syncToFirebase();
+      addLog('Восстановлена резервная копия');
       renderAll();
       toast('Восстановлено');
     } catch { toast('Ошибка файла'); }
@@ -721,10 +804,11 @@ function restoreBackup() {
 function resetAll() {
   if (!confirm('Удалить ВСЕ данные? Это нельзя отменить!')) return;
   if (!confirm('Точно-точно?')) return;
-  ['owl_catalog','owl_settings','owl_orders','owl_messages'].forEach(k => localStorage.removeItem(k));
-  state.catalog = []; state.settings = {card:'',name:'',bank:'',email:'',phone:'',address:'',hours:''};
-  state.orders = []; state.messages = [];
-  saveVersion();
+  ['owl_catalog','owl_settings','owl_orders','owl_messages','owl_users'].forEach(k => localStorage.removeItem(k));
+  state.catalog = []; state.settings = {card:'',name:'',bank:'',sbp:'',email:'',phone:'',address:'',hours:''};
+  state.orders = []; state.messages = []; state.users = [];
+  syncToFirebase();
+  addLog('Сброшены все данные');
   renderAll();
   toast('Данные сброшены');
 }
@@ -737,6 +821,7 @@ function renderAll() {
   renderOrders();
   renderMessages();
   loadSettingsForm();
+  renderLog();
 }
 
 /* ============ СТАРТ ============ */
