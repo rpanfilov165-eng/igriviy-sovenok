@@ -11,7 +11,6 @@ body {
   background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%);
   min-height: 100vh;
   padding: 15px;
-  transition: background 0.5s;
 }
 
 body.dark-mode {
@@ -22,64 +21,81 @@ body.dark-mode {
 
 /* Навигация */
 .top-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background: white;
-  padding: 10px 20px;
+  padding: 15px 20px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 15px;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
 }
 
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .logo-img {
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: linear-gradient(135deg, #f5e6a3, #d4a017);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 30px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .logo-text {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #8B7355;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 15px;
+  color: #666;
+}
+
+.user-area a {
+  color: #8B7355;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .nav-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
   justify-content: center;
-  flex: 1;
 }
 
 .nav-btn {
-  padding: 8px 16px;
+  padding: 10px 18px;
   background: linear-gradient(135deg, #f0c040, #e8a820);
   color: #5a4000;
   border: none;
   border-radius: 20px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -93,30 +109,15 @@ body.dark-mode {
 .nav-btn.theme-btn { background: linear-gradient(135deg, #333, #555); color: white; }
 .nav-btn.admin-btn { background: linear-gradient(135deg, #9C27B0, #7B1FA2); color: white; }
 
-.user-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #666;
-}
-
-.user-area a {
-  color: #8B7355;
-  text-decoration: none;
-  font-weight: 600;
-}
-
 /* Баннер */
 .banner {
   background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 50%, #d4c06a 100%);
   border-radius: 20px;
-  padding: 40px 20px;
+  padding: 50px 20px;
   text-align: center;
   margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   position: relative;
-  overflow: hidden;
 }
 
 .banner::before {
@@ -128,38 +129,38 @@ body.dark-mode {
 }
 
 .banner-logo {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
+  margin: 0 auto 25px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  font-size: 70px;
-  border: 4px solid #f0c040;
+  font-size: 80px;
+  border: 5px solid #f0c040;
 }
 
 .banner h1 {
-  font-size: 32px;
+  font-size: 36px;
   color: #5a4000;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .banner p {
   color: #8B7355;
-  font-size: 16px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  margin-bottom: 25px;
 }
 
 .banner-btn {
-  padding: 12px 30px;
+  padding: 14px 35px;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
@@ -173,12 +174,12 @@ body.dark-mode {
 .welcome-bar {
   background: linear-gradient(135deg, #4CAF50, #66BB6A);
   color: white;
-  padding: 12px 20px;
+  padding: 14px 20px;
   border-radius: 12px;
   text-align: center;
   margin-bottom: 20px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   display: none;
 }
 
@@ -188,33 +189,33 @@ body.dark-mode {
 .stats-section {
   background: white;
   border-radius: 15px;
-  padding: 20px;
+  padding: 25px;
   margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .stats-section h2 {
   color: #5a4000;
-  margin-bottom: 15px;
-  font-size: 20px;
+  margin-bottom: 20px;
+  font-size: 22px;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
 }
 
 .stat-card {
   background: linear-gradient(135deg, #5c4db7, #4a3fa0);
   color: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 12px;
   text-align: center;
 }
 
-.stat-value { font-size: 28px; font-weight: bold; margin-bottom: 5px; }
-.stat-label { font-size: 13px; opacity: 0.9; }
+.stat-value { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
+.stat-label { font-size: 14px; opacity: 0.9; }
 
 /* Категории */
 .categories-grid {
@@ -226,7 +227,7 @@ body.dark-mode {
 
 .category-card {
   background: white;
-  padding: 25px 15px;
+  padding: 30px 20px;
   border-radius: 15px;
   text-align: center;
   cursor: pointer;
@@ -239,9 +240,9 @@ body.dark-mode {
   box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
-.category-icon { font-size: 40px; margin-bottom: 10px; }
-.category-title { font-weight: 600; color: #333; margin-bottom: 5px; font-size: 15px; }
-.category-count { color: #999; font-size: 13px; }
+.category-icon { font-size: 45px; margin-bottom: 12px; }
+.category-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 16px; }
+.category-count { color: #999; font-size: 14px; }
 
 /* Фичи */
 .features-grid {
@@ -253,41 +254,41 @@ body.dark-mode {
 
 .feature-card {
   background: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.feature-icon { font-size: 32px; margin-bottom: 8px; }
-.feature-title { font-weight: 600; color: #333; margin-bottom: 5px; font-size: 14px; }
-.feature-desc { color: #999; font-size: 12px; }
+.feature-icon { font-size: 36px; margin-bottom: 10px; }
+.feature-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 15px; }
+.feature-desc { color: #999; font-size: 13px; }
 
 /* Контакты */
 .contacts-section {
   background: white;
-  padding: 25px;
+  padding: 30px;
   border-radius: 15px;
   margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.contacts-section h2 { color: #5a4000; margin-bottom: 15px; }
+.contacts-section h2 { color: #5a4000; margin-bottom: 20px; font-size: 22px; }
 
-.contact-form { display: grid; gap: 12px; margin-top: 15px; }
+.contact-form { display: grid; gap: 15px; margin-top: 20px; }
 .contact-form input, .contact-form textarea {
-  padding: 12px;
+  padding: 14px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 15px;
 }
 .contact-form input:focus, .contact-form textarea:focus {
   outline: none;
   border-color: #f0c040;
 }
 
-.contact-info { display: grid; gap: 8px; margin-top: 15px; }
-.contact-item { display: flex; align-items: center; gap: 8px; color: #555; }
+.contact-info { display: grid; gap: 10px; margin-top: 20px; }
+.contact-item { display: flex; align-items: center; gap: 10px; color: #555; font-size: 15px; }
 
 /* Корзина */
 .cart-sidebar {
@@ -300,15 +301,15 @@ body.dark-mode {
   box-shadow: -5px 0 20px rgba(0,0,0,0.2);
   transition: right 0.3s;
   z-index: 1000;
-  padding: 20px;
+  padding: 25px;
   overflow-y: auto;
 }
 .cart-sidebar.active { right: 0; }
-.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.close-cart { background: none; border: none; font-size: 24px; cursor: pointer; }
-.cart-item { background: #f9f9f9; padding: 12px; border-radius: 10px; margin-bottom: 8px; }
-.cart-item-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-.cart-total { border-top: 2px solid #e0e0e0; padding-top: 15px; margin-top: 15px; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.close-cart { background: none; border: none; font-size: 28px; cursor: pointer; }
+.cart-item { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
+.cart-item-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.cart-total { border-top: 2px solid #e0e0e0; padding-top: 20px; margin-top: 20px; }
 
 /* Модальные окна */
 .modal {
@@ -324,15 +325,15 @@ body.dark-mode {
 .modal.active { display: flex; }
 .modal-content {
   background: white;
-  padding: 30px;
+  padding: 35px;
   border-radius: 15px;
   max-width: 500px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
 }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.close-modal { background: none; border: none; font-size: 24px; cursor: pointer; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.close-modal { background: none; border: none; font-size: 28px; cursor: pointer; }
 
 /* Поиск */
 .search-overlay {
@@ -349,21 +350,21 @@ body.dark-mode {
 .search-overlay.active { display: flex; }
 .search-box {
   background: white;
-  padding: 30px;
+  padding: 35px;
   border-radius: 15px;
   width: 90%;
   max-width: 600px;
 }
 .search-box input {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-size: 16px;
 }
-.search-results { margin-top: 15px; max-height: 300px; overflow-y: auto; }
+.search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; }
 .search-result-item {
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
 }
@@ -372,7 +373,7 @@ body.dark-mode {
 /* Просмотр категории */
 .category-view {
   background: white;
-  padding: 25px;
+  padding: 30px;
   border-radius: 15px;
   margin-bottom: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -383,37 +384,37 @@ body.dark-mode {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 .items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
+  gap: 20px;
 }
 .item-card {
   background: #f9f9f9;
-  padding: 15px;
+  padding: 20px;
   border-radius: 12px;
   transition: transform 0.2s;
 }
 .item-card:hover { transform: translateY(-3px); }
-.item-name { font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-.item-description { color: #666; font-size: 12px; margin-bottom: 10px; }
-.item-price { font-size: 18px; font-weight: bold; color: #5c4db7; margin-bottom: 10px; }
-.item-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.item-name { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
+.item-description { color: #666; font-size: 13px; margin-bottom: 12px; }
+.item-price { font-size: 20px; font-weight: bold; color: #5c4db7; margin-bottom: 12px; }
+.item-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
 .btn {
-  padding: 8px 16px;
+  padding: 10px 20px;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s;
 }
-.btn:hover { transform: translateY(-1px); }
+.btn:hover { transform: translateY(-2px); }
 .btn-secondary { background: #f0f0f0; color: #333; }
 .btn-success { background: linear-gradient(135deg, #4CAF50, #388E3C); }
 
@@ -421,21 +422,21 @@ body.dark-mode {
 footer {
   background: linear-gradient(135deg, #2c2c54, #474787);
   color: white;
-  padding: 20px;
+  padding: 25px;
   border-radius: 15px;
   text-align: center;
+  margin-top: 20px;
 }
-footer a { color: #f0c040; text-decoration: none; margin: 0 10px; }
+footer a { color: #f0c040; text-decoration: none; margin: 0 12px; font-size: 15px; }
 footer a:hover { text-decoration: underline; }
 
-.payment-success { text-align: center; padding: 20px; }
-.payment-success h2 { color: #4CAF50; margin-bottom: 15px; }
+.payment-success { text-align: center; padding: 25px; }
+.payment-success h2 { color: #4CAF50; margin-bottom: 20px; }
 
 @media (max-width: 768px) {
   .cart-sidebar { width: 100%; right: -100%; }
-  .nav-buttons { order: 3; width: 100%; }
-  .banner h1 { font-size: 24px; }
-  .banner-logo { width: 80px; height: 80px; font-size: 50px; }
+  .banner h1 { font-size: 28px; }
+  .banner-logo { width: 100px; height: 100px; font-size: 60px; }
 }
 </style>
 </head>
@@ -444,9 +445,15 @@ footer a:hover { text-decoration: underline; }
 
   <!-- Навигация -->
   <nav class="top-nav">
-    <div class="logo-area">
-      <div class="logo-img">🦉</div>
-      <span class="logo-text">Игривый совёнок</span>
+    <div class="nav-header">
+      <div class="logo-area">
+        <div class="logo-img">🦉</div>
+        <span class="logo-text">Игривый совёнок</span>
+      </div>
+      <div class="user-area">
+        <span id="userInfo">👤 Гость</span>
+        <a href="login.html" id="loginBtn">Войти</a>
+      </div>
     </div>
     <div class="nav-buttons">
       <button class="nav-btn" onclick="showHome()">🏠 Главная</button>
@@ -457,7 +464,7 @@ footer a:hover { text-decoration: underline; }
       <button class="nav-btn" onclick="showCategory('speechGames')">🗣️ Логопедические</button>
       <button class="nav-btn" onclick="showCategory('free')">🎁 Бесплатно</button>
       <button class="nav-btn" onclick="showFavorites()">❤️ Избранное</button>
-      <button class="nav-btn" onclick="alert('Раздел в разработке')">⚖️ Сравнение<span id="compareCount">0</span></button>
+      <button class="nav-btn" onclick="alert('Раздел в разработке')">⚖️ Сравнение <span id="compareCount">0</span></button>
       <button class="nav-btn" onclick="showHistory()">👁 История</button>
       <button class="nav-btn" onclick="showAchievements()">🏆 Достижения</button>
       <button class="nav-btn" onclick="showContacts()">📞 Контакты</button>
@@ -467,10 +474,6 @@ footer a:hover { text-decoration: underline; }
       <button class="nav-btn cart-btn" onclick="openCart()">🛒 <span id="cartCountNav">0</span></button>
       <button class="nav-btn theme-btn" onclick="toggleTheme()">🌙</button>
       <button class="nav-btn admin-btn" onclick="showAdminHint()">🔐 Админ</button>
-    </div>
-    <div class="user-area">
-      <span id="userInfo">👤 Гость</span>
-      <a href="login.html" id="loginBtn">Войти</a>
     </div>
   </nav>
 
@@ -575,7 +578,7 @@ footer a:hover { text-decoration: underline; }
   <div class="contacts-section" id="contactsSection">
     <h2>📞 Контакты</h2>
     <div class="contact-info" id="contactInfo"></div>
-    <h3 style="margin-top: 20px; margin-bottom: 10px; color: #5a4000;">✉️ Напишите нам</h3>
+    <h3 style="margin-top: 25px; margin-bottom: 15px; color: #5a4000;">✉️ Напишите нам</h3>
     <form class="contact-form" id="contactForm">
       <input type="text" id="contactName" placeholder="Ваше имя" required>
       <input type="email" id="contactEmail" placeholder="Email" required>
@@ -604,7 +607,7 @@ footer a:hover { text-decoration: underline; }
   <div id="cartItems"></div>
   <div class="cart-total">
     <h3>Итого: <span id="cartTotal">0</span>₽</h3>
-    <div style="display: flex; gap: 10px; margin-top: 15px;">
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
       <button class="btn btn-secondary" onclick="closeCart()" style="flex:1;">Продолжить</button>
       <button class="btn" onclick="openCheckout()" style="flex:1;">Оформить</button>
     </div>
@@ -619,25 +622,25 @@ footer a:hover { text-decoration: underline; }
       <button class="close-modal" onclick="closeCheckout()">×</button>
     </div>
     <form id="checkoutForm">
-      <div style="display: grid; gap: 12px; margin-bottom: 20px;">
-        <input type="text" id="checkoutName" placeholder="Ваше имя" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
-        <input type="email" id="checkoutEmail" placeholder="Email" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
-        <input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
-        <input type="text" id="checkoutAddress" placeholder="Адрес доставки" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
-        <select id="checkoutDelivery" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
+      <div style="display: grid; gap: 15px; margin-bottom: 25px;">
+        <input type="text" id="checkoutName" placeholder="Ваше имя" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
+        <input type="email" id="checkoutEmail" placeholder="Email" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
+        <input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
+        <input type="text" id="checkoutAddress" placeholder="Адрес доставки" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
+        <select id="checkoutDelivery" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
           <option value="">Выберите доставку</option>
           <option value="Почта России (300₽)">Почта России (300₽)</option>
           <option value="СДЭК (400₽)">СДЭК (400₽)</option>
           <option value="Самовывоз">Самовывоз</option>
         </select>
-        <select id="checkoutPayment" required style="padding:12px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px;">
+        <select id="checkoutPayment" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
           <option value="">Выберите оплату</option>
           <option value="Карта">Карта</option>
           <option value="СБП">СБП</option>
           <option value="При получении">При получении</option>
         </select>
       </div>
-      <div id="checkoutSummary" style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;"></div>
+      <div id="checkoutSummary" style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px;"></div>
       <div style="display: flex; gap: 10px;">
         <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1;">Отмена</button>
         <button type="submit" class="btn btn-success" style="flex:1;">✅ Подтвердить</button>
@@ -671,7 +674,7 @@ footer a:hover { text-decoration: underline; }
 <!-- Поиск -->
 <div class="search-overlay" id="searchOverlay">
   <div class="search-box">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
       <h3>🔍 Поиск по сайту</h3>
       <button class="close-modal" onclick="closeSearch()">×</button>
     </div>
@@ -683,7 +686,7 @@ footer a:hover { text-decoration: underline; }
 <!-- Футер -->
 <footer>
   <p>🦉 © 2026 «Игривый совёнок»</p>
-  <p style="margin-top: 10px;">
+  <p style="margin-top: 12px;">
     <a href="login.html">Вход</a> |
     <a href="#" onclick="showAdminHint(); return false;">Админ</a>
   </p>
@@ -696,7 +699,6 @@ let currentCategory = '';
 let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
 let history = JSON.parse(localStorage.getItem('viewHistory') || '[]');
-let achievements = JSON.parse(localStorage.getItem('achievements') || '[]');
 
 function init() {
   loadBackground();
@@ -818,8 +820,8 @@ function showCategory(category) {
     document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">В этой категории пока нет материалов</p>';
   } else {
     document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `
-      <div style="margin-bottom: 25px;">
-        <h3 style="margin-bottom: 12px; color: #5a4000;">📁 ${folder.name}</h3>
+      <div style="margin-bottom: 30px;">
+        <h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3>
         <div class="items-grid">
           ${(folder.items || []).map((item, ii) => `
             <div class="item-card">
@@ -901,9 +903,9 @@ function openCheckout() {
   if (!currentUser) { alert('Пожалуйста, войдите в систему'); window.location.href = 'login.html'; return; }
   const total = cart.reduce((sum, item) => sum + item.price, 0);
   document.getElementById('checkoutSummary').innerHTML = `
-    <h3 style="margin-bottom: 10px;">Ваш заказ:</h3>
+    <h3 style="margin-bottom: 12px;">Ваш заказ:</h3>
     ${cart.map(item => `<div>${item.name} - ${item.price}₽</div>`).join('')}
-    <div style="margin-top: 10px; font-weight: bold; font-size: 18px;">Итого: ${total}₽</div>
+    <div style="margin-top: 12px; font-weight: bold; font-size: 20px;">Итого: ${total}₽</div>
   `;
   document.getElementById('checkoutModal').classList.add('active');
 }
@@ -954,7 +956,7 @@ function processPayment(order) {
         <p style="margin-bottom: 20px;">Сумма: <strong>${order.total}₽</strong></p>
         <p style="margin-bottom: 20px;">Метод: ${order.payment}</p>
         <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-          <p style="margin-bottom: 10px;">Для тестирования нажмите кнопку ниже</p>
+          <p style="margin-bottom: 12px;">Для тестирования нажмите кнопку ниже</p>
           <button class="btn" onclick="simulatePayment(${order.id})">💳 Оплатить ${order.total}₽</button>
         </div>
         <p style="color: #999; font-size: 12px;">Демонстрационная версия. В реальном магазине — интеграция с платежной системой.</p>
