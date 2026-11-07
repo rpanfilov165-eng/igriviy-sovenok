@@ -155,26 +155,15 @@ button:hover { transform: translateY(-2px); }
     <div id="payment" class="tab-content">
       <h2>💳 Реквизиты для оплаты</h2>
       <p style="color: #666; margin-bottom: 20px;">Здесь вы указываете свои реквизиты. Они будут показываться покупателям при оформлении заказа.</p>
-      
       <div class="payment-settings-box">
         <h3>💳 Реквизиты банковской карты</h3>
         <form id="cardRequisitesForm">
-          <div class="form-group">
-            <label>ФИО получателя (как на карте)</label>
-            <input type="text" id="cardHolder" placeholder="ИВАНОВ ИВАН ИВАНОВИЧ">
-          </div>
-          <div class="form-group">
-            <label>Номер карты</label>
-            <input type="text" id="cardNumber" placeholder="2200 0000 0000 0000" maxlength="19">
-          </div>
-          <div class="form-group">
-            <label>Банк</label>
-            <input type="text" id="cardBank" placeholder="Сбербанк">
-          </div>
+          <div class="form-group"><label>ФИО получателя (как на карте)</label><input type="text" id="cardHolder" placeholder="ИВАНОВ ИВАН ИВАНОВИЧ"></div>
+          <div class="form-group"><label>Номер карты</label><input type="text" id="cardNumber" placeholder="2200 0000 0000 0000" maxlength="19"></div>
+          <div class="form-group"><label>Банк</label><input type="text" id="cardBank" placeholder="Сбербанк"></div>
           <button type="submit">💾 Сохранить реквизиты карты</button>
         </form>
       </div>
-
       <div class="payment-settings-box">
         <h3>📱 QR-код для СБП</h3>
         <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Загрузите QR-код из вашего банковского приложения.</p>
@@ -187,14 +176,10 @@ button:hover { transform: translateY(-2px); }
         <button id="saveQrBtn" class="hidden" style="margin-top: 15px;">💾 Сохранить QR-код</button>
         <button id="removeQrBtn" class="btn-secondary hidden" style="margin-top: 10px;">🗑 Удалить QR-код</button>
       </div>
-
       <div class="payment-settings-box">
         <h3>📧 Email для уведомлений</h3>
         <form id="notificationEmailForm">
-          <div class="form-group">
-            <label>Email для уведомлений о заказах</label>
-            <input type="email" id="notificationEmail" placeholder="your@email.com">
-          </div>
+          <div class="form-group"><label>Email для уведомлений о заказах</label><input type="email" id="notificationEmail" placeholder="your@email.com"></div>
           <button type="submit">💾 Сохранить email</button>
         </form>
       </div>
@@ -312,104 +297,52 @@ let selectedQrFile = null;
 
 function init() {
   const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  if (!adminData.password) {
-    document.getElementById('loginSection').classList.add('hidden');
-    document.getElementById('setupSection').classList.remove('hidden');
-  }
-  loadDashboard();
-  loadRegisteredUsers();
-  loadUsers();
-  loadCarts();
-  loadPaymentSettings();
-  loadBackground();
-  loadCatalog();
-  loadOrders();
-  loadMessages();
-  loadContacts();
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems' || e.key === 'cart' || e.key === 'registeredUsers') {
-      loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadCatalog(); loadOrders();
-    }
-  });
+  if (!adminData.password) { document.getElementById('loginSection').classList.add('hidden'); document.getElementById('setupSection').classList.remove('hidden'); }
+  loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadPaymentSettings(); loadBackground(); loadCatalog(); loadOrders(); loadMessages(); loadContacts();
+  window.addEventListener('storage', (e) => { if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems' || e.key === 'cart' || e.key === 'registeredUsers') { loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadCatalog(); loadOrders(); } });
   setInterval(() => { loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadOrders(); }, 5000);
 }
 
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  if (document.getElementById('username').value === 'admin' && document.getElementById('password').value === adminData.password) {
-    document.getElementById('loginSection').classList.add('hidden');
-    document.getElementById('adminPanel').classList.remove('hidden');
-  } else { alert('Неверный логин или пароль'); }
-});
-
-document.getElementById('setupForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const np = document.getElementById('newPassword').value;
-  if (np.length < 8 || !/[a-zA-Zа-яА-Я]/.test(np) || !/\d/.test(np)) { alert('Пароль: мин. 8 символов, буквы+цифры'); return; }
-  if (np !== document.getElementById('confirmPassword').value) { alert('Пароли не совпадают'); return; }
-  localStorage.setItem('adminData', JSON.stringify({ password: np }));
-  document.getElementById('setupSection').classList.add('hidden');
-  document.getElementById('adminPanel').classList.remove('hidden');
-});
-
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
-  });
-});
+document.getElementById('loginForm').addEventListener('submit', (e) => { e.preventDefault(); const adminData = JSON.parse(localStorage.getItem('adminData') || '{}'); if (document.getElementById('username').value === 'admin' && document.getElementById('password').value === adminData.password) { document.getElementById('loginSection').classList.add('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); } else { alert('Неверный логин или пароль'); } });
+document.getElementById('setupForm').addEventListener('submit', (e) => { e.preventDefault(); const np = document.getElementById('newPassword').value; if (np.length < 8 || !/[a-zA-Zа-яА-Я]/.test(np) || !/\d/.test(np)) { alert('Пароль: мин. 8 символов, буквы+цифры'); return; } if (np !== document.getElementById('confirmPassword').value) { alert('Пароли не совпадают'); return; } localStorage.setItem('adminData', JSON.stringify({ password: np })); document.getElementById('setupSection').classList.add('hidden'); document.getElementById('adminPanel').classList.remove('hidden'); });
+document.querySelectorAll('.tab').forEach(tab => { tab.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); tab.classList.add('active'); document.getElementById(tab.dataset.tab).classList.add('active'); }); });
 
 function loadDashboard() {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   let totalItems = 0, totalFolders = 0, paidCount = 0, unpaidCount = 0, totalRevenue = 0;
-  Object.values(catalog).forEach(category => {
-    totalFolders += category.length;
-    category.forEach(folder => { totalItems += (folder.items || []).length; });
-  });
-  orders.forEach(order => {
-    if (order.paid) { paidCount++; totalRevenue += order.total; } else { unpaidCount++; }
-  });
+  Object.values(catalog).forEach(category => { totalFolders += category.length; category.forEach(folder => { totalItems += (folder.items || []).length; }); });
+  orders.forEach(order => { if (order.paid) { paidCount++; totalRevenue += order.total; } else { unpaidCount++; } });
   document.getElementById('totalOrders').textContent = orders.length;
   document.getElementById('totalRevenue').textContent = totalRevenue + '₽';
   document.getElementById('paidOrders').textContent = paidCount;
   document.getElementById('unpaidOrders').textContent = unpaidCount;
   document.getElementById('totalItems').textContent = totalItems;
   document.getElementById('totalFolders').textContent = totalFolders;
-  document.getElementById('totalRegistered').textContent = registeredUsers.length;
+  const totalRegisteredEl = document.getElementById('totalRegistered');
+  if (totalRegisteredEl) totalRegisteredEl.textContent = registeredUsers.length;
 }
 
 function loadRegisteredUsers() {
   const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const list = document.getElementById('registeredList');
-  
-  if (users.length === 0) {
-    list.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">Зарегистрированных пользователей пока нет</p>';
-    return;
-  }
-  
+  if (users.length === 0) { list.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">Зарегистрированных пользователей пока нет</p>'; return; }
   list.innerHTML = users.map(user => {
     const userOrders = orders.filter(o => o.email === user.email);
     const totalSpent = userOrders.reduce((sum, o) => sum + o.total, 0);
     const paidOrders = userOrders.filter(o => o.paid).length;
-    
-    return `
-      <div class="user-card ${paidOrders > 0 ? 'paid' : 'unpaid'}">
-        <div class="user-name">👤 ${user.name}</div>
-        <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
-        <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
-        <div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>
-        <div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>
-        <div class="user-stat"><span>📦 Заказов:</span><span>${userOrders.length}</span></div>
-        <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${paidOrders}</span></div>
-        <div class="user-stat"><span>💰 Потрачено:</span><span>${totalSpent}₽</span></div>
-      </div>
-    `;
+    return `<div class="user-card ${paidOrders > 0 ? 'paid' : 'unpaid'}">
+      <div class="user-name">👤 ${user.name}</div>
+      <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
+      <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
+      <div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>
+      <div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>
+      <div class="user-stat"><span>📦 Заказов:</span><span>${userOrders.length}</span></div>
+      <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${paidOrders}</span></div>
+      <div class="user-stat"><span>💰 Потрачено:</span><span>${totalSpent}₽</span></div>
+    </div>`;
   }).join('');
 }
 
@@ -418,68 +351,21 @@ function loadUsers() {
   const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   const usersList = document.getElementById('usersList');
   const users = {};
-  
-  registeredUsers.forEach(user => {
-    if (!users[user.email]) {
-      users[user.email] = { 
-        name: user.name, 
-        email: user.email, 
-        phone: user.phone, 
-        orders: 0, 
-        paid: 0, 
-        unpaid: 0, 
-        totalSpent: 0, 
-        items: [],
-        registerDate: user.registerDate,
-        lastLogin: user.lastLogin
-      };
-    }
-  });
-  
-  orders.forEach(order => {
-    if (!users[order.email]) {
-      users[order.email] = { 
-        name: order.customerName, 
-        email: order.email, 
-        phone: order.phone, 
-        orders: 0, 
-        paid: 0, 
-        unpaid: 0, 
-        totalSpent: 0, 
-        items: []
-      };
-    }
-    users[order.email].orders++;
-    if (order.paid) { 
-      users[order.email].paid++; 
-      users[order.email].totalSpent += order.total; 
-    } else { 
-      users[order.email].unpaid++; 
-    }
-    order.items.forEach(item => { 
-      users[order.email].items.push(item.name + (item.itemType === 'physical' ? ' 📦' : ' 📥')); 
-    });
-  });
-  
-  if (Object.keys(users).length === 0) { 
-    usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; 
-    return; 
-  }
-  
-  usersList.innerHTML = Object.values(users).map(user => `
-    <div class="user-card ${user.paid > 0 ? 'paid' : 'unpaid'}">
-      <div class="user-name">👤 ${user.name}</div>
-      <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
-      <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
-      ${user.registerDate ? `<div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>` : ''}
-      ${user.lastLogin ? `<div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>` : ''}
-      <div class="user-stat"><span>📦 Заказов:</span><span>${user.orders}</span></div>
-      <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${user.paid}</span></div>
-      <div class="user-stat"><span>⏳ Ожидают:</span><span style="color: #ff9800;">${user.unpaid}</span></div>
-      <div class="user-stat"><span>💰 Потрачено:</span><span>${user.totalSpent}₽</span></div>
-      <div style="margin-top: 10px; font-size: 12px; color: #666;"><strong>Купленные товары:</strong><br>${user.items.length > 0 ? user.items.join(', ') : 'Нет'}</div>
-    </div>
-  `).join('');
+  registeredUsers.forEach(user => { if (!users[user.email]) { users[user.email] = { name: user.name, email: user.email, phone: user.phone, orders: 0, paid: 0, unpaid: 0, totalSpent: 0, items: [], registerDate: user.registerDate, lastLogin: user.lastLogin }; } });
+  orders.forEach(order => { if (!users[order.email]) { users[order.email] = { name: order.customerName, email: order.email, phone: order.phone, orders: 0, paid: 0, unpaid: 0, totalSpent: 0, items: [] }; } users[order.email].orders++; if (order.paid) { users[order.email].paid++; users[order.email].totalSpent += order.total; } else { users[order.email].unpaid++; } order.items.forEach(item => { users[order.email].items.push(item.name + (item.itemType === 'physical' ? ' 📦' : ' 📥')); }); });
+  if (Object.keys(users).length === 0) { usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; return; }
+  usersList.innerHTML = Object.values(users).map(user => `<div class="user-card ${user.paid > 0 ? 'paid' : 'unpaid'}">
+    <div class="user-name">👤 ${user.name}</div>
+    <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
+    <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
+    ${user.registerDate ? `<div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>` : ''}
+    ${user.lastLogin ? `<div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>` : ''}
+    <div class="user-stat"><span>📦 Заказов:</span><span>${user.orders}</span></div>
+    <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${user.paid}</span></div>
+    <div class="user-stat"><span>⏳ Ожидают:</span><span style="color: #ff9800;">${user.unpaid}</span></div>
+    <div class="user-stat"><span>💰 Потрачено:</span><span>${user.totalSpent}₽</span></div>
+    <div style="margin-top: 10px; font-size: 12px; color: #666;"><strong>Купленные товары:</strong><br>${user.items.length > 0 ? user.items.join(', ') : 'Нет'}</div>
+  </div>`).join('');
 }
 
 function loadCarts() {
@@ -487,119 +373,20 @@ function loadCarts() {
   const allCarts = JSON.parse(localStorage.getItem('allCarts') || '{}');
   const cartKeys = Object.keys(allCarts);
   if (cartKeys.length === 0) { cartsList.innerHTML = '<p style="color: #999; text-align: center;">Корзины пока пусты</p>'; return; }
-  cartsList.innerHTML = cartKeys.map(email => {
-    const cart = allCarts[email];
-    const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-    return `
-      <div class="cart-card">
-        <div class="cart-user-name">👤 ${cart.userName || 'Гость'} (${email})</div>
-        <div style="margin-bottom: 10px;"><strong>Товаров в корзине: ${cart.length}</strong></div>
-        ${cart.map(item => `<div class="cart-item-row"><span>${item.name} ${item.itemType === 'physical' ? '📦' : '📥'}</span><span>${item.price}₽</span></div>`).join('')}
-        <div style="margin-top: 10px; font-weight: bold; font-size: 16px; color: #667eea;">Итого: ${total}₽</div>
-      </div>
-    `;
-  }).join('');
+  cartsList.innerHTML = cartKeys.map(email => { const cart = allCarts[email]; const total = cart.reduce((sum, item) => sum + (item.price || 0), 0); return `<div class="cart-card"><div class="cart-user-name">👤 ${cart.userName || 'Гость'} (${email})</div><div style="margin-bottom: 10px;"><strong>Товаров в корзине: ${cart.length}</strong></div>${cart.map(item => `<div class="cart-item-row"><span>${item.name} ${item.itemType === 'physical' ? '📦' : '📥'}</span><span>${item.price}₽</span></div>`).join('')}<div style="margin-top: 10px; font-weight: bold; font-size: 16px; color: #667eea;">Итого: ${total}₽</div></div>`; }).join('');
 }
 
-function loadPaymentSettings() {
-  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
-  document.getElementById('cardHolder').value = payment.cardHolder || '';
-  document.getElementById('cardNumber').value = payment.cardNumber || '';
-  document.getElementById('cardBank').value = payment.cardBank || '';
-  document.getElementById('notificationEmail').value = payment.notificationEmail || '';
-  
-  if (payment.qrCode) {
-    document.getElementById('currentQrDisplay').innerHTML = `
-      <p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p>
-      <img src="${payment.qrCode}" class="qr-preview" alt="QR-код">
-    `;
-    document.getElementById('removeQrBtn').classList.remove('hidden');
-  }
-}
+function loadPaymentSettings() { const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}'); document.getElementById('cardHolder').value = payment.cardHolder || ''; document.getElementById('cardNumber').value = payment.cardNumber || ''; document.getElementById('cardBank').value = payment.cardBank || ''; document.getElementById('notificationEmail').value = payment.notificationEmail || ''; if (payment.qrCode) { document.getElementById('currentQrDisplay').innerHTML = `<p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p><img src="${payment.qrCode}" class="qr-preview" alt="QR-код">`; document.getElementById('removeQrBtn').classList.remove('hidden'); } }
+document.getElementById('cardRequisitesForm').addEventListener('submit', (e) => { e.preventDefault(); const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}'); payment.cardHolder = document.getElementById('cardHolder').value; payment.cardNumber = document.getElementById('cardNumber').value; payment.cardBank = document.getElementById('cardBank').value; localStorage.setItem('paymentSettings', JSON.stringify(payment)); alert('✅ Реквизиты карты сохранены!'); });
+document.getElementById('qrInput').addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { selectedQrFile = event.target.result; document.getElementById('qrPreview').innerHTML = `<img src="${selectedQrFile}" class="qr-preview" alt="Предпросмотр QR">`; document.getElementById('saveQrBtn').classList.remove('hidden'); }; reader.readAsDataURL(e.target.files[0]); } });
+document.getElementById('saveQrBtn').addEventListener('click', () => { if (selectedQrFile) { const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}'); payment.qrCode = selectedQrFile; localStorage.setItem('paymentSettings', JSON.stringify(payment)); document.getElementById('currentQrDisplay').innerHTML = `<p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p><img src="${selectedQrFile}" class="qr-preview" alt="QR-код">`; document.getElementById('removeQrBtn').classList.remove('hidden'); document.getElementById('saveQrBtn').classList.add('hidden'); document.getElementById('qrPreview').innerHTML = ''; selectedQrFile = null; alert('✅ QR-код сохранён!'); } });
+document.getElementById('removeQrBtn').addEventListener('click', () => { if (confirm('Удалить QR-код?')) { const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}'); delete payment.qrCode; localStorage.setItem('paymentSettings', JSON.stringify(payment)); document.getElementById('currentQrDisplay').innerHTML = ''; document.getElementById('removeQrBtn').classList.add('hidden'); alert('QR-код удалён'); } });
+document.getElementById('notificationEmailForm').addEventListener('submit', (e) => { e.preventDefault(); const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}'); payment.notificationEmail = document.getElementById('notificationEmail').value; localStorage.setItem('paymentSettings', JSON.stringify(payment)); alert('✅ Email сохранён!'); });
 
-document.getElementById('cardRequisitesForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
-  payment.cardHolder = document.getElementById('cardHolder').value;
-  payment.cardNumber = document.getElementById('cardNumber').value;
-  payment.cardBank = document.getElementById('cardBank').value;
-  localStorage.setItem('paymentSettings', JSON.stringify(payment));
-  alert('✅ Реквизиты карты сохранены!');
-});
-
-document.getElementById('qrInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      selectedQrFile = event.target.result;
-      document.getElementById('qrPreview').innerHTML = `<img src="${selectedQrFile}" class="qr-preview" alt="Предпросмотр QR">`;
-      document.getElementById('saveQrBtn').classList.remove('hidden');
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  }
-});
-
-document.getElementById('saveQrBtn').addEventListener('click', () => {
-  if (selectedQrFile) {
-    const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
-    payment.qrCode = selectedQrFile;
-    localStorage.setItem('paymentSettings', JSON.stringify(payment));
-    document.getElementById('currentQrDisplay').innerHTML = `<p style="margin-bottom: 10px;"><strong>Текущий QR-код:</strong></p><img src="${selectedQrFile}" class="qr-preview" alt="QR-код">`;
-    document.getElementById('removeQrBtn').classList.remove('hidden');
-    document.getElementById('saveQrBtn').classList.add('hidden');
-    document.getElementById('qrPreview').innerHTML = '';
-    selectedQrFile = null;
-    alert('✅ QR-код сохранён!');
-  }
-});
-
-document.getElementById('removeQrBtn').addEventListener('click', () => {
-  if (confirm('Удалить QR-код?')) {
-    const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
-    delete payment.qrCode;
-    localStorage.setItem('paymentSettings', JSON.stringify(payment));
-    document.getElementById('currentQrDisplay').innerHTML = '';
-    document.getElementById('removeQrBtn').classList.add('hidden');
-    alert('QR-код удалён');
-  }
-});
-
-document.getElementById('notificationEmailForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
-  payment.notificationEmail = document.getElementById('notificationEmail').value;
-  localStorage.setItem('paymentSettings', JSON.stringify(payment));
-  alert('✅ Email сохранён!');
-});
-
-function loadBackground() {
-  const bg = localStorage.getItem('siteBackground');
-  if (bg) { document.getElementById('currentBgText').innerHTML = `<img src="${bg}" style="max-width: 200px; border-radius: 10px;">`; document.getElementById('removeBg').classList.remove('hidden'); }
-}
+function loadBackground() { const bg = localStorage.getItem('siteBackground'); if (bg) { document.getElementById('currentBgText').innerHTML = `<img src="${bg}" style="max-width: 200px; border-radius: 10px;">`; document.getElementById('removeBg').classList.remove('hidden'); } }
 document.getElementById('uploadArea').addEventListener('click', () => document.getElementById('bgImageInput').click());
-document.getElementById('bgImageInput').addEventListener('change', (e) => {
-  if (e.target.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      document.getElementById('bgPreview').innerHTML = `<img src="${event.target.result}" class="preview">`;
-      document.getElementById('applyBg').classList.remove('hidden');
-      document.getElementById('cancelBg').classList.remove('hidden');
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  }
-});
-document.getElementById('applyBg').addEventListener('click', () => {
-  const img = document.querySelector('#bgPreview img');
-  if (img) {
-    localStorage.setItem('siteBackground', img.src);
-    document.getElementById('currentBgText').innerHTML = `<img src="${img.src}" style="max-width: 200px; border-radius: 10px;">`;
-    document.getElementById('removeBg').classList.remove('hidden');
-    document.getElementById('applyBg').classList.add('hidden');
-    document.getElementById('cancelBg').classList.add('hidden');
-    document.getElementById('bgPreview').innerHTML = '';
-    alert('Фон применен!');
-  }
-});
+document.getElementById('bgImageInput').addEventListener('change', (e) => { if (e.target.files[0]) { const reader = new FileReader(); reader.onload = (event) => { document.getElementById('bgPreview').innerHTML = `<img src="${event.target.result}" class="preview">`; document.getElementById('applyBg').classList.remove('hidden'); document.getElementById('cancelBg').classList.remove('hidden'); }; reader.readAsDataURL(e.target.files[0]); } });
+document.getElementById('applyBg').addEventListener('click', () => { const img = document.querySelector('#bgPreview img'); if (img) { localStorage.setItem('siteBackground', img.src); document.getElementById('currentBgText').innerHTML = `<img src="${img.src}" style="max-width: 200px; border-radius: 10px;">`; document.getElementById('removeBg').classList.remove('hidden'); document.getElementById('applyBg').classList.add('hidden'); document.getElementById('cancelBg').classList.add('hidden'); document.getElementById('bgPreview').innerHTML = ''; alert('Фон применен!'); } });
 document.getElementById('cancelBg').addEventListener('click', () => { document.getElementById('bgPreview').innerHTML = ''; document.getElementById('applyBg').classList.add('hidden'); document.getElementById('cancelBg').classList.add('hidden'); });
 document.getElementById('removeBg').addEventListener('click', () => { localStorage.removeItem('siteBackground'); document.getElementById('currentBgText').textContent = 'Фон не установлен'; document.getElementById('removeBg').classList.add('hidden'); });
 document.getElementById('gradientLeft').addEventListener('input', updateGradientPreview);
@@ -607,199 +394,34 @@ document.getElementById('gradientRight').addEventListener('input', updateGradien
 function updateGradientPreview() { document.getElementById('gradientPreview').style.background = `linear-gradient(135deg, ${document.getElementById('gradientLeft').value} 0%, ${document.getElementById('gradientRight').value} 100%)`; }
 document.getElementById('saveGradient').addEventListener('click', () => { localStorage.setItem('siteGradient', JSON.stringify({ left: document.getElementById('gradientLeft').value, right: document.getElementById('gradientRight').value })); alert('Градиент сохранен!'); });
 
-function loadCatalog() {
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  const categories = ['catalog', 'worksheets', 'themes', 'letterGames', 'speechGames', 'free'];
-  categories.forEach(category => {
-    const list = document.getElementById(category + 'List');
-    const folders = catalog[category] || [];
-    list.innerHTML = folders.map((folder, fi) => `
-      <div class="folder">
-        <div class="folder-header"><span class="folder-name">📁 ${folder.name}</span><div><button class="btn-small btn-edit" onclick="openAddItemModal('${category}', ${fi})">➕ Товар</button><button class="btn-small btn-delete" onclick="deleteFolder('${category}', ${fi})">🗑</button></div></div>
-        ${(folder.items || []).map((item, ii) => `<div class="item"><div class="item-info"><div class="item-name">${item.name} <span class="item-type ${item.itemType === 'physical' ? 'type-physical' : 'type-digital'}">${item.itemType === 'physical' ? '📦 Доставка' : '📥 Скачивание'}</span></div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div></div><div class="item-actions"><button class="btn-small btn-edit" onclick="editItem('${category}', ${fi}, ${ii})">✏️</button><button class="btn-small btn-delete" onclick="deleteItem('${category}', ${fi}, ${ii})">🗑</button></div></div>`).join('')}
-      </div>
-    `).join('');
-  });
-}
+function loadCatalog() { const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}'); const categories = ['catalog', 'worksheets', 'themes', 'letterGames', 'speechGames', 'free']; categories.forEach(category => { const list = document.getElementById(category + 'List'); const folders = catalog[category] || []; list.innerHTML = folders.map((folder, fi) => `<div class="folder"><div class="folder-header"><span class="folder-name">📁 ${folder.name}</span><div><button class="btn-small btn-edit" onclick="openAddItemModal('${category}', ${fi})">➕ Товар</button><button class="btn-small btn-delete" onclick="deleteFolder('${category}', ${fi})">🗑</button></div></div>${(folder.items || []).map((item, ii) => `<div class="item"><div class="item-info"><div class="item-name">${item.name} <span class="item-type ${item.itemType === 'physical' ? 'type-physical' : 'type-digital'}">${item.itemType === 'physical' ? '📦 Доставка' : '📥 Скачивание'}</span></div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div></div><div class="item-actions"><button class="btn-small btn-edit" onclick="editItem('${category}', ${fi}, ${ii})">✏️</button><button class="btn-small btn-delete" onclick="deleteItem('${category}', ${fi}, ${ii})">🗑</button></div></div>`).join('')}</div>`).join(''); }); }
 function openAddFolderModal(category) { currentCategory = category; document.getElementById('folderModal').classList.add('active'); }
 function closeFolderModal() { document.getElementById('folderModal').classList.remove('active'); document.getElementById('folderForm').reset(); }
-document.getElementById('folderForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  if (!catalog[currentCategory]) catalog[currentCategory] = [];
-  catalog[currentCategory].push({ name: document.getElementById('folderName').value, items: [] });
-  localStorage.setItem('catalogData', JSON.stringify(catalog));
-  closeFolderModal(); loadCatalog(); loadDashboard();
-});
-function deleteFolder(category, fi) {
-  if (confirm('Удалить папку?')) {
-    const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    catalog[category].splice(fi, 1);
-    localStorage.setItem('catalogData', JSON.stringify(catalog));
-    loadCatalog(); loadDashboard();
-  }
-}
-function openAddItemModal(category, fi) {
-  currentCategory = category; editingItemId = fi;
-  document.getElementById('itemModalTitle').textContent = 'Добавить товар';
-  document.getElementById('itemModal').classList.add('active');
-  document.getElementById('itemForm').reset(); document.getElementById('fileList').innerHTML = ''; selectedFile = null;
-  document.getElementById('itemType').value = 'digital';
-}
+document.getElementById('folderForm').addEventListener('submit', (e) => { e.preventDefault(); const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}'); if (!catalog[currentCategory]) catalog[currentCategory] = []; catalog[currentCategory].push({ name: document.getElementById('folderName').value, items: [] }); localStorage.setItem('catalogData', JSON.stringify(catalog)); closeFolderModal(); loadCatalog(); loadDashboard(); });
+function deleteFolder(category, fi) { if (confirm('Удалить папку?')) { const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}'); catalog[category].splice(fi, 1); localStorage.setItem('catalogData', JSON.stringify(catalog)); loadCatalog(); loadDashboard(); } }
+function openAddItemModal(category, fi) { currentCategory = category; editingItemId = fi; document.getElementById('itemModalTitle').textContent = 'Добавить товар'; document.getElementById('itemModal').classList.add('active'); document.getElementById('itemForm').reset(); document.getElementById('fileList').innerHTML = ''; selectedFile = null; document.getElementById('itemType').value = 'digital'; }
 function closeItemModal() { document.getElementById('itemModal').classList.remove('active'); document.getElementById('itemForm').reset(); document.getElementById('fileList').innerHTML = ''; selectedFile = null; editingItemId = null; }
-function handleFileSelect(event) {
-  if (event.target.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      selectedFile = { name: event.target.files[0].name, data: e.target.result, size: event.target.files[0].size };
-      document.getElementById('fileList').innerHTML = `<div class="file-item"><span>📄 ${event.target.files[0].name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-  }
-}
+function handleFileSelect(event) { if (event.target.files[0]) { const reader = new FileReader(); reader.onload = (e) => { selectedFile = { name: event.target.files[0].name, data: e.target.result, size: event.target.files[0].size }; document.getElementById('fileList').innerHTML = `<div class="file-item"><span>📄 ${event.target.files[0].name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`; }; reader.readAsDataURL(event.target.files[0]); } }
 function removeFile() { selectedFile = null; document.getElementById('fileList').innerHTML = ''; document.getElementById('itemFileInput').value = ''; }
-document.getElementById('itemForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  const folder = catalog[currentCategory][editingItemId];
-  if (!folder.items) folder.items = [];
-  const itemType = document.getElementById('itemType').value;
-  folder.items.push({ id: Date.now(), name: document.getElementById('itemName').value, description: document.getElementById('itemDescription').value, price: parseFloat(document.getElementById('itemPrice').value), itemType: itemType, file: itemType === 'digital' ? selectedFile : null });
-  localStorage.setItem('catalogData', JSON.stringify(catalog));
-  closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен!');
-});
-function editItem(category, fi, ii) {
-  currentCategory = category; editingItemId = fi;
-  const item = JSON.parse(localStorage.getItem('catalogData') || '{}')[category][fi].items[ii];
-  document.getElementById('itemModalTitle').textContent = 'Редактировать товар';
-  document.getElementById('itemName').value = item.name;
-  document.getElementById('itemDescription').value = item.description || '';
-  document.getElementById('itemPrice').value = item.price;
-  document.getElementById('itemType').value = item.itemType || 'digital';
-  if (item.file) { selectedFile = item.file; document.getElementById('fileList').innerHTML = `<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`; }
-  document.getElementById('itemModal').classList.add('active');
-}
-function deleteItem(category, fi, ii) {
-  if (confirm('Удалить товар?')) {
-    const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    catalog[category][fi].items.splice(ii, 1);
-    localStorage.setItem('catalogData', JSON.stringify(catalog));
-    loadCatalog(); loadDashboard();
-  }
-}
+document.getElementById('itemForm').addEventListener('submit', (e) => { e.preventDefault(); const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}'); const folder = catalog[currentCategory][editingItemId]; if (!folder.items) folder.items = []; const itemType = document.getElementById('itemType').value; folder.items.push({ id: Date.now(), name: document.getElementById('itemName').value, description: document.getElementById('itemDescription').value, price: parseFloat(document.getElementById('itemPrice').value), itemType: itemType, file: itemType === 'digital' ? selectedFile : null }); localStorage.setItem('catalogData', JSON.stringify(catalog)); closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен!'); });
+function editItem(category, fi, ii) { currentCategory = category; editingItemId = fi; const item = JSON.parse(localStorage.getItem('catalogData') || '{}')[category][fi].items[ii]; document.getElementById('itemModalTitle').textContent = 'Редактировать товар'; document.getElementById('itemName').value = item.name; document.getElementById('itemDescription').value = item.description || ''; document.getElementById('itemPrice').value = item.price; document.getElementById('itemType').value = item.itemType || 'digital'; if (item.file) { selectedFile = item.file; document.getElementById('fileList').innerHTML = `<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`; } document.getElementById('itemModal').classList.add('active'); }
+function deleteItem(category, fi, ii) { if (confirm('Удалить товар?')) { const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}'); catalog[category][fi].items.splice(ii, 1); localStorage.setItem('catalogData', JSON.stringify(catalog)); loadCatalog(); loadDashboard(); } }
 
-function loadOrders() {
-  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
-  const list = document.getElementById('ordersList');
-  if (orders.length === 0) { list.innerHTML = '<p style="color: #999; text-align: center;">Заказов пока нет</p>'; return; }
-  list.innerHTML = orders.map((order, index) => `
-    <div class="order-card">
-      <div class="order-header"><span class="order-id">Заказ #${order.id}</span><span class="order-status ${order.paid ? 'status-completed' : 'status-new'}">${order.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div>
-      <p><strong>Клиент:</strong> ${order.customerName} | <strong>Email:</strong> ${order.email} | <strong>Телефон:</strong> ${order.phone}</p>
-      <p><strong>Тип:</strong> ${order.orderType === 'digital' ? '📥 Скачивание' : '📦 Доставка'}</p>
-      ${order.orderType === 'physical' ? `<p><strong>Адрес:</strong> ${order.address} | <strong>Доставка:</strong> ${order.delivery}</p>` : ''}
-      <p><strong>Товары:</strong> ${order.items.map(item => `${item.name} (${item.price}₽) ${item.itemType === 'physical' ? '📦' : '📥'}`).join(', ')}</p>
-      <p><strong>Итого:</strong> ${order.total}₽ | <strong>Оплата:</strong> ${order.payment}</p>
-      ${!order.paid ? `<button class="btn-small btn-edit" onclick="markAsPaid(${order.id})" style="margin-top: 10px;">✅ Отметить оплаченным</button>` : ''}
-    </div>
-  `).join('');
-}
-function markAsPaid(orderId) {
-  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
-  const order = orders.find(o => o.id === orderId);
-  if (order) {
-    order.paid = true; order.paymentDate = new Date().toISOString();
-    order.items.forEach(item => {
-      if (item.itemType === 'digital') {
-        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
-        if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
-          purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
-        }
-        localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
-      }
-    });
-    localStorage.setItem('ordersData', JSON.stringify(orders));
-    loadOrders(); loadDashboard(); loadUsers(); loadRegisteredUsers(); alert('Заказ отмечен как оплаченный!');
-  }
-}
+function loadOrders() { const orders = JSON.parse(localStorage.getItem('ordersData') || '[]'); const list = document.getElementById('ordersList'); if (orders.length === 0) { list.innerHTML = '<p style="color: #999; text-align: center;">Заказов пока нет</p>'; return; } list.innerHTML = orders.map((order, index) => `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${order.id}</span><span class="order-status ${order.paid ? 'status-completed' : 'status-new'}">${order.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div><p><strong>Клиент:</strong> ${order.customerName} | <strong>Email:</strong> ${order.email} | <strong>Телефон:</strong> ${order.phone}</p><p><strong>Тип:</strong> ${order.orderType === 'digital' ? '📥 Скачивание' : '📦 Доставка'}</p>${order.orderType === 'physical' ? `<p><strong>Адрес:</strong> ${order.address} | <strong>Доставка:</strong> ${order.delivery}</p>` : ''}<p><strong>Товары:</strong> ${order.items.map(item => `${item.name} (${item.price}₽) ${item.itemType === 'physical' ? '📦' : '📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${order.total}₽ | <strong>Оплата:</strong> ${order.payment}</p>${!order.paid ? `<button class="btn-small btn-edit" onclick="markAsPaid(${order.id})" style="margin-top: 10px;">✅ Отметить оплаченным</button>` : ''}</div>`).join(''); }
+function markAsPaid(orderId) { const orders = JSON.parse(localStorage.getItem('ordersData') || '[]'); const order = orders.find(o => o.id === orderId); if (order) { order.paid = true; order.paymentDate = new Date().toISOString(); order.items.forEach(item => { if (item.itemType === 'digital') { const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]'); if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) { purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() }); } localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems)); } }); localStorage.setItem('ordersData', JSON.stringify(orders)); loadOrders(); loadDashboard(); loadUsers(); loadRegisteredUsers(); alert('Заказ отмечен как оплаченный!'); } }
 
-function loadMessages() {
-  const messages = JSON.parse(localStorage.getItem('messagesData') || '[]');
-  const list = document.getElementById('messagesList');
-  if (messages.length === 0) { list.innerHTML = '<p style="color: #999; text-align: center;">Сообщений пока нет</p>'; return; }
-  list.innerHTML = messages.map((message, index) => `<div class="message-card"><div class="message-from">${message.name} (${message.email})</div><div class="message-date">${new Date(message.date).toLocaleString('ru-RU')}</div><div class="message-text">${message.text}</div><button class="btn-small btn-delete" style="margin-top: 10px;" onclick="deleteMessage(${index})">🗑 Удалить</button></div>`).join('');
-}
-function deleteMessage(index) {
-  if (confirm('Удалить сообщение?')) {
-    const messages = JSON.parse(localStorage.getItem('messagesData') || '[]');
-    messages.splice(index, 1);
-    localStorage.setItem('messagesData', JSON.stringify(messages));
-    loadMessages();
-  }
-}
+function loadMessages() { const messages = JSON.parse(localStorage.getItem('messagesData') || '[]'); const list = document.getElementById('messagesList'); if (messages.length === 0) { list.innerHTML = '<p style="color: #999; text-align: center;">Сообщений пока нет</p>'; return; } list.innerHTML = messages.map((message, index) => `<div class="message-card"><div class="message-from">${message.name} (${message.email})</div><div class="message-date">${new Date(message.date).toLocaleString('ru-RU')}</div><div class="message-text">${message.text}</div><button class="btn-small btn-delete" style="margin-top: 10px;" onclick="deleteMessage(${index})">🗑 Удалить</button></div>`).join(''); }
+function deleteMessage(index) { if (confirm('Удалить сообщение?')) { const messages = JSON.parse(localStorage.getItem('messagesData') || '[]'); messages.splice(index, 1); localStorage.setItem('messagesData', JSON.stringify(messages)); loadMessages(); } }
 
-function loadContacts() {
-  const contacts = JSON.parse(localStorage.getItem('siteContacts') || '{}');
-  document.getElementById('contactEmail').value = contacts.email || '';
-  document.getElementById('contactPhone').value = contacts.phone || '';
-  document.getElementById('contactAddress').value = contacts.address || '';
-  document.getElementById('contactHours').value = contacts.hours || '';
-}
-document.getElementById('contactsForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  localStorage.setItem('siteContacts', JSON.stringify({ email: document.getElementById('contactEmail').value, phone: document.getElementById('contactPhone').value, address: document.getElementById('contactAddress').value, hours: document.getElementById('contactHours').value }));
-  alert('Контакты сохранены!');
-});
-document.getElementById('changePasswordForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  if (document.getElementById('currentPassword').value !== adminData.password) { alert('Неверный текущий пароль'); return; }
-  const np = document.getElementById('newPasswordChange').value;
-  if (np.length < 8 || !/[a-zA-Zа-яА-Я]/.test(np) || !/\d/.test(np)) { alert('Пароль: мин. 8 символов, буквы+цифры'); return; }
-  adminData.password = np;
-  localStorage.setItem('adminData', JSON.stringify(adminData));
-  document.getElementById('changePasswordForm').reset();
-  alert('Пароль изменен!');
-});
+function loadContacts() { const contacts = JSON.parse(localStorage.getItem('siteContacts') || '{}'); document.getElementById('contactEmail').value = contacts.email || ''; document.getElementById('contactPhone').value = contacts.phone || ''; document.getElementById('contactAddress').value = contacts.address || ''; document.getElementById('contactHours').value = contacts.hours || ''; }
+document.getElementById('contactsForm').addEventListener('submit', (e) => { e.preventDefault(); localStorage.setItem('siteContacts', JSON.stringify({ email: document.getElementById('contactEmail').value, phone: document.getElementById('contactPhone').value, address: document.getElementById('contactAddress').value, hours: document.getElementById('contactHours').value })); alert('Контакты сохранены!'); });
+document.getElementById('changePasswordForm').addEventListener('submit', (e) => { e.preventDefault(); const adminData = JSON.parse(localStorage.getItem('adminData') || '{}'); if (document.getElementById('currentPassword').value !== adminData.password) { alert('Неверный текущий пароль'); return; } const np = document.getElementById('newPasswordChange').value; if (np.length < 8 || !/[a-zA-Zа-яА-Я]/.test(np) || !/\d/.test(np)) { alert('Пароль: мин. 8 символов, буквы+цифры'); return; } adminData.password = np; localStorage.setItem('adminData', JSON.stringify(adminData)); document.getElementById('changePasswordForm').reset(); alert('Пароль изменен!'); });
 
-function downloadBackup() {
-  const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), payment: localStorage.getItem('paymentSettings'), registeredUsers: localStorage.getItem('registeredUsers'), users: localStorage.getItem('users'), date: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click();
-}
-function restoreBackup(event) {
-  if (event.target.files[0]) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const backup = JSON.parse(e.target.result);
-        if (backup.catalog) localStorage.setItem('catalogData', backup.catalog);
-        if (backup.orders) localStorage.setItem('ordersData', backup.orders);
-        if (backup.messages) localStorage.setItem('messagesData', backup.messages);
-        if (backup.contacts) localStorage.setItem('siteContacts', backup.contacts);
-        if (backup.background) localStorage.setItem('siteBackground', backup.background);
-        if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient);
-        if (backup.payment) localStorage.setItem('paymentSettings', backup.payment);
-        if (backup.registeredUsers) localStorage.setItem('registeredUsers', backup.registeredUsers);
-        if (backup.users) localStorage.setItem('users', backup.users);
-        loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadPaymentSettings(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
-        alert('Резервная копия восстановлена!');
-      } catch (error) { alert('Ошибка при восстановлении копии'); }
-    };
-    reader.readAsText(event.target.files[0]);
-  }
-}
+function downloadBackup() { const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), payment: localStorage.getItem('paymentSettings'), registeredUsers: localStorage.getItem('registeredUsers'), users: localStorage.getItem('users'), date: new Date().toISOString() }; const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click(); }
+function restoreBackup(event) { if (event.target.files[0]) { const reader = new FileReader(); reader.onload = (e) => { try { const backup = JSON.parse(e.target.result); if (backup.catalog) localStorage.setItem('catalogData', backup.catalog); if (backup.orders) localStorage.setItem('ordersData', backup.orders); if (backup.messages) localStorage.setItem('messagesData', backup.messages); if (backup.contacts) localStorage.setItem('siteContacts', backup.contacts); if (backup.background) localStorage.setItem('siteBackground', backup.background); if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient); if (backup.payment) localStorage.setItem('paymentSettings', backup.payment); if (backup.registeredUsers) localStorage.setItem('registeredUsers', backup.registeredUsers); if (backup.users) localStorage.setItem('users', backup.users); loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadPaymentSettings(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground(); alert('Резервная копия восстановлена!'); } catch (error) { alert('Ошибка при восстановлении копии'); } }; reader.readAsText(event.target.files[0]); } }
 
-function resetAllData() {
-  if (confirm('Вы уверены? Все данные будут удалены безвозвратно!') && confirm('Это действие нельзя отменить. Продолжить?')) {
-    localStorage.clear(); location.reload();
-  }
-}
-function logout() {
-  document.getElementById('adminPanel').classList.add('hidden');
-  document.getElementById('loginSection').classList.remove('hidden');
-  document.getElementById('loginForm').reset();
-}
+function resetAllData() { if (confirm('Вы уверены? Все данные будут удалены безвозвратно!') && confirm('Это действие нельзя отменить. Продолжить?')) { localStorage.clear(); location.reload(); } }
+function logout() { document.getElementById('adminPanel').classList.add('hidden'); document.getElementById('loginSection').classList.remove('hidden'); document.getElementById('loginForm').reset(); }
 
 init();
 </script>
