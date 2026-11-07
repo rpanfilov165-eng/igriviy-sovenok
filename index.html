@@ -37,6 +37,15 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 .stat-card{background:linear-gradient(135deg,#5c4db7,#4a3fa0);color:#fff;padding:25px;border-radius:12px;text-align:center}
 .stat-value{font-size:32px;font-weight:bold;margin-bottom:8px}
 .stat-label{font-size:14px;opacity:.9}
+.video-section{background:#fff;border-radius:15px;padding:25px;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+.video-section h2{color:#5a4000;margin-bottom:20px;font-size:22px}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.video-card{background:#f9f9f9;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:transform .2s}
+.video-card:hover{transform:translateY(-3px)}
+.video-card video,.video-card img{width:100%;height:180px;object-fit:cover;background:#000}
+.video-card-body{padding:15px}
+.video-card-title{font-weight:600;margin-bottom:8px;font-size:15px}
+.video-card-price{font-size:18px;font-weight:bold;color:#5c4db7;margin-bottom:10px}
 .categories-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px}
 .category-card{background:#fff;padding:30px 20px;border-radius:15px;text-align:center;cursor:pointer;transition:all .3s;box-shadow:0 4px 15px rgba(0,0,0,.08)}
 .category-card:hover{transform:translateY(-5px);box-shadow:0 8px 25px rgba(0,0,0,.15)}
@@ -65,6 +74,7 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
 .modal.active{display:flex}
 .modal-content{background:#fff;padding:35px;border-radius:15px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto}
+.modal-content.large{max-width:800px}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
 .close-modal{background:none;border:none;font-size:28px;cursor:pointer}
 .search-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:3000;align-items:flex-start;justify-content:center;padding-top:100px}
@@ -86,6 +96,7 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 .item-type-badge{display:inline-block;padding:3px 8px;border-radius:10px;font-size:11px;margin-bottom:8px}
 .type-digital{background:#e3f2fd;color:#1976d2}
 .type-physical{background:#fff3e0;color:#e65100}
+.type-video{background:#f3e5f5;color:#7b1fa2}
 .item-actions{display:flex;gap:10px;flex-wrap:wrap}
 .btn{padding:10px 20px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:transform .2s}
 .btn:hover{transform:translateY(-2px)}
@@ -97,6 +108,10 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 footer{background:linear-gradient(135deg,#2c2c54,#474787);color:#fff;padding:25px;border-radius:15px;text-align:center;margin-top:20px}
 footer a{color:#f0c040;text-decoration:none;margin:0 12px;font-size:15px}
 footer a:hover{text-decoration:underline}
+.status-badge{display:inline-block;padding:4px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.status-pending{background:#fff3e0;color:#e65100}
+.status-paid{background:#e8f5e9;color:#2e7d32}
+.status-waiting{background:#e3f2fd;color:#1976d2}
 @media(max-width:768px){.cart-sidebar{width:100%;right:-100%}.banner h1{font-size:28px}.banner-logo{width:130px;height:130px}}
 </style>
 </head>
@@ -121,6 +136,7 @@ footer a:hover{text-decoration:underline}
 <button class="nav-btn" onclick="showCategory('letterGames')">🔤 Буквы</button>
 <button class="nav-btn" onclick="showCategory('speechGames')">🗣️ Логопед</button>
 <button class="nav-btn" onclick="showCategory('free')">🎁 Бесплатно</button>
+<button class="nav-btn" onclick="showVideoSection()">🎬 Видео</button>
 <button class="nav-btn" onclick="showMyPurchases()">📥 Покупки</button>
 <button class="nav-btn" onclick="showMyOrders()">📦 Заказы</button>
 <button class="nav-btn" onclick="showQuestions()">❓ Вопросы</button>
@@ -150,6 +166,11 @@ footer a:hover{text-decoration:underline}
 </div>
 </div>
 
+<div class="video-section" id="videoSection" style="display:none">
+<h2>🎬 Видео-уроки и материалы</h2>
+<div class="video-grid" id="videoGrid"></div>
+</div>
+
 <div class="categories-grid" id="categoriesGrid">
 <div class="category-card" onclick="showCategory('catalog')"><div class="category-icon">📚</div><div class="category-title">Весь каталог</div><div class="category-count" id="countCatalog">0 материалов</div></div>
 <div class="category-card" onclick="showCategory('worksheets')"><div class="category-icon">📝</div><div class="category-title">Рабочие листы</div><div class="category-count" id="countWorksheets">0 материалов</div></div>
@@ -170,7 +191,6 @@ footer a:hover{text-decoration:underline}
 <div class="contacts-section" id="contactsSection">
 <h2>📞 Контакты</h2>
 <div class="contact-info" id="contactInfo"></div>
-
 <h3 style="margin-top:25px;margin-bottom:15px;color:#5a4000">✉️ Напишите нам</h3>
 <form class="contact-form" id="contactForm">
 <input type="text" id="contactName" placeholder="Ваше имя" required>
@@ -178,7 +198,6 @@ footer a:hover{text-decoration:underline}
 <textarea id="contactMessage" placeholder="Сообщение" rows="4" required></textarea>
 <button type="submit" class="btn">Отправить 🦉</button>
 </form>
-
 <h3 style="margin-top:30px;margin-bottom:15px;color:#5a4000">❓ Задать вопрос по продукту или проблеме</h3>
 <p style="color:#666;font-size:14px;margin-bottom:15px">Опишите проблему с товаром или задайте вопрос — мы ответим в течение 24 часов</p>
 <form class="contact-form" id="questionForm">
@@ -239,14 +258,12 @@ footer a:hover{text-decoration:underline}
 </div>
 <div id="checkoutSummary" style="background:#f9f9f9;padding:20px;border-radius:10px;margin-bottom:25px"></div>
 <div id="orderTypeInfo" style="padding:10px;border-radius:8px;margin-bottom:20px;font-size:14px"></div>
-
 <div style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
-<h4 style="margin-bottom:10px;color:#e65100">📎 Прикрепите чек об оплате (если уже оплатили)</h4>
-<p style="font-size:13px;color:#666;margin-bottom:10px">Загрузите скриншот или фото чека — админ проверит и подтвердит оплату</p>
+<h4 style="margin-bottom:10px;color:#e65100">📎 Прикрепите чек об оплате</h4>
+<p style="font-size:13px;color:#666;margin-bottom:10px">Загрузите скриншот или фото чека. После проверки администратором файлы станут доступны для скачивания.</p>
 <input type="file" id="receiptFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%;font-size:14px">
 <div id="receiptPreview" style="margin-top:10px"></div>
 </div>
-
 <h3 style="margin-bottom:15px;color:#5a4000">💳 Выберите способ оплаты:</h3>
 <div>
 <div class="payment-method" onclick="selectPayment('Карта')">💳 Банковская карта</div>
@@ -262,11 +279,11 @@ footer a:hover{text-decoration:underline}
 <h4 style="margin-bottom:15px;color:#2e7d32">📱 Оплата через СБП</h4>
 <p style="margin-bottom:15px;color:#555">Отсканируйте QR-код в приложении банка:</p>
 <div id="qrDisplay"></div>
-<p style="margin-top:15px;color:#555;font-size:14px">После оплаты нажмите "Подтвердить"</p>
+<p style="margin-top:15px;color:#555;font-size:14px">После оплаты прикрепите чек выше</p>
 </div>
 <div style="display:flex;gap:10px;margin-top:20px">
 <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1">Отмена</button>
-<button type="submit" class="btn btn-success" style="flex:1">✅ Подтвердить заказ</button>
+<button type="submit" class="btn btn-success" style="flex:1">✅ Отправить на проверку</button>
 </div>
 </form>
 </div>
@@ -300,6 +317,13 @@ footer a:hover{text-decoration:underline}
 </div>
 </div>
 
+<div id="videoModal" class="modal">
+<div class="modal-content large">
+<div class="modal-header"><h2 id="videoModalTitle">🎬 Просмотр видео</h2><button class="close-modal" onclick="closeVideo()">×</button></div>
+<div id="videoPlayer"></div>
+</div>
+</div>
+
 <div class="search-overlay" id="searchOverlay">
 <div class="search-box">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
@@ -317,15 +341,27 @@ footer a:hover{text-decoration:underline}
 </footer>
 
 <script>
-let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+let cart=[];
 let currentUser=JSON.parse(localStorage.getItem('currentUser')||'null');
 let currentCategory='';
-let purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
+let purchasedItems=[];
 let receiptData=null;
 
-function init(){loadContacts();updateStats();updateCartCount();updateUserDisplay();
-window.addEventListener('storage',e=>{if(e.key==='catalogData'||e.key==='ordersData'||e.key==='purchasedItems'){purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');updateStats();if(currentCategory)showCategory(currentCategory)}});
-setInterval(()=>{updateStats();if(currentCategory)showCategory(currentCategory)},3000)}
+function init(){
+  cart=JSON.parse(localStorage.getItem('cart')||'[]');
+  purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
+  loadContacts();
+  updateStats();
+  updateCartCount();
+  updateUserDisplay();
+  loadVideoSection();
+  window.addEventListener('storage',e=>{
+    if(e.key==='cart'){cart=JSON.parse(localStorage.getItem('cart')||'[]');updateCartCount();renderCart()}
+    if(e.key==='catalogData'){updateStats();loadVideoSection();if(currentCategory)showCategory(currentCategory)}
+    if(e.key==='ordersData'||e.key==='purchasedItems'){purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');updateStats();if(currentCategory)showCategory(currentCategory)}
+  });
+  setInterval(()=>{updateStats();if(currentCategory)showCategory(currentCategory)},3000);
+}
 
 function loadContacts(){const c=JSON.parse(localStorage.getItem('siteContacts')||'{}');const i=document.getElementById('contactInfo');if(Object.keys(c).length===0){i.innerHTML='<p style="color:#999">Контакты не указаны</p>';return}i.innerHTML=`${c.email?`<div class="contact-item">✉️ ${c.email}</div>`:''}${c.phone?`<div class="contact-item">📞 ${c.phone}</div>`:''}${c.address?`<div class="contact-item">📍 ${c.address}</div>`:''}${c.hours?`<div class="contact-item">🕐 ${c.hours}</div>`:''}`}
 
@@ -335,63 +371,346 @@ function updateUserDisplay(){if(currentUser){document.getElementById('userInfo')
 
 function logout(){localStorage.removeItem('currentUser');currentUser=null;location.reload()}
 
-function showHome(){document.getElementById('mainBanner').style.display='block';document.getElementById('statsSection').style.display='block';document.getElementById('categoriesGrid').style.display='grid';document.getElementById('featuresGrid').style.display='grid';document.getElementById('contactsSection').style.display='block';document.getElementById('categoryView').classList.remove('active');currentCategory=''}
+function showHome(){document.getElementById('mainBanner').style.display='block';document.getElementById('statsSection').style.display='block';document.getElementById('videoSection').style.display='block';document.getElementById('categoriesGrid').style.display='grid';document.getElementById('featuresGrid').style.display='grid';document.getElementById('contactsSection').style.display='block';document.getElementById('categoryView').classList.remove('active');currentCategory=''}
 
-function showCategory(category){currentCategory=category;const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const folders=cat[category]||[];const titles={'catalog':'📚 Весь каталог','worksheets':'📝 Рабочие листы','themes':'🎨 Темы','letterGames':'🔤 Игры с буквами','speechGames':'🗣️ Логопедические игры','free':'🎁 Бесплатно'};document.getElementById('categoryTitle').textContent=titles[category];if(folders.length===0){document.getElementById('foldersList').innerHTML='<p style="color:#999;text-align:center;padding:30px">В этой категории пока нет материалов</p>'}else{document.getElementById('foldersList').innerHTML=folders.map((folder,fi)=>`<div style="margin-bottom:30px"><h3 style="margin-bottom:15px;color:#5a4000">📁 ${folder.name}</h3><div class="items-grid">${(folder.items||[]).map((item,ii)=>{const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);const it=item.itemType||'digital';const badge=`<span class="item-type-badge ${it==='physical'?'type-physical':'type-digital'}">${it==='physical'?'📦 Доставка':'📥 Скачивание'}</span>`;let prev='';if(item.file&&it==='digital'){if(item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i))prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px;pointer-events:none" oncontextmenu="return false" alt=""></div>`;else if(item.file.name.match(/\.pdf$/i))prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`;else prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📎</div><div style="font-size:11px;color:#666">${item.file.name}</div></div>`}else if(it==='physical')prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`;else prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`;return `<div class="item-card"><div class="item-name">${item.name}</div>${badge}<div class="item-description">${item.description||''}</div>${prev}<div class="item-price">${item.price>0?item.price+'₽':'Бесплатно'}</div><div class="item-actions">${item.price===0&&it==='digital'?`<button class="btn btn-success" onclick="downloadFreeItem('${category}',${fi},${ii})">📥 Скачать</button>`:isP&&it==='digital'?`<button class="btn btn-success" onclick="downloadPurchasedItem('${category}',${fi},${ii})">📥 Скачать</button>`:`<button class="btn" onclick="addToCart('${category}',${fi},${ii})">🛒 В корзину</button>`}</div></div>`}).join('')}</div></div>`).join('')}document.getElementById('mainBanner').style.display='none';document.getElementById('statsSection').style.display='none';document.getElementById('categoriesGrid').style.display='none';document.getElementById('featuresGrid').style.display='none';document.getElementById('contactsSection').style.display='none';document.getElementById('categoryView').classList.add('active')}
+function loadVideoSection(){
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const videos=[];
+  ['catalog','worksheets','themes','letterGames','speechGames','free'].forEach(c=>{
+    (cat[c]||[]).forEach((folder,fi)=>{
+      (folder.items||[]).forEach((item,ii)=>{
+        if(item.itemType==='video'&&item.file){
+          videos.push({...item,category:c,folderIndex:fi,itemIndex:ii})
+        }
+      })
+    })
+  });
+  const section=document.getElementById('videoSection');
+  const grid=document.getElementById('videoGrid');
+  if(videos.length===0){section.style.display='none';return}
+  section.style.display='block';
+  grid.innerHTML=videos.map(v=>{
+    const isP=purchasedItems.some(p=>p.category===v.category&&p.folderIndex===v.folderIndex&&p.itemIndex===v.itemIndex);
+    const preview=v.file.data.startsWith('data:video')?`<video src="${v.file.data}" muted></video>`:`<img src="${v.file.data}" alt="${v.name}">`;
+    return `<div class="video-card">${preview}<div class="video-card-body"><div class="video-card-title">${v.name}</div><div class="video-card-price">${v.price>0?v.price+'₽':'Бесплатно'}</div><button class="btn ${isP||v.price===0?'btn-success':''}" onclick="playVideo('${v.category}',${v.folderIndex},${v.itemIndex})">${isP||v.price===0?'▶️ Смотреть':'🛒 В корзину'}</button></div></div>`
+  }).join('')
+}
 
-function addToCart(category,fi,ii){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');if(!cat[category]||!cat[category][fi]||!cat[category][fi].items[ii]){alert('❌ Товар не найден');return}const item=cat[category][fi].items[ii];if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});localStorage.setItem('cart',JSON.stringify(cart));saveCartToAllCarts();updateCartCount();alert('✅ "'+item.name+'" добавлен в корзину!')}
+function showVideoSection(){showHome();document.getElementById('videoSection').scrollIntoView({behavior:'smooth'})}
 
-function saveCartToAllCarts(){const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');if(currentUser&&currentUser.email){ac[currentUser.email]=cart;ac[currentUser.email].userName=currentUser.name}else{ac['guest_'+Date.now()]=cart}localStorage.setItem('allCarts',JSON.stringify(ac))}
+function playVideo(category,fi,ii){
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const item=cat[category]?.[fi]?.items?.[ii];
+  if(!item||!item.file){alert('Видео не найдено');return}
+  const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
+  if(item.price>0&&!isP){alert('⛔ Сначала оплатите товар');return}
+  document.getElementById('videoModalTitle').textContent='🎬 '+item.name;
+  document.getElementById('videoPlayer').innerHTML=`<video src="${item.file.data}" controls style="width:100%;max-height:70vh;border-radius:10px;background:#000"></video>`;
+  document.getElementById('videoModal').classList.add('active')
+}
+function closeVideo(){document.getElementById('videoModal').classList.remove('active');document.getElementById('videoPlayer').innerHTML=''}
 
-function updateCartCount(){const count=cart.length;const n=document.getElementById('cartCountNav');if(n)n.textContent=count;const t=document.getElementById('cartTitle');if(t)t.innerHTML='🛒 Корзина ('+count+')';const o=document.getElementById('cartCount');if(o)o.textContent=count;saveCartToAllCarts()}
+function showCategory(category){
+  currentCategory=category;
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const folders=cat[category]||[];
+  const titles={'catalog':'📚 Весь каталог','worksheets':'📝 Рабочие листы','themes':'🎨 Темы','letterGames':'🔤 Игры с буквами','speechGames':'🗣️ Логопедические игры','free':'🎁 Бесплатно'};
+  document.getElementById('categoryTitle').textContent=titles[category];
+  if(folders.length===0){
+    document.getElementById('foldersList').innerHTML='<p style="color:#999;text-align:center;padding:30px">В этой категории пока нет материалов</p>'
+  }else{
+    document.getElementById('foldersList').innerHTML=folders.map((folder,fi)=>`<div style="margin-bottom:30px"><h3 style="margin-bottom:15px;color:#5a4000">📁 ${folder.name}</h3><div class="items-grid">${(folder.items||[]).map((item,ii)=>{
+      const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
+      const it=item.itemType||'digital';
+      const badge=`<span class="item-type-badge ${it==='physical'?'type-physical':it==='video'?'type-video':'type-digital'}">${it==='physical'?'📦 Доставка':it==='video'?'🎬 Видео':'📥 Скачивание'}</span>`;
+      let prev='';
+      if(item.file){
+        if(item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px;pointer-events:none" oncontextmenu="return false" alt=""></div>`
+        }else if(item.file.name.match(/\.(mp4|webm|mov)$/i)){
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
+        }else if(item.file.name.match(/\.pdf$/i)){
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
+        }else if(item.file.name.match(/\.(mp3|wav|ogg)$/i)){
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🎵</div><div style="font-size:11px;color:#666">${item.file.name}</div><audio src="${item.file.data}" controls style="width:100%;margin-top:5px"></audio></div>`
+        }else{
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📎</div><div style="font-size:11px;color:#666">${item.file.name}</div><div style="font-size:10px;color:#999">${(item.file.size/1024).toFixed(1)} КБ</div></div>`
+        }
+      }else if(it==='physical'){
+        prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`
+      }else{
+        prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`
+      }
+      let actionBtn='';
+      if(item.price===0&&(it==='digital'||it==='video')){
+        actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadFreeItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
+      }else if(isP&&(it==='digital'||it==='video')){
+        actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadPurchasedItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
+      }else{
+        actionBtn=`<button class="btn" onclick="addToCart('${category}',${fi},${ii})">🛒 В корзину</button>`
+      }
+      return `<div class="item-card"><div class="item-name">${item.name}</div>${badge}<div class="item-description">${item.description||''}</div>${prev}<div class="item-price">${item.price>0?item.price+'₽':'Бесплатно'}</div><div class="item-actions">${actionBtn}</div></div>`
+    }).join('')}</div></div>`).join('')
+  }
+  document.getElementById('mainBanner').style.display='none';
+  document.getElementById('statsSection').style.display='none';
+  document.getElementById('videoSection').style.display='none';
+  document.getElementById('categoriesGrid').style.display='none';
+  document.getElementById('featuresGrid').style.display='none';
+  document.getElementById('contactsSection').style.display='none';
+  document.getElementById('categoryView').classList.add('active')
+}
+
+function addToCart(category,fi,ii){
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  if(!cat[category]||!cat[category][fi]||!cat[category][fi].items[ii]){alert('❌ Товар не найден');return}
+  const item=cat[category][fi].items[ii];
+  if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}
+  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  saveCartToAllCarts();
+  updateCartCount();
+  alert('✅ "'+item.name+'" добавлен в корзину!')
+}
+
+function saveCartToAllCarts(){
+  const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');
+  if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}
+  else{ac['guest_'+Date.now()]={items:cart,userName:'Гость'}}
+  localStorage.setItem('allCarts',JSON.stringify(ac))
+}
+
+function updateCartCount(){
+  const count=cart.length;
+  const n=document.getElementById('cartCountNav');if(n)n.textContent=count;
+  const t=document.getElementById('cartTitle');if(t)t.innerHTML='🛒 Корзина ('+count+')';
+  const o=document.getElementById('cartCount');if(o)o.textContent=count;
+  saveCartToAllCarts()
+}
 
 function openCart(){renderCart();document.getElementById('cartSidebar').classList.add('active')}
 function closeCart(){document.getElementById('cartSidebar').classList.remove('active')}
 
-function renderCart(){const ci=document.getElementById('cartItems');if(cart.length===0){ci.innerHTML='<p style="color:#999;text-align:center">Корзина пуста</p>';document.getElementById('cartTotal').textContent='0';return}ci.innerHTML=cart.map((item,index)=>`<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><span style="font-size:11px;padding:2px 6px;border-radius:8px;background:${item.itemType==='physical'?'#fff3e0':'#e3f2fd'};color:${item.itemType==='physical'?'#e65100':'#1976d2'}">${item.itemType==='physical'?'📦':'📥'}</span><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding:4px 8px;font-size:12px">✕</button></div><div>${item.price}₽</div></div>`).join('');document.getElementById('cartTotal').textContent=cart.reduce((s,i)=>s+i.price,0)}
+function renderCart(){
+  const ci=document.getElementById('cartItems');
+  if(cart.length===0){ci.innerHTML='<p style="color:#999;text-align:center">Корзина пуста</p>';document.getElementById('cartTotal').textContent='0';return}
+  ci.innerHTML=cart.map((item,index)=>`<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><span style="font-size:11px;padding:2px 6px;border-radius:8px;background:${item.itemType==='physical'?'#fff3e0':item.itemType==='video'?'#f3e5f5':'#e3f2fd'};color:${item.itemType==='physical'?'#e65100':item.itemType==='video'?'#7b1fa2':'#1976d2'}">${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</span><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding:4px 8px;font-size:12px">✕</button></div><div>${item.price}₽</div></div>`).join('');
+  document.getElementById('cartTotal').textContent=cart.reduce((s,i)=>s+i.price,0)
+}
 
 function removeFromCart(index){cart.splice(index,1);localStorage.setItem('cart',JSON.stringify(cart));saveCartToAllCarts();updateCartCount();renderCart()}
 
-function selectPayment(method){document.querySelectorAll('.payment-method').forEach(el=>{el.style.borderColor='#e0e0e0';el.style.background='#fff'});if(event&&event.target){event.target.style.borderColor='#4CAF50';event.target.style.background='#f1f8e9'}document.getElementById('checkoutPayment').value=method;const cf=document.getElementById('cardFields');const qb=document.getElementById('qrBlock');const total=document.getElementById('cartTotal').textContent;if(cf){cf.style.display=method==='Карта'?'block':'none';if(method==='Карта')showCardRequisites(total)}if(qb){qb.style.display=method==='СБП'?'block':'none';if(method==='СБП')showQrCode(total)}}
+function selectPayment(method){
+  document.querySelectorAll('.payment-method').forEach(el=>{el.style.borderColor='#e0e0e0';el.style.background='#fff'});
+  if(event&&event.target){event.target.style.borderColor='#4CAF50';event.target.style.background='#f1f8e9'}
+  document.getElementById('checkoutPayment').value=method;
+  const cf=document.getElementById('cardFields');const qb=document.getElementById('qrBlock');const total=document.getElementById('cartTotal').textContent;
+  if(cf){cf.style.display=method==='Карта'?'block':'none';if(method==='Карта')showCardRequisites(total)}
+  if(qb){qb.style.display=method==='СБП'?'block':'none';if(method==='СБП')showQrCode(total)}
+}
 
-function showCardRequisites(total){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');const d=document.getElementById('cardRequisitesDisplay');if(p.cardHolder||p.cardNumber){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:8px;border:1px solid #f0c040"><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Получатель:</strong></p><p style="font-size:16px;font-weight:bold;color:#5a4000;margin-bottom:10px">${p.cardHolder||'—'}</p><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Карта:</strong></p><p style="font-size:18px;font-weight:bold;color:#5a4000;letter-spacing:2px;margin-bottom:10px">${p.cardNumber||'—'}</p>${p.cardBank?`<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Банк:</strong></p><p style="font-size:14px;color:#333;margin-bottom:10px">${p.cardBank}</p>`:''}<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Сумма:</strong></p><p style="font-size:24px;font-weight:bold;color:#4CAF50">${total}₽</p></div><p style="font-size:12px;color:#999;margin-top:10px">📱 Переведите сумму, затем нажмите "Подтвердить"</p>`}else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ Реквизиты не настроены</p>'}}
+function showCardRequisites(total){
+  const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
+  const d=document.getElementById('cardRequisitesDisplay');
+  if(p.cardHolder||p.cardNumber){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:8px;border:1px solid #f0c040"><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Получатель:</strong></p><p style="font-size:16px;font-weight:bold;color:#5a4000;margin-bottom:10px">${p.cardHolder||'—'}</p><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Карта:</strong></p><p style="font-size:18px;font-weight:bold;color:#5a4000;letter-spacing:2px;margin-bottom:10px">${p.cardNumber||'—'}</p>${p.cardBank?`<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Банк:</strong></p><p style="font-size:14px;color:#333;margin-bottom:10px">${p.cardBank}</p>`:''}<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Сумма:</strong></p><p style="font-size:24px;font-weight:bold;color:#4CAF50">${total}₽</p></div><p style="font-size:12px;color:#999;margin-top:10px">📱 Переведите сумму и прикрепите чек выше</p>`}
+  else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ Реквизиты не настроены</p>'}
+}
 
-function showQrCode(total){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');const d=document.getElementById('qrDisplay');if(p.qrCode){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:10px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,.1)"><img src="${p.qrCode}" style="width:200px;height:200px;border-radius:5px"><p style="margin-top:10px;font-size:12px;color:#666;font-weight:bold">Сумма: ${total}₽</p></div>`}else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ QR-код не загружен</p>'}}
+function showQrCode(total){
+  const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
+  const d=document.getElementById('qrDisplay');
+  if(p.qrCode){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:10px;display:inline-block;box-shadow:0 2px 10px rgba(0,0,0,.1)"><img src="${p.qrCode}" style="width:200px;height:200px;border-radius:5px"><p style="margin-top:10px;font-size:12px;color:#666;font-weight:bold">Сумма: ${total}₽</p></div>`}
+  else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ QR-код не загружен</p>'}
+}
 
-function openCheckout(){if(cart.length===0){alert('Корзина пуста');return}if(!currentUser){alert('Войдите в систему');window.location.href='login.html';return}const hp=cart.some(i=>i.itemType==='physical');const hd=cart.some(i=>i.itemType==='digital');const ot=hp?'physical':'digital';const df=document.getElementById('deliveryFields');if(df)df.style.display=hp?'block':'none';const oi=document.getElementById('orderTypeInfo');if(hp&&hd){oi.style.background='#fff3e0';oi.style.color='#e65100';oi.innerHTML='📦📥 Заказ: доставка + скачивание'}else if(hp){oi.style.background='#fff3e0';oi.style.color='#e65100';oi.innerHTML='📦 Только доставка. Заполните адрес'}else{oi.style.background='#e3f2fd';oi.style.color='#1976d2';oi.innerHTML='📥 Только скачивание. Файлы сразу после оплаты'}const total=cart.reduce((s,i)=>s+i.price,0);document.getElementById('checkoutSummary').innerHTML=`<h3 style="margin-bottom:12px">Ваш заказ (${cart.length} тов.):</h3>${cart.map(i=>`<div>${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':'📥'}</div>`).join('')}<div style="margin-top:12px;font-weight:bold;font-size:20px">Итого: ${total}₽</div>`;document.getElementById('checkoutModal').classList.add('active')}
+function openCheckout(){
+  if(cart.length===0){alert('Корзина пуста');return}
+  if(!currentUser){alert('Войдите в систему');window.location.href='login.html';return}
+  const hp=cart.some(i=>i.itemType==='physical');
+  const df=document.getElementById('deliveryFields');if(df)df.style.display=hp?'block':'none';
+  const oi=document.getElementById('orderTypeInfo');
+  const hasVideo=cart.some(i=>i.itemType==='video');
+  if(hp){oi.style.background='#fff3e0';oi.style.color='#e65100';oi.innerHTML='📦 Есть товары с доставкой. Заполните адрес.'}
+  else if(hasVideo){oi.style.background='#f3e5f5';oi.style.color='#7b1fa2';oi.innerHTML='🎬 Есть видео-товары. После проверки чека они станут доступны.'}
+  else{oi.style.background='#e3f2fd';oi.style.color='#1976d2';oi.innerHTML='📥 Цифровые товары. После проверки чека файлы станут доступны.'}
+  const total=cart.reduce((s,i)=>s+i.price,0);
+  document.getElementById('checkoutSummary').innerHTML=`<h3 style="margin-bottom:12px">Ваш заказ (${cart.length} тов.):</h3>${cart.map(i=>`<div>${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}<div style="margin-top:12px;font-weight:bold;font-size:20px">Итого: ${total}₽</div>`;
+  document.getElementById('checkoutModal').classList.add('active')
+}
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
 
-document.getElementById('receiptFile').addEventListener('change',e=>{if(e.target.files[0]){const reader=new FileReader();reader.onload=ev=>{receiptData=ev.target.result;document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`};reader.readAsDataURL(e.target.files[0])}});
+document.getElementById('receiptFile').addEventListener('change',e=>{
+  if(e.target.files[0]){
+    if(e.target.files[0].size>5*1024*1024){alert('⚠️ Файл слишком большой (макс. 5 МБ). Сожмите изображение.');e.target.value='';return}
+    const reader=new FileReader();
+    reader.onload=ev=>{receiptData=ev.target.result;document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`};
+    reader.readAsDataURL(e.target.files[0])
+  }
+});
 
-document.getElementById('checkoutForm').addEventListener('submit',e=>{e.preventDefault();const pm=document.getElementById('checkoutPayment').value;if(!pm){alert('Выберите способ оплаты');return}const hp=cart.some(i=>i.itemType==='physical');const ot=hp?'physical':'digital';const order={id:Date.now(),customerName:document.getElementById('checkoutName').value,email:document.getElementById('checkoutEmail').value,phone:document.getElementById('checkoutPhone').value,address:hp?document.getElementById('checkoutAddress').value:'',delivery:hp?document.getElementById('checkoutDelivery').value:'',payment:pm,orderType:ot,receipt:receiptData||null,items:cart.map(i=>({name:i.name,price:i.price,category:i.category,folderIndex:i.folderIndex,itemIndex:i.itemIndex,itemType:i.itemType||'digital'})),total:cart.reduce((s,i)=>s+i.price,0),status:'new',paid:false,date:new Date().toISOString()};const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');orders.push(order);localStorage.setItem('ordersData',JSON.stringify(orders));closeCheckout();closeCart();cart=[];receiptData=null;document.getElementById('receiptPreview').innerHTML='';document.getElementById('receiptFile').value='';localStorage.setItem('cart',JSON.stringify(cart));saveCartToAllCarts();updateCartCount();processPayment(order)});
+document.getElementById('checkoutForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const pm=document.getElementById('checkoutPayment').value;
+  if(!pm){alert('Выберите способ оплаты');return}
+  const hp=cart.some(i=>i.itemType==='physical');
+  const hasReceipt=!!receiptData;
+  const order={id:Date.now(),customerName:document.getElementById('checkoutName').value,email:document.getElementById('checkoutEmail').value,phone:document.getElementById('checkoutPhone').value,address:hp?document.getElementById('checkoutAddress').value:'',delivery:hp?document.getElementById('checkoutDelivery').value:'',payment:pm,orderType:hp?'physical':'digital',receipt:receiptData||null,receiptVerified:false,items:cart.map(i=>({name:i.name,price:i.price,category:i.category,folderIndex:i.folderIndex,itemIndex:i.itemIndex,itemType:i.itemType||'digital'})),total:cart.reduce((s,i)=>s+i.price,0),status:hasReceipt?'pending_receipt':'new',paid:false,date:new Date().toISOString()};
+  const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
+  orders.push(order);
+  localStorage.setItem('ordersData',JSON.stringify(orders));
+  closeCheckout();closeCart();
+  cart=[];receiptData=null;
+  document.getElementById('receiptPreview').innerHTML='';
+  document.getElementById('receiptFile').value='';
+  localStorage.setItem('cart',JSON.stringify(cart));
+  saveCartToAllCarts();
+  updateCartCount();
+  showOrderResult(order,hasReceipt)
+});
 
-function processPayment(order){const pc=document.getElementById('paymentContent');const ps=JSON.parse(localStorage.getItem('paymentSettings')||'{}');if(order.payment==='При получении'){pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#ff9800;margin-top:15px">⚠️ ${order.orderType==='digital'?'Файлы после оплаты':'Товар после оплаты'}</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`}else if(order.payment==='Карта'){let ci='';if(ps.cardHolder||ps.cardNumber){ci=`<div style="background:#fff8e1;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #f0c040;text-align:left"><p style="margin-bottom:8px"><strong>Получатель:</strong> ${ps.cardHolder||'—'}</p><p style="margin-bottom:8px"><strong>Карта:</strong> ${ps.cardNumber||'—'}</p>${ps.cardBank?`<p style="margin-bottom:8px"><strong>Банк:</strong> ${ps.cardBank}</p>`:''}</div>`}else{ci='<p style="color:#ff9800;margin:20px 0">⚠️ Реквизиты не настроены</p>'}pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#5a4000;margin-bottom:20px">💳 Оплата картой</h2><p style="font-size:24px;margin-bottom:20px"><strong>${order.total}₽</strong></p>${ci}<button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size:16px;padding:15px 30px;width:100%">✅ Я перевёл — Подтвердить</button><p style="color:#999;font-size:12px;margin-top:15px">${order.orderType==='digital'?'После подтверждения файлы станут доступны':'Товар будет отправлен'}</p></div>`}else if(order.payment==='СБП'){let qi='';if(ps.qrCode){qi=`<div style="background:#fff;padding:15px;border-radius:10px;display:inline-block;margin:20px 0"><img src="${ps.qrCode}" style="width:200px;height:200px;border-radius:5px"><p style="margin-top:10px;font-weight:bold">Сумма: ${order.total}₽</p></div>`}else{qi='<p style="color:#ff9800;margin:20px 0">⚠️ QR-код не загружен</p>'}pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#2e7d32;margin-bottom:20px">📱 Оплата по СБП</h2><p style="font-size:24px;margin-bottom:20px"><strong>${order.total}₽</strong></p>${qi}<button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size:16px;padding:15px 30px;width:100%;margin-top:15px">✅ Я оплатил — Подтвердить</button></div>`}document.getElementById('paymentModal').classList.add('active')}
-
-function confirmPayment(orderId){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const order=orders.find(o=>o.id===orderId);if(!order){alert('❌ Заказ не найден');return}order.paid=true;order.paymentDate=new Date().toISOString();order.status='completed';localStorage.setItem('ordersData',JSON.stringify(orders));order.items.forEach(item=>{if(item.itemType==='digital'){if(!purchasedItems.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){purchasedItems.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})}}});localStorage.setItem('purchasedItems',JSON.stringify(purchasedItems));closePayment();updateStats();setTimeout(()=>{showMyPurchases()},300);alert('✅ Оплата подтверждена! '+(order.orderType==='digital'?'Файлы доступны для скачивания.':'Товар будет отправлен.'))}
+function showOrderResult(order,hasReceipt){
+  const pc=document.getElementById('paymentContent');
+  if(hasReceipt){
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#1976d2;margin-bottom:20px">📎 Чек отправлен на проверку</h2><p>Номер заказа: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e3f2fd;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #1976d2"><p style="color:#1976d2;font-weight:600;margin-bottom:10px">⏳ Ожидает проверки администратором</p><p style="color:#666;font-size:14px">Мы проверим ваш чек в течение 24 часов. После подтверждения файлы станут доступны для скачивания в разделе "Мои покупки".</p></div><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+  }else{
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#ff9800;margin-top:15px">⚠️ Прикрепите чек об оплате в оформлении заказа, чтобы получить доступ к файлам</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+  }
+  document.getElementById('paymentModal').classList.add('active')
+}
 
 function closePayment(){document.getElementById('paymentModal').classList.remove('active')}
 
-function downloadFreeItem(category,fi,ii){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const item=cat[category][fi].items[ii];if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}}
+function downloadFreeItem(category,fi,ii){
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const item=cat[category][fi].items[ii];
+  if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}
+}
 
-function downloadPurchasedItem(category,fi,ii){if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите');return}const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const item=cat[category][fi].items[ii];if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}}
+function downloadPurchasedItem(category,fi,ii){
+  if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите товар');return}
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const item=cat[category][fi].items[ii];
+  if(item.file){const link=document.createElement('a');link.href=item.file.data;link.download=item.file.name;document.body.appendChild(link);link.click();document.body.removeChild(link);alert('✅ Файл скачан!')}else{alert('❌ Файл не найден')}
+}
 
-function showMyPurchases(){const pc=document.getElementById('purchasesContent');if(purchasedItems.length===0){pc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Нет купленных материалов</p>'}else{const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');pc.innerHTML=`<h3 style="margin-bottom:20px">Ваши материалы:</h3>`+purchasedItems.map(p=>{const item=cat[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];if(!item)return '';return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><strong>${item.name}</strong><div style="color:#666;font-size:12px">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div><div style="display:flex;gap:8px"><button class="btn btn-success" onclick="downloadPurchasedItem('${p.category}',${p.folderIndex},${p.itemIndex})">📥 Скачать</button><button class="btn" onclick="addPurchasedToCart('${p.category}',${p.folderIndex},${p.itemIndex})">🛒 Ещё раз</button></div></div>`}).join('')}document.getElementById('purchasesModal').classList.add('active')}
+function showMyPurchases(){
+  const pc=document.getElementById('purchasesContent');
+  if(purchasedItems.length===0){pc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Нет купленных материалов</p>'}
+  else{
+    const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+    pc.innerHTML=`<h3 style="margin-bottom:20px">Ваши материалы:</h3>`+purchasedItems.map(p=>{
+      const item=cat[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
+      if(!item)return '';
+      const isVideo=item.itemType==='video';
+      return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><strong>${isVideo?'🎬 ':'📄 '}${item.name}</strong><div style="color:#666;font-size:12px">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div><div style="display:flex;gap:8px"><button class="btn btn-success" onclick="${isVideo?`playVideo('${p.category}',${p.folderIndex},${p.itemIndex})`:`downloadPurchasedItem('${p.category}',${p.folderIndex},${p.itemIndex})`}">${isVideo?'▶️ Смотреть':'📥 Скачать'}</button><button class="btn" onclick="addPurchasedToCart('${p.category}',${p.folderIndex},${p.itemIndex})">🛒 Ещё раз</button></div></div>`
+    }).join('')
+  }
+  document.getElementById('purchasesModal').classList.add('active')
+}
 function closePurchases(){document.getElementById('purchasesModal').classList.remove('active')}
 
-function addPurchasedToCart(category,fi,ii){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const item=cat[category]?.[fi]?.items?.[ii];if(!item){alert('❌ Товар не найден');return}if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});localStorage.setItem('cart',JSON.stringify(cart));saveCartToAllCarts();updateCartCount();alert('✅ "'+item.name+'" добавлен в корзину!')}
+function addPurchasedToCart(category,fi,ii){
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  const item=cat[category]?.[fi]?.items?.[ii];
+  if(!item){alert('❌ Товар не найден');return}
+  if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}
+  cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,quantity:1});
+  localStorage.setItem('cart',JSON.stringify(cart));
+  saveCartToAllCarts();
+  updateCartCount();
+  alert('✅ "'+item.name+'" добавлен в корзину!')
+}
 
-function showMyOrders(){if(!currentUser){alert('Войдите в систему');return}const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const my=orders.filter(o=>o.email===currentUser.email).reverse();const oc=document.getElementById('ordersContent');if(my.length===0){oc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Заказов нет</p>'}else{oc.innerHTML=my.map(o=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:10px"><strong>Заказ #${o.id}</strong><span style="color:${o.paid?'#4CAF50':'#ff9800'};font-weight:bold">${o.paid?'✅ Оплачен':'⏳ Ожидает'}</span></div><div style="font-size:12px;color:#666;margin-bottom:5px">${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'}</div><div style="margin-bottom:10px">${o.items.map(i=>`<div style="font-size:13px">${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':'📥'}</div>`).join('')}</div><div style="font-weight:bold;font-size:16px">Итого: ${o.total}₽</div>${o.receipt?'<div style="margin-top:8px;color:#4CAF50;font-size:12px">📎 Чек прикреплён</div>':''}</div>`).join('')}document.getElementById('ordersModal').classList.add('active')}
+function showMyOrders(){
+  if(!currentUser){alert('Войдите в систему');return}
+  const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
+  const my=orders.filter(o=>o.email===currentUser.email).reverse();
+  const oc=document.getElementById('ordersContent');
+  if(my.length===0){oc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Заказов нет</p>'}
+  else{
+    oc.innerHTML=my.map(o=>{
+      let statusHtml='';
+      if(o.paid){statusHtml=`<span class="status-badge status-paid">✅ Оплачен</span>`}
+      else if(o.status==='pending_receipt'){statusHtml=`<span class="status-badge status-pending">📎 Чек на проверке</span>`}
+      else{statusHtml=`<span class="status-badge status-waiting">⏳ Ожидает оплаты</span>`}
+      return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px"><strong>Заказ #${o.id}</strong>${statusHtml}</div><div style="font-size:12px;color:#666;margin-bottom:5px">${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | ${o.payment}</div><div style="margin-bottom:10px">${o.items.map(i=>`<div style="font-size:13px">${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}</div><div style="font-weight:bold;font-size:16px">Итого: ${o.total}₽</div>${o.receipt?'<div style="margin-top:8px;color:#4CAF50;font-size:12px">📎 Чек прикреплён</div>':''}</div>`
+    }).join('')
+  }
+  document.getElementById('ordersModal').classList.add('active')
+}
 function closeOrders(){document.getElementById('ordersModal').classList.remove('active')}
 
-function showQuestions(){const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');const myQuestions=currentUser?questions.filter(q=>q.email===currentUser.email):[];const qc=document.getElementById('questionsContent');const typeNames={product:'❓ Продукт',download:'⬇️ Скачивание',payment:'💳 Оплата',bug:'🐛 Ошибка',other:'💬 Другое'};if(myQuestions.length===0){qc.innerHTML='<p style="text-align:center;color:#999;padding:30px">У вас нет вопросов. Задайте вопрос в разделе Контакты ниже.</p>'}else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает ответа'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${q.product}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${q.text}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${q.answer}</div>`:''}</div>`).join('')}document.getElementById('questionsModal').classList.add('active')}
+function showQuestions(){
+  const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');
+  const myQuestions=currentUser?questions.filter(q=>q.email===currentUser.email):[];
+  const qc=document.getElementById('questionsContent');
+  const typeNames={product:'❓ Продукт',download:'⬇️ Скачивание',payment:'💳 Оплата',bug:'🐛 Ошибка',other:'💬 Другое'};
+  if(myQuestions.length===0){qc.innerHTML='<p style="text-align:center;color:#999;padding:30px">У вас нет вопросов. Задайте вопрос в разделе Контакты ниже.</p>'}
+  else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает ответа'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${q.product}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${q.text}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${q.answer}</div>`:''}</div>`).join('')}
+  document.getElementById('questionsModal').classList.add('active')
+}
 function closeQuestions(){document.getElementById('questionsModal').classList.remove('active')}
 
 function openSearch(){document.getElementById('searchOverlay').classList.add('active');document.getElementById('searchInput').focus()}
 function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML=''}
 
-function performSearch(){const q=document.getElementById('searchInput').value.toLowerCase().trim();const r=document.getElementById('searchResults');if(q.length<2){r.innerHTML='';return}const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');let found=[];Object.keys(cat).forEach(c=>{(cat[c]||[]).forEach((folder,fi)=>{(folder.items||[]).forEach((item,ii)=>{if(item.name.toLowerCase().includes(q))found.push({...item,category:c,folderIndex:fi,itemIndex:ii})})})});r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найдено</p>':found.map(item=>`<div class="search-result-item" onclick="closeSearch();showCategory('${item.category}')"><strong>${item.name}</strong> — ${item.price>0?item.price+'₽':'Бесплатно'} ${item.itemType==='physical'?'📦':'📥'}</div>`).join('')}
+function performSearch(){
+  const q=document.getElementById('searchInput').value.toLowerCase().trim();
+  const r=document.getElementById('searchResults');
+  if(q.length<2){r.innerHTML='';return}
+  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
+  let found=[];
+  Object.keys(cat).forEach(c=>{(cat[c]||[]).forEach((folder,fi)=>{(folder.items||[]).forEach((item,ii)=>{if(item.name.toLowerCase().includes(q))found.push({...item,category:c,folderIndex:fi,itemIndex:ii})})})});
+  r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найдено</p>':found.map(item=>`<div class="search-result-item" onclick="closeSearch();showCategory('${item.category}')"><strong>${item.name}</strong> — ${item.price>0?item.price+'₽':'Бесплатно'} ${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</div>`).join('')
+}
 
-function previewFile(fileData,fileName,fileType){const modal=document.createElement('div');modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px';const content=document.createElement('div');content.style.cssText='background:#fff;border-radius:15px;padding:20px;max-width:800px;width:100%;max-height:90vh;overflow:auto;position:relative';const closeBtn=document.createElement('button');closeBtn.textContent='✕ Закрыть';closeBtn.style.cssText='position:absolute;top:10px;right:15px;background:#f44336;color:#fff;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:600;z-index:10';closeBtn.onclick=()=>document.body.removeChild(modal);const title=document.createElement('h3');title.textContent='👁 Предпросмотр: '+fileName;title.style.cssText='margin-bottom:15px;padding-right:100px;color:#5a4000';const viewer=document.createElement('div');if(fileType&&fileType.startsWith('image/')){const img=document.createElement('img');img.src=fileData;img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-drag:none;pointer-events:none';img.oncontextmenu=e=>{e.preventDefault();alert('🔒 Скачивание только после оплаты')};viewer.appendChild(img)}else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){const embed=document.createElement('embed');embed.src=fileData;embed.type='application/pdf';embed.style.cssText='width:100%;height:70vh;border-radius:8px';viewer.appendChild(embed)}else{viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`}const warning=document.createElement('p');warning.textContent='⚠️ Скачивание только после оплаты';warning.style.cssText='text-align:center;color:#ff9800;margin-top:15px;font-weight:600;font-size:14px';content.appendChild(closeBtn);content.appendChild(title);content.appendChild(viewer);content.appendChild(warning);modal.appendChild(content);modal.onclick=e=>{if(e.target===modal)document.body.removeChild(modal)};document.body.appendChild(modal)}
+function previewFile(fileData,fileName,fileType){
+  const modal=document.createElement('div');
+  modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px';
+  const content=document.createElement('div');
+  content.style.cssText='background:#fff;border-radius:15px;padding:20px;max-width:800px;width:100%;max-height:90vh;overflow:auto;position:relative';
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='✕ Закрыть';
+  closeBtn.style.cssText='position:absolute;top:10px;right:15px;background:#f44336;color:#fff;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:600;z-index:10';
+  closeBtn.onclick=()=>document.body.removeChild(modal);
+  const title=document.createElement('h3');
+  title.textContent='👁 Предпросмотр: '+fileName;
+  title.style.cssText='margin-bottom:15px;padding-right:100px;color:#5a4000';
+  const viewer=document.createElement('div');
+  if(fileType==='video'||fileName.match(/\.(mp4|webm|mov)$/i)){
+    const video=document.createElement('video');
+    video.src=fileData;
+    video.controls=true;
+    video.style.cssText='width:100%;max-height:70vh;border-radius:8px;background:#000';
+    viewer.appendChild(video)
+  }else if(fileType&&fileType.startsWith('image/')){
+    const img=document.createElement('img');
+    img.src=fileData;
+    img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px;user-select:none;-webkit-user-drag:none;pointer-events:none';
+    img.oncontextmenu=e=>{e.preventDefault();alert('🔒 Скачивание только после оплаты')};
+    viewer.appendChild(img)
+  }else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){
+    const embed=document.createElement('embed');
+    embed.src=fileData;embed.type='application/pdf';
+    embed.style.cssText='width:100%;height:70vh;border-radius:8px';
+    viewer.appendChild(embed)
+  }else if(fileType==='audio'||fileName.match(/\.(mp3|wav|ogg)$/i)){
+    const audio=document.createElement('audio');
+    audio.src=fileData;audio.controls=true;
+    audio.style.cssText='width:100%';
+    viewer.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:60px">🎵</div><p style="margin:15px 0;color:#666">${fileName}</p></div>`;
+    viewer.appendChild(audio)
+  }else{
+    viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
+  }
+  const warning=document.createElement('p');
+  warning.textContent='⚠️ Скачивание только после оплаты';
+  warning.style.cssText='text-align:center;color:#ff9800;margin-top:15px;font-weight:600;font-size:14px';
+  content.appendChild(closeBtn);content.appendChild(title);content.appendChild(viewer);content.appendChild(warning);
+  modal.appendChild(content);
+  modal.onclick=e=>{if(e.target===modal)document.body.removeChild(modal)};
+  document.body.appendChild(modal)
+}
 
 document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');messages.push({name:document.getElementById('contactName').value,email:document.getElementById('contactEmail').value,text:document.getElementById('contactMessage').value,date:new Date().toISOString()});localStorage.setItem('messagesData',JSON.stringify(messages));document.getElementById('contactForm').reset();alert('Сообщение отправлено! 🦉')});
 
