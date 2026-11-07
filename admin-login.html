@@ -14,7 +14,7 @@ h2{color:#333;margin-bottom:20px}
 .subtitle{color:#666;text-align:center;margin-bottom:30px}
 .form-group{margin-bottom:20px}
 label{display:block;margin-bottom:8px;color:#333;font-weight:500}
-input[type="text"],input[type="password"],input[type="email"],input[type="tel"],input[type="number"],textarea,select{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;transition:border .3s}
+input[type="text"],input[type="password"],input[type="email"],input[type="tel"],input[type="number"],input[type="url"],textarea,select{width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:10px;font-size:16px;transition:border .3s}
 input:focus,textarea:focus,select:focus{outline:none;border-color:#667eea}
 button{width:100%;padding:14px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;transition:transform .2s}
 button:hover{transform:translateY(-2px)}
@@ -80,6 +80,7 @@ button:hover{transform:translateY(-2px)}
 .payment-settings-box h3{color:#667eea;margin-bottom:15px}
 .qr-preview{max-width:200px;border-radius:10px;margin-top:10px}
 .receipt-thumb{max-width:200px;border-radius:8px;cursor:pointer;margin-top:8px;border:2px solid #4CAF50}
+.file-type-hint{font-size:12px;color:#666;margin-top:5px}
 @media(max-width:768px){.tabs{flex-direction:column}.stats-grid{grid-template-columns:1fr}.gradient-picker{grid-template-columns:1fr}}
 </style>
 </head>
@@ -140,33 +141,33 @@ button:hover{transform:translateY(-2px)}
 </div>
 </div>
 
-<div id="registered" class="tab-content"><h2>📝 Зарегистрированные пользователи</h2><p style="color:#666;margin-bottom:20px">Все кто зарегистрировался на сайте</p><div id="registeredList"></div></div>
-<div id="users" class="tab-content"><h2>👥 Пользователи и оплаты</h2><p style="color:#666;margin-bottom:20px">Пользователи с заказами</p><div id="usersList"></div></div>
-<div id="carts" class="tab-content"><h2>🛒 Корзины пользователей</h2><div id="cartsList"></div></div>
+<div id="registered" class="tab-content"><h2>📝 Зарегистрированные</h2><p style="color:#666;margin-bottom:20px">Все зарегистрированные пользователи</p><div id="registeredList"></div></div>
+<div id="users" class="tab-content"><h2>👥 Пользователи</h2><p style="color:#666;margin-bottom:20px">Пользователи с заказами</p><div id="usersList"></div></div>
+<div id="carts" class="tab-content"><h2>🛒 Корзины</h2><div id="cartsList"></div></div>
 
 <div id="payment" class="tab-content">
-<h2>💳 Реквизиты для оплаты</h2>
-<p style="color:#666;margin-bottom:20px">Укажите реквизиты — они будут показываться покупателям</p>
+<h2>💳 Реквизиты</h2>
+<p style="color:#666;margin-bottom:20px">Укажите реквизиты для покупателей</p>
 <div class="payment-settings-box">
-<h3>💳 Реквизиты карты</h3>
+<h3>💳 Карта</h3>
 <form id="cardRequisitesForm">
-<div class="form-group"><label>ФИО получателя</label><input type="text" id="cardHolder" placeholder="ИВАНОВ ИВАН ИВАНОВИЧ"></div>
+<div class="form-group"><label>ФИО</label><input type="text" id="cardHolder" placeholder="ИВАНОВ ИВАН"></div>
 <div class="form-group"><label>Номер карты</label><input type="text" id="cardNumber" placeholder="2200 0000 0000 0000" maxlength="19"></div>
 <div class="form-group"><label>Банк</label><input type="text" id="cardBank" placeholder="Сбербанк"></div>
-<button type="submit">💾 Сохранить реквизиты</button>
+<button type="submit">💾 Сохранить</button>
 </form>
 </div>
 <div class="payment-settings-box">
-<h3>📱 QR-код СБП</h3>
-<p style="color:#666;margin-bottom:15px;font-size:14px">Загрузите QR из банковского приложения</p>
-<div class="upload-area" onclick="document.getElementById('qrInput').click()"><p>📤 Нажмите для загрузки QR</p><input type="file" id="qrInput" accept="image/*" style="display:none"></div>
+<h3>📱 QR СБП</h3>
+<p style="color:#666;margin-bottom:15px;font-size:14px">Загрузите QR из банка</p>
+<div class="upload-area" onclick="document.getElementById('qrInput').click()"><p>📤 Загрузить QR</p><input type="file" id="qrInput" accept="image/*" style="display:none"></div>
 <div id="qrPreview"></div>
 <div id="currentQrDisplay" style="margin-top:15px"></div>
-<button id="saveQrBtn" class="hidden" style="margin-top:15px">💾 Сохранить QR</button>
-<button id="removeQrBtn" class="btn-secondary hidden" style="margin-top:10px">🗑 Удалить QR</button>
+<button id="saveQrBtn" class="hidden" style="margin-top:15px">💾 Сохранить</button>
+<button id="removeQrBtn" class="btn-secondary hidden" style="margin-top:10px">🗑 Удалить</button>
 </div>
 <div class="payment-settings-box">
-<h3>📧 Email для уведомлений</h3>
+<h3>📧 Email</h3>
 <form id="notificationEmailForm">
 <div class="form-group"><label>Email</label><input type="email" id="notificationEmail" placeholder="your@email.com"></div>
 <button type="submit">💾 Сохранить</button>
@@ -175,7 +176,7 @@ button:hover{transform:translateY(-2px)}
 </div>
 
 <div id="background" class="tab-content">
-<h2>🎨 Фон сайта</h2>
+<h2>🎨 Фон</h2>
 <div class="upload-area" id="uploadArea"><p>📤 Загрузить изображение</p><input type="file" id="bgImageInput" accept="image/*" style="display:none"></div>
 <div id="bgPreview"></div>
 <button id="applyBg" class="hidden">💾 Применить</button>
@@ -183,7 +184,7 @@ button:hover{transform:translateY(-2px)}
 <h3 style="margin-top:30px">🔄 Текущий фон</h3>
 <p id="currentBgText">Фон не установлен</p>
 <button id="removeBg" class="btn-secondary hidden">🗑 Убрать</button>
-<h3 style="margin-top:30px">🌈 Градиенты</h3>
+<h3 style="margin-top:30px">🌈 Градиент</h3>
 <div class="gradient-picker">
 <div class="color-input"><label>Левый</label><input type="color" id="gradientLeft" value="#667eea"></div>
 <div class="color-input"><label>Правый</label><input type="color" id="gradientRight" value="#764ba2"></div>
@@ -200,15 +201,15 @@ button:hover{transform:translateY(-2px)}
 <div id="free" class="tab-content"><h2>🎁 Бесплатно</h2><button onclick="openAddFolderModal('free')" style="margin-bottom:20px">➕ Папка</button><div id="freeList"></div></div>
 
 <div id="orders" class="tab-content"><h2>📦 Заказы</h2><div id="ordersList"></div></div>
-<div id="questions" class="tab-content"><h2>❓ Вопросы пользователей</h2><p style="color:#666;margin-bottom:20px">Вопросы по продуктам и проблемам</p><div id="questionsList"></div></div>
+<div id="questions" class="tab-content"><h2>❓ Вопросы</h2><p style="color:#666;margin-bottom:20px">Вопросы пользователей</p><div id="questionsList"></div></div>
 <div id="messages" class="tab-content"><h2>✉️ Сообщения</h2><div id="messagesList"></div></div>
 
 <div id="settings" class="tab-content">
 <h2>⚙️ Настройки</h2>
-<h3 style="margin-top:20px">🔑 Сменить пароль</h3>
+<h3 style="margin-top:20px">🔑 Пароль</h3>
 <form id="changePasswordForm">
-<div class="form-group"><label>Текущий пароль</label><input type="password" id="currentPassword" required></div>
-<div class="form-group"><label>Новый пароль</label><input type="password" id="newPasswordChange" required></div>
+<div class="form-group"><label>Текущий</label><input type="password" id="currentPassword" required></div>
+<div class="form-group"><label>Новый</label><input type="password" id="newPasswordChange" required></div>
 <button type="submit">Сохранить</button>
 </form>
 <h3 style="margin-top:30px">📞 Контакты</h3>
@@ -219,7 +220,7 @@ button:hover{transform:translateY(-2px)}
 <div class="form-group"><label>Часы</label><input type="text" id="contactHours"></div>
 <button type="submit">💾 Сохранить</button>
 </form>
-<h3 style="margin-top:30px">💾 Резервная копия</h3>
+<h3 style="margin-top:30px">💾 Копия</h3>
 <button onclick="downloadBackup()">⬇️ Скачать</button>
 <button onclick="document.getElementById('restoreBackupInput').click()" class="btn-secondary">⬆️ Восстановить</button>
 <input type="file" id="restoreBackupInput" accept=".json" style="display:none" onchange="restoreBackup(event)">
@@ -232,7 +233,7 @@ button:hover{transform:translateY(-2px)}
 
 <div id="folderModal" class="modal">
 <div class="modal-content">
-<div class="modal-header"><h2>Добавить папку</h2><button class="close-modal" onclick="closeFolderModal()">×</button></div>
+<div class="modal-header"><h2>Папка</h2><button class="close-modal" onclick="closeFolderModal()">×</button></div>
 <form id="folderForm">
 <div class="form-group"><label>Название</label><input type="text" id="folderName" required></div>
 <button type="submit">Создать</button>
@@ -242,13 +243,35 @@ button:hover{transform:translateY(-2px)}
 
 <div id="itemModal" class="modal">
 <div class="modal-content">
-<div class="modal-header"><h2 id="itemModalTitle">Добавить товар</h2><button class="close-modal" onclick="closeItemModal()">×</button></div>
+<div class="modal-header"><h2 id="itemModalTitle">Товар</h2><button class="close-modal" onclick="closeItemModal()">×</button></div>
 <form id="itemForm">
 <div class="form-group"><label>Название</label><input type="text" id="itemName" required></div>
 <div class="form-group"><label>Описание</label><textarea id="itemDescription" rows="3"></textarea></div>
 <div class="form-group"><label>Цена (0=бесплатно)</label><input type="number" id="itemPrice" min="0" step="0.01" required></div>
-<div class="form-group"><label>Тип товара</label><select id="itemType" required><option value="digital">📥 Цифровой (PDF, изображение, документ)</option><option value="video">🎬 Видео (MP4, WebM)</option><option value="audio">🎵 Аудио (MP3, WAV)</option><option value="physical">📦 Физический (доставка)</option></select></div>
-<div class="form-group"><label>Файл (макс. 5 МБ)</label><div class="file-upload" onclick="document.getElementById('itemFileInput').click()"><p>📎 Выбрать файл</p><p style="font-size:12px;color:#999;margin-top:5px">Поддерживаются: JPG, PNG, PDF, MP4, MP3, DOC, ZIP и др.</p><input type="file" id="itemFileInput" style="display:none" onchange="handleFileSelect(event)"></div><div id="fileList" class="file-list"></div></div>
+<div class="form-group">
+<label>Тип товара</label>
+<select id="itemType" required>
+<option value="digital">📥 Цифровой (любой формат)</option>
+<option value="video">🎬 Видео</option>
+<option value="audio">🎵 Аудио</option>
+<option value="physical">📦 Физический (доставка)</option>
+</select>
+</div>
+<div class="form-group">
+<label>📎 Файл (до 5 МБ) ИЛИ ссылка на файл</label>
+<p class="file-type-hint">Поддерживаются ВСЕ форматы: PDF, DOC, ZIP, RAR, MP4, MP3, JPG, PNG и др.</p>
+<p class="file-type-hint" style="color:#ff9800">⚠️ Для файлов больше 5 МБ используйте ссылку (Яндекс.Диск, Google Drive)</p>
+<div class="file-upload" onclick="document.getElementById('itemFileInput').click()" style="margin-top:10px">
+<p>📎 Выбрать файл с компьютера</p>
+<input type="file" id="itemFileInput" style="display:none" onchange="handleFileSelect(event)">
+</div>
+<div id="fileList" class="file-list"></div>
+<div style="margin-top:15px;padding-top:15px;border-top:1px solid #e0e0e0">
+<label style="font-size:14px;color:#666">Или вставьте ссылку на файл:</label>
+<input type="url" id="itemFileUrl" placeholder="https://disk.yandex.ru/... или https://drive.google.com/..." style="margin-top:8px">
+<p class="file-type-hint">Ссылка на Яндекс.Диск, Google Drive, Dropbox и т.д.</p>
+</div>
+</div>
 <button type="submit">Сохранить</button>
 </form>
 </div>
@@ -318,13 +341,13 @@ function loadCarts(){
   list.innerHTML=keys.map(email=>{const c=ac[email].items||ac[email];const total=c.reduce((s,i)=>s+(i.price||0),0);return `<div class="cart-card"><div class="cart-user-name">👤 ${ac[email].userName||'Гость'} (${email})</div><div style="margin-bottom:10px"><strong>Товаров: ${c.length}</strong></div>${c.map(i=>`<div class="cart-item-row"><span>${i.name} ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</span><span>${i.price}₽</span></div>`).join('')}<div style="margin-top:10px;font-weight:bold;font-size:16px;color:#667eea">Итого: ${total}₽</div></div>`}).join('')
 }
 
-function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';document.getElementById('notificationEmail').value=p.notificationEmail||'';if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR-код:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
+function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';document.getElementById('notificationEmail').value=p.notificationEmail||'';if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
 
 document.getElementById('cardRequisitesForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.cardHolder=document.getElementById('cardHolder').value;p.cardNumber=document.getElementById('cardNumber').value;p.cardBank=document.getElementById('cardBank').value;localStorage.setItem('paymentSettings',JSON.stringify(p));alert('✅ Реквизиты сохранены!')});
 
 document.getElementById('qrInput').addEventListener('change',e=>{if(e.target.files[0]){const reader=new FileReader();reader.onload=ev=>{selectedQrFile=ev.target.result;document.getElementById('qrPreview').innerHTML=`<img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('saveQrBtn').classList.remove('hidden')};reader.readAsDataURL(e.target.files[0])}});
 
-document.getElementById('saveQrBtn').addEventListener('click',()=>{if(selectedQrFile){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.qrCode=selectedQrFile;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR-код:</strong></p><img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden');document.getElementById('saveQrBtn').classList.add('hidden');document.getElementById('qrPreview').innerHTML='';selectedQrFile=null;alert('✅ QR сохранён!')}});
+document.getElementById('saveQrBtn').addEventListener('click',()=>{if(selectedQrFile){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.qrCode=selectedQrFile;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden');document.getElementById('saveQrBtn').classList.add('hidden');document.getElementById('qrPreview').innerHTML='';selectedQrFile=null;alert('✅ QR сохранён!')}});
 
 document.getElementById('removeQrBtn').addEventListener('click',()=>{if(confirm('Удалить QR?')){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');delete p.qrCode;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML='';document.getElementById('removeQrBtn').classList.add('hidden');alert('QR удалён')}});
 
@@ -364,12 +387,17 @@ function openAddItemModal(c,fi){
   selectedFile=null;
   document.getElementById('itemType').value='digital'
 }
-function closeItemModal(){document.getElementById('itemModal').classList.remove('active');document.getElementById('itemForm').reset();document.getElementById('fileList').innerHTML='';selectedFile=null;editingItemId=null}
+function closeItemModal(){document.getElementById('itemModal').classList.remove('active');document.getElementById('itemForm').reset();document.getElementById('fileList').innerHTML='';document.getElementById('itemFileUrl').value='';selectedFile=null;editingItemId=null}
 
 function handleFileSelect(event){
   if(event.target.files[0]){
     const file=event.target.files[0];
-    if(file.size>5*1024*1024){alert('⚠️ Файл слишком большой! Максимум 5 МБ. Сожмите файл или используйте ссылку.');event.target.value='';return}
+    const maxSize=5*1024*1024;
+    if(file.size>maxSize){
+      alert('⚠️ Файл больше 5 МБ!\n\nДля больших файлов используйте ссылку (Яндекс.Диск, Google Drive).\nРазмер файла: '+(file.size/1024/1024).toFixed(2)+' МБ');
+      event.target.value='';
+      return
+    }
     const reader=new FileReader();
     reader.onload=e=>{
       selectedFile={name:file.name,data:e.target.result,size:file.size,type:file.type};
@@ -387,11 +415,15 @@ document.getElementById('itemForm').addEventListener('submit',e=>{
   const folder=cat[currentCategory][editingItemId];
   if(!folder.items)folder.items=[];
   const it=document.getElementById('itemType').value;
-  if((it==='digital'||it==='video'||it==='audio')&&!selectedFile){if(!confirm('⚠️ Файл не прикреплён. Сохранить без файла?'))return}
-  folder.items.push({id:Date.now(),name:document.getElementById('itemName').value,description:document.getElementById('itemDescription').value,price:parseFloat(document.getElementById('itemPrice').value),itemType:it,file:selectedFile||null});
+  const fileUrl=document.getElementById('itemFileUrl').value.trim();
+  if(!selectedFile&&!fileUrl){if(!confirm('⚠️ Ни файл, ни ссылка не указаны. Сохранить?'))return}
+  const itemData={id:Date.now(),name:document.getElementById('itemName').value,description:document.getElementById('itemDescription').value,price:parseFloat(document.getElementById('itemPrice').value),itemType:it};
+  if(selectedFile){itemData.file=selectedFile}
+  if(fileUrl){itemData.fileUrl=fileUrl}
+  folder.items.push(itemData);
   localStorage.setItem('catalogData',JSON.stringify(cat));
   closeItemModal();loadCatalog();loadDashboard();
-  alert('✅ Товар добавлен! Тип: '+(it==='digital'?'📥 Скачивание':it==='video'?'🎬 Видео':it==='audio'?'🎵 Аудио':'📦 Доставка'))
+  alert('✅ Товар добавлен! Тип: '+(it==='digital'?'📥':it==='video'?'🎬':it==='audio'?'🎵':'📦'))
 });
 
 function editItem(c,fi,ii){
@@ -402,6 +434,7 @@ function editItem(c,fi,ii){
   document.getElementById('itemDescription').value=item.description||'';
   document.getElementById('itemPrice').value=item.price;
   document.getElementById('itemType').value=item.itemType||'digital';
+  document.getElementById('itemFileUrl').value=item.fileUrl||'';
   if(item.file){selectedFile=item.file;document.getElementById('fileList').innerHTML=`<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`}
   document.getElementById('itemModal').classList.add('active')
 }
@@ -416,7 +449,7 @@ function loadOrders(){
     let statusClass='status-new',statusText='⏳ Ожидает';
     if(o.paid){statusClass='status-completed';statusText='✅ Оплачен'}
     else if(o.status==='pending_receipt'){statusClass='status-pending';statusText='📎 Чек на проверке'}
-    return `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${statusClass}">${statusText}</span></div><p><strong>Клиент:</strong> ${o.customerName} | <strong>Email:</strong> ${o.email} | <strong>Тел:</strong> ${o.phone}</p><p><strong>Тип:</strong> ${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | <strong>Оплата:</strong> ${o.payment}</p>${o.orderType==='physical'?`<p><strong>Адрес:</strong> ${o.address} | <strong>Доставка:</strong> ${o.delivery}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${i.name} (${i.price}₽) ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽</p>${o.receipt?`<div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;border:2px solid #4CAF50"><strong style="color:#4CAF50">📎 Чек прикреплён:</strong><br><img src="${o.receipt}" class="receipt-thumb" onclick="viewReceipt('${o.receipt}',${o.id})" title="Нажмите для увеличения"><br><button class="btn-small btn-edit" onclick="confirmByReceipt(${o.id})" style="margin-top:10px">✅ Подтвердить по чеку (открыть доступ к файлам)</button></div>`:'<p style="color:#999;font-size:12px;margin-top:5px">📭 Чек не прикреплён</p>'}${!o.paid?`<button class="btn-small btn-edit" onclick="markAsPaid(${o.id})" style="margin-top:10px">✅ Отметить оплаченным вручную</button>`:''}</div>`
+    return `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${statusClass}">${statusText}</span></div><p><strong>Клиент:</strong> ${o.customerName} | <strong>Email:</strong> ${o.email} | <strong>Тел:</strong> ${o.phone}</p><p><strong>Тип:</strong> ${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | <strong>Оплата:</strong> ${o.payment}</p>${o.orderType==='physical'?`<p><strong>Адрес:</strong> ${o.address} | <strong>Доставка:</strong> ${o.delivery}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${i.name} (${i.price}₽) ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽</p>${o.receipt?`<div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;border:2px solid #4CAF50"><strong style="color:#4CAF50">📎 Чек:</strong><br><img src="${o.receipt}" class="receipt-thumb" onclick="viewReceipt('${o.receipt}',${o.id})" title="Нажмите для увеличения"><br><button class="btn-small btn-edit" onclick="confirmByReceipt(${o.id})" style="margin-top:10px">✅ Подтвердить по чеку (открыть доступ)</button></div>`:'<p style="color:#999;font-size:12px;margin-top:5px">📭 Чек не прикреплён</p>'}${!o.paid?`<button class="btn-small btn-edit" onclick="markAsPaid(${o.id})" style="margin-top:10px">✅ Отметить оплаченным</button>`:''}</div>`
   }).join('')
 }
 
@@ -432,7 +465,7 @@ function viewReceipt(receiptData,orderId){
 }
 
 function confirmByReceipt(orderId){
-  if(!confirm('Подтвердить оплату заказа #'+orderId+' по чеку? После этого покупатель получит доступ к файлам.'))return;
+  if(!confirm('Подтвердить оплату заказа #'+orderId+' по чеку? Покупатель получит доступ к файлам.'))return;
   const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
   const order=orders.find(o=>o.id===orderId);
   if(order){
@@ -451,7 +484,7 @@ function confirmByReceipt(orderId){
     });
     localStorage.setItem('ordersData',JSON.stringify(orders));
     loadOrders();loadDashboard();loadUsers();loadRegisteredUsers();
-    alert('✅ Заказ #'+orderId+' подтверждён по чеку! Покупатель получил доступ к файлам.')
+    alert('✅ Заказ #'+orderId+' подтверждён! Покупатель получил доступ к файлам.')
   }
 }
 
@@ -476,7 +509,7 @@ function markAsPaid(orderId){
 function loadQuestions(){
   const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');
   const list=document.getElementById('questionsList');
-  if(questions.length===0){list.innerHTML='<p style="color:#999;text-align:center;padding:30px">Вопросов пока нет</p>';return}
+  if(questions.length===0){list.innerHTML='<p style="color:#999;text-align:center;padding:30px">Вопросов нет</p>';return}
   const typeNames={product:'❓ Продукт',download:'⬇️ Скачивание',payment:'💳 Оплата',bug:'🐛 Ошибка',other:'💬 Другое'};
   list.innerHTML=questions.slice().reverse().map((q,idx)=>{
     const realIdx=questions.length-1-idx;
@@ -487,7 +520,7 @@ function loadQuestions(){
 function answerQuestion(idx){
   const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');
   const q=questions[idx];
-  const answer=prompt('Ваш ответ для '+q.name+' ('+q.email+'):',q.answer||'');
+  const answer=prompt('Ответ для '+q.name+' ('+q.email+'):',q.answer||'');
   if(answer!==null){q.answer=answer;q.answered=true;q.answerDate=new Date().toISOString();localStorage.setItem('questionsData',JSON.stringify(questions));loadQuestions();loadDashboard();alert('✅ Ответ сохранён!')}
 }
 
