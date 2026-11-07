@@ -50,17 +50,19 @@ button:hover{transform:translateY(-2px)}
 .btn-small{padding:6px 12px;font-size:12px;width:auto}
 .btn-edit{background:#4CAF50}
 .btn-delete{background:#f44336}
-.order-card,.message-card,.user-card,.cart-card{background:#f9f9f9;border-radius:10px;padding:15px;margin-bottom:15px}
-.user-card{border-left:4px solid #667eea}
-.user-card.paid{border-left-color:#4CAF50}
-.user-card.unpaid{border-left-color:#ff9800}
-.user-name{font-weight:600;margin-bottom:8px;color:#667eea}
-.user-stat{display:flex;justify-content:space-between;margin:5px 0;font-size:14px}
+.btn-confirm{background:#2196F3}
+.order-card,.message-card,.user-card,.cart-card,.receipt-card{background:#f9f9f9;border-radius:10px;padding:15px;margin-bottom:15px}
+.user-card,.receipt-card{border-left:4px solid #667eea}
+.user-card.paid,.receipt-card.confirmed{border-left-color:#4CAF50}
+.user-card.unpaid,.receipt-card.pending{border-left-color:#ff9800}
+.user-name,.receipt-number{font-weight:600;margin-bottom:8px;color:#667eea}
+.user-stat,.receipt-stat{display:flex;justify-content:space-between;margin:5px 0;font-size:14px}
 .order-header{display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px}
 .order-id{font-weight:600;color:#667eea}
 .order-status{padding:4px 12px;border-radius:20px;font-size:12px}
 .status-new{background:#ff9800;color:#fff}
 .status-completed{background:#4CAF50;color:#fff}
+.status-pending{background:#ff9800;color:#fff}
 .message-from{font-weight:600;margin-bottom:5px}
 .message-date{color:#999;font-size:12px;margin-bottom:10px}
 .message-text{color:#333;line-height:1.5}
@@ -106,6 +108,7 @@ button:hover{transform:translateY(-2px)}
 <div id="adminPanel" class="admin-panel hidden">
 <div class="tabs">
 <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
+<button class="tab" data-tab="receipts">🧾 Чеки</button>
 <button class="tab" data-tab="registered">📝 Зарегистрированные</button>
 <button class="tab" data-tab="users">👥 Пользователи</button>
 <button class="tab" data-tab="carts">🛒 Корзины</button>
@@ -129,21 +132,26 @@ button:hover{transform:translateY(-2px)}
 <div class="stat-card"><div class="stat-value" id="totalRevenue">0₽</div><div class="stat-label">Выручка</div></div>
 <div class="stat-card"><div class="stat-value" id="paidOrders">0</div><div class="stat-label">Оплачено</div></div>
 <div class="stat-card"><div class="stat-value" id="unpaidOrders">0</div><div class="stat-label">Ожидают</div></div>
+<div class="stat-card"><div class="stat-value" id="pendingReceipts">0</div><div class="stat-label">Чеков ждут</div></div>
 <div class="stat-card"><div class="stat-value" id="totalItems">0</div><div class="stat-label">Материалов</div></div>
 <div class="stat-card"><div class="stat-value" id="totalFolders">0</div><div class="stat-label">Папок</div></div>
 <div class="stat-card"><div class="stat-value" id="totalRegistered">0</div><div class="stat-label">Зарегистрировано</div></div>
 </div>
 </div>
 
+<div id="receipts" class="tab-content">
+<h2>🧾 Чеки оплаты</h2>
+<p style="color:#666;margin-bottom:20px">Подтверждайте чеки после проверки оплаты. После подтверждения покупатель сможет скачать файл 1 раз.</p>
+<div id="receiptsList"></div>
+</div>
+
 <div id="registered" class="tab-content">
 <h2>📝 Зарегистрированные пользователи</h2>
-<p style="color:#666;margin-bottom:20px">Все кто зарегистрировался на сайте</p>
 <div id="registeredList"></div>
 </div>
 
 <div id="users" class="tab-content">
 <h2>👥 Пользователи и оплаты</h2>
-<p style="color:#666;margin-bottom:20px">Пользователи с заказами</p>
 <div id="usersList"></div>
 </div>
 
@@ -154,7 +162,6 @@ button:hover{transform:translateY(-2px)}
 
 <div id="payment" class="tab-content">
 <h2>💳 Реквизиты для оплаты</h2>
-<p style="color:#666;margin-bottom:20px">Укажите реквизиты — они будут показываться покупателям</p>
 <div class="payment-settings-box">
 <h3>💳 Реквизиты карты</h3>
 <form id="cardRequisitesForm">
@@ -175,13 +182,6 @@ button:hover{transform:translateY(-2px)}
 <div id="currentQrDisplay" style="margin-top:15px"></div>
 <button id="saveQrBtn" class="hidden" style="margin-top:15px">💾 Сохранить QR</button>
 <button id="removeQrBtn" class="btn-secondary hidden" style="margin-top:10px">🗑 Удалить QR</button>
-</div>
-<div class="payment-settings-box">
-<h3>📧 Email для уведомлений</h3>
-<form id="notificationEmailForm">
-<div class="form-group"><label>Email</label><input type="email" id="notificationEmail" placeholder="your@email.com"></div>
-<button type="submit">💾 Сохранить</button>
-</form>
 </div>
 </div>
 
@@ -229,10 +229,6 @@ button:hover{transform:translateY(-2px)}
 <div class="form-group"><label>Часы</label><input type="text" id="contactHours"></div>
 <button type="submit">💾 Сохранить</button>
 </form>
-<h3 style="margin-top:30px">💾 Резервная копия</h3>
-<button onclick="downloadBackup()">⬇️ Скачать</button>
-<button onclick="document.getElementById('restoreBackupInput').click()" class="btn-secondary">⬆️ Восстановить</button>
-<input type="file" id="restoreBackupInput" accept=".json" style="display:none" onchange="restoreBackup(event)">
 <h3 style="margin-top:30px">💾 Данные</h3>
 <button onclick="resetAllData()" style="background:#f44336">🗑 Сброс</button>
 <button onclick="logout()" class="btn-secondary">🚪 Выйти</button>
@@ -269,7 +265,7 @@ button:hover{transform:translateY(-2px)}
 <script>
 let currentCategory='',editingItemId=null,selectedFile=null,selectedQrFile=null;
 
-function init(){const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(!ad.password){document.getElementById('loginSection').classList.add('hidden');document.getElementById('setupSection').classList.remove('hidden')}loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadBackground();loadCatalog();loadOrders();loadMessages();loadContacts();window.addEventListener('storage',e=>{if(e.key==='catalogData'||e.key==='ordersData'||e.key==='purchasedItems'||e.key==='cart'||e.key==='registeredUsers'){loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadCatalog();loadOrders()}});setInterval(()=>{loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadOrders()},5000)}
+function init(){const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(!ad.password){document.getElementById('loginSection').classList.add('hidden');document.getElementById('setupSection').classList.remove('hidden')}loadDashboard();loadReceipts();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadBackground();loadCatalog();loadOrders();loadMessages();loadContacts();window.addEventListener('storage',e=>{if(['catalogData','ordersData','purchasedItems','cart','registeredUsers','receiptsData'].includes(e.key)){loadDashboard();loadReceipts();loadRegisteredUsers();loadUsers();loadCarts();loadCatalog();loadOrders()}});setInterval(()=>{loadDashboard();loadReceipts();loadRegisteredUsers();loadUsers();loadCarts();loadOrders()},5000)}
 
 document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('username').value==='admin'&&document.getElementById('password').value===ad.password){document.getElementById('loginSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')}else{alert('Неверный логин или пароль')}});
 
@@ -277,7 +273,33 @@ document.getElementById('setupForm').addEventListener('submit',e=>{e.preventDefa
 
 document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.tab).classList.add('active')})});
 
-function loadDashboard(){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const ru=JSON.parse(localStorage.getItem('registeredUsers')||'[]');let ti=0,tf=0,pc=0,uc=0,tr=0;Object.values(cat).forEach(c=>{tf+=c.length;c.forEach(f=>{ti+=(f.items||[]).length})});orders.forEach(o=>{if(o.paid){pc++;tr+=o.total}else{uc++}});document.getElementById('totalOrders').textContent=orders.length;document.getElementById('totalRevenue').textContent=tr+'₽';document.getElementById('paidOrders').textContent=pc;document.getElementById('unpaidOrders').textContent=uc;document.getElementById('totalItems').textContent=ti;document.getElementById('totalFolders').textContent=tf;const el=document.getElementById('totalRegistered');if(el)el.textContent=ru.length}
+function loadDashboard(){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');const ru=JSON.parse(localStorage.getItem('registeredUsers')||'[]');const receipts=JSON.parse(localStorage.getItem('receiptsData')||'[]');let ti=0,tf=0,pc=0,uc=0,tr=0,pr=0;Object.values(cat).forEach(c=>{tf+=c.length;c.forEach(f=>{ti+=(f.items||[]).length})});orders.forEach(o=>{if(o.paid){pc++;tr+=o.total}else{uc++}});receipts.forEach(r=>{if(r.status==='pending')pr++});document.getElementById('totalOrders').textContent=orders.length;document.getElementById('totalRevenue').textContent=tr+'₽';document.getElementById('paidOrders').textContent=pc;document.getElementById('unpaidOrders').textContent=uc;document.getElementById('pendingReceipts').textContent=pr;document.getElementById('totalItems').textContent=ti;document.getElementById('totalFolders').textContent=tf;const el=document.getElementById('totalRegistered');if(el)el.textContent=ru.length}
+
+function loadReceipts(){const receipts=JSON.parse(localStorage.getItem('receiptsData')||'[]').reverse();const list=document.getElementById('receiptsList');if(receipts.length===0){list.innerHTML='<p style="color:#999;text-align:center;padding:30px">Чеков нет</p>';return}list.innerHTML=receipts.map(r=>`<div class="receipt-card ${r.status==='confirmed'?'confirmed':'pending'}">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px">
+<span class="receipt-number">🧾 Чек № ${r.id}</span>
+<span class="order-status ${r.status==='confirmed'?'status-completed':'status-pending'}">${r.status==='confirmed'?'✅ ПОДТВЕРЖДЁН':'⏳ ОЖИДАЕТ'}</span>
+</div>
+<div class="receipt-stat"><span>👤 Покупатель:</span><span>${r.customerName}</span></div>
+<div class="receipt-stat"><span>📧 Email:</span><span>${r.email}</span></div>
+<div class="receipt-stat"><span>📞 Телефон:</span><span>${r.phone}</span></div>
+<div class="receipt-stat"><span>💳 Оплата:</span><span>${r.payment}</span></div>
+<div class="receipt-stat"><span>📅 Создан:</span><span>${new Date(r.createdDate).toLocaleString('ru-RU')}</span></div>
+${r.confirmedDate?`<div class="receipt-stat"><span>✅ Подтверждён:</span><span>${new Date(r.confirmedDate).toLocaleString('ru-RU')}</span></div>`:''}
+<hr style="margin:10px 0;border:none;border-top:1px dashed #ccc">
+<div style="margin:10px 0"><strong>Товары:</strong>
+${r.items.map(i=>`<div style="font-size:13px;padding:3px 0">${i.name} — ${i.price}₽ ${i.itemType==='physical'?'📦':'📥'}</div>`).join('')}
+</div>
+<div class="receipt-stat" style="font-size:18px;font-weight:bold;color:#4CAF50"><span>💰 Итого:</span><span>${r.total}₽</span></div>
+${r.status==='pending'?`<div style="margin-top:15px;display:flex;gap:10px">
+<button class="btn-small btn-confirm" onclick="confirmReceipt('${r.id}')" style="flex:1">✅ Подтвердить чек (разрешить скачивание)</button>
+<button class="btn-small btn-delete" onclick="rejectReceipt('${r.id}')" style="flex:1">❌ Отклонить</button>
+</div>`:`<p style="margin-top:10px;color:#2e7d32;font-size:13px">✅ Покупатель может скачать файлы (1 раз)</p>`}
+</div>`).join('')}
+
+function confirmReceipt(receiptId){if(!confirm('Подтвердить чек №'+receiptId+'?\n\nПосле этого покупатель сможет скачать файлы (только 1 раз).'))return;const receipts=JSON.parse(localStorage.getItem('receiptsData')||'[]');const r=receipts.find(x=>x.id===receiptId);if(!r)return;r.status='confirmed';r.confirmedDate=new Date().toISOString();const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const order=orders.find(o=>o.id===r.orderId);if(order){order.paid=true;order.confirmed=true;order.paymentDate=r.confirmedDate}r.items.forEach(item=>{if(item.itemType==='digital'){const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');if(!pi.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){pi.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:r.orderId,receiptId:r.id,purchaseDate:r.confirmedDate,downloaded:false})}localStorage.setItem('purchasedItems',JSON.stringify(pi))}});localStorage.setItem('receiptsData',JSON.stringify(receipts));localStorage.setItem('ordersData',JSON.stringify(orders));loadDashboard();loadReceipts();loadOrders();alert('✅ Чек '+receiptId+' подтверждён! Покупатель может скачать файлы.');}
+
+function rejectReceipt(receiptId){if(!confirm('Отклонить чек №'+receiptId+'?'))return;const receipts=JSON.parse(localStorage.getItem('receiptsData')||'[]');const r=receipts.find(x=>x.id===receiptId);if(r){r.status='rejected';r.rejectedDate=new Date().toISOString();localStorage.setItem('receiptsData',JSON.stringify(receipts));loadDashboard();loadReceipts();alert('Чек отклонён')}}
 
 function loadRegisteredUsers(){const users=JSON.parse(localStorage.getItem('registeredUsers')||'[]');const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const list=document.getElementById('registeredList');if(users.length===0){list.innerHTML='<p style="color:#999;text-align:center;padding:30px">Нет зарегистрированных</p>';return}list.innerHTML=users.map(u=>{const uo=orders.filter(o=>o.email===u.email);const ts=uo.reduce((s,o)=>s+o.total,0);const po=uo.filter(o=>o.paid).length;return `<div class="user-card ${po>0?'paid':'unpaid'}"><div class="user-name">👤 ${u.name}</div><div class="user-stat"><span>📧 Email:</span><span>${u.email}</span></div><div class="user-stat"><span>📞 Телефон:</span><span>${u.phone||'—'}</span></div><div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(u.registerDate).toLocaleString('ru-RU')}</span></div><div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(u.lastLogin).toLocaleString('ru-RU')}</span></div><div class="user-stat"><span>📦 Заказов:</span><span>${uo.length}</span></div><div class="user-stat"><span>✅ Оплачено:</span><span style="color:#4CAF50">${po}</span></div><div class="user-stat"><span>💰 Потрачено:</span><span>${ts}₽</span></div></div>`}).join('')}
 
@@ -285,7 +307,7 @@ function loadUsers(){const orders=JSON.parse(localStorage.getItem('ordersData')|
 
 function loadCarts(){const list=document.getElementById('cartsList');const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');const keys=Object.keys(ac);if(keys.length===0){list.innerHTML='<p style="color:#999;text-align:center">Корзины пусты</p>';return}list.innerHTML=keys.map(email=>{const cart=ac[email];const total=cart.reduce((s,i)=>s+(i.price||0),0);return `<div class="cart-card"><div class="cart-user-name">👤 ${cart.userName||'Гость'} (${email})</div><div style="margin-bottom:10px"><strong>Товаров: ${cart.length}</strong></div>${cart.map(i=>`<div class="cart-item-row"><span>${i.name} ${i.itemType==='physical'?'📦':'📥'}</span><span>${i.price}₽</span></div>`).join('')}<div style="margin-top:10px;font-weight:bold;font-size:16px;color:#667eea">Итого: ${total}₽</div></div>`}).join('')}
 
-function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';document.getElementById('notificationEmail').value=p.notificationEmail||'';if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR-код:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
+function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR-код:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
 
 document.getElementById('cardRequisitesForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.cardHolder=document.getElementById('cardHolder').value;p.cardNumber=document.getElementById('cardNumber').value;p.cardBank=document.getElementById('cardBank').value;localStorage.setItem('paymentSettings',JSON.stringify(p));alert('✅ Реквизиты сохранены!')});
 
@@ -294,8 +316,6 @@ document.getElementById('qrInput').addEventListener('change',e=>{if(e.target.fil
 document.getElementById('saveQrBtn').addEventListener('click',()=>{if(selectedQrFile){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.qrCode=selectedQrFile;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR-код:</strong></p><img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden');document.getElementById('saveQrBtn').classList.add('hidden');document.getElementById('qrPreview').innerHTML='';selectedQrFile=null;alert('✅ QR сохранён!')}});
 
 document.getElementById('removeQrBtn').addEventListener('click',()=>{if(confirm('Удалить QR?')){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');delete p.qrCode;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML='';document.getElementById('removeQrBtn').classList.add('hidden');alert('QR удалён')}});
-
-document.getElementById('notificationEmailForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.notificationEmail=document.getElementById('notificationEmail').value;localStorage.setItem('paymentSettings',JSON.stringify(p));alert('✅ Email сохранён!')});
 
 function loadBackground(){const bg=localStorage.getItem('siteBackground');if(bg){document.getElementById('currentBgText').innerHTML=`<img src="${bg}" style="max-width:200px;border-radius:10px">`;document.getElementById('removeBg').classList.remove('hidden')}}
 document.getElementById('uploadArea').addEventListener('click',()=>document.getElementById('bgImageInput').click());
@@ -323,8 +343,7 @@ document.getElementById('itemForm').addEventListener('submit',e=>{e.preventDefau
 function editItem(c,fi,ii){currentCategory=c;editingItemId=fi;const item=JSON.parse(localStorage.getItem('catalogData')||'{}')[c][fi].items[ii];document.getElementById('itemModalTitle').textContent='Редактировать';document.getElementById('itemName').value=item.name;document.getElementById('itemDescription').value=item.description||'';document.getElementById('itemPrice').value=item.price;document.getElementById('itemType').value=item.itemType||'digital';if(item.file){selectedFile=item.file;document.getElementById('fileList').innerHTML=`<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`}document.getElementById('itemModal').classList.add('active')}
 function deleteItem(c,fi,ii){if(confirm('Удалить товар?')){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');cat[c][fi].items.splice(ii,1);localStorage.setItem('catalogData',JSON.stringify(cat));loadCatalog();loadDashboard()}}
 
-function loadOrders(){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const list=document.getElementById('ordersList');if(orders.length===0){list.innerHTML='<p style="color:#999;text-align:center">Заказов нет</p>';return}list.innerHTML=orders.map((o,i)=>`<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${o.paid?'status-completed':'status-new'}">${o.paid?'✅ Оплачен':'⏳ Ожидает'}</span></div><p><strong>Клиент:</strong> ${o.customerName} | <strong>Email:</strong> ${o.email} | <strong>Тел:</strong> ${o.phone}</p><p><strong>Тип:</strong> ${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'}</p>${o.orderType==='physical'?`<p><strong>Адрес:</strong> ${o.address} | <strong>Доставка:</strong> ${o.delivery}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${i.name} (${i.price}₽) ${i.itemType==='physical'?'📦':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽ | <strong>Оплата:</strong> ${o.payment}</p>${!o.paid?`<button class="btn-small btn-edit" onclick="markAsPaid(${o.id})" style="margin-top:10px">✅ Отметить оплаченным</button>`:''}</div>`).join('')}
-function markAsPaid(orderId){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const order=orders.find(o=>o.id===orderId);if(order){order.paid=true;order.paymentDate=new Date().toISOString();order.items.forEach(item=>{if(item.itemType==='digital'){const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');if(!pi.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){pi.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})}localStorage.setItem('purchasedItems',JSON.stringify(pi))}});localStorage.setItem('ordersData',JSON.stringify(orders));loadOrders();loadDashboard();loadUsers();loadRegisteredUsers();alert('Заказ оплачен!')}}
+function loadOrders(){const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');const list=document.getElementById('ordersList');if(orders.length===0){list.innerHTML='<p style="color:#999;text-align:center">Заказов нет</p>';return}list.innerHTML=orders.map(o=>{const r=JSON.parse(localStorage.getItem('receiptsData')||'[]').find(x=>x.orderId===o.id);return `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${o.paid?'status-completed':'status-new'}">${o.paid?'✅ Оплачен':'⏳ Ожидает'}</span></div><p><strong>Клиент:</strong> ${o.customerName} | <strong>Email:</strong> ${o.email} | <strong>Тел:</strong> ${o.phone}</p>${r?`<p><strong>🧾 Чек:</strong> ${r.id} — ${r.status==='confirmed'?'✅ Подтверждён':'⏳ Ожидает'}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${i.name} (${i.price}₽) ${i.itemType==='physical'?'📦':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽ | <strong>Оплата:</strong> ${o.payment}</p></div>`}).join('')}
 
 function loadMessages(){const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');const list=document.getElementById('messagesList');if(messages.length===0){list.innerHTML='<p style="color:#999;text-align:center">Сообщений нет</p>';return}list.innerHTML=messages.map((m,i)=>`<div class="message-card"><div class="message-from">${m.name} (${m.email})</div><div class="message-date">${new Date(m.date).toLocaleString('ru-RU')}</div><div class="message-text">${m.text}</div><button class="btn-small btn-delete" style="margin-top:10px" onclick="deleteMessage(${i})">🗑 Удалить</button></div>`).join('')}
 function deleteMessage(i){if(confirm('Удалить?')){const m=JSON.parse(localStorage.getItem('messagesData')||'[]');m.splice(i,1);localStorage.setItem('messagesData',JSON.stringify(m));loadMessages()}}
@@ -332,9 +351,6 @@ function deleteMessage(i){if(confirm('Удалить?')){const m=JSON.parse(loca
 function loadContacts(){const c=JSON.parse(localStorage.getItem('siteContacts')||'{}');document.getElementById('contactEmail').value=c.email||'';document.getElementById('contactPhone').value=c.phone||'';document.getElementById('contactAddress').value=c.address||'';document.getElementById('contactHours').value=c.hours||''}
 document.getElementById('contactsForm').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem('siteContacts',JSON.stringify({email:document.getElementById('contactEmail').value,phone:document.getElementById('contactPhone').value,address:document.getElementById('contactAddress').value,hours:document.getElementById('contactHours').value}));alert('Контакты сохранены!')});
 document.getElementById('changePasswordForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('currentPassword').value!==ad.password){alert('Неверный пароль');return}const np=document.getElementById('newPasswordChange').value;if(np.length<8||!/[a-zA-Zа-яА-Я]/.test(np)||!/\d/.test(np)){alert('Мин. 8 символов, буквы+цифры');return}ad.password=np;localStorage.setItem('adminData',JSON.stringify(ad));document.getElementById('changePasswordForm').reset();alert('Пароль изменён!')});
-
-function downloadBackup(){const b={catalog:localStorage.getItem('catalogData'),orders:localStorage.getItem('ordersData'),messages:localStorage.getItem('messagesData'),contacts:localStorage.getItem('siteContacts'),background:localStorage.getItem('siteBackground'),gradient:localStorage.getItem('siteGradient'),payment:localStorage.getItem('paymentSettings'),registeredUsers:localStorage.getItem('registeredUsers'),users:localStorage.getItem('users'),date:new Date().toISOString()};const blob=new Blob([JSON.stringify(b,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`backup_${new Date().toISOString().split('T')[0]}.json`;a.click()}
-function restoreBackup(event){if(event.target.files[0]){const reader=new FileReader();reader.onload=e=>{try{const b=JSON.parse(e.target.result);if(b.catalog)localStorage.setItem('catalogData',b.catalog);if(b.orders)localStorage.setItem('ordersData',b.orders);if(b.messages)localStorage.setItem('messagesData',b.messages);if(b.contacts)localStorage.setItem('siteContacts',b.contacts);if(b.background)localStorage.setItem('siteBackground',b.background);if(b.gradient)localStorage.setItem('siteGradient',b.gradient);if(b.payment)localStorage.setItem('paymentSettings',b.payment);if(b.registeredUsers)localStorage.setItem('registeredUsers',b.registeredUsers);if(b.users)localStorage.setItem('users',b.users);loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadCatalog();loadOrders();loadMessages();loadContacts();loadBackground();alert('Восстановлено!')}catch(error){alert('Ошибка')}};reader.readAsText(event.target.files[0])}}
 
 function resetAllData(){if(confirm('Удалить все данные?')&&confirm('Точно?')){localStorage.clear();location.reload()}}
 function logout(){document.getElementById('adminPanel').classList.add('hidden');document.getElementById('loginSection').classList.remove('hidden');document.getElementById('loginForm').reset()}
