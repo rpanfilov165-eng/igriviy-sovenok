@@ -64,6 +64,9 @@ button:hover { transform: translateY(-2px); }
 .message-from { font-weight: 600; margin-bottom: 5px; }
 .message-date { color: #999; font-size: 12px; margin-bottom: 10px; }
 .message-text { color: #333; line-height: 1.5; }
+.log-entry { background: #f9f9f9; border-left: 3px solid #667eea; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+.log-time { color: #999; font-size: 12px; }
+.log-action { color: #333; margin-top: 5px; }
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal.active { display: flex; }
 .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
@@ -106,9 +109,10 @@ button:hover { transform: translateY(-2px); }
   <div id="adminPanel" class="admin-panel hidden">
     <div class="tabs">
       <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
+      <button class="tab" data-tab="registered">📝 Зарегистрированные</button>
       <button class="tab" data-tab="users">👥 Пользователи</button>
       <button class="tab" data-tab="carts">🛒 Корзины</button>
-      <button class="tab" data-tab="payment">💳 Реквизиты оплаты</button>
+      <button class="tab" data-tab="payment">💳 Реквизиты</button>
       <button class="tab" data-tab="background">🎨 Фон</button>
       <button class="tab" data-tab="catalog">📚 Каталог</button>
       <button class="tab" data-tab="worksheets">📝 Рабочие листы</button>
@@ -130,11 +134,20 @@ button:hover { transform: translateY(-2px); }
         <div class="stat-card"><div class="stat-value" id="unpaidOrders">0</div><div class="stat-label">Ожидают оплаты</div></div>
         <div class="stat-card"><div class="stat-value" id="totalItems">0</div><div class="stat-label">Материалов</div></div>
         <div class="stat-card"><div class="stat-value" id="totalFolders">0</div><div class="stat-label">Папок</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalRegistered">0</div><div class="stat-label">Зарегистрировано</div></div>
       </div>
+    </div>
+
+    <!-- НОВАЯ ВКЛАДКА: ЗАРЕГИСТРИРОВАННЫЕ -->
+    <div id="registered" class="tab-content">
+      <h2>📝 Зарегистрированные пользователи</h2>
+      <p style="color: #666; margin-bottom: 20px;">Все пользователи, которые зарегистрировались на сайте</p>
+      <div id="registeredList"></div>
     </div>
 
     <div id="users" class="tab-content">
       <h2>👥 Пользователи и оплаты</h2>
+      <p style="color: #666; margin-bottom: 20px;">Пользователи, которые сделали заказы</p>
       <div id="usersList"></div>
     </div>
 
@@ -143,7 +156,6 @@ button:hover { transform: translateY(-2px); }
       <div id="cartsList"></div>
     </div>
 
-    <!-- НОВАЯ ВКЛАДКА: РЕКВИЗИТЫ ОПЛАТЫ -->
     <div id="payment" class="tab-content">
       <h2>💳 Реквизиты для оплаты</h2>
       <p style="color: #666; margin-bottom: 20px;">Здесь вы указываете свои реквизиты. Они будут показываться покупателям при оформлении заказа.</p>
@@ -169,7 +181,7 @@ button:hover { transform: translateY(-2px); }
 
       <div class="payment-settings-box">
         <h3>📱 QR-код для СБП</h3>
-        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Загрузите QR-код из вашего банковского приложения. Покупатели будут сканировать его для оплаты.</p>
+        <p style="color: #666; margin-bottom: 15px; font-size: 14px;">Загрузите QR-код из вашего банковского приложения.</p>
         <div class="upload-area" id="qrUploadArea" onclick="document.getElementById('qrInput').click()">
           <p>📤 Нажмите для загрузки QR-кода</p>
           <input type="file" id="qrInput" accept="image/*" style="display: none;">
@@ -184,7 +196,7 @@ button:hover { transform: translateY(-2px); }
         <h3>📧 Email для уведомлений</h3>
         <form id="notificationEmailForm">
           <div class="form-group">
-            <label>Email, на который будут приходить уведомления о заказах</label>
+            <label>Email для уведомлений о заказах</label>
             <input type="email" id="notificationEmail" placeholder="your@email.com">
           </div>
           <button type="submit">💾 Сохранить email</button>
@@ -278,12 +290,12 @@ button:hover { transform: translateY(-2px); }
       <div class="form-group">
         <label>Тип товара</label>
         <select id="itemType" required>
-          <option value="digital">📥 Цифровой (скачивание файла)</option>
+          <option value="digital">📥 Цифровой (скачивание)</option>
           <option value="physical">📦 Физический (доставка)</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Файл для скачивания (только для цифровых)</label>
+        <label>Файл (только для цифровых)</label>
         <div class="file-upload" onclick="document.getElementById('itemFileInput').click()"><p>📎 Нажмите для выбора файла</p><input type="file" id="itemFileInput" style="display: none;" onchange="handleFileSelect(event)"></div>
         <div id="fileList" class="file-list"></div>
       </div>
@@ -309,6 +321,7 @@ function init() {
     document.getElementById('setupSection').classList.remove('hidden');
   }
   loadDashboard();
+  loadRegisteredUsers();
   loadUsers();
   loadCarts();
   loadPaymentSettings();
@@ -318,11 +331,11 @@ function init() {
   loadMessages();
   loadContacts();
   window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems' || e.key === 'cart') {
-      loadDashboard(); loadUsers(); loadCarts(); loadCatalog(); loadOrders();
+    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems' || e.key === 'cart' || e.key === 'registeredUsers') {
+      loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadCatalog(); loadOrders();
     }
   });
-  setInterval(() => { loadDashboard(); loadUsers(); loadCarts(); loadOrders(); }, 5000);
+  setInterval(() => { loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadOrders(); }, 5000);
 }
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -356,6 +369,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 function loadDashboard() {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
+  const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   let totalItems = 0, totalFolders = 0, paidCount = 0, unpaidCount = 0, totalRevenue = 0;
   Object.values(catalog).forEach(category => {
     totalFolders += category.length;
@@ -370,24 +384,102 @@ function loadDashboard() {
   document.getElementById('unpaidOrders').textContent = unpaidCount;
   document.getElementById('totalItems').textContent = totalItems;
   document.getElementById('totalFolders').textContent = totalFolders;
+  document.getElementById('totalRegistered').textContent = registeredUsers.length;
+}
+
+// НОВАЯ ФУНКЦИЯ: Загрузка зарегистрированных пользователей
+function loadRegisteredUsers() {
+  const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
+  const list = document.getElementById('registeredList');
+  
+  if (users.length === 0) {
+    list.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">Зарегистрированных пользователей пока нет</p>';
+    return;
+  }
+  
+  list.innerHTML = users.map(user => {
+    const userOrders = orders.filter(o => o.email === user.email);
+    const totalSpent = userOrders.reduce((sum, o) => sum + o.total, 0);
+    const paidOrders = userOrders.filter(o => o.paid).length;
+    
+    return `
+      <div class="user-card ${paidOrders > 0 ? 'paid' : 'unpaid'}">
+        <div class="user-name">👤 ${user.name}</div>
+        <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
+        <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
+        <div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>
+        <div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>
+        <div class="user-stat"><span>📦 Заказов:</span><span>${userOrders.length}</span></div>
+        <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${paidOrders}</span></div>
+        <div class="user-stat"><span>💰 Потрачено:</span><span>${totalSpent}₽</span></div>
+      </div>
+    `;
+  }).join('');
 }
 
 function loadUsers() {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
+  const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   const usersList = document.getElementById('usersList');
   const users = {};
-  orders.forEach(order => {
-    if (!users[order.email]) users[order.email] = { name: order.customerName, email: order.email, phone: order.phone, orders: 0, paid: 0, unpaid: 0, totalSpent: 0, items: [] };
-    users[order.email].orders++;
-    if (order.paid) { users[order.email].paid++; users[order.email].totalSpent += order.total; } else { users[order.email].unpaid++; }
-    order.items.forEach(item => { users[order.email].items.push(item.name + (item.itemType === 'physical' ? ' 📦' : ' 📥')); });
+  
+  // Добавляем всех зарегистрированных
+  registeredUsers.forEach(user => {
+    if (!users[user.email]) {
+      users[user.email] = { 
+        name: user.name, 
+        email: user.email, 
+        phone: user.phone, 
+        orders: 0, 
+        paid: 0, 
+        unpaid: 0, 
+        totalSpent: 0, 
+        items: [],
+        registerDate: user.registerDate,
+        lastLogin: user.lastLogin
+      };
+    }
   });
-  if (Object.keys(users).length === 0) { usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; return; }
+  
+  // Добавляем данные из заказов
+  orders.forEach(order => {
+    if (!users[order.email]) {
+      users[order.email] = { 
+        name: order.customerName, 
+        email: order.email, 
+        phone: order.phone, 
+        orders: 0, 
+        paid: 0, 
+        unpaid: 0, 
+        totalSpent: 0, 
+        items: []
+      };
+    }
+    users[order.email].orders++;
+    if (order.paid) { 
+      users[order.email].paid++; 
+      users[order.email].totalSpent += order.total; 
+    } else { 
+      users[order.email].unpaid++; 
+    }
+    order.items.forEach(item => { 
+      users[order.email].items.push(item.name + (item.itemType === 'physical' ? ' 📦' : ' 📥')); 
+    });
+  });
+  
+  if (Object.keys(users).length === 0) { 
+    usersList.innerHTML = '<p style="color: #999; text-align: center;">Пользователей пока нет</p>'; 
+    return; 
+  }
+  
   usersList.innerHTML = Object.values(users).map(user => `
     <div class="user-card ${user.paid > 0 ? 'paid' : 'unpaid'}">
       <div class="user-name">👤 ${user.name}</div>
       <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
-      <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone}</span></div>
+      <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone || 'Не указан'}</span></div>
+      ${user.registerDate ? `<div class="user-stat"><span>📅 Регистрация:</span><span>${new Date(user.registerDate).toLocaleString('ru-RU')}</span></div>` : ''}
+      ${user.lastLogin ? `<div class="user-stat"><span>🕐 Последний вход:</span><span>${new Date(user.lastLogin).toLocaleString('ru-RU')}</span></div>` : ''}
       <div class="user-stat"><span>📦 Заказов:</span><span>${user.orders}</span></div>
       <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${user.paid}</span></div>
       <div class="user-stat"><span>⏳ Ожидают:</span><span style="color: #ff9800;">${user.unpaid}</span></div>
@@ -416,7 +508,6 @@ function loadCarts() {
   }).join('');
 }
 
-// ЗАГРУЗКА РЕКВИЗИТОВ ОПЛАТЫ
 function loadPaymentSettings() {
   const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
   document.getElementById('cardHolder').value = payment.cardHolder || '';
@@ -433,7 +524,6 @@ function loadPaymentSettings() {
   }
 }
 
-// СОХРАНЕНИЕ РЕКВИЗИТОВ КАРТЫ
 document.getElementById('cardRequisitesForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
@@ -441,10 +531,9 @@ document.getElementById('cardRequisitesForm').addEventListener('submit', (e) => 
   payment.cardNumber = document.getElementById('cardNumber').value;
   payment.cardBank = document.getElementById('cardBank').value;
   localStorage.setItem('paymentSettings', JSON.stringify(payment));
-  alert('✅ Реквизиты карты сохранены! Теперь они будут показываться покупателям.');
+  alert('✅ Реквизиты карты сохранены!');
 });
 
-// ЗАГРУЗКА QR-КОДА
 document.getElementById('qrInput').addEventListener('change', (e) => {
   if (e.target.files[0]) {
     const reader = new FileReader();
@@ -457,7 +546,6 @@ document.getElementById('qrInput').addEventListener('change', (e) => {
   }
 });
 
-// СОХРАНЕНИЕ QR-КОДА
 document.getElementById('saveQrBtn').addEventListener('click', () => {
   if (selectedQrFile) {
     const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
@@ -468,11 +556,10 @@ document.getElementById('saveQrBtn').addEventListener('click', () => {
     document.getElementById('saveQrBtn').classList.add('hidden');
     document.getElementById('qrPreview').innerHTML = '';
     selectedQrFile = null;
-    alert('✅ QR-код сохранён! Теперь покупатели будут видеть его при оплате через СБП.');
+    alert('✅ QR-код сохранён!');
   }
 });
 
-// УДАЛЕНИЕ QR-КОДА
 document.getElementById('removeQrBtn').addEventListener('click', () => {
   if (confirm('Удалить QR-код?')) {
     const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
@@ -484,13 +571,12 @@ document.getElementById('removeQrBtn').addEventListener('click', () => {
   }
 });
 
-// СОХРАНЕНИЕ EMAIL ДЛЯ УВЕДОМЛЕНИЙ
 document.getElementById('notificationEmailForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const payment = JSON.parse(localStorage.getItem('paymentSettings') || '{}');
   payment.notificationEmail = document.getElementById('notificationEmail').value;
   localStorage.setItem('paymentSettings', JSON.stringify(payment));
-  alert('✅ Email для уведомлений сохранён!');
+  alert('✅ Email сохранён!');
 });
 
 function loadBackground() {
@@ -587,7 +673,7 @@ document.getElementById('itemForm').addEventListener('submit', (e) => {
   const itemType = document.getElementById('itemType').value;
   folder.items.push({ id: Date.now(), name: document.getElementById('itemName').value, description: document.getElementById('itemDescription').value, price: parseFloat(document.getElementById('itemPrice').value), itemType: itemType, file: itemType === 'digital' ? selectedFile : null });
   localStorage.setItem('catalogData', JSON.stringify(catalog));
-  closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен! Тип: ' + (itemType === 'digital' ? '📥 Скачивание' : '📦 Доставка'));
+  closeItemModal(); loadCatalog(); loadDashboard(); alert('Товар добавлен!');
 });
 function editItem(category, fi, ii) {
   currentCategory = category; editingItemId = fi;
@@ -617,7 +703,7 @@ function loadOrders() {
     <div class="order-card">
       <div class="order-header"><span class="order-id">Заказ #${order.id}</span><span class="order-status ${order.paid ? 'status-completed' : 'status-new'}">${order.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span></div>
       <p><strong>Клиент:</strong> ${order.customerName} | <strong>Email:</strong> ${order.email} | <strong>Телефон:</strong> ${order.phone}</p>
-      <p><strong>Тип заказа:</strong> ${order.orderType === 'digital' ? '📥 Только скачивание' : '📦 С доставкой'}</p>
+      <p><strong>Тип:</strong> ${order.orderType === 'digital' ? '📥 Скачивание' : '📦 Доставка'}</p>
       ${order.orderType === 'physical' ? `<p><strong>Адрес:</strong> ${order.address} | <strong>Доставка:</strong> ${order.delivery}</p>` : ''}
       <p><strong>Товары:</strong> ${order.items.map(item => `${item.name} (${item.price}₽) ${item.itemType === 'physical' ? '📦' : '📥'}`).join(', ')}</p>
       <p><strong>Итого:</strong> ${order.total}₽ | <strong>Оплата:</strong> ${order.payment}</p>
@@ -640,7 +726,7 @@ function markAsPaid(orderId) {
       }
     });
     localStorage.setItem('ordersData', JSON.stringify(orders));
-    loadOrders(); loadDashboard(); loadUsers(); alert('Заказ отмечен как оплаченный!');
+    loadOrders(); loadDashboard(); loadUsers(); loadRegisteredUsers(); alert('Заказ отмечен как оплаченный!');
   }
 }
 
@@ -684,7 +770,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', (e) => 
 });
 
 function downloadBackup() {
-  const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), payment: localStorage.getItem('paymentSettings'), date: new Date().toISOString() };
+  const backup = { catalog: localStorage.getItem('catalogData'), orders: localStorage.getItem('ordersData'), messages: localStorage.getItem('messagesData'), contacts: localStorage.getItem('siteContacts'), background: localStorage.getItem('siteBackground'), gradient: localStorage.getItem('siteGradient'), payment: localStorage.getItem('paymentSettings'), registeredUsers: localStorage.getItem('registeredUsers'), users: localStorage.getItem('users'), date: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_${new Date().toISOString().split('T')[0]}.json`; a.click();
 }
@@ -701,7 +787,9 @@ function restoreBackup(event) {
         if (backup.background) localStorage.setItem('siteBackground', backup.background);
         if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient);
         if (backup.payment) localStorage.setItem('paymentSettings', backup.payment);
-        loadDashboard(); loadUsers(); loadCarts(); loadPaymentSettings(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
+        if (backup.registeredUsers) localStorage.setItem('registeredUsers', backup.registeredUsers);
+        if (backup.users) localStorage.setItem('users', backup.users);
+        loadDashboard(); loadRegisteredUsers(); loadUsers(); loadCarts(); loadPaymentSettings(); loadCatalog(); loadOrders(); loadMessages(); loadContacts(); loadBackground();
         alert('Резервная копия восстановлена!');
       } catch (error) { alert('Ошибка при восстановлении копии'); }
     };
