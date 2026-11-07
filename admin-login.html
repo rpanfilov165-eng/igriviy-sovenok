@@ -6,73 +6,69 @@
 <title>Админ — Игривый совёнок</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-.container { max-width: 1200px; margin: 0 auto; }
+body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1400px; margin: 0 auto; }
 .login-box, .setup-box { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-width: 400px; margin: 50px auto; }
-h1 { color: #667eea; margin-bottom: 10px; text-align: center; }
-h2 { color: #333; margin-bottom: 20px; }
+h1 { color: #5a4000; margin-bottom: 10px; text-align: center; }
+h2 { color: #5a4000; margin-bottom: 20px; }
 .subtitle { color: #666; text-align: center; margin-bottom: 30px; }
 .form-group { margin-bottom: 20px; }
 label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; }
 input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: border 0.3s; }
-input:focus, textarea:focus, select:focus { outline: none; border-color: #667eea; }
-button { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: #f0c040; }
+button { width: 100%; padding: 14px; background: linear-gradient(135deg, #f0c040, #e8a820); color: #5a4000; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
 button:hover { transform: translateY(-2px); }
 .btn-secondary { background: #f0f0f0; color: #333; margin-top: 10px; }
 .hidden { display: none; }
 .admin-panel { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; border-bottom: 2px solid #e0e0e0; padding-bottom: 20px; }
 .tab { padding: 10px 20px; background: #f0f0f0; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
-.tab.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+.tab.active { background: linear-gradient(135deg, #f0c040, #e8a820); color: #5a4000; }
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
-.stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 15px; text-align: center; }
+.stat-card { background: linear-gradient(135deg, #5c4db7, #4a3fa0); color: white; padding: 20px; border-radius: 15px; text-align: center; }
 .stat-value { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
 .stat-label { font-size: 14px; opacity: 0.9; }
-.upload-area { border: 2px dashed #667eea; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
-.upload-area:hover { background: #f5f5ff; }
+.upload-area { border: 2px dashed #f0c040; border-radius: 15px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
+.upload-area:hover { background: #fffef5; }
 .preview { max-width: 100%; max-height: 300px; border-radius: 10px; margin-top: 20px; }
-.gradient-picker { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px; }
-.color-input { display: flex; flex-direction: column; gap: 5px; }
-.gradient-preview { height: 100px; border-radius: 10px; margin-top: 20px; }
 .folder { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 10px; }
-.folder-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.folder-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
 .folder-name { font-weight: 600; color: #333; }
-.item { background: white; border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
-.item-info { flex: 1; }
+.item { background: white; border-radius: 8px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.item-info { flex: 1; min-width: 200px; }
 .item-name { font-weight: 500; margin-bottom: 5px; }
-.item-price { color: #667eea; font-weight: 600; }
+.item-price { color: #5c4db7; font-weight: 600; }
 .item-actions { display: flex; gap: 10px; }
 .btn-small { padding: 6px 12px; font-size: 12px; width: auto; }
-.btn-edit { background: #4CAF50; }
-.btn-delete { background: #f44336; }
-.order-card, .message-card { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
-.order-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
-.order-id { font-weight: 600; color: #667eea; }
-.order-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; }
-.status-new { background: #ff9800; color: white; }
-.status-processing { background: #2196F3; color: white; }
-.status-completed { background: #4CAF50; color: white; }
-.message-from { font-weight: 600; margin-bottom: 5px; }
-.message-date { color: #999; font-size: 12px; margin-bottom: 10px; }
-.message-text { color: #333; line-height: 1.5; }
-.log-entry { background: #f9f9f9; border-left: 3px solid #667eea; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-.log-time { color: #999; font-size: 12px; }
-.log-action { color: #333; margin-top: 5px; }
+.btn-edit { background: #4CAF50; color: white; }
+.btn-delete { background: #f44336; color: white; }
+.order-card { background: #f9f9f9; border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #f0c040; }
+.order-card.paid { border-left-color: #4CAF50; }
+.order-card.unpaid { border-left-color: #ff9800; }
+.order-header { display: flex; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+.order-id { font-weight: 600; color: #5c4db7; }
+.order-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.status-paid { background: #4CAF50; color: white; }
+.status-unpaid { background: #ff9800; color: white; }
+.status-new { background: #2196F3; color: white; }
+.order-info { margin: 10px 0; font-size: 14px; }
+.order-items { margin: 10px 0; padding-left: 20px; }
+.order-total { font-weight: bold; font-size: 16px; margin-top: 10px; color: #5a4000; }
+.user-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.user-card { background: #f9f9f9; padding: 15px; border-radius: 10px; }
+.user-name { font-weight: 600; margin-bottom: 8px; color: #5a4000; }
+.user-stat { display: flex; justify-content: space-between; margin: 5px 0; font-size: 14px; }
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
 .modal.active { display: flex; }
 .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .close-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; width: auto; padding: 0; }
-.file-upload { border: 2px dashed #667eea; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 15px; }
+.file-upload { border: 2px dashed #f0c040; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 15px; }
 .file-list { margin-top: 15px; }
 .file-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-@media (max-width: 768px) {
-  .tabs { flex-direction: column; }
-  .stats-grid { grid-template-columns: 1fr; }
-  .gradient-picker { grid-template-columns: 1fr; }
-}
+@media (max-width: 768px) { .tabs { flex-direction: column; } .stats-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -113,13 +109,8 @@ button:hover { transform: translateY(-2px); }
   <div id="adminPanel" class="admin-panel hidden">
     <div class="tabs">
       <button class="tab active" data-tab="dashboard">📊 Дашборд</button>
-      <button class="tab" data-tab="background">🎨 Фон</button>
-      <button class="tab" data-tab="catalog">📚 Весь каталог</button>
-      <button class="tab" data-tab="worksheets">📝 Рабочие листы</button>
-      <button class="tab" data-tab="themes">🎨 Темы</button>
-      <button class="tab" data-tab="letterGames">🔤 Игры с буквами</button>
-      <button class="tab" data-tab="speechGames">🗣️ Логопедические</button>
-      <button class="tab" data-tab="free">🎁 Бесплатно</button>
+      <button class="tab" data-tab="users">👥 Пользователи и оплаты</button>
+      <button class="tab" data-tab="catalog">📚 Каталог</button>
       <button class="tab" data-tab="orders">📦 Заказы</button>
       <button class="tab" data-tab="messages">✉️ Сообщения</button>
       <button class="tab" data-tab="settings">⚙️ Настройки</button>
@@ -128,94 +119,28 @@ button:hover { transform: translateY(-2px); }
     <div id="dashboard" class="tab-content active">
       <h2>📊 Статистика</h2>
       <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="totalOrders">0</div>
-          <div class="stat-label">Заказов</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalRevenue">0₽</div>
-          <div class="stat-label">Выручка</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalItems">0</div>
-          <div class="stat-label">Материалов</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="totalFolders">0</div>
-          <div class="stat-label">Папок</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" id="totalOrders">0</div><div class="stat-label">Заказов</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalRevenue">0₽</div><div class="stat-label">Выручка</div></div>
+        <div class="stat-card"><div class="stat-value" id="paidOrders">0</div><div class="stat-label">Оплачено</div></div>
+        <div class="stat-card"><div class="stat-value" id="unpaidOrders">0</div><div class="stat-label">Ожидают оплаты</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalItems">0</div><div class="stat-label">Материалов</div></div>
+        <div class="stat-card"><div class="stat-value" id="totalFolders">0</div><div class="stat-label">Папок</div></div>
       </div>
     </div>
 
-    <div id="background" class="tab-content">
-      <h2>🎨 Фон сайта</h2>
-      <div class="upload-area" id="uploadArea">
-        <p>📤 Загрузить изображение</p>
-        <p>📁</p>
-        <p>Нажмите для выбора</p>
-        <input type="file" id="bgImageInput" accept="image/*" style="display: none;">
-      </div>
-      <div id="bgPreview"></div>
-      <button id="applyBg" class="hidden">💾 Применить</button>
-      <button id="cancelBg" class="btn-secondary hidden">✕ Отмена</button>
-      
-      <h3 style="margin-top: 30px;">🔄 Текущий фон</h3>
-      <p id="currentBgText">Фон не установлен</p>
-      <button id="removeBg" class="btn-secondary hidden">🗑 Убрать</button>
-
-      <h3 style="margin-top: 30px;">🌈 Градиенты</h3>
-      <div class="gradient-picker">
-        <div class="color-input">
-          <label>Левый</label>
-          <input type="color" id="gradientLeft" value="#667eea">
-        </div>
-        <div class="color-input">
-          <label>Правый</label>
-          <input type="color" id="gradientRight" value="#764ba2">
-        </div>
-      </div>
-      <div class="gradient-preview" id="gradientPreview"></div>
-      <button id="saveGradient" style="margin-top: 15px;">💾 Сохранить</button>
+    <div id="users" class="tab-content">
+      <h2>👥 Пользователи и оплаты</h2>
+      <div id="usersList"></div>
     </div>
 
     <div id="catalog" class="tab-content">
-      <h2>📚 Весь каталог</h2>
+      <h2>📚 Управление каталогом</h2>
       <button onclick="openAddFolderModal('catalog')" style="margin-bottom: 20px;">➕ Добавить папку</button>
       <div id="catalogList"></div>
     </div>
 
-    <div id="worksheets" class="tab-content">
-      <h2>📝 Рабочие листы</h2>
-      <button onclick="openAddFolderModal('worksheets')" style="margin-bottom: 20px;">➕ Добавить папку</button>
-      <div id="worksheetsList"></div>
-    </div>
-
-    <div id="themes" class="tab-content">
-      <h2>🎨 Темы</h2>
-      <button onclick="openAddFolderModal('themes')" style="margin-bottom: 20px;">➕ Добавить папку</button>
-      <div id="themesList"></div>
-    </div>
-
-    <div id="letterGames" class="tab-content">
-      <h2>🔤 Игры с буквами</h2>
-      <button onclick="openAddFolderModal('letterGames')" style="margin-bottom: 20px;">➕ Добавить папку</button>
-      <div id="letterGamesList"></div>
-    </div>
-
-    <div id="speechGames" class="tab-content">
-      <h2>🗣️ Логопедические игры</h2>
-      <button onclick="openAddFolderModal('speechGames')" style="margin-bottom: 20px;">➕ Добавить папку</button>
-      <div id="speechGamesList"></div>
-    </div>
-
-    <div id="free" class="tab-content">
-      <h2>🎁 Бесплатно</h2>
-      <button onclick="openAddFolderModal('free')" style="margin-bottom: 20px;">➕ Добавить папку</button>
-      <div id="freeList"></div>
-    </div>
-
     <div id="orders" class="tab-content">
-      <h2>📦 Заказы</h2>
+      <h2>📦 Все заказы</h2>
       <div id="ordersList"></div>
     </div>
 
@@ -226,7 +151,6 @@ button:hover { transform: translateY(-2px); }
 
     <div id="settings" class="tab-content">
       <h2>⚙️ Настройки</h2>
-      
       <h3 style="margin-top: 20px;">🔑 Сменить пароль</h3>
       <form id="changePasswordForm">
         <div class="form-group">
@@ -261,17 +185,8 @@ button:hover { transform: translateY(-2px); }
         <button type="submit">💾 Сохранить контакты</button>
       </form>
 
-      <h3 style="margin-top: 30px;">💾 Резервная копия</h3>
-      <p style="margin-bottom: 15px; color: #666;">Сохраните каталог, настройки, заказы и сообщения в JSON-файл.</p>
-      <button onclick="downloadBackup()">⬇️ Скачать копию</button>
-      <button onclick="document.getElementById('restoreBackupInput').click()" class="btn-secondary">⬆️ Восстановить копию</button>
-      <input type="file" id="restoreBackupInput" accept=".json" style="display: none;" onchange="restoreBackup(event)">
-
-      <h3 style="margin-top: 30px;">🕘 Журнал действий</h3>
-      <div id="actionLog"></div>
-
       <h3 style="margin-top: 30px;">💾 Данные</h3>
-      <button onclick="resetAllData()" style="background: #f44336;">🗑 Сброс</button>
+      <button onclick="resetAllData()" style="background: #f44336; color: white;">🗑 Сброс всех данных</button>
       <button onclick="logout()" class="btn-secondary">🚪 Выйти</button>
     </div>
   </div>
@@ -309,7 +224,7 @@ button:hover { transform: translateY(-2px); }
         <textarea id="itemDescription" rows="3"></textarea>
       </div>
       <div class="form-group">
-        <label>Цена (₽)</label>
+        <label>Цена (₽, 0 = бесплатно)</label>
         <input type="number" id="itemPrice" min="0" step="0.01" required>
       </div>
       <div class="form-group">
@@ -336,29 +251,32 @@ let selectedFile = null;
 
 function init() {
   const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  
   if (!adminData.password) {
     document.getElementById('loginSection').classList.add('hidden');
     document.getElementById('setupSection').classList.remove('hidden');
   }
-  
   loadDashboard();
-  loadBackground();
+  loadUsers();
   loadCatalog();
   loadOrders();
   loadMessages();
   loadContacts();
-  loadActionLog();
-  updateGradientPreview();
   
   window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'messagesData') {
+    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'messagesData' || e.key === 'purchasedItems') {
       loadDashboard();
+      loadUsers();
       loadCatalog();
       loadOrders();
       loadMessages();
     }
   });
+  
+  setInterval(() => {
+    loadDashboard();
+    loadUsers();
+    loadOrders();
+  }, 5000);
 }
 
 document.getElementById('loginForm').addEventListener('submit', (e) => {
@@ -366,11 +284,9 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  
   if (username === 'admin' && password === adminData.password) {
     document.getElementById('loginSection').classList.add('hidden');
     document.getElementById('adminPanel').classList.remove('hidden');
-    logAction('Вход в админ-панель');
   } else {
     alert('Неверный логин или пароль');
   }
@@ -380,23 +296,18 @@ document.getElementById('setupForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const newPassword = document.getElementById('newPassword').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
-  
   if (newPassword.length < 8 || !/[a-zA-Zа-яА-Я]/.test(newPassword) || !/\d/.test(newPassword)) {
     alert('Пароль должен содержать минимум 8 символов, включая буквы и цифры');
     return;
   }
-  
   if (newPassword !== confirmPassword) {
     alert('Пароли не совпадают');
     return;
   }
-  
   const adminData = { password: newPassword };
   localStorage.setItem('adminData', JSON.stringify(adminData));
-  
   document.getElementById('setupSection').classList.add('hidden');
   document.getElementById('adminPanel').classList.remove('hidden');
-  logAction('Установлен пароль администратора');
 });
 
 document.querySelectorAll('.tab').forEach(tab => {
@@ -411,127 +322,105 @@ document.querySelectorAll('.tab').forEach(tab => {
 function loadDashboard() {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  
-  let totalItems = 0;
-  let totalFolders = 0;
+  let totalItems = 0, totalFolders = 0, paidCount = 0, unpaidCount = 0, totalRevenue = 0;
   
   Object.values(catalog).forEach(category => {
     totalFolders += category.length;
-    category.forEach(folder => {
-      totalItems += (folder.items || []).length;
-    });
+    category.forEach(folder => { totalItems += (folder.items || []).length; });
   });
   
-  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  orders.forEach(order => {
+    if (order.paid) { paidCount++; totalRevenue += order.total; }
+    else { unpaidCount++; }
+  });
   
   document.getElementById('totalOrders').textContent = orders.length;
   document.getElementById('totalRevenue').textContent = totalRevenue + '₽';
+  document.getElementById('paidOrders').textContent = paidCount;
+  document.getElementById('unpaidOrders').textContent = unpaidCount;
   document.getElementById('totalItems').textContent = totalItems;
   document.getElementById('totalFolders').textContent = totalFolders;
 }
 
-document.getElementById('uploadArea').addEventListener('click', () => {
-  document.getElementById('bgImageInput').click();
-});
-
-document.getElementById('bgImageInput').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const preview = document.getElementById('bgPreview');
-      preview.innerHTML = `<img src="${event.target.result}" class="preview" alt="Предпросмотр">`;
-      document.getElementById('applyBg').classList.remove('hidden');
-      document.getElementById('cancelBg').classList.remove('hidden');
-    };
-    reader.readAsDataURL(file);
+function loadUsers() {
+  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
+  const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
+  const usersList = document.getElementById('usersList');
+  
+  const users = {};
+  orders.forEach(order => {
+    if (!users[order.email]) {
+      users[order.email] = { name: order.customerName, email: order.email, phone: order.phone, orders: 0, paid: 0, unpaid: 0, totalSpent: 0, items: [] };
+    }
+    users[order.email].orders++;
+    if (order.paid) { users[order.email].paid++; users[order.email].totalSpent += order.total; }
+    else { users[order.email].unpaid++; }
+    order.items.forEach(item => {
+      users[order.email].items.push(item.name);
+    });
+  });
+  
+  if (Object.keys(users).length === 0) {
+    usersList.innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">Пользователей пока нет</p>';
+    return;
   }
-});
-
-document.getElementById('applyBg').addEventListener('click', () => {
-  const img = document.querySelector('#bgPreview img');
-  if (img) {
-    localStorage.setItem('siteBackground', img.src);
-    document.getElementById('currentBgText').innerHTML = `<img src="${img.src}" style="max-width: 200px; border-radius: 10px;">`;
-    document.getElementById('removeBg').classList.remove('hidden');
-    document.getElementById('applyBg').classList.add('hidden');
-    document.getElementById('cancelBg').classList.add('hidden');
-    document.getElementById('bgPreview').innerHTML = '';
-    logAction('Изменен фон сайта');
-    alert('Фон применен!');
-  }
-});
-
-document.getElementById('cancelBg').addEventListener('click', () => {
-  document.getElementById('bgPreview').innerHTML = '';
-  document.getElementById('applyBg').classList.add('hidden');
-  document.getElementById('cancelBg').classList.add('hidden');
-});
-
-document.getElementById('removeBg').addEventListener('click', () => {
-  localStorage.removeItem('siteBackground');
-  document.getElementById('currentBgText').textContent = 'Фон не установлен';
-  document.getElementById('removeBg').classList.add('hidden');
-  logAction('Удален фон сайта');
-});
-
-function loadBackground() {
-  const bg = localStorage.getItem('siteBackground');
-  if (bg) {
-    document.getElementById('currentBgText').innerHTML = `<img src="${bg}" style="max-width: 200px; border-radius: 10px;">`;
-    document.getElementById('removeBg').classList.remove('hidden');
-  }
+  
+  usersList.innerHTML = '<div class="user-stats">' + Object.values(users).map(user => `
+    <div class="user-card">
+      <div class="user-name">👤 ${user.name}</div>
+      <div class="user-stat"><span>📧 Email:</span><span>${user.email}</span></div>
+      <div class="user-stat"><span>📞 Телефон:</span><span>${user.phone}</span></div>
+      <div class="user-stat"><span>📦 Заказов:</span><span>${user.orders}</span></div>
+      <div class="user-stat"><span>✅ Оплачено:</span><span style="color: #4CAF50;">${user.paid}</span></div>
+      <div class="user-stat"><span>⏳ Ожидают:</span><span style="color: #ff9800;">${user.unpaid}</span></div>
+      <div class="user-stat"><span>💰 Потрачено:</span><span>${user.totalSpent}₽</span></div>
+      <div style="margin-top: 10px; font-size: 12px; color: #666;">
+        <strong>Купленные товары:</strong><br>
+        ${user.items.length > 0 ? user.items.join(', ') : 'Нет'}
+      </div>
+    </div>
+  `).join('') + '</div>';
 }
-
-document.getElementById('gradientLeft').addEventListener('input', updateGradientPreview);
-document.getElementById('gradientRight').addEventListener('input', updateGradientPreview);
-
-function updateGradientPreview() {
-  const left = document.getElementById('gradientLeft').value;
-  const right = document.getElementById('gradientRight').value;
-  document.getElementById('gradientPreview').style.background = `linear-gradient(135deg, ${left} 0%, ${right} 100%)`;
-}
-
-document.getElementById('saveGradient').addEventListener('click', () => {
-  const left = document.getElementById('gradientLeft').value;
-  const right = document.getElementById('gradientRight').value;
-  localStorage.setItem('siteGradient', JSON.stringify({ left, right }));
-  logAction('Изменен градиент сайта');
-  alert('Градиент сохранен!');
-});
 
 function loadCatalog() {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const categories = ['catalog', 'worksheets', 'themes', 'letterGames', 'speechGames', 'free'];
+  const categoryNames = { catalog: '📚 Весь каталог', worksheets: '📝 Рабочие листы', themes: '🎨 Темы', letterGames: '🔤 Игры с буквами', speechGames: '🗣️ Логопедические', free: '🎁 Бесплатно' };
   
+  let html = '';
   categories.forEach(category => {
-    const list = document.getElementById(category + 'List');
     const folders = catalog[category] || [];
+    html += `<h3 style="margin: 20px 0 10px; color: #5a4000;">${categoryNames[category]}</h3>`;
+    html += `<button onclick="openAddFolderModal('${category}')" style="margin-bottom: 15px; width: auto; padding: 8px 16px;">➕ Добавить папку</button>`;
     
-    list.innerHTML = folders.map((folder, folderIndex) => `
-      <div class="folder">
-        <div class="folder-header">
-          <span class="folder-name">📁 ${folder.name}</span>
-          <div>
-            <button class="btn-small btn-edit" onclick="openAddItemModal('${category}', ${folderIndex})">➕ Товар</button>
-            <button class="btn-small btn-delete" onclick="deleteFolder('${category}', ${folderIndex})">🗑</button>
+    folders.forEach((folder, folderIndex) => {
+      html += `
+        <div class="folder">
+          <div class="folder-header">
+            <span class="folder-name">📁 ${folder.name}</span>
+            <div>
+              <button class="btn-small btn-edit" onclick="openAddItemModal('${category}', ${folderIndex})">➕ Товар</button>
+              <button class="btn-small btn-delete" onclick="deleteFolder('${category}', ${folderIndex})">🗑</button>
+            </div>
           </div>
+          ${(folder.items || []).map((item, itemIndex) => `
+            <div class="item">
+              <div class="item-info">
+                <div class="item-name">${item.name}</div>
+                <div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>
+              </div>
+              <div class="item-actions">
+                <button class="btn-small btn-edit" onclick="editItem('${category}', ${folderIndex}, ${itemIndex})">✏️</button>
+                <button class="btn-small btn-delete" onclick="deleteItem('${category}', ${folderIndex}, ${itemIndex})">🗑</button>
+              </div>
+            </div>
+          `).join('')}
         </div>
-        ${(folder.items || []).map((item, itemIndex) => `
-          <div class="item">
-            <div class="item-info">
-              <div class="item-name">${item.name}</div>
-              <div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>
-            </div>
-            <div class="item-actions">
-              <button class="btn-small btn-edit" onclick="editItem('${category}', ${folderIndex}, ${itemIndex})">✏️</button>
-              <button class="btn-small btn-delete" onclick="deleteItem('${category}', ${folderIndex}, ${itemIndex})">🗑</button>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `).join('');
+      `;
+    });
   });
+  
+  document.getElementById('catalogList').innerHTML = html;
 }
 
 function openAddFolderModal(category) {
@@ -548,29 +437,23 @@ document.getElementById('folderForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const name = document.getElementById('folderName').value;
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  
-  if (!catalog[currentCategory]) {
-    catalog[currentCategory] = [];
-  }
-  
+  if (!catalog[currentCategory]) catalog[currentCategory] = [];
   catalog[currentCategory].push({ name, items: [] });
   localStorage.setItem('catalogData', JSON.stringify(catalog));
-  
+  localStorage.setItem('lastCatalogUpdate', Date.now().toString());
   closeFolderModal();
   loadCatalog();
   loadDashboard();
-  logAction(`Добавлена папка "${name}" в категорию ${currentCategory}`);
 });
 
 function deleteFolder(category, folderIndex) {
   if (confirm('Удалить папку и все товары в ней?')) {
     const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    const folderName = catalog[category][folderIndex].name;
     catalog[category].splice(folderIndex, 1);
     localStorage.setItem('catalogData', JSON.stringify(catalog));
+    localStorage.setItem('lastCatalogUpdate', Date.now().toString());
     loadCatalog();
     loadDashboard();
-    logAction(`Удалена папка "${folderName}" из категории ${category}`);
   }
 }
 
@@ -597,14 +480,10 @@ function handleFileSelect(event) {
   if (file) {
     const reader = new FileReader();
     reader.onload = (e) => {
-      selectedFile = {
-        name: file.name,
-        data: e.target.result,
-        size: file.size
-      };
+      selectedFile = { name: file.name, data: e.target.result, size: file.size };
       document.getElementById('fileList').innerHTML = `
         <div class="file-item">
-          <span>📄 ${file.name}</span>
+          <span>📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)</span>
           <button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button>
         </div>
       `;
@@ -624,43 +503,28 @@ document.getElementById('itemForm').addEventListener('submit', (e) => {
   const name = document.getElementById('itemName').value;
   const description = document.getElementById('itemDescription').value;
   const price = parseFloat(document.getElementById('itemPrice').value);
-  
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const folder = catalog[currentCategory][editingItemId];
-  
-  if (!folder.items) {
-    folder.items = [];
-  }
-  
-  const item = {
-    id: Date.now(),
-    name,
-    description,
-    price,
-    file: selectedFile
-  };
-  
+  if (!folder.items) folder.items = [];
+  const item = { id: Date.now(), name, description, price, file: selectedFile };
   folder.items.push(item);
   localStorage.setItem('catalogData', JSON.stringify(catalog));
-  
+  localStorage.setItem('lastCatalogUpdate', Date.now().toString());
   closeItemModal();
   loadCatalog();
   loadDashboard();
-  logAction(`Добавлен товар "${name}" в папку "${folder.name}"`);
+  alert('Товар добавлен! Он сразу появится на сайте.');
 });
 
 function editItem(category, folderIndex, itemIndex) {
   currentCategory = category;
   editingItemId = folderIndex;
-  
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const item = catalog[category][folderIndex].items[itemIndex];
-  
   document.getElementById('itemModalTitle').textContent = 'Редактировать товар';
   document.getElementById('itemName').value = item.name;
   document.getElementById('itemDescription').value = item.description || '';
   document.getElementById('itemPrice').value = item.price;
-  
   if (item.file) {
     selectedFile = item.file;
     document.getElementById('fileList').innerHTML = `
@@ -670,87 +534,86 @@ function editItem(category, folderIndex, itemIndex) {
       </div>
     `;
   }
-  
   document.getElementById('itemModal').classList.add('active');
 }
 
 function deleteItem(category, folderIndex, itemIndex) {
   if (confirm('Удалить товар?')) {
     const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    const itemName = catalog[category][folderIndex].items[itemIndex].name;
     catalog[category][folderIndex].items.splice(itemIndex, 1);
     localStorage.setItem('catalogData', JSON.stringify(catalog));
+    localStorage.setItem('lastCatalogUpdate', Date.now().toString());
     loadCatalog();
     loadDashboard();
-    logAction(`Удален товар "${itemName}"`);
   }
 }
 
 function loadOrders() {
-  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
+  const orders = JSON.parse(localStorage.getItem('ordersData') || '[]').reverse();
   const list = document.getElementById('ordersList');
-  
   if (orders.length === 0) {
     list.innerHTML = '<p style="color: #999; text-align: center;">Заказов пока нет</p>';
     return;
   }
-  
   list.innerHTML = orders.map((order, index) => `
-    <div class="order-card">
+    <div class="order-card ${order.paid ? 'paid' : 'unpaid'}">
       <div class="order-header">
         <span class="order-id">Заказ #${order.id}</span>
-        <span class="order-status status-${order.status}">${getStatusText(order.status)}</span>
+        <span class="order-status ${order.paid ? 'status-paid' : 'status-unpaid'}">${order.paid ? '✅ Оплачен' : '⏳ Ожидает оплаты'}</span>
       </div>
-      <p><strong>Клиент:</strong> ${order.customerName}</p>
-      <p><strong>Email:</strong> ${order.email}</p>
-      <p><strong>Телефон:</strong> ${order.phone}</p>
-      <p><strong>Адрес:</strong> ${order.address}</p>
-      <p><strong>Доставка:</strong> ${order.delivery}</p>
-      <p><strong>Оплата:</strong> ${order.payment}</p>
-      <p><strong>Товары:</strong></p>
-      <ul style="margin-left: 20px; margin-top: 5px;">
-        ${order.items.map(item => `<li>${item.name} - ${item.price}₽</li>`).join('')}
-      </ul>
-      <p style="margin-top: 10px;"><strong>Итого: ${order.total}₽</strong></p>
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button class="btn-small btn-edit" onclick="updateOrderStatus(${index}, 'processing')">В обработке</button>
-        <button class="btn-small btn-edit" onclick="updateOrderStatus(${index}, 'completed')">Завершен</button>
+      <div class="order-info"><strong>Клиент:</strong> ${order.customerName}</div>
+      <div class="order-info"><strong>Email:</strong> ${order.email}</div>
+      <div class="order-info"><strong>Телефон:</strong> ${order.phone}</div>
+      <div class="order-info"><strong>Адрес:</strong> ${order.address}</div>
+      <div class="order-info"><strong>Доставка:</strong> ${order.delivery}</div>
+      <div class="order-info"><strong>Оплата:</strong> ${order.payment}</div>
+      <div class="order-info"><strong>Дата:</strong> ${new Date(order.date).toLocaleString('ru-RU')}</div>
+      <div class="order-items">
+        <strong>Товары:</strong>
+        <ul>
+          ${order.items.map(item => `<li>${item.name} - ${item.price}₽</li>`).join('')}
+        </ul>
       </div>
+      <div class="order-total">Итого: ${order.total}₽</div>
+      ${!order.paid ? `<button class="btn-small btn-edit" onclick="markAsPaid(${order.id})" style="margin-top: 10px;">✅ Отметить как оплаченный</button>` : ''}
     </div>
   `).join('');
 }
 
-function getStatusText(status) {
-  const statuses = {
-    'new': 'Новый',
-    'processing': 'В обработке',
-    'completed': 'Завершен'
-  };
-  return statuses[status] || status;
-}
-
-function updateOrderStatus(index, status) {
+function markAsPaid(orderId) {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
-  orders[index].status = status;
-  localStorage.setItem('ordersData', JSON.stringify(orders));
-  loadOrders();
-  logAction(`Статус заказа #${orders[index].id} изменен на "${getStatusText(status)}"`);
+  const order = orders.find(o => o.id === orderId);
+  if (order) {
+    order.paid = true;
+    order.paymentDate = new Date().toISOString();
+    order.items.forEach(item => {
+      const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
+      if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
+        purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
+      }
+      localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+    });
+    localStorage.setItem('ordersData', JSON.stringify(orders));
+    localStorage.setItem('lastCatalogUpdate', Date.now().toString());
+    loadOrders();
+    loadDashboard();
+    loadUsers();
+    alert('Заказ отмечен как оплаченный!');
+  }
 }
 
 function loadMessages() {
   const messages = JSON.parse(localStorage.getItem('messagesData') || '[]');
   const list = document.getElementById('messagesList');
-  
   if (messages.length === 0) {
     list.innerHTML = '<p style="color: #999; text-align: center;">Сообщений пока нет</p>';
     return;
   }
-  
   list.innerHTML = messages.map((message, index) => `
-    <div class="message-card">
-      <div class="message-from">${message.name}</div>
-      <div class="message-date">${new Date(message.date).toLocaleString('ru-RU')}</div>
-      <div class="message-text">${message.text}</div>
+    <div class="order-card">
+      <div class="order-info"><strong>От:</strong> ${message.name} (${message.email})</div>
+      <div class="order-info"><strong>Дата:</strong> ${new Date(message.date).toLocaleString('ru-RU')}</div>
+      <div class="order-info"><strong>Сообщение:</strong><br>${message.text}</div>
       <button class="btn-small btn-delete" style="margin-top: 10px;" onclick="deleteMessage(${index})">🗑 Удалить</button>
     </div>
   `).join('');
@@ -762,7 +625,6 @@ function deleteMessage(index) {
     messages.splice(index, 1);
     localStorage.setItem('messagesData', JSON.stringify(messages));
     loadMessages();
-    logAction('Удалено сообщение');
   }
 }
 
@@ -783,7 +645,6 @@ document.getElementById('contactsForm').addEventListener('submit', (e) => {
     hours: document.getElementById('contactHours').value
   };
   localStorage.setItem('siteContacts', JSON.stringify(contacts));
-  logAction('Обновлены контакты сайта');
   alert('Контакты сохранены!');
 });
 
@@ -792,114 +653,22 @@ document.getElementById('changePasswordForm').addEventListener('submit', (e) => 
   const currentPassword = document.getElementById('currentPassword').value;
   const newPassword = document.getElementById('newPasswordChange').value;
   const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-  
-  if (currentPassword !== adminData.password) {
-    alert('Неверный текущий пароль');
-    return;
-  }
-  
+  if (currentPassword !== adminData.password) { alert('Неверный текущий пароль'); return; }
   if (newPassword.length < 8 || !/[a-zA-Zа-яА-Я]/.test(newPassword) || !/\d/.test(newPassword)) {
     alert('Пароль должен содержать минимум 8 символов, включая буквы и цифры');
     return;
   }
-  
   adminData.password = newPassword;
   localStorage.setItem('adminData', JSON.stringify(adminData));
   document.getElementById('changePasswordForm').reset();
-  logAction('Изменен пароль администратора');
   alert('Пароль изменен!');
 });
-
-function downloadBackup() {
-  const backup = {
-    catalog: localStorage.getItem('catalogData'),
-    orders: localStorage.getItem('ordersData'),
-    messages: localStorage.getItem('messagesData'),
-    contacts: localStorage.getItem('siteContacts'),
-    background: localStorage.getItem('siteBackground'),
-    gradient: localStorage.getItem('siteGradient'),
-    date: new Date().toISOString()
-  };
-  
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  logAction('Скачана резервная копия');
-}
-
-function restoreBackup(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const backup = JSON.parse(e.target.result);
-        
-        if (backup.catalog) localStorage.setItem('catalogData', backup.catalog);
-        if (backup.orders) localStorage.setItem('ordersData', backup.orders);
-        if (backup.messages) localStorage.setItem('messagesData', backup.messages);
-        if (backup.contacts) localStorage.setItem('siteContacts', backup.contacts);
-        if (backup.background) localStorage.setItem('siteBackground', backup.background);
-        if (backup.gradient) localStorage.setItem('siteGradient', backup.gradient);
-        
-        loadDashboard();
-        loadCatalog();
-        loadOrders();
-        loadMessages();
-        loadContacts();
-        loadBackground();
-        
-        logAction('Восстановлена резервная копия');
-        alert('Резервная копия восстановлена!');
-      } catch (error) {
-        alert('Ошибка при восстановлении копии');
-      }
-    };
-    reader.readAsText(file);
-  }
-}
-
-function logAction(action) {
-  const log = JSON.parse(localStorage.getItem('actionLog') || '[]');
-  log.unshift({
-    time: new Date().toISOString(),
-    action: action
-  });
-  
-  if (log.length > 100) {
-    log.pop();
-  }
-  
-  localStorage.setItem('actionLog', JSON.stringify(log));
-  loadActionLog();
-}
-
-function loadActionLog() {
-  const log = JSON.parse(localStorage.getItem('actionLog') || '[]');
-  const container = document.getElementById('actionLog');
-  
-  if (log.length === 0) {
-    container.innerHTML = '<p style="color: #999;">Журнал пуст</p>';
-    return;
-  }
-  
-  container.innerHTML = log.slice(0, 20).map(entry => `
-    <div class="log-entry">
-      <div class="log-time">${new Date(entry.time).toLocaleString('ru-RU')}</div>
-      <div class="log-action">${entry.action}</div>
-    </div>
-  `).join('');
-}
 
 function resetAllData() {
   if (confirm('Вы уверены? Все данные будут удалены безвозвратно!')) {
     if (confirm('Это действие нельзя отменить. Продолжить?')) {
       localStorage.clear();
-      alert('Все данные удалены. Страница будет перезагружена.');
+      alert('Все данные удалены.');
       location.reload();
     }
   }
@@ -909,7 +678,6 @@ function logout() {
   document.getElementById('adminPanel').classList.add('hidden');
   document.getElementById('loginSection').classList.remove('hidden');
   document.getElementById('loginForm').reset();
-  logAction('Выход из админ-панели');
 }
 
 init();
