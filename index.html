@@ -260,7 +260,7 @@ footer a:hover{text-decoration:underline}
 <div style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
 <h4 style="margin-bottom:10px;color:#e65100">📎 Чек об оплате</h4>
 <p style="font-size:13px;color:#666;margin-bottom:10px">Прикрепите скриншот чека. После проверки админом файлы станут доступны.</p>
-<input type="file" id="receiptFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
+<input type="file" id="receiptFile" accept="image/*,application/pdf,.pdf,.doc,.docx,.txt,.zip,.rar" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
 <div id="receiptPreview" style="margin-top:10px"></div>
 </div>
 <h3 style="margin-bottom:15px;color:#5a4000">💳 Способ оплаты:</h3>
@@ -507,7 +507,27 @@ function openCheckout(){
 }
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
 
-document.getElementById('receiptFile').addEventListener('change',e=>{if(e.target.files[0]){if(e.target.files[0].size>10*1024*1024){alert('⚠️ Файл слишком большой (макс. 10 МБ для чека)');e.target.value='';return}const reader=new FileReader();reader.onload=ev=>{receiptData=ev.target.result;document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`};reader.readAsDataURL(e.target.files[0])}});
+document.getElementById('receiptFile').addEventListener('change',e=>{
+  if(e.target.files[0]){
+    const file=e.target.files[0];
+    if(file.size>10*1024*1024){alert('⚠️ Файл слишком большой (макс. 10 МБ)');e.target.value='';return}
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      receiptData=ev.target.result;
+      const isImage=file.type.startsWith('image/');
+      const icon=file.type==='application/pdf'?'📄':file.name.endsWith('.doc')||file.name.endsWith('.docx')?'📝':file.name.endsWith('.zip')||file.name.endsWith('.rar')?'📦':'📎';
+      document.getElementById('receiptPreview').innerHTML=`<div style="background:#e8f5e9;padding:12px;border-radius:8px;border:2px solid #4CAF50;display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">${icon}</span>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#2e7d32">${file.name}</div>
+          <div style="font-size:11px;color:#666">${(file.size/1024).toFixed(1)} КБ</div>
+        </div>
+        <span style="margin-left:auto;color:#4CAF50;font-size:13px">✅ Прикреплено</span>
+      </div>`;
+    };
+    reader.readAsDataURL(file);
+  }
+});
 
 document.getElementById('checkoutForm').addEventListener('submit',e=>{
   e.preventDefault();
