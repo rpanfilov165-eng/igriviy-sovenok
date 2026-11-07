@@ -26,7 +26,6 @@ button:hover { transform: translateY(-2px); }
 </head>
 <body>
 <div class="auth-container">
-  <!-- Форма входа -->
   <div id="loginForm">
     <h1>🔑 Вход</h1>
     <p class="subtitle">Войдите в свой аккаунт</p>
@@ -44,7 +43,6 @@ button:hover { transform: translateY(-2px); }
     <div class="back-link"><a href="index.html">← Вернуться на сайт</a></div>
   </div>
 
-  <!-- Форма регистрации -->
   <div id="registerForm" class="hidden">
     <h1>📝 Регистрация</h1>
     <p class="subtitle">Создайте новый аккаунт</p>
@@ -114,11 +112,9 @@ function doLogin() {
     return;
   }
 
-  // Обновляем последний вход в users
   user.lastLogin = new Date().toISOString();
   localStorage.setItem('users', JSON.stringify(users));
 
-  // Обновляем registeredUsers для админа
   const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   const regUser = registeredUsers.find(u => u.email === email);
   if (regUser) {
@@ -126,7 +122,6 @@ function doLogin() {
     localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
   }
 
-  // Сохраняем текущего пользователя
   const currentUser = { name: user.name, email: user.email, phone: user.phone || '' };
   localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
@@ -168,7 +163,6 @@ function doRegister() {
     return;
   }
 
-  // Создаём нового пользователя
   const newUser = {
     name: name,
     email: email,
@@ -181,7 +175,7 @@ function doRegister() {
   users.push(newUser);
   localStorage.setItem('users', JSON.stringify(users));
 
-  // ===== СОХРАНЕНИЕ ДЛЯ АДМИНА (чтобы админ видел зарегистрированных) =====
+  // ===== СОХРАНЕНИЕ ДЛЯ АДМИНА =====
   const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
   registeredUsers.push({
     name: name,
@@ -193,7 +187,6 @@ function doRegister() {
   localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
   // ===== КОНЕЦ СОХРАНЕНИЯ =====
 
-  // Автоматический вход после регистрации
   const currentUser = { name: name, email: email, phone: phone };
   localStorage.setItem('currentUser', JSON.stringify(currentUser));
 
