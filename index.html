@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Игривый совёнок</title>
+<link rel="icon" href="logo.png" type="image/png">
 <style>
-/* ВАШ СУЩЕСТВУЮЩИЙ CSS ОСТАЛСЯ БЕЗ ИЗМЕНЕНИЙ */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%); min-height: 100vh; padding: 15px; }
 .container { max-width: 1300px; margin: 0 auto; }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
 .top-nav { background: white; padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
 .nav-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px; }
 .logo-area { display: flex; align-items: center; gap: 12px; }
-.logo-img { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f5e6a3, #d4a017); display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); animation: float 3s ease-in-out infinite; }
+.logo-img { width: 50px; height: 50px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.15); border: 3px solid #f0c040; animation: float 3s ease-in-out infinite; background: white; padding: 2px; object-fit: cover; }
 .logo-text { font-size: 22px; font-weight: bold; color: #8B7355; }
 .user-area { display: flex; align-items: center; gap: 15px; font-size: 15px; color: #666; }
 .user-area a { color: #8B7355; text-decoration: none; font-weight: 600; }
@@ -22,7 +23,7 @@ body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%,
 .nav-btn.search-btn { background: linear-gradient(135deg, #4CAF50, #388E3C); color: white; }
 .nav-btn.cart-btn { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
 .banner { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 50%, #d4c06a 100%); border-radius: 20px; padding: 50px 20px; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.banner-logo { width: 150px; height: 150px; border-radius: 50%; background: white; margin: 0 auto 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 5px solid #f0c040; overflow: hidden; display: flex; align-items: center; justify-content: center; animation: float 4s ease-in-out infinite; }
+.banner-logo { width: 180px; height: 180px; border-radius: 50%; background: white; margin: 0 auto 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 5px solid #f0c040; overflow: hidden; display: flex; align-items: center; justify-content: center; animation: float 4s ease-in-out infinite; }
 .banner-logo img { width: 100%; height: 100%; object-fit: cover; }
 .banner h1 { font-size: 36px; color: #5a4000; margin-bottom: 15px; }
 .banner p { color: #8B7355; font-size: 18px; margin-bottom: 25px; }
@@ -87,11 +88,12 @@ body { background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%,
 .btn:hover { transform: translateY(-2px); }
 .btn-secondary { background: #f0f0f0; color: #333; }
 .btn-success { background: linear-gradient(135deg, #4CAF50, #388E3C); }
+.payment-method { padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; margin-bottom: 10px; text-align: center; transition: all 0.3s; }
+.payment-method:hover { border-color: #f0c040; background: #fffef5; }
 footer { background: linear-gradient(135deg, #2c2c54, #474787); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 20px; }
 footer a { color: #f0c040; text-decoration: none; margin: 0 12px; font-size: 15px; }
 footer a:hover { text-decoration: underline; }
-@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-@media (max-width: 768px) { .cart-sidebar { width: 100%; right: -100%; } .banner h1 { font-size: 28px; } .banner-logo { width: 120px; height: 120px; } }
+@media (max-width: 768px) { .cart-sidebar { width: 100%; right: -100%; } .banner h1 { font-size: 28px; } .banner-logo { width: 130px; height: 130px; } }
 </style>
 </head>
 <body>
@@ -99,7 +101,7 @@ footer a:hover { text-decoration: underline; }
   <nav class="top-nav">
     <div class="nav-header">
       <div class="logo-area">
-        <img src="logo.png" alt="Логотип" class="logo-img" style="padding:0; border:none; background:white;">
+        <img src="logo.png" alt="Логотип" class="logo-img" onerror="this.style.display='none'">
         <span class="logo-text">Игривый совёнок</span>
       </div>
       <div class="user-area">
@@ -123,7 +125,9 @@ footer a:hover { text-decoration: underline; }
   </nav>
 
   <div class="banner" id="mainBanner">
-    <div class="banner-logo"><img src="logo.png" alt="Игривый совёнок" style="width:100%; height:100%; object-fit:cover; border-radius:50%;"></div>
+    <div class="banner-logo">
+      <img src="logo.png" alt="Игривый совёнок" onerror="this.parentElement.innerHTML='<div style=\'font-size:80px\'>🦉</div>'">
+    </div>
     <h1>Добро пожаловать!</h1>
     <p>Уютный мир игр, пособий и знаний для маленьких совят 🌙✨</p>
     <a href="login.html" class="banner-btn" id="bannerLoginBtn">🔑 Войти / Регистрация</a>
@@ -210,14 +214,46 @@ footer a:hover { text-decoration: underline; }
       <div id="checkoutSummary" style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px;"></div>
       <h3 style="margin-bottom: 15px; color: #5a4000;">💳 Выберите способ оплаты:</h3>
       <div>
-        <div class="payment-method" onclick="selectPayment('Карта')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; margin-bottom:10px; text-align:center;">💳 Банковская карта</div>
-        <div class="payment-method" onclick="selectPayment('СБП')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; margin-bottom:10px; text-align:center;">📱 СБП</div>
-        <div class="payment-method" onclick="selectPayment('При получении')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; text-align:center;">💵 При получении</div>
+        <div class="payment-method" onclick="selectPayment('Карта')">💳 Банковская карта</div>
+        <div class="payment-method" onclick="selectPayment('СБП')">📱 СБП (Система быстрых платежей)</div>
+        <div class="payment-method" onclick="selectPayment('При получении')">💵 При получении</div>
       </div>
       <input type="hidden" id="checkoutPayment" required>
+      
+      <!-- ПОЛЯ ДЛЯ КАРТЫ -->
+      <div id="cardFields" style="display:none; background:#fff8e1; padding:20px; border-radius:10px; margin-top:15px; border:2px solid #f0c040;">
+        <h4 style="margin-bottom:15px; color:#5a4000;">💳 Данные банковской карты</h4>
+        <div style="display:grid; gap:12px;">
+          <input type="text" id="cardNumber" placeholder="Номер карты: 0000 0000 0000 0000" maxlength="19" 
+                 style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px; letter-spacing:2px;"
+                 oninput="formatCardNumber(this)">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <input type="text" id="cardExpiry" placeholder="ММ/ГГ" maxlength="5"
+                   style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px;"
+                   oninput="formatExpiry(this)">
+            <input type="password" id="cardCVV" placeholder="CVV" maxlength="3"
+                   style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px;">
+          </div>
+          <input type="text" id="cardHolder" placeholder="Имя владельца (латиницей, как на карте)"
+                 style="padding:12px; border:2px solid #e0e0e0; border-radius:8px; font-size:15px; text-transform:uppercase;">
+        </div>
+        <p style="margin-top:10px; font-size:12px; color:#999;">🔒 Данные используются только для демонстрации</p>
+      </div>
+      
+      <!-- QR-КОД СБП -->
+      <div id="qrBlock" style="display:none; text-align:center; background:#e8f5e9; padding:20px; border-radius:10px; margin-top:15px; border:2px solid #4CAF50;">
+        <h4 style="margin-bottom:15px; color:#2e7d32;">📱 Оплата через СБП</h4>
+        <p style="margin-bottom:15px; color:#555;">Отсканируйте QR-код в приложении вашего банка:</p>
+        <div style="background:white; padding:15px; border-radius:10px; display:inline-block; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+          <div style="width:180px; height:180px; background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 15px 15px; border-radius:5px;"></div>
+          <p style="margin-top:10px; font-size:12px; color:#666; font-weight:bold;">Сумма: <span id="qrAmount">0</span>₽</p>
+        </div>
+        <p style="margin-top:15px; color:#555; font-size:14px;">После оплаты в приложении нажмите "Подтвердить"</p>
+      </div>
+      
       <div style="display: flex; gap: 10px; margin-top: 20px;">
         <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1;">Отмена</button>
-        <button type="submit" class="btn btn-success" style="flex:1;">✅ Оплатить и скачать</button>
+        <button type="submit" class="btn btn-success" style="flex:1;">✅ Подтвердить заказ</button>
       </div>
     </form>
   </div>
@@ -271,8 +307,6 @@ function init() {
   updateStats();
   updateCartCount();
   updateUserDisplay();
-  
-  // ПУНКТ 4: Мгновенная синхронизация между вкладками одного браузера
   window.addEventListener('storage', (e) => {
     if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
       purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
@@ -280,21 +314,13 @@ function init() {
       if (currentCategory) showCategory(currentCategory);
     }
   });
-  
-  // ПУНКТ 4: Проверка обновлений каждые 3 секунды (для надежности)
-  setInterval(() => {
-    updateStats();
-    if (currentCategory) showCategory(currentCategory);
-  }, 3000);
+  setInterval(() => { updateStats(); if (currentCategory) showCategory(currentCategory); }, 3000);
 }
 
 function loadContacts() {
   const contacts = JSON.parse(localStorage.getItem('siteContacts') || '{}');
   const info = document.getElementById('contactInfo');
-  if (Object.keys(contacts).length === 0) {
-    info.innerHTML = '<p style="color: #999;">Контакты не указаны</p>';
-    return;
-  }
+  if (Object.keys(contacts).length === 0) { info.innerHTML = '<p style="color: #999;">Контакты не указаны</p>'; return; }
   info.innerHTML = `${contacts.email ? `<div class="contact-item">✉️ ${contacts.email}</div>` : ''}${contacts.phone ? `<div class="contact-item">📞 ${contacts.phone}</div>` : ''}${contacts.address ? `<div class="contact-item">📍 ${contacts.address}</div>` : ''}${contacts.hours ? `<div class="contact-item">🕐 ${contacts.hours}</div>` : ''}`;
 }
 
@@ -305,12 +331,7 @@ function updateStats() {
   categories.forEach(category => {
     const folders = catalog[category] || [];
     let categoryItems = 0;
-    folders.forEach(folder => {
-      const items = folder.items || [];
-      categoryItems += items.length;
-      totalItems += items.length;
-      freeItems += items.filter(item => item.price === 0).length;
-    });
+    folders.forEach(folder => { const items = folder.items || []; categoryItems += items.length; totalItems += items.length; freeItems += items.filter(item => item.price === 0).length; });
     const countEl = document.getElementById('count' + category.charAt(0).toUpperCase() + category.slice(1));
     if (countEl) countEl.textContent = `${categoryItems} материалов`;
   });
@@ -331,11 +352,7 @@ function updateUserDisplay() {
   }
 }
 
-function logout() {
-  localStorage.removeItem('currentUser');
-  currentUser = null;
-  location.reload();
-}
+function logout() { localStorage.removeItem('currentUser'); currentUser = null; location.reload(); }
 
 function showHome() {
   document.getElementById('mainBanner').style.display = 'block';
@@ -356,10 +373,21 @@ function showCategory(category) {
   if (folders.length === 0) {
     document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">В этой категории пока нет материалов</p>';
   } else {
-    document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `<div style="margin-bottom: 30px;"><h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3><div class="items-grid">${(folder.items || []).map((item, ii) => { 
-      // ПУНКТ 2: Проверка, куплен ли товар
-      const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii); 
-      return `<div class="item-card"><div class="item-name">${item.name}</div><div class="item-description">${item.description || ''}</div><div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div><div class="item-actions">${item.price === 0 ? `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : isPurchased ? `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">🛒 В корзину</button>`}</div></div>`; 
+    document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `<div style="margin-bottom: 30px;"><h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3><div class="items-grid">${(folder.items || []).map((item, ii) => {
+      const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii);
+      let previewHtml = '';
+      if (item.file) {
+        if (item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+          previewHtml = `<div style="margin: 10px 0; padding: 8px; background: white; border-radius: 8px; border: 1px solid #e0e0e0;"><img src="${item.file.data}" style="width:100%; max-height:150px; object-fit:cover; border-radius:5px; pointer-events:none;" oncontextmenu="return false;" alt="Превью"></div>`;
+        } else if (item.file.name.match(/\.pdf$/i)) {
+          previewHtml = `<div style="margin: 10px 0; padding: 8px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; text-align:center;"><div style="font-size:30px;">📄</div><div style="font-size:11px; color:#666;">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}', '${item.file.name}', 'application/pdf')" style="margin-top:5px; font-size:11px; padding:4px 10px;">👁 Предпросмотр</button></div>`;
+        } else {
+          previewHtml = `<div style="margin: 10px 0; padding: 8px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; text-align:center;"><div style="font-size:30px;">📎</div><div style="font-size:11px; color:#666;">${item.file.name}</div></div>`;
+        }
+      } else {
+        previewHtml = `<div style="margin: 10px 0; padding: 8px; background: white; border-radius: 8px; border: 1px solid #e0e0e0; text-align:center; color:#999; font-size:11px;">📭 Файл не прикреплён</div>`;
+      }
+      return `<div class="item-card"><div class="item-name">${item.name}</div><div class="item-description">${item.description || ''}</div>${previewHtml}<div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div><div class="item-actions">${item.price === 0 ? `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : isPurchased ? `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` : `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">🛒 В корзину</button>`}</div></div>`;
     }).join('')}</div></div>`).join('');
   }
   document.getElementById('mainBanner').style.display = 'none';
@@ -371,79 +399,65 @@ function showCategory(category) {
 }
 
 function addToCart(category, folderIndex, itemIndex) {
-  // Получаем актуальный каталог
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  
-  // Проверяем, существует ли товар
   if (!catalog[category] || !catalog[category][folderIndex] || !catalog[category][folderIndex].items[itemIndex]) {
-    alert('❌ Ошибка: товар не найден в каталоге');
+    alert('❌ Ошибка: товар не найден');
     return;
   }
-  
   const item = catalog[category][folderIndex].items[itemIndex];
-  
-  // Проверяем, нет ли уже в корзине
-  const alreadyInCart = cart.some(c => 
-    c.category === category && 
-    c.folderIndex === folderIndex && 
-    c.itemIndex === itemIndex
-  );
-  
-  if (alreadyInCart) {
-    alert('⚠️ Этот товар уже в корзине!');
-    return;
-  }
-  
-  // Добавляем товар в корзину
-  cart.push({
-    id: item.id || Date.now(),
-    name: item.name,
-    description: item.description || '',
-    price: item.price,
-    category: category,
-    folderIndex: folderIndex,
-    itemIndex: itemIndex,
-    file: item.file || null,
-    quantity: 1
-  });
-  
-  // Сохраняем корзину в память браузера
+  const alreadyInCart = cart.some(c => c.category === category && c.folderIndex === folderIndex && c.itemIndex === itemIndex);
+  if (alreadyInCart) { alert('⚠️ Этот товар уже в корзине!'); return; }
+  cart.push({ id: item.id || Date.now(), name: item.name, description: item.description || '', price: item.price, category: category, folderIndex: folderIndex, itemIndex: itemIndex, file: item.file || null, quantity: 1 });
   localStorage.setItem('cart', JSON.stringify(cart));
-  
-  // Обновляем счётчик на экране
   updateCartCount();
-  
-  // Показываем сообщение
   alert('✅ Товар "' + item.name + '" добавлен в корзину!');
 }
 
-function updateCartCount() { document.getElementById('cartCountNav').textContent = cart.length; }
+function updateCartCount() {
+  const count = cart.length;
+  const newCount = document.getElementById('cartCountNav');
+  if (newCount) newCount.textContent = count;
+  const oldCount = document.getElementById('cartCount');
+  if (oldCount) oldCount.textContent = count;
+}
+
 function openCart() { renderCart(); document.getElementById('cartSidebar').classList.add('active'); }
 function closeCart() { document.getElementById('cartSidebar').classList.remove('active'); }
 
 function renderCart() {
   const cartItems = document.getElementById('cartItems');
-  if (cart.length === 0) {
-    cartItems.innerHTML = '<p style="color: #999; text-align: center;">Корзина пуста</p>';
-    document.getElementById('cartTotal').textContent = '0';
-    return;
-  }
+  if (cart.length === 0) { cartItems.innerHTML = '<p style="color: #999; text-align: center;">Корзина пуста</p>'; document.getElementById('cartTotal').textContent = '0'; return; }
   cartItems.innerHTML = cart.map((item, index) => `<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding: 4px 8px; font-size: 12px;">✕</button></div><div>${item.price}₽</div></div>`).join('');
   document.getElementById('cartTotal').textContent = cart.reduce((sum, item) => sum + item.price, 0);
 }
 
-function removeFromCart(index) {
-  cart.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-  renderCart();
-}
+function removeFromCart(index) { cart.splice(index, 1); localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount(); renderCart(); }
 
 function selectPayment(method) {
   document.querySelectorAll('.payment-method').forEach(el => { el.style.borderColor = '#e0e0e0'; el.style.background = 'white'; });
-  event.target.style.borderColor = '#4CAF50';
-  event.target.style.background = '#f1f8e9';
+  if (event && event.target) { event.target.style.borderColor = '#4CAF50'; event.target.style.background = '#f1f8e9'; }
   document.getElementById('checkoutPayment').value = method;
+  const cardFields = document.getElementById('cardFields');
+  const qrBlock = document.getElementById('qrBlock');
+  if (cardFields) cardFields.style.display = (method === 'Карта') ? 'block' : 'none';
+  if (qrBlock) {
+    qrBlock.style.display = (method === 'СБП') ? 'block' : 'none';
+    const qrAmount = document.getElementById('qrAmount');
+    if (qrAmount) { const total = document.getElementById('cartTotal'); qrAmount.textContent = total ? total.textContent : '0'; }
+  }
+}
+
+function formatCardNumber(input) {
+  let value = input.value.replace(/\D/g, '');
+  value = value.substring(0, 16);
+  let formatted = value.match(/.{1,4}/g);
+  input.value = formatted ? formatted.join(' ') : value;
+}
+
+function formatExpiry(input) {
+  let value = input.value.replace(/\D/g, '');
+  if (value.length >= 2) { value = value.substring(0, 2) + '/' + value.substring(2, 4); }
+  input.value = value;
 }
 
 function openCheckout() {
@@ -459,23 +473,33 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const paymentMethod = document.getElementById('checkoutPayment').value;
   if (!paymentMethod) { alert('Выберите способ оплаты'); return; }
+  if (paymentMethod === 'Карта') {
+    const cardNum = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    const cardExp = document.getElementById('cardExpiry').value;
+    const cardCvv = document.getElementById('cardCVV').value;
+    const cardHolder = document.getElementById('cardHolder').value;
+    if (cardNum.length < 16 || !cardExp || cardCvv.length < 3 || !cardHolder) {
+      alert('Заполните все поля карты');
+      return;
+    }
+  }
   const order = { id: Date.now(), customerName: document.getElementById('checkoutName').value, email: document.getElementById('checkoutEmail').value, phone: document.getElementById('checkoutPhone').value, address: document.getElementById('checkoutAddress').value, delivery: document.getElementById('checkoutDelivery').value, payment: paymentMethod, items: cart.map(item => ({ name: item.name, price: item.price, category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex })), total: cart.reduce((sum, item) => sum + item.price, 0), status: 'new', paid: false, date: new Date().toISOString() };
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   orders.push(order);
   localStorage.setItem('ordersData', JSON.stringify(orders));
   closeCheckout(); closeCart();
-  cart = [];
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
+  cart = []; localStorage.setItem('cart', JSON.stringify(cart)); updateCartCount();
   processPayment(order);
 });
 
 function processPayment(order) {
   const paymentContent = document.getElementById('paymentContent');
   if (order.payment === 'При получении') {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Заказ оформлен!</h2><p>Номер заказа: #${order.id}</p><p>Сумма: ${order.total}₽</p><p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы будут доступны только после фактической оплаты</p><button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button></div>`;
-  } else {
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h3 style="margin-bottom: 20px;">Оплата заказа #${order.id}</h3><p style="margin-bottom: 20px; font-size: 18px;">Сумма: <strong>${order.total}₽</strong></p><div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;"><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px;">💳 Подтвердить оплату ${order.total}₽</button></div></div>`;
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #ff9800; margin-bottom: 20px;">⏳ Заказ оформлен</h2><p>Номер заказа: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы станут доступны после оплаты при получении</p><button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button></div>`;
+  } else if (order.payment === 'Карта') {
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #5a4000; margin-bottom: 20px;">💳 Оплата картой</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p><div style="background: #fff8e1; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #f0c040;"><p style="margin-bottom: 10px;">✅ Данные карты приняты</p><p style="margin-bottom: 15px; color: #666; font-size: 14px;">Нажмите кнопку для подтверждения оплаты</p><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%;">✅ Оплатить ${order.total}₽</button></div><p style="color: #999; font-size: 12px;">После оплаты файлы станут доступны автоматически</p></div>`;
+  } else if (order.payment === 'СБП') {
+    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #2e7d32; margin-bottom: 20px;">📱 Оплата по СБП</h2><p style="font-size: 24px; margin-bottom: 20px;"><strong>${order.total}₽</strong></p><div style="background: #e8f5e9; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 2px solid #4CAF50;"><p style="margin-bottom: 15px;">Отсканируйте QR-код в приложении банка</p><div style="background:white; padding:15px; border-radius:10px; display:inline-block; margin-bottom:15px;"><div style="width:150px; height:150px; background:repeating-conic-gradient(#000 0% 25%, #fff 0% 50%) 50% / 12px 12px; border-radius:5px;"></div></div><p style="margin-bottom: 15px; color: #666;">После оплаты в приложении нажмите кнопку:</p><button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px; width: 100%;">✅ Я оплатил — Подтвердить</button></div></div>`;
   }
   document.getElementById('paymentModal').classList.add('active');
 }
@@ -483,36 +507,37 @@ function processPayment(order) {
 function confirmPayment(orderId) {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const order = orders.find(o => o.id === orderId);
-  if (order) {
-    order.paid = true;
-    order.paymentDate = new Date().toISOString();
-    localStorage.setItem('ordersData', JSON.stringify(orders));
-    order.items.forEach(item => {
-      if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
-        purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
-      }
-    });
-    localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
-    closePayment();
-    const paymentContent = document.getElementById('paymentContent');
-    paymentContent.innerHTML = `<div style="text-align: center; padding: 25px;"><h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Оплата прошла успешно!</h2><p>Теперь вы можете скачать купленные материалы</p><button class="btn btn-success" onclick="showMyPurchases()" style="margin-top: 20px;">📥 Перейти к покупкам</button><button class="btn btn-secondary" onclick="closePayment()" style="margin-top: 10px;">Закрыть</button></div>`;
-    document.getElementById('paymentModal').classList.add('active');
-    updateStats();
-  }
+  if (!order) { alert('❌ Заказ не найден'); return; }
+  order.paid = true;
+  order.paymentDate = new Date().toISOString();
+  order.status = 'completed';
+  localStorage.setItem('ordersData', JSON.stringify(orders));
+  order.items.forEach(item => {
+    const alreadyPurchased = purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex);
+    if (!alreadyPurchased) {
+      purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
+    }
+  });
+  localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+  closePayment();
+  updateStats();
+  setTimeout(() => { showMyPurchases(); }, 300);
+  alert('✅ Оплата подтверждена! Ваши файлы доступны для скачивания.');
 }
+
 function closePayment() { document.getElementById('paymentModal').classList.remove('active'); }
 
 function downloadFreeItem(category, folderIndex, itemIndex) {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const item = catalog[category][folderIndex].items[itemIndex];
-  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; link.click(); alert('Файл скачан! 📥'); } else { alert('Файл не найден'); }
+  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; document.body.appendChild(link); link.click(); document.body.removeChild(link); alert('✅ Файл "' + item.file.name + '" скачан!'); } else { alert('❌ Файл не найден'); }
 }
 
 function downloadPurchasedItem(category, folderIndex, itemIndex) {
-  if (!purchasedItems.some(p => p.category === category && p.folderIndex === folderIndex && p.itemIndex === itemIndex)) { alert('Сначала необходимо оплатить товар'); return; }
+  if (!purchasedItems.some(p => p.category === category && p.folderIndex === folderIndex && p.itemIndex === itemIndex)) { alert('⛔ Сначала необходимо оплатить товар'); return; }
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
   const item = catalog[category][folderIndex].items[itemIndex];
-  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; link.click(); alert('Файл скачан! 📥'); } else { alert('Файл не найден'); }
+  if (item.file) { const link = document.createElement('a'); link.href = item.file.data; link.download = item.file.name; document.body.appendChild(link); link.click(); document.body.removeChild(link); alert('✅ Файл "' + item.file.name + '" скачан!'); } else { alert('❌ Файл не найден'); }
 }
 
 function showMyPurchases() {
@@ -548,6 +573,46 @@ function performSearch() {
   let found = [];
   Object.keys(catalog).forEach(cat => { (catalog[cat] || []).forEach((folder, fi) => { (folder.items || []).forEach((item, ii) => { if (item.name.toLowerCase().includes(query)) { found.push({ ...item, category: cat, folderIndex: fi, itemIndex: ii }); } }); }); });
   results.innerHTML = found.length === 0 ? '<p style="color: #999;">Ничего не найдено</p>' : found.map(item => `<div class="search-result-item" onclick="closeSearch(); showCategory('${item.category}');"><strong>${item.name}</strong> — ${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>`).join('');
+}
+
+function previewFile(fileData, fileName, fileType) {
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:5000; display:flex; align-items:center; justify-content:center; padding:20px;';
+  const content = document.createElement('div');
+  content.style.cssText = 'background:white; border-radius:15px; padding:20px; max-width:800px; width:100%; max-height:90vh; overflow:auto; position:relative;';
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '✕ Закрыть';
+  closeBtn.style.cssText = 'position:absolute; top:10px; right:15px; background:#f44336; color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer; font-size:14px; font-weight:600; z-index:10;';
+  closeBtn.onclick = () => document.body.removeChild(modal);
+  const title = document.createElement('h3');
+  title.textContent = '👁 Предпросмотр: ' + fileName;
+  title.style.cssText = 'margin-bottom:15px; padding-right:100px; color:#5a4000;';
+  const viewer = document.createElement('div');
+  if (fileType && fileType.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = fileData;
+    img.style.cssText = 'width:100%; max-height:70vh; object-fit:contain; border-radius:8px; user-select:none; -webkit-user-drag:none; pointer-events:none;';
+    img.oncontextmenu = (e) => { e.preventDefault(); alert('🔒 Скачивание доступно только после оплаты'); };
+    viewer.appendChild(img);
+  } else if (fileType === 'application/pdf' || fileName.endsWith('.pdf')) {
+    const embed = document.createElement('embed');
+    embed.src = fileData;
+    embed.type = 'application/pdf';
+    embed.style.cssText = 'width:100%; height:70vh; border-radius:8px;';
+    viewer.appendChild(embed);
+  } else {
+    viewer.innerHTML = `<div style="text-align:center; padding:40px;"><div style="font-size:60px;">📄</div><p style="margin-top:15px; color:#666;">Предпросмотр недоступен</p><p style="color:#999; font-size:13px;">Файл: ${fileName}</p></div>`;
+  }
+  const warning = document.createElement('p');
+  warning.textContent = '⚠️ Скачивание доступно только после оплаты';
+  warning.style.cssText = 'text-align:center; color:#ff9800; margin-top:15px; font-weight:600; font-size:14px;';
+  content.appendChild(closeBtn);
+  content.appendChild(title);
+  content.appendChild(viewer);
+  content.appendChild(warning);
+  modal.appendChild(content);
+  modal.onclick = (e) => { if (e.target === modal) document.body.removeChild(modal); };
+  document.body.appendChild(modal);
 }
 
 document.getElementById('contactForm').addEventListener('submit', (e) => {
