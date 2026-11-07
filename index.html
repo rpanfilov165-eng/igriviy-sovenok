@@ -432,6 +432,9 @@ function updateCartCount() {
   // Обновляем старый счётчик если есть
   const oldCount = document.getElementById('cartCount');
   if (oldCount) oldCount.textContent = count;
+  
+  // Сохраняем корзину для админа
+  saveCartToAllCarts();
 }
 
 function openCart() { renderCart(); document.getElementById('cartSidebar').classList.add('active'); }
