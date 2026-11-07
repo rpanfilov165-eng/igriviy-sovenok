@@ -6,334 +6,172 @@
 <title>Игривый совёнок</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
-body {
-  background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 30%, #d4c06a 70%, #c9b45a 100%);
-  min-height: 100vh;
-  padding: 15px;
-}
-
-.container { max-width: 1300px; margin: 0 auto; }
-
-/* Анимация плавания */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  25% { transform: translateY(-8px) rotate(1deg); }
-  50% { transform: translateY(-4px) rotate(0deg); }
-  75% { transform: translateY(-10px) rotate(-1deg); }
-}
-
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-12px); }
-}
-
-.logo-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.logo-float-slow {
-  animation: floatSlow 5s ease-in-out infinite;
-}
-
-.top-nav {
-  background: white;
-  padding: 15px 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  margin-bottom: 20px;
-}
-
-.nav-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-img {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  border: 3px solid #f0c040;
-}
-
-.logo-text {
-  font-size: 22px;
-  font-weight: bold;
-  color: #8B7355;
-}
-
-.user-area {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 15px;
-  color: #666;
-}
-
-.user-area a {
-  color: #8B7355;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.nav-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-.nav-btn {
-  padding: 10px 18px;
-  background: linear-gradient(135deg, #f0c040, #e8a820);
-  color: #5a4000;
-  border: none;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.nav-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-.nav-btn.search-btn { background: linear-gradient(135deg, #4CAF50, #388E3C); color: white; }
-.nav-btn.cart-btn { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
-
-.banner {
-  background: linear-gradient(135deg, #f5e6a3 0%, #e8d580 50%, #d4c06a 100%);
-  border-radius: 20px;
-  padding: 50px 20px;
-  text-align: center;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  position: relative;
-}
-
-.banner-logo {
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  background: white;
-  margin: 0 auto 25px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-  border: 5px solid #f0c040;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.banner-logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.banner h1 { font-size: 36px; color: #5a4000; margin-bottom: 15px; }
-.banner p { color: #8B7355; font-size: 18px; margin-bottom: 25px; }
-
-.banner-btn {
-  padding: 14px 35px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 17px;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  transition: transform 0.2s;
-}
-.banner-btn:hover { transform: translateY(-2px); }
-
-.welcome-bar {
-  background: linear-gradient(135deg, #4CAF50, #66BB6A);
-  color: white;
-  padding: 14px 20px;
-  border-radius: 12px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: 600;
-  font-size: 16px;
-  display: none;
-}
-.welcome-bar.show { display: block; }
-
-.stats-section {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.stats-section h2 { color: #5a4000; margin-bottom: 20px; font-size: 22px; }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; }
-.stat-card { background: linear-gradient(135deg, #5c4db7, #4a3fa0); color: white; padding: 25px; border-radius: 12px; text-align: center; }
-.stat-value { font-size: 32px; font-weight: bold; margin-bottom: 8px; }
-.stat-label { font-size: 14px; opacity: 0.9; }
-
-.categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-.category-card { background: white; padding: 30px 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-.category-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-.category-icon { font-size: 45px; margin-bottom: 12px; }
-.category-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 16px; }
-.category-count { color: #999; font-size: 14px; }
-
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-.feature-card { background: white; padding: 25px; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+header { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.logo { font-size: 24px; font-weight: bold; color: #667eea; }
+.user-info { display: flex; align-items: center; gap: 15px; }
+.welcome { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 30px; text-align: center; }
+.welcome h1 { color: #667eea; margin-bottom: 15px; }
+.welcome p { color: #666; font-size: 18px; margin-bottom: 20px; }
+.btn { padding: 12px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; transition: transform 0.2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn-secondary { background: #f0f0f0; color: #333; }
+.categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.category-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; cursor: pointer; transition: transform 0.2s; }
+.category-card:hover { transform: translateY(-5px); }
+.category-icon { font-size: 48px; margin-bottom: 15px; }
+.category-title { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 10px; }
+.category-count { color: #667eea; font-size: 14px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+.stat-value { font-size: 32px; font-weight: bold; color: #667eea; margin-bottom: 5px; }
+.stat-label { color: #666; font-size: 14px; }
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.feature-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
 .feature-icon { font-size: 36px; margin-bottom: 10px; }
-.feature-title { font-weight: 600; color: #333; margin-bottom: 8px; font-size: 15px; }
-.feature-desc { color: #999; font-size: 13px; }
-
-.contacts-section { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-.contacts-section h2 { color: #5a4000; margin-bottom: 20px; font-size: 22px; }
-.contact-form { display: grid; gap: 15px; margin-top: 20px; }
-.contact-form input, .contact-form textarea { padding: 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 15px; }
-.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #f0c040; }
-.contact-info { display: grid; gap: 10px; margin-top: 20px; }
-.contact-item { display: flex; align-items: center; gap: 10px; color: #555; font-size: 15px; }
-
-.cart-sidebar { position: fixed; right: -420px; top: 0; width: 400px; height: 100vh; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.2); transition: right 0.3s; z-index: 1000; padding: 25px; overflow-y: auto; }
+.feature-title { font-weight: 600; margin-bottom: 5px; }
+.contacts { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
+.contacts h2 { color: #667eea; margin-bottom: 20px; }
+.contact-form { display: grid; gap: 15px; }
+.contact-form input, .contact-form textarea { padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; }
+.contact-form input:focus, .contact-form textarea:focus { outline: none; border-color: #667eea; }
+.contact-info { margin-top: 20px; display: grid; gap: 10px; }
+.contact-item { display: flex; align-items: center; gap: 10px; }
+.cart-sidebar { position: fixed; right: -400px; top: 0; width: 400px; height: 100vh; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.2); transition: right 0.3s; z-index: 1000; padding: 20px; overflow-y: auto; }
 .cart-sidebar.active { right: 0; }
-.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.close-cart { background: none; border: none; font-size: 28px; cursor: pointer; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.close-cart { background: none; border: none; font-size: 24px; cursor: pointer; }
 .cart-item { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; }
 .cart-item-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
 .cart-total { border-top: 2px solid #e0e0e0; padding-top: 20px; margin-top: 20px; }
-
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
 .modal.active { display: flex; }
-.modal-content { background: white; padding: 35px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.close-modal { background: none; border: none; font-size: 28px; cursor: pointer; }
-
-.search-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3000; align-items: flex-start; justify-content: center; padding-top: 100px; }
-.search-overlay.active { display: flex; }
-.search-box { background: white; padding: 35px; border-radius: 15px; width: 90%; max-width: 600px; }
-.search-box input { width: 100%; padding: 16px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; }
-.search-results { margin-top: 20px; max-height: 300px; overflow-y: auto; }
-.search-result-item { padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; }
-.search-result-item:hover { background: #f5f5f5; }
-
-.category-view { background: white; padding: 30px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: none; }
-.category-view.active { display: block; }
-.category-view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-.item-card { background: #f9f9f9; padding: 20px; border-radius: 12px; transition: transform 0.2s; }
+.modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.close-modal { background: none; border: none; font-size: 24px; cursor: pointer; }
+.folder-content { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); margin-bottom: 30px; }
+.folder-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+.item-card { background: #f9f9f9; padding: 20px; border-radius: 15px; transition: transform 0.2s; }
 .item-card:hover { transform: translateY(-3px); }
-.item-name { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
-.item-description { color: #666; font-size: 13px; margin-bottom: 12px; }
-.item-price { font-size: 20px; font-weight: bold; color: #5c4db7; margin-bottom: 12px; }
-.item-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-.btn { padding: 10px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
-.btn:hover { transform: translateY(-2px); }
-.btn-secondary { background: #f0f0f0; color: #333; }
-.btn-success { background: linear-gradient(135deg, #4CAF50, #388E3C); }
-
-footer { background: linear-gradient(135deg, #2c2c54, #474787); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-top: 20px; }
-footer a { color: #f0c040; text-decoration: none; margin: 0 12px; font-size: 15px; }
-footer a:hover { text-decoration: underline; }
-
+.item-name { font-weight: 600; margin-bottom: 10px; }
+.item-description { color: #666; font-size: 14px; margin-bottom: 15px; }
+.item-price { font-size: 20px; font-weight: bold; color: #667eea; margin-bottom: 15px; }
+.item-actions { display: flex; gap: 10px; }
+.payment-success { text-align: center; padding: 30px; }
+.payment-success h2 { color: #4CAF50; margin-bottom: 20px; }
+.download-btn { margin-top: 20px; }
+footer { text-align: center; color: white; padding: 20px; }
+footer a { color: white; text-decoration: none; margin: 0 10px; }
 @media (max-width: 768px) {
   .cart-sidebar { width: 100%; right: -100%; }
-  .banner h1 { font-size: 28px; }
-  .banner-logo { width: 120px; height: 120px; }
+  header { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 <div class="container">
+  <header>
+    <div class="logo">🦉 Игривый совёнок</div>
+    <div class="user-info">
+      <span id="userInfo">👤 Гость</span>
+      <button class="btn btn-secondary" onclick="openCart()" style="padding: 8px 15px;">🛒 Корзина (<span id="cartCount">0</span>)</button>
+      <a href="login.html" class="btn" id="loginBtn">Войти</a>
+    </div>
+  </header>
 
-  <nav class="top-nav">
-    <div class="nav-header">
-      <div class="logo-area">
-        <img src="logo.png" alt="Логотип" class="logo-img logo-float" onerror="this.style.display='none'">
-        <span class="logo-text">Игривый совёнок</span>
-      </div>
-      <div class="user-area">
-        <span id="userInfo">👤 Гость</span>
-        <a href="login.html" id="loginBtn">Войти</a>
-      </div>
-    </div>
-    <div class="nav-buttons">
-      <button class="nav-btn" onclick="showHome()">🏠 Главная</button>
-      <button class="nav-btn" onclick="showCategory('catalog')">📚 Весь каталог</button>
-      <button class="nav-btn" onclick="showCategory('worksheets')">📝 Рабочие листы</button>
-      <button class="nav-btn" onclick="showCategory('themes')">🎨 Темы</button>
-      <button class="nav-btn" onclick="showCategory('letterGames')">🔤 Игры с буквами</button>
-      <button class="nav-btn" onclick="showCategory('speechGames')">🗣️ Логопедические</button>
-      <button class="nav-btn" onclick="showCategory('free')">🎁 Бесплатно</button>
-      <button class="nav-btn" onclick="showMyPurchases()">📥 Мои покупки</button>
-      <button class="nav-btn" onclick="showMyOrders()">📦 Мои заказы</button>
-      <button class="nav-btn search-btn" onclick="openSearch()">🔍 Поиск</button>
-      <button class="nav-btn cart-btn" onclick="openCart()">🛒 <span id="cartCountNav">0</span></button>
-    </div>
-  </nav>
-
-  <div class="banner" id="mainBanner">
-    <div class="banner-logo logo-float-slow">
-      <img src="logo.png" alt="Игривый совёнок" onerror="this.parentElement.innerHTML='🦉'">
-    </div>
+  <div class="welcome">
     <h1>Добро пожаловать!</h1>
     <p>Уютный мир игр, пособий и знаний для маленьких совят 🌙✨</p>
-    <a href="login.html" class="banner-btn" id="bannerLoginBtn">🔑 Войти / Регистрация</a>
+    <a href="login.html" class="btn">🔑 Войти / Регистрация</a>
   </div>
 
-  <div class="welcome-bar" id="welcomeBar"></div>
-
-  <div class="stats-section" id="statsSection">
-    <h2>📊 Статистика</h2>
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-value" id="statSections">6</div><div class="stat-label">📚 Разделов</div></div>
-      <div class="stat-card"><div class="stat-value" id="statItems">0</div><div class="stat-label">📄 Материалов</div></div>
-      <div class="stat-card"><div class="stat-value" id="statFree">0</div><div class="stat-label">🎁 Бесплатных</div></div>
-      <div class="stat-card"><div class="stat-value" id="statPurchased">0</div><div class="stat-label">✅ Куплено</div></div>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-value" id="statItems">0</div>
+      <div class="stat-label">📚 Материалов</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statFolders">0</div>
+      <div class="stat-label">📁 Папок</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statFree">0</div>
+      <div class="stat-label">🎁 Бесплатных</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statPurchased">0</div>
+      <div class="stat-label">✅ Куплено</div>
     </div>
   </div>
 
-  <div class="categories-grid" id="categoriesGrid">
-    <div class="category-card" onclick="showCategory('catalog')"><div class="category-icon">📚</div><div class="category-title">Весь каталог</div><div class="category-count" id="countCatalog">0 материалов</div></div>
-    <div class="category-card" onclick="showCategory('worksheets')"><div class="category-icon">📝</div><div class="category-title">Рабочие листы</div><div class="category-count" id="countWorksheets">0 материалов</div></div>
-    <div class="category-card" onclick="showCategory('themes')"><div class="category-icon">🎨</div><div class="category-title">Темы</div><div class="category-count" id="countThemes">0 материалов</div></div>
-    <div class="category-card" onclick="showCategory('letterGames')"><div class="category-icon">🔤</div><div class="category-title">Игры с буквами</div><div class="category-count" id="countLetterGames">0 материалов</div></div>
-    <div class="category-card" onclick="showCategory('speechGames')"><div class="category-icon">🗣️</div><div class="category-title">Логопедические игры</div><div class="category-count" id="countSpeechGames">0 материалов</div></div>
-    <div class="category-card" onclick="showCategory('free')"><div class="category-icon">🎁</div><div class="category-title">Бесплатно</div><div class="category-count" id="countFree">0 материалов</div></div>
+  <div class="categories">
+    <div class="category-card" onclick="showCategory('catalog')">
+      <div class="category-icon">📚</div>
+      <div class="category-title">Весь каталог</div>
+      <div class="category-count" id="countCatalog">0 материалов</div>
+    </div>
+    <div class="category-card" onclick="showCategory('worksheets')">
+      <div class="category-icon">📝</div>
+      <div class="category-title">Рабочие листы</div>
+      <div class="category-count" id="countWorksheets">0 материалов</div>
+    </div>
+    <div class="category-card" onclick="showCategory('themes')">
+      <div class="category-icon">🎨</div>
+      <div class="category-title">Темы</div>
+      <div class="category-count" id="countThemes">0 материалов</div>
+    </div>
+    <div class="category-card" onclick="showCategory('letterGames')">
+      <div class="category-icon">🔤</div>
+      <div class="category-title">Игры с буквами</div>
+      <div class="category-count" id="countLetterGames">0 материалов</div>
+    </div>
+    <div class="category-card" onclick="showCategory('speechGames')">
+      <div class="category-icon">🗣️</div>
+      <div class="category-title">Логопедические игры</div>
+      <div class="category-count" id="countSpeechGames">0 материалов</div>
+    </div>
+    <div class="category-card" onclick="showCategory('free')">
+      <div class="category-icon">🎁</div>
+      <div class="category-title">Бесплатно</div>
+      <div class="category-count" id="countFree">0 материалов</div>
+    </div>
   </div>
 
-  <div class="features-grid" id="featuresGrid">
-    <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-title">Квиз</div><div class="feature-desc">Раздел в разработке</div></div>
-    <div class="feature-card"><div class="feature-icon">❤️</div><div class="feature-title">Избранное</div><div class="feature-desc">Сохраняйте любимое</div></div>
-    <div class="feature-card"><div class="feature-icon">⚖️</div><div class="feature-title">Сравнение</div><div class="feature-desc">Сравнивайте товары</div></div>
-    <div class="feature-card"><div class="feature-icon">👁️</div><div class="feature-title">История</div><div class="feature-desc">Просмотренные товары</div></div>
-    <div class="feature-card"><div class="feature-icon">🏆</div><div class="feature-title">Достижения</div><div class="feature-desc">Зарабатывайте награды</div></div>
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <div class="feature-title">Квиз</div>
+      <p>Раздел в разработке</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">❤️</div>
+      <div class="feature-title">Избранное</div>
+      <p>Сохраняйте любимое</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚖️</div>
+      <div class="feature-title">Сравнение</div>
+      <p>Сравнивайте товары</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👁️</div>
+      <div class="feature-title">История</div>
+      <p>Просмотренные товары</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Достижения</div>
+      <p>Зарабатывайте награды</p>
+    </div>
   </div>
 
-  <div class="contacts-section" id="contactsSection">
+  <div class="contacts">
     <h2>📞 Контакты</h2>
     <div class="contact-info" id="contactInfo"></div>
-    <h3 style="margin-top: 25px; margin-bottom: 15px; color: #5a4000;">✉️ Напишите нам</h3>
+    
+    <h3 style="margin-top: 30px; margin-bottom: 15px;">✉️ Напишите нам</h3>
     <form class="contact-form" id="contactForm">
       <input type="text" id="contactName" placeholder="Ваше имя" required>
       <input type="email" id="contactEmail" placeholder="Email" required>
@@ -342,12 +180,14 @@ footer a:hover { text-decoration: underline; }
     </form>
   </div>
 
-  <div class="category-view" id="categoryView">
-    <div class="category-view-header">
-      <h2 id="categoryTitle"></h2>
-      <button class="btn btn-secondary" onclick="showHome()">← Назад</button>
+  <div id="categoryView" style="display: none;">
+    <div class="folder-content">
+      <div class="folder-header">
+        <h2 id="categoryTitle"></h2>
+        <button class="btn btn-secondary" onclick="hideCategory()">← Назад</button>
+      </div>
+      <div id="foldersList"></div>
     </div>
-    <div id="foldersList"></div>
   </div>
 </div>
 
@@ -359,10 +199,7 @@ footer a:hover { text-decoration: underline; }
   <div id="cartItems"></div>
   <div class="cart-total">
     <h3>Итого: <span id="cartTotal">0</span>₽</h3>
-    <div style="display: flex; gap: 10px; margin-top: 20px;">
-      <button class="btn btn-secondary" onclick="closeCart()" style="flex:1;">Продолжить</button>
-      <button class="btn" onclick="openCheckout()" style="flex:1;">Оформить</button>
-    </div>
+    <button class="btn" onclick="openCheckout()" style="width: 100%; margin-top: 15px;">Оформить заказ</button>
   </div>
 </div>
 
@@ -373,30 +210,26 @@ footer a:hover { text-decoration: underline; }
       <button class="close-modal" onclick="closeCheckout()">×</button>
     </div>
     <form id="checkoutForm">
-      <div style="display: grid; gap: 15px; margin-bottom: 25px;">
-        <input type="text" id="checkoutName" placeholder="Ваше имя" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-        <input type="email" id="checkoutEmail" placeholder="Email" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-        <input type="tel" id="checkoutPhone" placeholder="Телефон" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-        <input type="text" id="checkoutAddress" placeholder="Адрес доставки" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
-        <select id="checkoutDelivery" required style="padding:14px; border:2px solid #e0e0e0; border-radius:10px; font-size:15px;">
+      <div style="display: grid; gap: 15px; margin-bottom: 20px;">
+        <input type="text" id="checkoutName" placeholder="Ваше имя" required>
+        <input type="email" id="checkoutEmail" placeholder="Email" required>
+        <input type="tel" id="checkoutPhone" placeholder="Телефон" required>
+        <input type="text" id="checkoutAddress" placeholder="Адрес доставки" required>
+        <select id="checkoutDelivery" required>
           <option value="">Выберите доставку</option>
           <option value="Почта России (300₽)">Почта России (300₽)</option>
           <option value="СДЭК (400₽)">СДЭК (400₽)</option>
           <option value="Самовывоз">Самовывоз</option>
         </select>
+        <select id="checkoutPayment" required>
+          <option value="">Выберите оплату</option>
+          <option value="Карта">Карта</option>
+          <option value="СБП">СБП</option>
+          <option value="При получении">При получении</option>
+        </select>
       </div>
-      <div id="checkoutSummary" style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 25px;"></div>
-      <h3 style="margin-bottom: 15px; color: #5a4000;">💳 Выберите способ оплаты:</h3>
-      <div class="payment-methods">
-        <div class="payment-method" onclick="selectPayment('Карта')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; margin-bottom:10px; text-align:center;">💳 Банковская карта</div>
-        <div class="payment-method" onclick="selectPayment('СБП')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; margin-bottom:10px; text-align:center;">📱 СБП</div>
-        <div class="payment-method" onclick="selectPayment('При получении')" style="padding:15px; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; text-align:center;">💵 При получении</div>
-      </div>
-      <input type="hidden" id="checkoutPayment" required>
-      <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <button type="button" class="btn btn-secondary" onclick="closeCheckout()" style="flex:1;">Отмена</button>
-        <button type="submit" class="btn btn-success" style="flex:1;">✅ Оплатить и скачать</button>
-      </div>
+      <div id="checkoutSummary" style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px;"></div>
+      <button type="submit" class="btn" style="width: 100%;">Подтвердить заказ ✅</button>
     </form>
   </div>
 </div>
@@ -404,20 +237,20 @@ footer a:hover { text-decoration: underline; }
 <div id="paymentModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h2>💳 Оплата</h2>
+      <h2>💳 Оплата заказа</h2>
       <button class="close-modal" onclick="closePayment()">×</button>
     </div>
     <div id="paymentContent"></div>
   </div>
 </div>
 
-<div id="purchasesModal" class="modal">
+<div id="downloadModal" class="modal">
   <div class="modal-content">
     <div class="modal-header">
       <h2>📥 Мои покупки</h2>
-      <button class="close-modal" onclick="closePurchases()">×</button>
+      <button class="close-modal" onclick="closeDownload()">×</button>
     </div>
-    <div id="purchasesContent"></div>
+    <div id="downloadContent"></div>
   </div>
 </div>
 
@@ -431,21 +264,12 @@ footer a:hover { text-decoration: underline; }
   </div>
 </div>
 
-<div class="search-overlay" id="searchOverlay">
-  <div class="search-box">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h3>🔍 Поиск по сайту</h3>
-      <button class="close-modal" onclick="closeSearch()">×</button>
-    </div>
-    <input type="text" id="searchInput" placeholder="Начните вводить текст для поиска..." oninput="performSearch()">
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</div>
-
 <footer>
   <p>🦉 © 2026 «Игривый совёнок»</p>
-  <p style="margin-top: 12px;">
-    <a href="login.html">Вход</a>
+  <p style="margin-top: 10px;">
+    <a href="login.html">Вход</a> |
+    <a href="#" onclick="showPurchasedItems(); return false;">📥 Мои покупки</a> |
+    <a href="#" onclick="showMyOrders(); return false;">📦 Мои заказы</a>
   </p>
 </footer>
 
@@ -456,15 +280,21 @@ let currentCategory = '';
 let purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
 
 function init() {
+  loadBackground();
+  loadGradient();
   loadContacts();
   updateStats();
   updateCartCount();
   updateUserDisplay();
   
   window.addEventListener('storage', (e) => {
-    if (e.key === 'catalogData' || e.key === 'ordersData' || e.key === 'purchasedItems') {
+    if (e.key === 'catalogData') {
       updateStats();
       if (currentCategory) showCategory(currentCategory);
+    }
+    if (e.key === 'purchasedItems') {
+      purchasedItems = JSON.parse(localStorage.getItem('purchasedItems') || '[]');
+      updateStats();
     }
   });
   
@@ -472,6 +302,18 @@ function init() {
     updateStats();
     if (currentCategory) showCategory(currentCategory);
   }, 3000);
+}
+
+function loadBackground() {
+  const bg = localStorage.getItem('siteBackground');
+  if (bg) document.body.style.background = `url(${bg}) center/cover`;
+}
+
+function loadGradient() {
+  const gradient = JSON.parse(localStorage.getItem('siteGradient') || 'null');
+  if (gradient) {
+    document.body.style.background = `linear-gradient(135deg, ${gradient.left} 0%, ${gradient.right} 100%)`;
+  }
 }
 
 function loadContacts() {
@@ -491,12 +333,13 @@ function loadContacts() {
 
 function updateStats() {
   const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  let totalItems = 0, freeItems = 0;
+  let totalItems = 0, totalFolders = 0, freeItems = 0;
   const categories = ['catalog', 'worksheets', 'themes', 'letterGames', 'speechGames', 'free'];
   
   categories.forEach(category => {
     const folders = catalog[category] || [];
     let categoryItems = 0;
+    totalFolders += folders.length;
     folders.forEach(folder => {
       const items = folder.items || [];
       categoryItems += items.length;
@@ -508,6 +351,7 @@ function updateStats() {
   });
   
   document.getElementById('statItems').textContent = totalItems;
+  document.getElementById('statFolders').textContent = totalFolders;
   document.getElementById('statFree').textContent = freeItems;
   document.getElementById('statPurchased').textContent = purchasedItems.length;
 }
@@ -517,10 +361,6 @@ function updateUserDisplay() {
     document.getElementById('userInfo').textContent = `👤 ${currentUser.name}`;
     document.getElementById('loginBtn').textContent = 'Выйти';
     document.getElementById('loginBtn').onclick = logout;
-    document.getElementById('bannerLoginBtn').style.display = 'none';
-    const wb = document.getElementById('welcomeBar');
-    wb.textContent = `🎉 Добро пожаловать, ${currentUser.name}!`;
-    wb.classList.add('show');
   }
 }
 
@@ -528,16 +368,6 @@ function logout() {
   localStorage.removeItem('currentUser');
   currentUser = null;
   location.reload();
-}
-
-function showHome() {
-  document.getElementById('mainBanner').style.display = 'block';
-  document.getElementById('statsSection').style.display = 'block';
-  document.getElementById('categoriesGrid').style.display = 'grid';
-  document.getElementById('featuresGrid').style.display = 'grid';
-  document.getElementById('contactsSection').style.display = 'block';
-  document.getElementById('categoryView').classList.remove('active');
-  currentCategory = '';
 }
 
 function showCategory(category) {
@@ -557,11 +387,11 @@ function showCategory(category) {
   document.getElementById('categoryTitle').textContent = titles[category];
   
   if (folders.length === 0) {
-    document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center; padding: 30px;">В этой категории пока нет материалов</p>';
+    document.getElementById('foldersList').innerHTML = '<p style="color: #999; text-align: center;">В этой категории пока нет материалов</p>';
   } else {
     document.getElementById('foldersList').innerHTML = folders.map((folder, fi) => `
       <div style="margin-bottom: 30px;">
-        <h3 style="margin-bottom: 15px; color: #5a4000;">📁 ${folder.name}</h3>
+        <h3 style="margin-bottom: 15px;">📁 ${folder.name}</h3>
         <div class="items-grid">
           ${(folder.items || []).map((item, ii) => {
             const isPurchased = purchasedItems.some(p => p.category === category && p.folderIndex === fi && p.itemIndex === ii);
@@ -572,10 +402,10 @@ function showCategory(category) {
                 <div class="item-price">${item.price > 0 ? item.price + '₽' : 'Бесплатно'}</div>
                 <div class="item-actions">
                   ${item.price === 0 ?
-                    `<button class="btn btn-success" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` :
+                    `<button class="btn" onclick="downloadFreeItem('${category}', ${fi}, ${ii})">Скачать 📥</button>` :
                     isPurchased ?
-                      `<button class="btn btn-success" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">📥 Скачать</button>` :
-                      `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">🛒 В корзину</button>`
+                      `<button class="btn" onclick="downloadPurchasedItem('${category}', ${fi}, ${ii})">Скачать 📥</button>` :
+                      `<button class="btn" onclick="addToCart('${category}', ${fi}, ${ii})">В корзину 🛒</button>`
                   }
                 </div>
               </div>
@@ -586,12 +416,20 @@ function showCategory(category) {
     `).join('');
   }
   
-  document.getElementById('mainBanner').style.display = 'none';
-  document.getElementById('statsSection').style.display = 'none';
-  document.getElementById('categoriesGrid').style.display = 'none';
-  document.getElementById('featuresGrid').style.display = 'none';
-  document.getElementById('contactsSection').style.display = 'none';
-  document.getElementById('categoryView').classList.add('active');
+  document.querySelector('.welcome').style.display = 'none';
+  document.querySelector('.stats').style.display = 'none';
+  document.querySelector('.categories').style.display = 'none';
+  document.querySelector('.features').style.display = 'none';
+  document.getElementById('categoryView').style.display = 'block';
+}
+
+function hideCategory() {
+  document.querySelector('.welcome').style.display = 'block';
+  document.querySelector('.stats').style.display = 'grid';
+  document.querySelector('.categories').style.display = 'grid';
+  document.querySelector('.features').style.display = 'grid';
+  document.getElementById('categoryView').style.display = 'none';
+  currentCategory = '';
 }
 
 function addToCart(category, folderIndex, itemIndex) {
@@ -600,11 +438,11 @@ function addToCart(category, folderIndex, itemIndex) {
   cart.push({ ...item, category, folderIndex, itemIndex, quantity: 1 });
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
-  alert('Товар добавлен в корзину! 🛒');
+  alert('Товар добавлен в корзину!');
 }
 
 function updateCartCount() {
-  document.getElementById('cartCountNav').textContent = cart.length;
+  document.getElementById('cartCount').textContent = cart.length;
 }
 
 function openCart() {
@@ -642,24 +480,14 @@ function removeFromCart(index) {
   renderCart();
 }
 
-function selectPayment(method) {
-  document.querySelectorAll('.payment-method').forEach(el => {
-    el.style.borderColor = '#e0e0e0';
-    el.style.background = 'white';
-  });
-  event.target.style.borderColor = '#4CAF50';
-  event.target.style.background = '#f1f8e9';
-  document.getElementById('checkoutPayment').value = method;
-}
-
 function openCheckout() {
   if (cart.length === 0) { alert('Корзина пуста'); return; }
   if (!currentUser) { alert('Пожалуйста, войдите в систему'); window.location.href = 'login.html'; return; }
   const total = cart.reduce((sum, item) => sum + item.price, 0);
   document.getElementById('checkoutSummary').innerHTML = `
-    <h3 style="margin-bottom: 12px;">Ваш заказ:</h3>
+    <h3 style="margin-bottom: 10px;">Ваш заказ:</h3>
     ${cart.map(item => `<div>${item.name} - ${item.price}₽</div>`).join('')}
-    <div style="margin-top: 12px; font-weight: bold; font-size: 20px;">Итого: ${total}₽</div>
+    <div style="margin-top: 10px; font-weight: bold; font-size: 18px;">Итого: ${total}₽</div>
   `;
   document.getElementById('checkoutModal').classList.add('active');
 }
@@ -668,9 +496,6 @@ function closeCheckout() { document.getElementById('checkoutModal').classList.re
 
 document.getElementById('checkoutForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const paymentMethod = document.getElementById('checkoutPayment').value;
-  if (!paymentMethod) { alert('Выберите способ оплаты'); return; }
-  
   const order = {
     id: Date.now(),
     customerName: document.getElementById('checkoutName').value,
@@ -678,36 +503,31 @@ document.getElementById('checkoutForm').addEventListener('submit', (e) => {
     phone: document.getElementById('checkoutPhone').value,
     address: document.getElementById('checkoutAddress').value,
     delivery: document.getElementById('checkoutDelivery').value,
-    payment: paymentMethod,
+    payment: document.getElementById('checkoutPayment').value,
     items: cart.map(item => ({ name: item.name, price: item.price, category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex })),
     total: cart.reduce((sum, item) => sum + item.price, 0),
     status: 'new',
     paid: false,
     date: new Date().toISOString()
   };
-  
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   orders.push(order);
   localStorage.setItem('ordersData', JSON.stringify(orders));
-  
   closeCheckout();
   closeCart();
   cart = [];
   localStorage.setItem('cart', JSON.stringify(cart));
   updateCartCount();
-  
   processPayment(order);
 });
 
 function processPayment(order) {
   const paymentContent = document.getElementById('paymentContent');
-  
   if (order.payment === 'При получении') {
     paymentContent.innerHTML = `
-      <div style="text-align: center; padding: 25px;">
-        <h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Заказ оформлен!</h2>
+      <div class="payment-success">
+        <h2>✅ Заказ оформлен!</h2>
         <p>Номер заказа: #${order.id}</p>
-        <p>Сумма: ${order.total}₽</p>
         <p>Оплата при получении</p>
         <p style="color: #ff9800; margin-top: 15px;">⚠️ Файлы будут доступны после оплаты</p>
         <button class="btn" onclick="closePayment()" style="margin-top: 20px;">Закрыть</button>
@@ -715,53 +535,43 @@ function processPayment(order) {
     `;
   } else {
     paymentContent.innerHTML = `
-      <div style="text-align: center; padding: 25px;">
+      <div style="text-align: center;">
         <h3 style="margin-bottom: 20px;">Оплата заказа #${order.id}</h3>
-        <p style="margin-bottom: 20px; font-size: 18px;">Сумма: <strong>${order.total}₽</strong></p>
+        <p style="margin-bottom: 20px;">Сумма: <strong>${order.total}₽</strong></p>
         <p style="margin-bottom: 20px;">Метод: ${order.payment}</p>
         <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-          <p style="margin-bottom: 15px;">Нажмите кнопку для подтверждения оплаты</p>
-          <button class="btn btn-success" onclick="confirmPayment(${order.id})" style="font-size: 16px; padding: 15px 30px;">💳 Оплатить ${order.total}₽</button>
+          <p style="margin-bottom: 10px;">Для тестирования нажмите кнопку ниже</p>
+          <button class="btn" onclick="simulatePayment(${order.id})">💳 Оплатить ${order.total}₽</button>
         </div>
-        <p style="color: #999; font-size: 12px;">После оплаты файлы станут доступны для скачивания</p>
+        <p style="color: #999; font-size: 12px;">Демонстрационная версия. В реальном магазине — интеграция с платежной системой.</p>
       </div>
     `;
   }
   document.getElementById('paymentModal').classList.add('active');
 }
 
-function confirmPayment(orderId) {
+function simulatePayment(orderId) {
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const order = orders.find(o => o.id === orderId);
-  
   if (order) {
     order.status = 'completed';
     order.paid = true;
     order.paymentDate = new Date().toISOString();
     localStorage.setItem('ordersData', JSON.stringify(orders));
-    
     order.items.forEach(item => {
       if (!purchasedItems.some(p => p.category === item.category && p.folderIndex === item.folderIndex && p.itemIndex === item.itemIndex)) {
-        purchasedItems.push({
-          category: item.category,
-          folderIndex: item.folderIndex,
-          itemIndex: item.itemIndex,
-          orderId: orderId,
-          purchaseDate: new Date().toISOString()
-        });
+        purchasedItems.push({ category: item.category, folderIndex: item.folderIndex, itemIndex: item.itemIndex, orderId: orderId, purchaseDate: new Date().toISOString() });
       }
     });
     localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
-    
     closePayment();
-    
     const paymentContent = document.getElementById('paymentContent');
     paymentContent.innerHTML = `
-      <div style="text-align: center; padding: 25px;">
-        <h2 style="color: #4CAF50; margin-bottom: 20px;">✅ Оплата прошла успешно!</h2>
+      <div class="payment-success">
+        <h2>✅ Оплата прошла успешно!</h2>
         <p>Заказ #${orderId} оплачен</p>
-        <p style="color: #4CAF50; font-weight: bold; margin: 15px 0;">Теперь вы можете скачать купленные материалы</p>
-        <button class="btn btn-success" onclick="showMyPurchases()" style="margin-top: 20px;">📥 Перейти к покупкам</button>
+        <p>Теперь вы можете скачать купленные материалы</p>
+        <button class="btn download-btn" onclick="showPurchasedItems()">📥 Скачать материалы</button>
         <button class="btn btn-secondary" onclick="closePayment()" style="margin-top: 10px;">Закрыть</button>
       </div>
     `;
@@ -780,10 +590,7 @@ function downloadFreeItem(category, folderIndex, itemIndex) {
     link.href = item.file.data;
     link.download = item.file.name;
     link.click();
-    alert('Файл скачан! 📥');
-  } else {
-    alert('Файл не найден');
-  }
+  } else { alert('Файл не найден'); }
 }
 
 function downloadPurchasedItem(category, folderIndex, itemIndex) {
@@ -798,46 +605,37 @@ function downloadPurchasedItem(category, folderIndex, itemIndex) {
     link.href = item.file.data;
     link.download = item.file.name;
     link.click();
-    alert('Файл скачан! 📥');
-  } else {
-    alert('Файл не найден');
-  }
+  } else { alert('Файл не найден'); }
 }
 
-function showMyPurchases() {
-  const purchasesContent = document.getElementById('purchasesContent');
-  
+function showPurchasedItems() {
+  const downloadContent = document.getElementById('downloadContent');
   if (purchasedItems.length === 0) {
-    purchasesContent.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">У вас пока нет купленных материалов</p>';
+    downloadContent.innerHTML = '<p style="text-align: center; color: #999;">У вас пока нет купленных материалов</p>';
   } else {
     const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-    purchasesContent.innerHTML = purchasedItems.map(p => {
-      const item = catalog[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
-      if (!item) return '';
-      return `
-        <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <strong>${item.name}</strong>
-            <div style="color: #666; font-size: 12px;">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div>
-          </div>
-          <button class="btn btn-success" onclick="downloadPurchasedItem('${p.category}', ${p.folderIndex}, ${p.itemIndex})">📥 Скачать</button>
-        </div>
-      `;
-    }).join('');
+    downloadContent.innerHTML = `<h3 style="margin-bottom: 20px;">Ваши материалы:</h3>` +
+      purchasedItems.map(p => {
+        const item = catalog[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
+        if (!item) return '';
+        return `<div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <div><strong>${item.name}</strong><div style="color: #666; font-size: 12px;">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div>
+          <button class="btn" onclick="downloadPurchasedItem('${p.category}', ${p.folderIndex}, ${p.itemIndex})">📥 Скачать</button>
+        </div>`;
+      }).join('');
   }
-  document.getElementById('purchasesModal').classList.add('active');
+  document.getElementById('downloadModal').classList.add('active');
 }
 
-function closePurchases() { document.getElementById('purchasesModal').classList.remove('active'); }
+function closeDownload() { document.getElementById('downloadModal').classList.remove('active'); }
 
 function showMyOrders() {
   if (!currentUser) { alert('Войдите в систему'); return; }
   const orders = JSON.parse(localStorage.getItem('ordersData') || '[]');
   const myOrders = orders.filter(o => o.email === currentUser.email).reverse();
   const ordersContent = document.getElementById('ordersContent');
-  
   if (myOrders.length === 0) {
-    ordersContent.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">Заказов пока нет</p>';
+    ordersContent.innerHTML = '<p style="text-align: center; color: #999;">Заказов пока нет</p>';
   } else {
     ordersContent.innerHTML = myOrders.map(o => `
       <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
@@ -859,32 +657,6 @@ function showMyOrders() {
 
 function closeOrders() { document.getElementById('ordersModal').classList.remove('active'); }
 
-function openSearch() { document.getElementById('searchOverlay').classList.add('active'); document.getElementById('searchInput').focus(); }
-function closeSearch() { document.getElementById('searchOverlay').classList.remove('active'); document.getElementById('searchInput').value = ''; document.getElementById('searchResults').innerHTML = ''; }
-
-function performSearch() {
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
-  const results = document.getElementById('searchResults');
-  if (query.length < 2) { results.innerHTML = ''; return; }
-  
-  const catalog = JSON.parse(localStorage.getItem('catalogData') || '{}');
-  let found = [];
-  Object.keys(catalog).forEach(cat => {
-    (catalog[cat] || []).forEach((folder, fi) => {
-      (folder.items || []).forEach((item, ii) => {
-        if (item.name.toLowerCase().includes(query) || (item.description || '').toLowerCase().includes(query)) {
-          found.push({ ...item, category: cat, folderIndex: fi, itemIndex: ii });
-        }
-      });
-    });
-  });
-  
-  results.innerHTML = found.length === 0 ? '<p style="color: #999;">Ничего не найдено</p>' :
-    found.map(item => `<div class="search-result-item" onclick="closeSearch(); showCategory('${item.category}');">
-      <strong>${item.name}</strong> — ${item.price > 0 ? item.price + '₽' : 'Бесплатно'}
-    </div>`).join('');
-}
-
 document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
   const message = {
@@ -897,7 +669,7 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
   messages.push(message);
   localStorage.setItem('messagesData', JSON.stringify(messages));
   document.getElementById('contactForm').reset();
-  alert('Сообщение отправлено! 🦉');
+  alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
 });
 
 init();
