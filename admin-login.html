@@ -63,8 +63,8 @@ button:hover{transform:translateY(-2px)}
 .order-status{padding:4px 12px;border-radius:20px;font-size:12px}
 .status-new{background:#ff9800;color:#fff}
 .status-pending{background:#2196F3;color:#fff}
-.status-completed{background:#4CAF50;color:#fff}
 .status-rejected{background:#f44336;color:#fff}
+.status-completed{background:#4CAF50;color:#fff}
 .message-from{font-weight:600;margin-bottom:5px}
 .message-date{color:#999;font-size:12px;margin-bottom:10px}
 .message-text{color:#333;line-height:1.5}
@@ -133,7 +133,7 @@ button:hover{transform:translateY(-2px)}
 <div class="stat-card"><div class="stat-value" id="totalRevenue">0₽</div><div class="stat-label">Выручка</div></div>
 <div class="stat-card"><div class="stat-value" id="paidOrders">0</div><div class="stat-label">Оплачено</div></div>
 <div class="stat-card"><div class="stat-value" id="pendingReceipts">0</div><div class="stat-label">Чеки на проверке</div></div>
-<div class="stat-card"><div class="stat-value" id="rejectedReceipts">0</div><div class="stat-label">Чеки отклонены</div></div>
+<div class="stat-card"><div class="stat-value" id="rejectedReceipts">0</div><div class="stat-label">Отклонено чеков</div></div>
 <div class="stat-card"><div class="stat-value" id="totalItems">0</div><div class="stat-label">Материалов</div></div>
 <div class="stat-card"><div class="stat-value" id="totalFolders">0</div><div class="stat-label">Папок</div></div>
 <div class="stat-card"><div class="stat-value" id="totalRegistered">0</div><div class="stat-label">Зарегистрировано</div></div>
@@ -163,6 +163,15 @@ button:hover{transform:translateY(-2px)}
 <div id="currentQrDisplay" style="margin-top:15px"></div>
 <button id="saveQrBtn" class="hidden" style="margin-top:15px">💾 Сохранить</button>
 <button id="removeQrBtn" class="btn-secondary hidden" style="margin-top:10px">🗑 Удалить</button>
+</div>
+<div class="payment-settings-box">
+<h3>⚡ Автоматическая оплата</h3>
+<p style="color:#666;margin-bottom:15px;font-size:14px">Вставьте ссылку на онлайн-оплату — например, «Биллинг по ссылке» из личного кабинета ЮKassa или платёжную ссылку вашего банка. Покупатель сможет оплатить в один клик прямо со страницы заказа.</p>
+<form id="payLinkForm">
+<div class="form-group"><label>Ссылка на оплату</label><input type="url" id="payLink" placeholder="https://yookassa.ru/..."></div>
+<button type="submit">💾 Сохранить ссылку</button>
+</form>
+<label style="display:flex;align-items:center;gap:10px;margin-top:15px;cursor:pointer;font-size:14px"><input type="checkbox" id="autoApproveToggle"> Автоподтверждение: доступ открывается сразу после отправки чека, без ручной проверки</label>
 </div>
 <div class="payment-settings-box">
 <h3>📧 Email</h3>
@@ -270,32 +279,66 @@ button:hover{transform:translateY(-2px)}
 </div>
 <p style="text-align:center;margin-top:20px;color:#fff"><a href="index.html" style="color:#fff;text-decoration:none">🏠 На сайт</a></p>
 <script>
-let currentCategory='',editingItemId=null,editingItemIndex=null,selectedFile=null,selectedQrFile=null;
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+/* ===== ☁️ Облачная синхронизация между устройствами =====
+   Как подключить (5 минут):
+   1. Зайдите на console.firebase.google.com и создайте проект (бесплатно).
+   2. Добавьте веб-приложение (</>) и скопируйте конфигурацию.
+   3. Включите Realtime Database в режиме тестирования.
+   4. Вставьте значения конфигурации ниже — синхронизация включится сама.
+   Пока поля пустые, сайт работает локально (как раньше). */
+const FIREBASE_CONFIG={apiKey:"",authDomain:"",databaseURL:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""};
+const SYNC_KEYS=['ordersData','registeredUsers','users','allCarts','catalogData','paymentSettings','siteContacts','siteBackground','siteGradient','messagesData','questionsData','adminData','purchasedItems','purchasedItemsByUser'];
+let DB=null,applyingRemote=false;
+function sSet(k,v){
+  try{localStorage.setItem(k,v)}catch(e){console.warn('Хранилище переполнено:',k)}
+  if(DB&&!applyingRemote&&SYNC_KEYS.includes(k)){try{DB.ref('shop/'+k).set(v)}catch(e){console.warn('☁️ Не удалось сохранить в облако:',k)}}
+}
+function initSync(){
+  if(!FIREBASE_CONFIG.databaseURL){console.info('☁️ Firebase не настроен — данные хранятся локально');return}
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    DB=firebase.database();
+    DB.ref('shop').on('value',snap=>{
+      const v=snap.val()||{};
+      applyingRemote=true;
+      SYNC_KEYS.forEach(k=>{if(v[k]!==undefined&&v[k]!==null){try{localStorage.setItem(k,v[k])}catch(e){}}});
+      applyingRemote=false;
+      if(typeof window.remoteRefresh==='function'){try{window.remoteRefresh()}catch(e){}}
+    },err=>console.warn('☁️ Ошибка синхронизации:',err.message));
+    console.info('☁️ Синхронизация между устройствами включена');
+  }catch(e){console.warn('☁️ Firebase недоступен, работаем локально:',e.message)}
+}
+window.addEventListener('load',initSync);
+</script>
+<script>
+let currentCategory='',editingItemId=null,selectedFile=null,selectedQrFile=null;
 function init(){
 const ad=JSON.parse(localStorage.getItem('adminData')||'{}');
 if(!ad.password){document.getElementById('loginSection').classList.add('hidden');document.getElementById('setupSection').classList.remove('hidden')}
-else if(sessionStorage.getItem('adminAuth')==='1'){document.getElementById('loginSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')}
 loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadBackground();loadCatalog();loadOrders();loadQuestions();loadMessages();loadContacts();
-window.addEventListener('storage',e=>{if(['catalogData','ordersData','purchasedItemsByUser','purchasedItems','cart','registeredUsers','questionsData'].includes(e.key)){loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadCatalog();loadOrders();loadQuestions()}});
-setInterval(()=>{loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadOrders();loadQuestions()},5000)
+window.addEventListener('storage',e=>{if(['catalogData','ordersData','purchasedItems','cart','registeredUsers','questionsData'].includes(e.key)){loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadCatalog();loadOrders();loadQuestions()}});
+setInterval(()=>{loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadOrders();loadQuestions()},5000);
+window.remoteRefresh=function(){
+  if(document.activeElement&&['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName))return;
+  loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadCatalog();loadOrders();loadQuestions();loadMessages();loadContacts();loadPaymentSettings()
 }
-document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('username').value==='admin'&&document.getElementById('password').value===ad.password){sessionStorage.setItem('adminAuth','1');document.getElementById('loginSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')}else{alert('Неверный логин или пароль')}});
-document.getElementById('setupForm').addEventListener('submit',e=>{e.preventDefault();const np=document.getElementById('newPassword').value;if(np.length<8||!/[a-zA-Zа-яА-Я]/.test(np)||!/\d/.test(np)){alert('Мин. 8 символов, буквы+цифры');return}if(np!==document.getElementById('confirmPassword').value){alert('Пароли не совпадают');return}localStorage.setItem('adminData',JSON.stringify({password:np}));sessionStorage.setItem('adminAuth','1');document.getElementById('setupSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')});
+}
+document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('username').value==='admin'&&document.getElementById('password').value===ad.password){document.getElementById('loginSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')}else{alert('Неверный логин или пароль')}});
+document.getElementById('setupForm').addEventListener('submit',e=>{e.preventDefault();const np=document.getElementById('newPassword').value;if(np.length<8||!/[a-zA-Zа-яА-Я]/.test(np)||!/\d/.test(np)){alert('Мин. 8 символов, буквы+цифры');return}if(np!==document.getElementById('confirmPassword').value){alert('Пароли не совпадают');return}sSet('adminData',JSON.stringify({password:np}));document.getElementById('setupSection').classList.add('hidden');document.getElementById('adminPanel').classList.remove('hidden')});
 document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));tab.classList.add('active');document.getElementById(tab.dataset.tab).classList.add('active')})});
 function loadDashboard(){
 const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
 const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
 const ru=JSON.parse(localStorage.getItem('registeredUsers')||'[]');
 const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');
-let ti=0,tf=0,pc=0,uc=0,tr=0,pr=0,rr=0;
+let ti=0,tf=0,pc=0,uc=0,tr=0,pr=0,rc=0;
 Object.values(cat).forEach(c=>{tf+=c.length;c.forEach(f=>{ti+=(f.items||[]).length})});
-orders.forEach(o=>{if(o.paid){pc++;tr+=o.total}else if(o.status==='receipt_rejected'){rr++}else if(o.status==='pending_receipt'){pr++}else{uc++}});
+orders.forEach(o=>{if(o.paid){pc++;tr+=o.total}else if(o.status==='pending_receipt'){pr++}else if(o.status==='rejected'){rc++}else{uc++}});
 document.getElementById('totalOrders').textContent=orders.length;
 document.getElementById('totalRevenue').textContent=tr+'₽';
 document.getElementById('paidOrders').textContent=pc;
 document.getElementById('pendingReceipts').textContent=pr;
-const rel=document.getElementById('rejectedReceipts');if(rel)rel.textContent=rr;
+document.getElementById('rejectedReceipts').textContent=rc;
 document.getElementById('totalItems').textContent=ti;
 document.getElementById('totalFolders').textContent=tf;
 const el=document.getElementById('totalRegistered');if(el)el.textContent=ru.length;
@@ -325,22 +368,24 @@ const keys=Object.keys(ac);
 if(keys.length===0){list.innerHTML='<p style="color:#999;text-align:center">Корзины пусты</p>';return}
 list.innerHTML=keys.map(email=>{const c=ac[email].items||ac[email];const total=c.reduce((s,i)=>s+(i.price||0),0);return `<div class="cart-card"><div class="cart-user-name">👤 ${ac[email].userName||'Гость'} (${email})</div><div style="margin-bottom:10px"><strong>Товаров: ${c.length}</strong></div>${c.map(i=>`<div class="cart-item-row"><span>${i.name} ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</span><span>${i.price}₽</span></div>`).join('')}<div style="margin-top:10px;font-weight:bold;font-size:16px;color:#667eea">Итого: ${total}₽</div></div>`}).join('')
 }
-function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';document.getElementById('notificationEmail').value=p.notificationEmail||'';if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
-document.getElementById('cardRequisitesForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.cardHolder=document.getElementById('cardHolder').value;p.cardNumber=document.getElementById('cardNumber').value;p.cardBank=document.getElementById('cardBank').value;localStorage.setItem('paymentSettings',JSON.stringify(p));alert('✅ Реквизиты сохранены!')});
+function loadPaymentSettings(){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');document.getElementById('cardHolder').value=p.cardHolder||'';document.getElementById('cardNumber').value=p.cardNumber||'';document.getElementById('cardBank').value=p.cardBank||'';document.getElementById('notificationEmail').value=p.notificationEmail||'';document.getElementById('payLink').value=p.payLink||'';document.getElementById('autoApproveToggle').checked=!!p.autoApprove;if(p.qrCode){document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${p.qrCode}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden')}}
+document.getElementById('cardRequisitesForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.cardHolder=document.getElementById('cardHolder').value;p.cardNumber=document.getElementById('cardNumber').value;p.cardBank=document.getElementById('cardBank').value;sSet('paymentSettings',JSON.stringify(p));alert('✅ Реквизиты сохранены!')});
+document.getElementById('payLinkForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.payLink=document.getElementById('payLink').value.trim();sSet('paymentSettings',JSON.stringify(p));alert('✅ Ссылка на оплату сохранена! Теперь в форме заказа появится кнопка «Оплатить онлайн».')});
+document.getElementById('autoApproveToggle').addEventListener('change',e=>{const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.autoApprove=e.target.checked;sSet('paymentSettings',JSON.stringify(p));alert(e.target.checked?'⚡ Автоподтверждение включено: доступ открывается сразу после отправки чека.':'Автоподтверждение выключено: чеки снова проверяете вы.')});
 document.getElementById('qrInput').addEventListener('change',e=>{if(e.target.files[0]){const reader=new FileReader();reader.onload=ev=>{selectedQrFile=ev.target.result;document.getElementById('qrPreview').innerHTML=`<img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('saveQrBtn').classList.remove('hidden')};reader.readAsDataURL(e.target.files[0])}});
-document.getElementById('saveQrBtn').addEventListener('click',()=>{if(selectedQrFile){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.qrCode=selectedQrFile;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden');document.getElementById('saveQrBtn').classList.add('hidden');document.getElementById('qrPreview').innerHTML='';selectedQrFile=null;alert('✅ QR сохранён!')}});
-document.getElementById('removeQrBtn').addEventListener('click',()=>{if(confirm('Удалить QR?')){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');delete p.qrCode;localStorage.setItem('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML='';document.getElementById('removeQrBtn').classList.add('hidden');alert('QR удалён')}});
-document.getElementById('notificationEmailForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.notificationEmail=document.getElementById('notificationEmail').value;localStorage.setItem('paymentSettings',JSON.stringify(p));alert('✅ Email сохранён!')});
+document.getElementById('saveQrBtn').addEventListener('click',()=>{if(selectedQrFile){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.qrCode=selectedQrFile;sSet('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML=`<p style="margin-bottom:10px"><strong>QR:</strong></p><img src="${selectedQrFile}" class="qr-preview">`;document.getElementById('removeQrBtn').classList.remove('hidden');document.getElementById('saveQrBtn').classList.add('hidden');document.getElementById('qrPreview').innerHTML='';selectedQrFile=null;alert('✅ QR сохранён!')}});
+document.getElementById('removeQrBtn').addEventListener('click',()=>{if(confirm('Удалить QR?')){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');delete p.qrCode;sSet('paymentSettings',JSON.stringify(p));document.getElementById('currentQrDisplay').innerHTML='';document.getElementById('removeQrBtn').classList.add('hidden');alert('QR удалён')}});
+document.getElementById('notificationEmailForm').addEventListener('submit',e=>{e.preventDefault();const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');p.notificationEmail=document.getElementById('notificationEmail').value;sSet('paymentSettings',JSON.stringify(p));alert('✅ Email сохранён!')});
 function loadBackground(){const bg=localStorage.getItem('siteBackground');if(bg){document.getElementById('currentBgText').innerHTML=`<img src="${bg}" style="max-width:200px;border-radius:10px">`;document.getElementById('removeBg').classList.remove('hidden')}}
 document.getElementById('uploadArea').addEventListener('click',()=>document.getElementById('bgImageInput').click());
 document.getElementById('bgImageInput').addEventListener('change',e=>{if(e.target.files[0]){const reader=new FileReader();reader.onload=ev=>{document.getElementById('bgPreview').innerHTML=`<img src="${ev.target.result}" class="preview">`;document.getElementById('applyBg').classList.remove('hidden');document.getElementById('cancelBg').classList.remove('hidden')};reader.readAsDataURL(e.target.files[0])}});
-document.getElementById('applyBg').addEventListener('click',()=>{const img=document.querySelector('#bgPreview img');if(img){localStorage.setItem('siteBackground',img.src);document.getElementById('currentBgText').innerHTML=`<img src="${img.src}" style="max-width:200px;border-radius:10px">`;document.getElementById('removeBg').classList.remove('hidden');document.getElementById('applyBg').classList.add('hidden');document.getElementById('cancelBg').classList.add('hidden');document.getElementById('bgPreview').innerHTML='';alert('Фон применён!')}});
+document.getElementById('applyBg').addEventListener('click',()=>{const img=document.querySelector('#bgPreview img');if(img){sSet('siteBackground',img.src);document.getElementById('currentBgText').innerHTML=`<img src="${img.src}" style="max-width:200px;border-radius:10px">`;document.getElementById('removeBg').classList.remove('hidden');document.getElementById('applyBg').classList.add('hidden');document.getElementById('cancelBg').classList.add('hidden');document.getElementById('bgPreview').innerHTML='';alert('Фон применён!')}});
 document.getElementById('cancelBg').addEventListener('click',()=>{document.getElementById('bgPreview').innerHTML='';document.getElementById('applyBg').classList.add('hidden');document.getElementById('cancelBg').classList.add('hidden')});
 document.getElementById('removeBg').addEventListener('click',()=>{localStorage.removeItem('siteBackground');document.getElementById('currentBgText').textContent='Фон не установлен';document.getElementById('removeBg').classList.add('hidden')});
 document.getElementById('gradientLeft').addEventListener('input',updateGradientPreview);
 document.getElementById('gradientRight').addEventListener('input',updateGradientPreview);
 function updateGradientPreview(){document.getElementById('gradientPreview').style.background=`linear-gradient(135deg,${document.getElementById('gradientLeft').value},${document.getElementById('gradientRight').value})`}
-document.getElementById('saveGradient').addEventListener('click',()=>{localStorage.setItem('siteGradient',JSON.stringify({left:document.getElementById('gradientLeft').value,right:document.getElementById('gradientRight').value}));alert('Градиент сохранён!')});
+document.getElementById('saveGradient').addEventListener('click',()=>{sSet('siteGradient',JSON.stringify({left:document.getElementById('gradientLeft').value,right:document.getElementById('gradientRight').value}));alert('Градиент сохранён!')});
 function loadCatalog(){
 const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
 ['catalog','worksheets','themes','letterGames','speechGames','free'].forEach(c=>{
@@ -351,10 +396,10 @@ list.innerHTML=folders.map((folder,fi)=>`<div class="folder"><div class="folder-
 }
 function openAddFolderModal(c){currentCategory=c;document.getElementById('folderModal').classList.add('active')}
 function closeFolderModal(){document.getElementById('folderModal').classList.remove('active');document.getElementById('folderForm').reset()}
-document.getElementById('folderForm').addEventListener('submit',e=>{e.preventDefault();const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');if(!cat[currentCategory])cat[currentCategory]=[];cat[currentCategory].push({name:document.getElementById('folderName').value,items:[]});localStorage.setItem('catalogData',JSON.stringify(cat));closeFolderModal();loadCatalog();loadDashboard()});
-function deleteFolder(c,fi){if(confirm('Удалить папку?')){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');cat[c].splice(fi,1);localStorage.setItem('catalogData',JSON.stringify(cat));loadCatalog();loadDashboard()}}
+document.getElementById('folderForm').addEventListener('submit',e=>{e.preventDefault();const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');if(!cat[currentCategory])cat[currentCategory]=[];cat[currentCategory].push({name:document.getElementById('folderName').value,items:[]});sSet('catalogData',JSON.stringify(cat));closeFolderModal();loadCatalog();loadDashboard()});
+function deleteFolder(c,fi){if(confirm('Удалить папку?')){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');cat[c].splice(fi,1);sSet('catalogData',JSON.stringify(cat));loadCatalog();loadDashboard()}}
 function openAddItemModal(c,fi){
-currentCategory=c;editingItemId=fi;editingItemIndex=null;
+currentCategory=c;editingItemId=fi;
 document.getElementById('itemModalTitle').textContent='Добавить товар';
 document.getElementById('itemModal').classList.add('active');
 document.getElementById('itemForm').reset();
@@ -362,7 +407,7 @@ document.getElementById('fileList').innerHTML='';
 selectedFile=null;
 document.getElementById('itemType').value='digital'
 }
-function closeItemModal(){document.getElementById('itemModal').classList.remove('active');document.getElementById('itemForm').reset();document.getElementById('fileList').innerHTML='';document.getElementById('itemFileUrl').value='';selectedFile=null;editingItemId=null;editingItemIndex=null}
+function closeItemModal(){document.getElementById('itemModal').classList.remove('active');document.getElementById('itemForm').reset();document.getElementById('fileList').innerHTML='';document.getElementById('itemFileUrl').value='';selectedFile=null;editingItemId=null}
 function handleFileSelect(event){
 if(event.target.files[0]){
 const file=event.target.files[0];
@@ -393,19 +438,13 @@ if(!selectedFile&&!fileUrl){if(!confirm('⚠️ Ни файл, ни ссылка
 const itemData={id:Date.now(),name:document.getElementById('itemName').value,description:document.getElementById('itemDescription').value,price:parseFloat(document.getElementById('itemPrice').value),itemType:it};
 if(selectedFile){itemData.file=selectedFile}
 if(fileUrl){itemData.fileUrl=fileUrl}
-if(editingItemIndex!==null){
-const old=folder.items[editingItemIndex];
-if(old&&old.id)itemData.id=old.id;
-folder.items[editingItemIndex]=itemData;
-}else{
 folder.items.push(itemData);
-}
-localStorage.setItem('catalogData',JSON.stringify(cat));
+sSet('catalogData',JSON.stringify(cat));
 closeItemModal();loadCatalog();loadDashboard();
 alert('✅ Товар добавлен! Тип: '+(it==='digital'?'📥':it==='video'?'🎬':it==='audio'?'🎵':'📦'))
 });
 function editItem(c,fi,ii){
-currentCategory=c;editingItemId=fi;editingItemIndex=ii;
+currentCategory=c;editingItemId=fi;
 const item=JSON.parse(localStorage.getItem('catalogData')||'{}')[c][fi].items[ii];
 document.getElementById('itemModalTitle').textContent='Редактировать';
 document.getElementById('itemName').value=item.name;
@@ -416,7 +455,7 @@ document.getElementById('itemFileUrl').value=item.fileUrl||'';
 if(item.file){selectedFile=item.file;document.getElementById('fileList').innerHTML=`<div class="file-item"><span>📄 ${item.file.name}</span><button type="button" class="btn-small btn-delete" onclick="removeFile()">✕</button></div>`}
 document.getElementById('itemModal').classList.add('active')
 }
-function deleteItem(c,fi,ii){if(confirm('Удалить товар?')){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');cat[c][fi].items.splice(ii,1);localStorage.setItem('catalogData',JSON.stringify(cat));loadCatalog();loadDashboard()}}
+function deleteItem(c,fi,ii){if(confirm('Удалить товар?')){const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');cat[c][fi].items.splice(ii,1);sSet('catalogData',JSON.stringify(cat));loadCatalog();loadDashboard()}}
 function loadOrders(){
 const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
 const list=document.getElementById('ordersList');
@@ -425,16 +464,12 @@ list.innerHTML=orders.slice().reverse().map((o,i)=>{
 const realIdx=orders.length-1-i;
 let statusClass='status-new',statusText='⏳ Ожидает';
 if(o.paid){statusClass='status-completed';statusText='✅ Оплачен'}
-else if(o.status==='receipt_rejected'){statusClass='status-rejected';statusText='❌ Чек отклонён'}
-else if(o.status==='pending_receipt'){statusClass='status-pending';statusText='📎 Чек на проверке'+(o.resubmitted?' (повторно)':'')}
-return `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${statusClass}">${statusText}</span></div><p><strong>Клиент:</strong> ${esc(o.customerName)} | <strong>Email:</strong> ${esc(o.email)} | <strong>Тел:</strong> ${esc(o.phone)}</p><p><strong>Тип:</strong> ${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | <strong>Оплата:</strong> ${o.payment}</p>${o.orderType==='physical'?`<p><strong>Адрес:</strong> ${esc(o.address)} | <strong>Доставка:</strong> ${esc(o.delivery)}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${esc(i.name)} (${i.price}₽) ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽</p>${o.receipt?`<div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;border:2px solid #4CAF50"><strong style="color:#4CAF50">📎 Чек:</strong><br><img src="${o.receipt}" class="receipt-thumb" onclick="viewReceipt(${o.id})" title="Нажмите для увеличения"><br><button class="btn-small btn-edit" onclick="confirmByReceipt(${o.id})" style="margin-top:10px">✅ Подтвердить по чеку (открыть доступ)</button><button class="btn-small btn-delete" onclick="rejectByReceipt(${o.id})" style="margin-top:10px">❌ Отклонить чек</button>${o.rejectReason&&!o.paid?`<div style="color:#f44336;font-size:12px;margin-top:8px">Причина отклонения: ${esc(o.rejectReason)}</div>`:''}${o.resubmitted&&!o.paid?`<div style="color:#2196F3;font-size:12px;margin-top:5px">🔄 Чек отправлен покупателем повторно</div>`:''}</div>`:'<p style="color:#999;font-size:12px;margin-top:5px">📭 Чек не прикреплён</p>'}${!o.paid?`<button class="btn-small btn-edit" onclick="markAsPaid(${o.id})" style="margin-top:10px">✅ Отметить оплаченным</button>`:''}</div>`
+else if(o.status==='pending_receipt'){statusClass='status-pending';statusText='📎 Чек на проверке'}
+else if(o.status==='rejected'){statusClass='status-rejected';statusText='❌ Чек отклонён'}
+return `<div class="order-card"><div class="order-header"><span class="order-id">Заказ #${o.id}</span><span class="order-status ${statusClass}">${statusText}</span></div><p><strong>Клиент:</strong> ${o.customerName} | <strong>Email:</strong> ${o.email} | <strong>Тел:</strong> ${o.phone}</p><p><strong>Тип:</strong> ${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | <strong>Оплата:</strong> ${o.payment}</p>${o.orderType==='physical'?`<p><strong>Адрес:</strong> ${o.address} | <strong>Доставка:</strong> ${o.delivery}</p>`:''}<p><strong>Товары:</strong> ${o.items.map(i=>`${i.name} (${i.price}₽) ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}`).join(', ')}</p><p><strong>Итого:</strong> ${o.total}₽</p>${o.receipt?`<div style="margin-top:10px;padding:10px;background:#fff;border-radius:8px;border:2px solid #4CAF50"><strong style="color:#4CAF50">📎 Чек:</strong><br><img src="${o.receipt}" class="receipt-thumb" onclick="viewReceipt('${o.receipt}',${o.id})" title="Нажмите для увеличения"><br><button class="btn-small btn-edit" onclick="confirmByReceipt(${o.id})" style="margin-top:10px">✅ Подтвердить по чеку (открыть доступ)</button><button class="btn-small btn-delete" onclick="rejectReceipt(${o.id})" style="margin-top:10px;margin-left:6px">❌ Отклонить чек</button>${o.autoVerified?'<span style="font-size:12px;color:#4CAF50;margin-left:6px">⚡ авто</span>':''}</div>`:'<p style="color:#999;font-size:12px;margin-top:5px">📭 Чек не прикреплён</p>'}${!o.paid?`<button class="btn-small btn-edit" onclick="markAsPaid(${o.id})" style="margin-top:10px">✅ Отметить оплаченным</button>`:''}</div>`
 }).join('')
 }
-function viewReceipt(orderId){
-const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
-const order=orders.find(o=>o.id===orderId);
-if(!order||!order.receipt){alert('Чек не найден');return}
-const receiptData=order.receipt;
+function viewReceipt(receiptData,orderId){
 const modal=document.createElement('div');
 modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer';
 const img=document.createElement('img');
@@ -453,60 +488,61 @@ order.paid=true;
 order.paymentDate=new Date().toISOString();
 order.status='completed';
 order.receiptVerified=true;
-delete order.rejectReason;
-const store=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
-const em=order.email;
-if(!store[em])store[em]=[];
+grantAccessToUser(order);
 order.items.forEach(item=>{
 if(item.itemType==='digital'||item.itemType==='video'||item.itemType==='audio'){
-if(!store[em].some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){
-store[em].push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})
+const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
+if(!pi.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){
+pi.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})
 }
+sSet('purchasedItems',JSON.stringify(pi))
 }
 });
-localStorage.setItem('purchasedItemsByUser',JSON.stringify(store));
-localStorage.setItem('ordersData',JSON.stringify(orders));
+sSet('ordersData',JSON.stringify(orders));
 loadOrders();loadDashboard();loadUsers();loadRegisteredUsers();
-alert('✅ Заказ #'+orderId+' подтверждён! Доступ открыт только для '+order.email+'.')
+alert('✅ Заказ #'+orderId+' подтверждён! Покупатель получил доступ к файлам.')
 }
-}
-function rejectByReceipt(orderId){
-const reason=prompt('Причина отклонения чека (покупатель её увидит):','');
-if(reason===null)return;
-const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
-const order=orders.find(o=>o.id===orderId);
-if(!order)return;
-order.paid=false;
-order.status='receipt_rejected';
-order.receiptVerified=false;
-order.rejectReason=reason||'Чек не проходит проверку';
-const store=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
-if(store[order.email]){
-store[order.email]=store[order.email].filter(p=>!order.items.some(i=>i.category===p.category&&i.folderIndex===p.folderIndex&&i.itemIndex===p.itemIndex));
-localStorage.setItem('purchasedItemsByUser',JSON.stringify(store));
-}
-localStorage.setItem('ordersData',JSON.stringify(orders));
-loadOrders();loadDashboard();
-alert('❌ Чек отклонён. Покупатель увидит причину и сможет прислать новый чек.')
 }
 function markAsPaid(orderId){
 const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
 const order=orders.find(o=>o.id===orderId);
 if(order){
 order.paid=true;order.paymentDate=new Date().toISOString();
-order.status='completed';delete order.rejectReason;
-const store=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
-const em=order.email;
-if(!store[em])store[em]=[];
+grantAccessToUser(order);
 order.items.forEach(item=>{
 if(item.itemType==='digital'||item.itemType==='video'||item.itemType==='audio'){
-if(!store[em].some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){store[em].push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})}
+const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
+if(!pi.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){pi.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})}
+sSet('purchasedItems',JSON.stringify(pi))
 }
 });
-localStorage.setItem('purchasedItemsByUser',JSON.stringify(store));
-localStorage.setItem('ordersData',JSON.stringify(orders));
+sSet('ordersData',JSON.stringify(orders));
 loadOrders();loadDashboard();loadUsers();loadRegisteredUsers();
 alert('Заказ оплачен! Доступ открыт.')
+}
+}
+function grantAccessToUser(order){
+const em=order.email||'';if(!em)return;
+const by=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
+by[em]=by[em]||[];
+order.items.forEach(item=>{
+if(['digital','video','audio'].includes(item.itemType)&&!by[em].some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){
+by[em].push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:order.id,purchaseDate:new Date().toISOString()})
+}
+});
+sSet('purchasedItemsByUser',JSON.stringify(by))
+}
+function rejectReceipt(orderId){
+const reason=prompt('Укажите причину отклонения чека — покупатель увидит её в разделе «Мои заказы»:','Чек нечитаем или сумма не совпадает');
+if(reason===null)return;
+const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
+const order=orders.find(o=>o.id===orderId);
+if(order){
+order.status='rejected';order.rejectReason=reason||'Не указана';order.paid=false;
+if(order.email){const by=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');if(by[order.email]){delete by[order.email];sSet('purchasedItemsByUser',JSON.stringify(by))}}
+sSet('ordersData',JSON.stringify(orders));
+loadOrders();loadDashboard();loadUsers();loadRegisteredUsers();
+alert('❌ Чек отклонён. Покупатель сможет приложить новый чек в разделе «Мои заказы».')
 }
 }
 function loadQuestions(){
@@ -523,19 +559,18 @@ function answerQuestion(idx){
 const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');
 const q=questions[idx];
 const answer=prompt('Ответ для '+q.name+' ('+q.email+'):',q.answer||'');
-if(answer!==null){q.answer=answer;q.answered=true;q.answerDate=new Date().toISOString();localStorage.setItem('questionsData',JSON.stringify(questions));loadQuestions();loadDashboard();alert('✅ Ответ сохранён!')}
+if(answer!==null){q.answer=answer;q.answered=true;q.answerDate=new Date().toISOString();sSet('questionsData',JSON.stringify(questions));loadQuestions();loadDashboard();alert('✅ Ответ сохранён!')}
 }
-function deleteQuestion(idx){if(!confirm('Удалить вопрос?'))return;const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.splice(idx,1);localStorage.setItem('questionsData',JSON.stringify(questions));loadQuestions();loadDashboard()}
+function deleteQuestion(idx){if(!confirm('Удалить вопрос?'))return;const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.splice(idx,1);sSet('questionsData',JSON.stringify(questions));loadQuestions();loadDashboard()}
 function loadMessages(){const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');const list=document.getElementById('messagesList');if(messages.length===0){list.innerHTML='<p style="color:#999;text-align:center">Сообщений нет</p>';return}list.innerHTML=messages.map((m,i)=>`<div class="message-card"><div class="message-from">${m.name} (${m.email})</div><div class="message-date">${new Date(m.date).toLocaleString('ru-RU')}</div><div class="message-text">${m.text}</div><button class="btn-small btn-delete" style="margin-top:10px" onclick="deleteMessage(${i})">🗑 Удалить</button></div>`).join('')}
-function deleteMessage(i){if(confirm('Удалить?')){const m=JSON.parse(localStorage.getItem('messagesData')||'[]');m.splice(i,1);localStorage.setItem('messagesData',JSON.stringify(m));loadMessages()}}
+function deleteMessage(i){if(confirm('Удалить?')){const m=JSON.parse(localStorage.getItem('messagesData')||'[]');m.splice(i,1);sSet('messagesData',JSON.stringify(m));loadMessages()}}
 function loadContacts(){const c=JSON.parse(localStorage.getItem('siteContacts')||'{}');document.getElementById('contactEmail').value=c.email||'';document.getElementById('contactPhone').value=c.phone||'';document.getElementById('contactAddress').value=c.address||'';document.getElementById('contactHours').value=c.hours||''}
-document.getElementById('contactsForm').addEventListener('submit',e=>{e.preventDefault();localStorage.setItem('siteContacts',JSON.stringify({email:document.getElementById('contactEmail').value,phone:document.getElementById('contactPhone').value,address:document.getElementById('contactAddress').value,hours:document.getElementById('contactHours').value}));alert('Контакты сохранены!')});
-document.getElementById('changePasswordForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('currentPassword').value!==ad.password){alert('Неверный пароль');return}const np=document.getElementById('newPasswordChange').value;if(np.length<8||!/[a-zA-Zа-яА-Я]/.test(np)||!/\d/.test(np)){alert('Мин. 8 символов, буквы+цифры');return}ad.password=np;localStorage.setItem('adminData',JSON.stringify(ad));document.getElementById('changePasswordForm').reset();alert('Пароль изменён!')});
-function downloadBackup(){const b={catalog:localStorage.getItem('catalogData'),orders:localStorage.getItem('ordersData'),messages:localStorage.getItem('messagesData'),contacts:localStorage.getItem('siteContacts'),background:localStorage.getItem('siteBackground'),gradient:localStorage.getItem('siteGradient'),payment:localStorage.getItem('paymentSettings'),registeredUsers:localStorage.getItem('registeredUsers'),users:localStorage.getItem('users'),questions:localStorage.getItem('questionsData'),purchasedByUser:localStorage.getItem('purchasedItemsByUser'),date:new Date().toISOString()};const blob=new Blob([JSON.stringify(b,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`backup_${new Date().toISOString().split('T')[0]}.json`;a.click()}
-function restoreBackup(event){if(event.target.files[0]){const reader=new FileReader();reader.onload=e=>{try{const b=JSON.parse(e.target.result);if(b.catalog)localStorage.setItem('catalogData',b.catalog);if(b.orders)localStorage.setItem('ordersData',b.orders);if(b.messages)localStorage.setItem('messagesData',b.messages);if(b.contacts)localStorage.setItem('siteContacts',b.contacts);if(b.background)localStorage.setItem('siteBackground',b.background);if(b.gradient)localStorage.setItem('siteGradient',b.gradient);if(b.payment)localStorage.setItem('paymentSettings',b.payment);if(b.registeredUsers)localStorage.setItem('registeredUsers',b.registeredUsers);if(b.users)localStorage.setItem('users',b.users);if(b.questions)localStorage.setItem('questionsData',b.questions);
-if(b.purchasedByUser)localStorage.setItem('purchasedItemsByUser',b.purchasedByUser);loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadCatalog();loadOrders();loadQuestions();loadMessages();loadContacts();loadBackground();alert('Восстановлено!')}catch(error){alert('Ошибка')}};reader.readAsText(event.target.files[0])}}
+document.getElementById('contactsForm').addEventListener('submit',e=>{e.preventDefault();sSet('siteContacts',JSON.stringify({email:document.getElementById('contactEmail').value,phone:document.getElementById('contactPhone').value,address:document.getElementById('contactAddress').value,hours:document.getElementById('contactHours').value}));alert('Контакты сохранены!')});
+document.getElementById('changePasswordForm').addEventListener('submit',e=>{e.preventDefault();const ad=JSON.parse(localStorage.getItem('adminData')||'{}');if(document.getElementById('currentPassword').value!==ad.password){alert('Неверный пароль');return}const np=document.getElementById('newPasswordChange').value;if(np.length<8||!/[a-zA-Zа-яА-Я]/.test(np)||!/\d/.test(np)){alert('Мин. 8 символов, буквы+цифры');return}ad.password=np;sSet('adminData',JSON.stringify(ad));document.getElementById('changePasswordForm').reset();alert('Пароль изменён!')});
+function downloadBackup(){const b={catalog:localStorage.getItem('catalogData'),orders:localStorage.getItem('ordersData'),messages:localStorage.getItem('messagesData'),contacts:localStorage.getItem('siteContacts'),background:localStorage.getItem('siteBackground'),gradient:localStorage.getItem('siteGradient'),payment:localStorage.getItem('paymentSettings'),registeredUsers:localStorage.getItem('registeredUsers'),users:localStorage.getItem('users'),questions:localStorage.getItem('questionsData'),purchasesByUser:localStorage.getItem('purchasedItemsByUser'),date:new Date().toISOString()};const blob=new Blob([JSON.stringify(b,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`backup_${new Date().toISOString().split('T')[0]}.json`;a.click()}
+function restoreBackup(event){if(event.target.files[0]){const reader=new FileReader();reader.onload=e=>{try{const b=JSON.parse(e.target.result);if(b.catalog)sSet('catalogData',b.catalog);if(b.orders)sSet('ordersData',b.orders);if(b.messages)sSet('messagesData',b.messages);if(b.contacts)sSet('siteContacts',b.contacts);if(b.background)sSet('siteBackground',b.background);if(b.gradient)sSet('siteGradient',b.gradient);if(b.payment)sSet('paymentSettings',b.payment);if(b.registeredUsers)sSet('registeredUsers',b.registeredUsers);if(b.users)sSet('users',b.users);if(b.questions)sSet('questionsData',b.questions);if(b.purchasesByUser)sSet('purchasedItemsByUser',b.purchasesByUser);loadDashboard();loadRegisteredUsers();loadUsers();loadCarts();loadPaymentSettings();loadCatalog();loadOrders();loadQuestions();loadMessages();loadContacts();loadBackground();alert('Восстановлено!')}catch(error){alert('Ошибка')}};reader.readAsText(event.target.files[0])}}
 function resetAllData(){if(confirm('Удалить все данные?')&&confirm('Точно?')){localStorage.clear();location.reload()}}
-function logout(){sessionStorage.removeItem('adminAuth');document.getElementById('adminPanel').classList.add('hidden');document.getElementById('loginSection').classList.remove('hidden');document.getElementById('loginForm').reset()}
+function logout(){document.getElementById('adminPanel').classList.add('hidden');document.getElementById('loginSection').classList.remove('hidden');document.getElementById('loginForm').reset()}
 init();
 </script>
 </body>
