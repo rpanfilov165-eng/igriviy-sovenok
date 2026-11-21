@@ -22,7 +22,8 @@ button:hover{transform:translateY(-2px)}
 .hidden{display:none}
 .admin-panel{background:#fff;border-radius:20px;padding:30px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
 .tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;border-bottom:2px solid #e0e0e0;padding-bottom:20px}
-.tab{padding:10px 20px;background:#f0f0f0;border:none;border-radius:10px;cursor:pointer;font-size:14px;transition:all .3s}
+.tab{padding:10px 20px;background:#e8e8e8;color:#333;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:all .3s}
+.tab:hover{background:#d0d0d0;color:#222}
 .tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
 .tab-content{display:none}
 .tab-content.active{display:block}
@@ -436,11 +437,9 @@ order.paid=true;
 order.paymentDate=new Date().toISOString();
 order.status='completed';
 order.receiptVerified=true;
-// Grant access to purchased items
 order.items.forEach(item=>{
 if(item.itemType==='digital'||item.itemType==='video'||item.itemType==='audio'){
 const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
-// Check if already purchased to avoid duplicates
 if(!pi.some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){
 pi.push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:orderId,purchaseDate:new Date().toISOString()})
 }
@@ -457,7 +456,6 @@ const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
 const order=orders.find(o=>o.id===orderId);
 if(order){
 order.paid=true;order.paymentDate=new Date().toISOString();
-// Grant access to purchased items
 order.items.forEach(item=>{
 if(item.itemType==='digital'||item.itemType==='video'||item.itemType==='audio'){
 const pi=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
