@@ -103,7 +103,7 @@ body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh
 .btn-secondary{background:#f0f0f0;color:#333}
 .btn-success{background:linear-gradient(135deg,#4CAF50,#388E3C)}
 .btn-warning{background:linear-gradient(135deg,#ff9800,#f57c00)}
-.btn-disabled{background:#ccc;color:#666;cursor:not-allowed}
+.btn-locked{background:linear-gradient(135deg,#9e9e9e,#757575);cursor:not-allowed}
 .payment-method{padding:15px;border:2px solid #e0e0e0;border-radius:10px;cursor:pointer;margin-bottom:10px;text-align:center;transition:all .3s}
 .payment-method:hover{border-color:#f0c040;background:#fffef5}
 footer{background:linear-gradient(135deg,#2c2c54,#474787);color:#fff;padding:25px;border-radius:15px;text-align:center;margin-top:20px}
@@ -113,10 +113,12 @@ footer a:hover{text-decoration:underline}
 .status-pending{background:#fff3e0;color:#e65100}
 .status-paid{background:#e8f5e9;color:#2e7d32}
 .status-waiting{background:#e3f2fd;color:#1976d2}
+.preview-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:40px;color:rgba(255,0,0,.15);font-weight:bold;pointer-events:none;z-index:10;white-space:nowrap}
+@media print{body *{visibility:hidden!important}.no-print,.preview-modal{display:none!important}}
 @media(max-width:768px){.cart-sidebar{width:100%;right:-100%}.banner h1{font-size:28px}.banner-logo{width:130px;height:130px}}
 </style>
 </head>
-<body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
 <div class="container">
 <nav class="top-nav">
 <div class="nav-header">
@@ -328,6 +330,12 @@ let currentCategory='';
 let purchasedItems=[];
 let receiptData=null;
 
+// Блокировка копирования, печати, сохранения
+document.addEventListener('keydown',function(e){
+if(e.ctrlKey&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'||e.key==='c'||e.key==='C'||e.key==='u'||e.key==='U')){e.preventDefault();return false}
+if(e.key==='F12'){e.preventDefault();return false}
+});
+
 function init(){
 cart=JSON.parse(localStorage.getItem('cart')||'[]');
 purchasedItems=JSON.parse(localStorage.getItem('purchasedItems')||'[]');
@@ -361,9 +369,11 @@ if(videos.length===0){section.style.display='none';return}
 section.style.display='block';
 grid.innerHTML=videos.map(v=>{
 const isP=purchasedItems.some(p=>p.category===v.category&&p.folderIndex===v.folderIndex&&p.itemIndex===v.itemIndex);
-const preview=v.file.data.startsWith('data:video')?`<video src="${v.file.data}" muted></video>`:`<img src="${v.file.data}" alt="${v.name}">`;
+const preview=v.file.data.startsWith('data:video')?`<video src="${v.file.data}" muted oncontextmenu="return false"></video>`:`<img src="${v.file.data}" alt="${v.name}" oncontextmenu="return false">`;
 let actionBtn='';
-if(isP||v.price===0){
+if(v.price===0){
+actionBtn=`<button class="btn btn-success" onclick="playVideo('${v.category}',${v.folderIndex},${v.itemIndex})">▶️ Смотреть</button>`
+}else if(isP){
 actionBtn=`<button class="btn btn-success" onclick="playVideo('${v.category}',${v.folderIndex},${v.itemIndex})">▶️ Смотреть</button>`
 }else{
 actionBtn=`<button class="btn" onclick="addToCart('${v.category}',${v.folderIndex},${v.itemIndex})">🛒 В корзину</button>`
@@ -379,7 +389,7 @@ const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
 const item=cat[category]?.[fi]?.items?.[ii];
 if(!item||!item.file){alert('Видео не найдено');return}
 const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
-if(item.price>0&&!isP){alert('⛔ Сначала оплатите');return}
+if(item.price>0&&!isP){alert('⛔ Сначала оплатите и дождитесь подтверждения администратора');return}
 document.getElementById('videoModalTitle').textContent='🎬 '+item.name;
 document.getElementById('videoPlayer').innerHTML=`<video src="${item.file.data}" controls style="width:100%;max-height:70vh;border-radius:10px;background:#000" oncontextmenu="return false"></video>`;
 document.getElementById('videoModal').classList.add('active')
@@ -402,24 +412,29 @@ const badge=`<span class="item-type-badge ${it==='physical'?'type-physical':it==
 let prev='';
 if(item.file){
 if(item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
-prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px" alt="" oncontextmenu="return false"></div>`
+prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;position:relative;overflow:hidden"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px;pointer-events:none" alt="" oncontextmenu="return false"><div style="position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.6);color:#fff;padding:2px 8px;border-radius:10px;font-size:10px">👁 Только просмотр</div></div>`
 }else if(item.file.name.match(/\.(mp4|webm|mov)$/i)){
-prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted oncontextmenu="return false"></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
+prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;position:relative"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted oncontextmenu="return false" controlsList="nodownload noplaybackrate"></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
 }else if(item.file.name.match(/\.pdf$/i)){
-prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
+prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;position:relative"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
 }else if(item.file.name.match(/\.(mp3|wav|ogg)$/i)){
-prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🎵</div><div style="font-size:11px;color:#666">${item.file.name}</div><audio src="${item.file.data}" controls style="width:100%;margin-top:5px" oncontextmenu="return false"></audio></div>`
+prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🎵</div><div style="font-size:11px;color:#666">${item.file.name}</div><audio src="${item.file.data}" controls style="width:100%;margin-top:5px" oncontextmenu="return false" controlsList="nodownload"></audio></div>`
 }else{
 prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📎</div><div style="font-size:11px;color:#666">${item.file.name}</div><div style="font-size:10px;color:#999">${(item.file.size/1024).toFixed(1)} КБ</div></div>`
 }
 }else if(it==='physical'){prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#e65100;font-size:11px">📦 Физический товар</div>`}
 else{prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center;color:#999;font-size:11px">📭 Файл не прикреплён</div>`}
 let actionBtn='';
+// Бесплатные товары - можно скачать сразу
 if(item.price===0&&(it==='digital'||it==='video'||it==='audio')){
 actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadFreeItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
-}else if(isP&&(it==='digital'||it==='video'||it==='audio')){
+}
+// Купленные товары - можно скачать
+else if(isP&&(it==='digital'||it==='video'||it==='audio')){
 actionBtn=`<button class="btn btn-success" onclick="${it==='video'?`playVideo('${category}',${fi},${ii})`:`downloadPurchasedItem('${category}',${fi},${ii})`}">${it==='video'?'▶️ Смотреть':'📥 Скачать'}</button>`
-}else{
+}
+// Неоплаченные платные товары - только в корзину
+else{
 actionBtn=`<button class="btn" onclick="addToCart('${category}',${fi},${ii})">🛒 В корзину</button>`
 }
 return `<div class="item-card"><div class="item-name">${item.name}</div>${badge}<div class="item-description">${item.description||''}</div>${prev}<div class="item-price">${item.price>0?item.price+'₽':'Бесплатно'}</div><div class="item-actions">${actionBtn}</div></div>`
@@ -443,7 +458,7 @@ cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'
 localStorage.setItem('cart',JSON.stringify(cart));
 saveCartToAllCarts();
 updateCartCount();
-alert('✅ "'+item.name+'" добавлен в корзину!')
+alert('✅ "'+item.name+'" добавлен в корзину! Оформите заказ и прикрепите чек.')
 }
 
 function saveCartToAllCarts(){const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}else{ac['guest_'+Date.now()]={items:cart,userName:'Гость'}}localStorage.setItem('allCarts',JSON.stringify(ac))}
@@ -549,7 +564,7 @@ alert('✅ Файл открыт по ссылке!')
 }
 
 function downloadPurchasedItem(category,fi,ii){
-if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите');return}
+if(!purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii)){alert('⛔ Сначала оплатите и дождитесь подтверждения администратора');return}
 const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
 const item=cat[category][fi].items[ii];
 if(!item){alert('❌ Товар не найден');return}
@@ -567,32 +582,20 @@ alert('✅ Файл открыт по ссылке!')
 
 function showMyPurchases(){
 const pc=document.getElementById('purchasesContent');
-if(purchasedItems.length===0){pc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Нет купленных материалов</p>'}
+if(purchasedItems.length===0){pc.innerHTML='<p style="text-align:center;color:#999;padding:30px">Нет купленных материалов. Оплатите заказ и дождитесь подтверждения администратора.</p>'}
 else{
 const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
 pc.innerHTML=`<h3 style="margin-bottom:20px">Ваши материалы:</h3>`+purchasedItems.map(p=>{
 const item=cat[p.category]?.[p.folderIndex]?.items?.[p.itemIndex];
 if(!item)return '';
 const isVideo=item.itemType==='video';
-return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><strong>${isVideo?'🎬 ':'📄 '}${item.name}</strong><div style="color:#666;font-size:12px">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div><div style="display:flex;gap:8px"><button class="btn btn-success" onclick="${isVideo?`playVideo('${p.category}',${p.folderIndex},${p.itemIndex})`:`downloadPurchasedItem('${p.category}',${p.folderIndex},${p.itemIndex})`}">${isVideo?'▶️ Смотреть':'📥 Скачать'}</button><button class="btn" onclick="addPurchasedToCart('${p.category}',${p.folderIndex},${p.itemIndex})">🛒 Ещё раз</button></div></div>`
+return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><div><strong>${isVideo?'🎬 ':'📄 '}${item.name}</strong><div style="color:#666;font-size:12px">Куплен: ${new Date(p.purchaseDate).toLocaleString('ru-RU')}</div></div><div style="display:flex;gap:8px"><button class="btn btn-success" onclick="${isVideo?`playVideo('${p.category}',${p.folderIndex},${p.itemIndex})`:`downloadPurchasedItem('${p.category}',${p.folderIndex},${p.itemIndex})`}">${isVideo?'▶️ Смотреть':'📥 Скачать'}</button></div></div>`
 }).join('')
 }
 document.getElementById('purchasesModal').classList.add('active')
 }
 
 function closePurchases(){document.getElementById('purchasesModal').classList.remove('active')}
-
-function addPurchasedToCart(category,fi,ii){
-const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
-const item=cat[category]?.[fi]?.items?.[ii];
-if(!item){alert('❌ Товар не найден');return}
-if(cart.some(c=>c.category===category&&c.folderIndex===fi&&c.itemIndex===ii)){alert('⚠️ Уже в корзине!');return}
-cart.push({id:item.id||Date.now(),name:item.name,description:item.description||'',price:item.price,category:category,folderIndex:fi,itemIndex:ii,itemType:item.itemType||'digital',file:item.file||null,fileUrl:item.fileUrl||null,quantity:1});
-localStorage.setItem('cart',JSON.stringify(cart));
-saveCartToAllCarts();
-updateCartCount();
-alert('✅ "'+item.name+'" добавлен в корзину!')
-}
 
 function showMyOrders(){
 if(!currentUser){alert('Войдите в систему');return}
@@ -640,53 +643,84 @@ r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найде
 }
 
 function previewFile(fileData,fileName,fileType){
+// Создаём модальное окно предпросмотра с защитой
 const modal=document.createElement('div');
-modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px';
+modal.className='preview-modal';
+modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px';
+modal.oncontextmenu=function(){return false};
+
 const content=document.createElement('div');
-content.style.cssText='background:#fff;border-radius:15px;padding:20px;max-width:800px;width:100%;max-height:90vh;overflow:auto;position:relative';
+content.style.cssText='background:#fff;border-radius:15px;padding:20px;max-width:900px;width:100%;max-height:90vh;overflow:auto;position:relative';
+content.oncontextmenu=function(){return false};
+
 const closeBtn=document.createElement('button');
 closeBtn.textContent='✕ Закрыть';
 closeBtn.style.cssText='position:absolute;top:10px;right:15px;background:#f44336;color:#fff;border:none;padding:8px 15px;border-radius:20px;cursor:pointer;font-size:14px;font-weight:600;z-index:10';
-closeBtn.onclick=()=>document.body.removeChild(modal);
+closeBtn.onclick=function(){document.body.removeChild(modal)};
+
 const title=document.createElement('h3');
 title.textContent='👁 Предпросмотр: '+fileName;
 title.style.cssText='margin-bottom:15px;padding-right:100px;color:#5a4000';
+
 const viewer=document.createElement('div');
+viewer.style.cssText='position:relative;overflow:hidden';
+
+// Водяной знак
+const watermark=document.createElement('div');
+watermark.className='preview-watermark';
+watermark.textContent='🔒 ТОЛЬКО ПРОСМОТР • НЕ ДЛЯ СКАЧИВАНИЯ';
+watermark.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:28px;color:rgba(255,0,0,.12);font-weight:bold;pointer-events:none;z-index:10;white-space:nowrap;text-align:center';
+
 if(fileType==='video'||fileName.match(/\.(mp4|webm|mov)$/i)){
 const video=document.createElement('video');
-video.src=fileData;video.controls=true;
+video.src=fileData;
+video.controls=true;
+video.controlsList='nodownload noplaybackrate noremoteplayback';
+video.disablePictureInPicture=true;
 video.style.cssText='width:100%;max-height:70vh;border-radius:8px;background:#000';
-video.oncontextmenu = () => false; // Disable right click
+video.oncontextmenu=function(){return false};
 viewer.appendChild(video)
 }else if(fileType&&fileType.startsWith('image/')){
 const img=document.createElement('img');
 img.src=fileData;
-img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px';
-img.oncontextmenu = () => false; // Disable right click
+img.style.cssText='width:100%;max-height:70vh;object-fit:contain;border-radius:8px;pointer-events:none';
+img.oncontextmenu=function(){return false};
+img.ondragstart=function(){return false};
 viewer.appendChild(img)
 }else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){
-const embed=document.createElement('embed');
-embed.src=fileData;embed.type='application/pdf';
-embed.style.cssText='width:100%;height:70vh;border-radius:8px';
-// Note: Fully blocking PDF download in embed is difficult without server-side protection, 
-// but we hide the UI elements and disable context menu.
-viewer.appendChild(embed)
+// Используем iframe с параметрами скрытия toolbar
+const iframe=document.createElement('iframe');
+iframe.src=fileData+'#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH';
+iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:8px';
+iframe.setAttribute('sandbox','allow-same-origin');
+viewer.appendChild(iframe)
 }else if(fileType==='audio'||fileName.match(/\.(mp3|wav|ogg)$/i)){
 const audio=document.createElement('audio');
-audio.src=fileData;audio.controls=true;
+audio.src=fileData;
+audio.controls=true;
+audio.controlsList='nodownload';
 audio.style.cssText='width:100%';
-audio.oncontextmenu = () => false;
-viewer.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:60px">🎵</div><p style="margin:15px 0;color:#666">${fileName}</p></div>`;
-viewer.appendChild(audio)
+audio.oncontextmenu=function(){return false};
+viewer.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:60px">🎵</div><p style="margin:15px 0;color:#666">${fileName}</p>`;
+viewer.appendChild(audio);
+viewer.innerHTML+=`</div>`
 }else{
-viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
+viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен для этого формата</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
 }
-const warning=document.createElement('p');
-warning.textContent='⚠️ Только просмотр. Скачивание доступно после оплаты.';
-warning.style.cssText='text-align:center;color:#ff9800;margin-top:15px;font-weight:600;font-size:14px';
-content.appendChild(closeBtn);content.appendChild(title);content.appendChild(viewer);content.appendChild(warning);
+
+viewer.appendChild(watermark);
+
+const warning=document.createElement('div');
+warning.style.cssText='text-align:center;padding:12px;margin-top:15px;background:#fff3e0;border-radius:10px;border:2px solid #ff9800';
+warning.innerHTML='<p style="color:#e65100;font-weight:600;font-size:14px;margin:0">⚠️ Только предпросмотр. Скачивание, копирование и печать заблокированы.</p><p style="color:#666;font-size:12px;margin:5px 0 0 0">После оплаты и подтверждения администратором файл станет доступен для скачивания.</p>';
+
+content.appendChild(closeBtn);
+content.appendChild(title);
+content.appendChild(viewer);
+content.appendChild(warning);
 modal.appendChild(content);
-modal.onclick=e=>{if(e.target===modal)document.body.removeChild(modal)};
+
+modal.onclick=function(e){if(e.target===modal)document.body.removeChild(modal)};
 document.body.appendChild(modal)
 }
 
