@@ -330,7 +330,7 @@ let currentCategory='';
 let purchasedItems=[];
 let receiptData=null;
 
-// Блокировка копирования, печати, сохранения
+// Блокировка клавиш
 document.addEventListener('keydown',function(e){
 if(e.ctrlKey&&(e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P'||e.key==='c'||e.key==='C'||e.key==='u'||e.key==='U')){e.preventDefault();return false}
 if(e.key==='F12'){e.preventDefault();return false}
@@ -643,7 +643,6 @@ r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найде
 }
 
 function previewFile(fileData,fileName,fileType){
-// Создаём модальное окно предпросмотра с защитой
 const modal=document.createElement('div');
 modal.className='preview-modal';
 modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);z-index:5000;display:flex;align-items:center;justify-content:center;padding:20px';
@@ -665,10 +664,9 @@ title.style.cssText='margin-bottom:15px;padding-right:100px;color:#5a4000';
 const viewer=document.createElement('div');
 viewer.style.cssText='position:relative;overflow:hidden';
 
-// Водяной знак
 const watermark=document.createElement('div');
 watermark.className='preview-watermark';
-watermark.textContent='🔒 ТОЛЬКО ПРОСМОТР • НЕ ДЛЯ СКАЧИВАНИЯ';
+watermark.textContent='🔒 ТОЛЬКО ПРОСМОТР';
 watermark.style.cssText='position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:28px;color:rgba(255,0,0,.12);font-weight:bold;pointer-events:none;z-index:10;white-space:nowrap;text-align:center';
 
 if(fileType==='video'||fileName.match(/\.(mp4|webm|mov)$/i)){
@@ -688,12 +686,11 @@ img.oncontextmenu=function(){return false};
 img.ondragstart=function(){return false};
 viewer.appendChild(img)
 }else if(fileType==='application/pdf'||fileName.endsWith('.pdf')){
-// Используем iframe с параметрами скрытия toolbar
-const iframe=document.createElement('iframe');
-iframe.src=fileData+'#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&view=FitH';
-iframe.style.cssText='width:100%;height:70vh;border:none;border-radius:8px';
-iframe.setAttribute('sandbox','allow-same-origin');
-viewer.appendChild(iframe)
+const embed=document.createElement('embed');
+embed.src=fileData;
+embed.type='application/pdf';
+embed.style.cssText='width:100%;height:70vh;border:none;border-radius:8px';
+viewer.appendChild(embed)
 }else if(fileType==='audio'||fileName.match(/\.(mp3|wav|ogg)$/i)){
 const audio=document.createElement('audio');
 audio.src=fileData;
@@ -701,11 +698,10 @@ audio.controls=true;
 audio.controlsList='nodownload';
 audio.style.cssText='width:100%';
 audio.oncontextmenu=function(){return false};
-viewer.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:60px">🎵</div><p style="margin:15px 0;color:#666">${fileName}</p>`;
-viewer.appendChild(audio);
-viewer.innerHTML+=`</div>`
+viewer.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:60px">🎵</div><p style="margin:15px 0;color:#666">${fileName}</p></div>`;
+viewer.appendChild(audio)
 }else{
-viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен для этого формата</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
+viewer.innerHTML=`<div style="text-align:center;padding:40px"><div style="font-size:60px">📄</div><p style="margin-top:15px;color:#666">Предпросмотр недоступен</p><p style="color:#999;font-size:13px">Файл: ${fileName}</p></div>`
 }
 
 viewer.appendChild(watermark);
