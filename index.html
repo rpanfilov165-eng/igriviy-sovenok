@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Игривый совёнок</title>
 <link rel="icon" href="logo.png" type="image/png">
-<link rel="manifest" href="manifest.json">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:linear-gradient(135deg,#f5e6a3,#e8d580,#d4c06a);min-height:100vh;padding:15px}
@@ -259,19 +258,19 @@ footer a:hover{text-decoration:underline}
 </div>
 <div id="checkoutSummary" style="background:#f9f9f9;padding:20px;border-radius:10px;margin-bottom:25px"></div>
 <div id="orderTypeInfo" style="padding:10px;border-radius:8px;margin-bottom:20px;font-size:14px"></div>
-<div id="receiptBlock" style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
+<div style="background:#fff3e0;padding:15px;border-radius:10px;margin-bottom:20px;border:2px solid #ff9800">
 <h4 style="margin-bottom:10px;color:#e65100">📎 Чек об оплате</h4>
 <p style="font-size:13px;color:#666;margin-bottom:10px">Прикрепите скриншот чека. После проверки админом файлы станут доступны.</p>
 <input type="file" id="receiptFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
 <div id="receiptPreview" style="margin-top:10px"></div>
-<div id="receiptError" style="color:#f44336;font-size:13px;margin-top:5px"></div>
 </div>
 <h3 style="margin-bottom:15px;color:#5a4000">💳 Способ оплаты:</h3>
 <div>
-<div class="payment-method" onclick="selectPayment('Карта',this)">💳 Карта</div>
-<div class="payment-method" onclick="selectPayment('СБП',this)">📱 СБП</div>
-<div class="payment-method" onclick="selectPayment('При получении',this)">💵 При получении</div>
+<div class="payment-method" onclick="selectPayment('Карта')">💳 Карта</div>
+<div class="payment-method" onclick="selectPayment('СБП')">📱 СБП</div>
+<div class="payment-method" onclick="selectPayment('При получении')">💵 При получении</div>
 </div>
+<div id="payLinkBlock" style="display:none;margin-top:15px"><button type="button" class="btn btn-success" onclick="openPayLink()" style="width:100%">⚡ Оплатить онлайн</button><p style="font-size:12px;color:#666;margin-top:8px">Откроется защищённая страница оплаты. После оплаты прикрепите чек ниже — или доступ откроется автоматически.</p></div>
 <input type="hidden" id="checkoutPayment">
 <div id="cardFields" style="display:none;background:#fff8e1;padding:20px;border-radius:10px;margin-top:15px;border:2px solid #f0c040">
 <h4 style="margin-bottom:15px;color:#5a4000">💳 Реквизиты</h4>
@@ -325,16 +324,6 @@ footer a:hover{text-decoration:underline}
 </div>
 </div>
 
-<div id="reuploadModal" class="modal">
-<div class="modal-content">
-<div class="modal-header"><h2>📎 Новый чек</h2><button class="close-modal" onclick="closeReupload()">×</button></div>
-<p style="color:#666;font-size:14px;margin-bottom:15px">Прикрепите новый чек — админ проверит его заново.</p>
-<input type="file" id="reuploadFile" accept="image/*" style="padding:10px;border:2px solid #e0e0e0;border-radius:8px;width:100%">
-<div id="reuploadPreview" style="margin-top:10px"></div>
-<button class="btn btn-success" onclick="submitReupload()" style="margin-top:15px">✅ Отправить на проверку</button>
-</div>
-</div>
-
 <div class="search-overlay" id="searchOverlay">
 <div class="search-box">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
@@ -352,59 +341,102 @@ footer a:hover{text-decoration:underline}
 </footer>
 
 <script>
+/* ===== ☁️ Облачная синхронизация между устройствами =====
+   Как подключить (5 минут):
+   1. Зайдите на console.firebase.google.com и создайте проект (бесплатно).
+   2. Добавьте веб-приложение (</>) и скопируйте конфигурацию.
+   3. Включите Realtime Database в режиме тестирования.
+   4. Вставьте значения конфигурации ниже — синхронизация включится сама.
+   Пока поля пустые, сайт работает локально (как раньше). */
+const FIREBASE_CONFIG={apiKey:"",authDomain:"",databaseURL:"",projectId:"",storageBucket:"",messagingSenderId:"",appId:""};
+const SYNC_KEYS=['ordersData','registeredUsers','users','allCarts','catalogData','paymentSettings','siteContacts','siteBackground','siteGradient','messagesData','questionsData','adminData','purchasedItems','purchasedItemsByUser'];
+let DB=null,applyingRemote=false;
+function sSet(k,v){
+  try{localStorage.setItem(k,v)}catch(e){console.warn('Хранилище переполнено:',k)}
+  if(DB&&!applyingRemote&&SYNC_KEYS.includes(k)){try{DB.ref('shop/'+k).set(v)}catch(e){console.warn('☁️ Не удалось сохранить в облако:',k)}}
+}
+function initSync(){
+  if(!FIREBASE_CONFIG.databaseURL){console.info('☁️ Firebase не настроен — данные хранятся локально');return}
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    DB=firebase.database();
+    DB.ref('shop').on('value',snap=>{
+      const v=snap.val()||{};
+      applyingRemote=true;
+      SYNC_KEYS.forEach(k=>{if(v[k]!==undefined&&v[k]!==null){try{localStorage.setItem(k,v[k])}catch(e){}}});
+      applyingRemote=false;
+      if(typeof window.remoteRefresh==='function'){try{window.remoteRefresh()}catch(e){}}
+    },err=>console.warn('☁️ Ошибка синхронизации:',err.message));
+    console.info('☁️ Синхронизация между устройствами включена');
+  }catch(e){console.warn('☁️ Firebase недоступен, работаем локально:',e.message)}
+}
+window.addEventListener('load',initSync);
+</script>
+<script>
 let cart=[];
 let currentUser=JSON.parse(localStorage.getItem('currentUser')||'null');
 let currentCategory='';
 let purchasedItems=[];
 let receiptData=null;
-let editingOrderId=null,reuploadData=null;
-function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function compressImage(dataUrl,maxSize,cb){
-  const img=new Image();
-  img.onload=()=>{
-    const w=img.width,h=img.height;
-    const scale=Math.min(1,maxSize/Math.max(w,h));
-    const canvas=document.createElement('canvas');
-    canvas.width=Math.round(w*scale);canvas.height=Math.round(h*scale);
-    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-    cb(canvas.toDataURL('image/jpeg',0.8));
-  };
-  img.onerror=()=>cb(dataUrl);
-  img.src=dataUrl;
-}
 
 function init(){
   cart=JSON.parse(localStorage.getItem('cart')||'[]');
-  syncPurchased();
+  refreshPurchases();
   loadContacts();updateStats();updateCartCount();updateUserDisplay();loadVideoSection();
   window.addEventListener('storage',e=>{
     if(e.key==='cart'){cart=JSON.parse(localStorage.getItem('cart')||'[]');updateCartCount();renderCart()}
     if(e.key==='catalogData'){updateStats();loadVideoSection();if(currentCategory)showCategory(currentCategory)}
-    if(e.key==='ordersData'||e.key==='purchasedItemsByUser'){syncPurchased();updateStats();if(currentCategory)showCategory(currentCategory)}
+    if(['ordersData','purchasedItems','purchasedItemsByUser'].includes(e.key)){refreshPurchases();updateStats();if(currentCategory)showCategory(currentCategory)}
   });
-  setInterval(()=>{syncPurchased();updateStats();if(currentCategory)showCategory(currentCategory)},3000);
+  setInterval(()=>{updateStats();if(currentCategory)showCategory(currentCategory)},3000);
 }
-
-function myPurchased(){
-  if(!currentUser)return[];
-  const list=[];
-  const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
-  orders.forEach(o=>{
-    if(o.email===currentUser.email&&o.paid&&o.status!=='receipt_rejected'){
-      o.items.forEach(it=>{
-        if(['digital','video','audio'].includes(it.itemType||'digital')){
-          list.push({category:it.category,folderIndex:it.folderIndex,itemIndex:it.itemIndex,purchaseDate:o.paymentDate||o.date});
-        }
-      });
+function refreshPurchases(){
+  const by=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
+  purchasedItems=(currentUser&&by[currentUser.email])?by[currentUser.email]:(JSON.parse(localStorage.getItem('purchasedItems')||'[]'))
+}
+function grantAccessToUser(order){
+  const em=order.email||'';if(!em)return;
+  const by=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
+  by[em]=by[em]||[];
+  order.items.forEach(item=>{
+    if(['digital','video','audio'].includes(item.itemType)&&!by[em].some(p=>p.category===item.category&&p.folderIndex===item.folderIndex&&p.itemIndex===item.itemIndex)){
+      by[em].push({category:item.category,folderIndex:item.folderIndex,itemIndex:item.itemIndex,orderId:order.id,purchaseDate:new Date().toISOString()})
     }
   });
-  const store=JSON.parse(localStorage.getItem('purchasedItemsByUser')||'{}');
-  (store[currentUser.email]||[]).forEach(p=>{
-    if(!list.some(l=>l.category===p.category&&l.folderIndex===p.folderIndex&&l.itemIndex===p.itemIndex))list.push(p);
-  });
-  return list;
+  sSet('purchasedItemsByUser',JSON.stringify(by));
+  refreshPurchases()
 }
-function syncPurchased(){purchasedItems=myPurchased()}
+function compressReceipt(dataUrl,cb){
+  const img=new Image();
+  img.onload=()=>{const max=1200;let w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}
+    const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.75))};
+  img.onerror=()=>cb(dataUrl);
+  img.src=dataUrl
+}
+function openPayLink(){const ps=JSON.parse(localStorage.getItem('paymentSettings')||'{}');if(ps.payLink)window.open(ps.payLink,'_blank');else alert('Ссылка на онлайн-оплату пока не настроена')}
+function resubmitReceipt(orderId){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
+  inp.onchange=()=>{
+    const f=inp.files[0];if(!f)return;
+    if(f.size>10*1024*1024){alert('⚠️ Файл слишком большой (макс. 10 МБ)');return}
+    const reader=new FileReader();
+    reader.onload=ev=>{compressReceipt(ev.target.result,data=>{
+      const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
+      const o=orders.find(x=>x.id===orderId);
+      if(o){
+        o.receipt=data;o.status='pending_receipt';o.rejectReason=null;
+        const ps=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
+        if(ps.autoApprove){o.paid=true;o.status='completed';o.receiptVerified=true;o.autoVerified=true;grantAccessToUser(o);alert('⚡ Платёж подтверждён автоматически! Доступ открыт в разделе «Мои покупки».')}
+        else{alert('📎 Новый чек отправлен на проверку администратору')}
+        sSet('ordersData',JSON.stringify(orders));
+        showMyOrders()
+      }
+    })};
+    reader.readAsDataURL(f)
+  };
+  inp.click()
+}
+window.remoteRefresh=function(){refreshPurchases();updateStats();updateCartCount();renderCart();loadContacts();loadVideoSection();if(currentCategory)showCategory(currentCategory)}
 
 function loadContacts(){const c=JSON.parse(localStorage.getItem('siteContacts')||'{}');const i=document.getElementById('contactInfo');if(Object.keys(c).length===0){i.innerHTML='<p style="color:#999">Контакты не указаны</p>';return}i.innerHTML=`${c.email?`<div class="contact-item">✉️ ${c.email}</div>`:''}${c.phone?`<div class="contact-item">📞 ${c.phone}</div>`:''}${c.address?`<div class="contact-item">📍 ${c.address}</div>`:''}${c.hours?`<div class="contact-item">🕐 ${c.hours}</div>`:''}`}
 
@@ -427,8 +459,8 @@ function loadVideoSection(){
   section.style.display='block';
   grid.innerHTML=videos.map(v=>{
     const isP=purchasedItems.some(p=>p.category===v.category&&p.folderIndex===v.folderIndex&&p.itemIndex===v.itemIndex);
-    const preview=v.file.data.startsWith('data:video')?`<video src="${v.file.data}" muted></video>`:`<img src="${v.file.data}" alt="${esc(v.name)}">`;
-    return `<div class="video-card">${preview}<div class="video-card-body"><div class="video-card-title">${esc(v.name)}</div><div class="video-card-price">${v.price>0?v.price+'₽':'Бесплатно'}</div><button class="btn ${isP||v.price===0?'btn-success':''}" onclick="playVideo('${v.category}',${v.folderIndex},${v.itemIndex})">${isP||v.price===0?'▶️ Смотреть':'🛒 В корзину'}</button></div></div>`
+    const preview=v.file.data.startsWith('data:video')?`<video src="${v.file.data}" muted></video>`:`<img src="${v.file.data}" alt="${v.name}">`;
+    return `<div class="video-card">${preview}<div class="video-card-body"><div class="video-card-title">${v.name}</div><div class="video-card-price">${v.price>0?v.price+'₽':'Бесплатно'}</div><button class="btn ${isP||v.price===0?'btn-success':''}" onclick="playVideo('${v.category}',${v.folderIndex},${v.itemIndex})">${isP||v.price===0?'▶️ Смотреть':'🛒 В корзину'}</button></div></div>`
   }).join('')
 }
 
@@ -454,7 +486,7 @@ function showCategory(category){
   document.getElementById('categoryTitle').textContent=titles[category];
   if(folders.length===0){document.getElementById('foldersList').innerHTML='<p style="color:#999;text-align:center;padding:30px">В этой категории пока нет материалов</p>'}
   else{
-    document.getElementById('foldersList').innerHTML=folders.map((folder,fi)=>`<div style="margin-bottom:30px"><h3 style="margin-bottom:15px;color:#5a4000">📁 ${esc(folder.name)}</h3><div class="items-grid">${(folder.items||[]).map((item,ii)=>{
+    document.getElementById('foldersList').innerHTML=folders.map((folder,fi)=>`<div style="margin-bottom:30px"><h3 style="margin-bottom:15px;color:#5a4000">📁 ${folder.name}</h3><div class="items-grid">${(folder.items||[]).map((item,ii)=>{
       const isP=purchasedItems.some(p=>p.category===category&&p.folderIndex===fi&&p.itemIndex===ii);
       const it=item.itemType||'digital';
       const badge=`<span class="item-type-badge ${it==='physical'?'type-physical':it==='video'?'type-video':'type-digital'}">${it==='physical'?'📦 Доставка':it==='video'?'🎬 Видео':'📥 Скачивание'}</span>`;
@@ -463,9 +495,9 @@ function showCategory(category){
         if(item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0"><img src="${item.file.data}" style="width:100%;max-height:150px;object-fit:cover;border-radius:5px" alt=""></div>`
         }else if(item.file.name.match(/\.(mp4|webm|mov)$/i)){
-          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted></video><button type="button" class="btn btn-secondary" onclick="previewItemAt('${category}',${fi},${ii})" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><video src="${item.file.data}" style="width:100%;max-height:150px;border-radius:5px" muted></video><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','video')" style="margin-top:5px;font-size:11px;padding:4px 10px">▶️ Предпросмотр</button></div>`
         }else if(item.file.name.match(/\.pdf$/i)){
-          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewItemAt('${category}',${fi},${ii})" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
+          prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">📄</div><div style="font-size:11px;color:#666">${item.file.name}</div><button type="button" class="btn btn-secondary" onclick="previewFile('${item.file.data}','${item.file.name}','application/pdf')" style="margin-top:5px;font-size:11px;padding:4px 10px">👁 Предпросмотр</button></div>`
         }else if(item.file.name.match(/\.(mp3|wav|ogg)$/i)){
           prev=`<div style="margin:10px 0;padding:8px;background:#fff;border-radius:8px;border:1px solid #e0e0e0;text-align:center"><div style="font-size:30px">🎵</div><div style="font-size:11px;color:#666">${item.file.name}</div><audio src="${item.file.data}" controls style="width:100%;margin-top:5px"></audio></div>`
         }else{
@@ -481,7 +513,7 @@ function showCategory(category){
       }else{
         actionBtn=`<button class="btn" onclick="addToCart('${category}',${fi},${ii})">🛒 В корзину</button>`
       }
-      return `<div class="item-card"><div class="item-name">${esc(item.name)}</div>${badge}<div class="item-description">${esc(item.description||'')}</div>${prev}<div class="item-price">${item.price>0?item.price+'₽':'Бесплатно'}</div><div class="item-actions">${actionBtn}</div></div>`
+      return `<div class="item-card"><div class="item-name">${item.name}</div>${badge}<div class="item-description">${item.description||''}</div>${prev}<div class="item-price">${item.price>0?item.price+'₽':'Бесплатно'}</div><div class="item-actions">${actionBtn}</div></div>`
     }).join('')}</div></div>`).join('')
   }
   document.getElementById('mainBanner').style.display='none';
@@ -505,7 +537,7 @@ function addToCart(category,fi,ii){
   alert('✅ "'+item.name+'" добавлен в корзину!')
 }
 
-function saveCartToAllCarts(){const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}else{ac['guest']={items:cart,userName:'Гость'}}localStorage.setItem('allCarts',JSON.stringify(ac))}
+function saveCartToAllCarts(){const ac=JSON.parse(localStorage.getItem('allCarts')||'{}');if(currentUser&&currentUser.email){ac[currentUser.email]={items:cart,userName:currentUser.name}}else{ac['guest_'+Date.now()]={items:cart,userName:'Гость'}}sSet('allCarts',JSON.stringify(ac))}
 
 function updateCartCount(){
   const count=cart.length;
@@ -521,43 +553,33 @@ function closeCart(){document.getElementById('cartSidebar').classList.remove('ac
 function renderCart(){
   const ci=document.getElementById('cartItems');
   if(cart.length===0){ci.innerHTML='<p style="color:#999;text-align:center">Корзина пуста</p>';document.getElementById('cartTotal').textContent='0';return}
-  ci.innerHTML=cart.map((item,index)=>`<div class="cart-item"><div class="cart-item-header"><strong>${esc(item.name)}</strong><span style="font-size:11px;padding:2px 6px;border-radius:8px;background:${item.itemType==='physical'?'#fff3e0':item.itemType==='video'?'#f3e5f5':'#e3f2fd'};color:${item.itemType==='physical'?'#e65100':item.itemType==='video'?'#7b1fa2':'#1976d2'}">${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</span><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding:4px 8px;font-size:12px">✕</button></div><div>${item.price}₽</div></div>`).join('');
+  ci.innerHTML=cart.map((item,index)=>`<div class="cart-item"><div class="cart-item-header"><strong>${item.name}</strong><span style="font-size:11px;padding:2px 6px;border-radius:8px;background:${item.itemType==='physical'?'#fff3e0':item.itemType==='video'?'#f3e5f5':'#e3f2fd'};color:${item.itemType==='physical'?'#e65100':item.itemType==='video'?'#7b1fa2':'#1976d2'}">${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</span><button class="btn btn-secondary" onclick="removeFromCart(${index})" style="padding:4px 8px;font-size:12px">✕</button></div><div>${item.price}₽</div></div>`).join('');
   document.getElementById('cartTotal').textContent=cart.reduce((s,i)=>s+i.price,0)
 }
 
 function removeFromCart(index){cart.splice(index,1);localStorage.setItem('cart',JSON.stringify(cart));saveCartToAllCarts();updateCartCount();renderCart()}
 
-function selectPayment(method,el){
-  document.querySelectorAll('.payment-method').forEach(x=>{x.style.borderColor='#e0e0e0';x.style.background='#fff'});
-  if(el){el.style.borderColor='#4CAF50';el.style.background='#f1f8e9'}
+function selectPayment(method){
+  document.querySelectorAll('.payment-method').forEach(el=>{el.style.borderColor='#e0e0e0';el.style.background='#fff'});
+  if(event&&event.target){event.target.style.borderColor='#4CAF50';event.target.style.background='#f1f8e9'}
   document.getElementById('checkoutPayment').value=method;
-  const cf=document.getElementById('cardFields');const qb=document.getElementById('qrBlock');const rb=document.getElementById('receiptBlock');
-  if(cf){cf.style.display=method==='Карта'?'block':'none';if(method==='Карта')showCardRequisites(currentTotal())}
-  if(qb){qb.style.display=method==='СБП'?'block':'none';if(method==='СБП')showQrCode(currentTotal())}
-  if(rb){rb.style.display=method==='При получении'?'none':'block'}
+  const cf=document.getElementById('cardFields');const qb=document.getElementById('qrBlock');const total=document.getElementById('cartTotal').textContent;
+  if(cf){cf.style.display=method==='Карта'?'block':'none';if(method==='Карта')showCardRequisites(total)}
+  if(qb){qb.style.display=method==='СБП'?'block':'none';if(method==='СБП')showQrCode(total)}
+  const plb=document.getElementById('payLinkBlock');
+  if(plb){const ps=JSON.parse(localStorage.getItem('paymentSettings')||'{}');plb.style.display=(ps.payLink&&method!=='При получении')?'block':'none'}
 }
-
-function currentTotal(){
-  let total=cart.reduce((s,i)=>s+i.price,0);
-  const dv=document.getElementById('checkoutDelivery');
-  if(dv&&dv.value){const m=dv.value.match(/\((\d+)₽\)/);if(m)total+=parseInt(m[1])}
-  return total;
+function showOrderResult(order,hasReceipt){
+  const pc=document.getElementById('paymentContent');
+  if(order.paid&&order.autoVerified){
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#4CAF50;margin-bottom:20px">⚡ Оплата подтверждена автоматически!</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e8f5e9;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #4CAF50"><p style="color:#2e7d32;font-weight:600;margin-bottom:10px">✅ Доступ к файлам уже открыт</p><p style="color:#666;font-size:14px">Все купленные материалы — в разделе «Мои покупки». Заказ сохранён в «Мои заказы».</p></div><button class="btn" onclick="closePayment();showMyPurchases()" style="margin-top:10px">📥 Перейти к покупкам</button> <button class="btn btn-secondary" onclick="closePayment()" style="margin-top:10px">Закрыть</button></div>`
+  }else if(hasReceipt){
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#1976d2;margin-bottom:20px">📎 Чек отправлен на проверку</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e3f2fd;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #1976d2"><p style="color:#1976d2;font-weight:600;margin-bottom:10px">⏳ Ожидает проверки администратором</p><p style="color:#666;font-size:14px">После подтверждения файлы станут доступны в «Мои покупки».</p></div><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+  }else{
+    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#ff9800;margin-top:15px">⚠️ Прикрепите чек для получения доступа к файлам</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
+  }
+  document.getElementById('paymentModal').classList.add('active')
 }
-
-function updateCheckoutSummary(){
-  const dv=document.getElementById('checkoutDelivery');
-  let deliveryHtml='';
-  if(dv&&dv.value){const m=dv.value.match(/\((\d+)₽\)/);if(m)deliveryHtml=`<div style="color:#e65100">Доставка (${dv.value.split(' (')[0]}) - ${m[1]}₽</div>`}
-  const total=currentTotal();
-  document.getElementById('checkoutSummary').innerHTML=`<h3 style="margin-bottom:12px">Ваш заказ (${cart.length} тов.):</h3>${cart.map(i=>`<div>${esc(i.name)} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}${deliveryHtml}<div style="margin-top:12px;font-weight:bold;font-size:20px">Итого: ${total}₽</div>`;
-}
-
-document.getElementById('checkoutDelivery').addEventListener('change',()=>{
-  updateCheckoutSummary();
-  const pm=document.getElementById('checkoutPayment').value;
-  if(pm==='Карта')showCardRequisites(currentTotal());
-  if(pm==='СБП')showQrCode(currentTotal());
-});
 
 function showCardRequisites(total){const p=JSON.parse(localStorage.getItem('paymentSettings')||'{}');const d=document.getElementById('cardRequisitesDisplay');if(p.cardHolder||p.cardNumber){d.innerHTML=`<div style="background:#fff;padding:15px;border-radius:8px;border:1px solid #f0c040"><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Получатель:</strong></p><p style="font-size:16px;font-weight:bold;color:#5a4000;margin-bottom:10px">${p.cardHolder||'—'}</p><p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Карта:</strong></p><p style="font-size:18px;font-weight:bold;color:#5a4000;letter-spacing:2px;margin-bottom:10px">${p.cardNumber||'—'}</p>${p.cardBank?`<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Банк:</strong></p><p style="font-size:14px;color:#333;margin-bottom:10px">${p.cardBank}</p>`:''}<p style="margin-bottom:8px;font-size:14px;color:#666"><strong>Сумма:</strong></p><p style="font-size:24px;font-weight:bold;color:#4CAF50">${total}₽</p></div><p style="font-size:12px;color:#999;margin-top:10px">📱 Переведите и прикрепите чек</p>`}else{d.innerHTML='<p style="color:#ff9800;text-align:center;padding:20px">⚠️ Реквизиты не настроены</p>'}}
 
@@ -574,29 +596,21 @@ function openCheckout(){
   else if(hasVideo){oi.style.background='#f3e5f5';oi.style.color='#7b1fa2';oi.innerHTML='🎬 Есть видео-товары'}
   else{oi.style.background='#e3f2fd';oi.style.color='#1976d2';oi.innerHTML='📥 Цифровые товары'}
   const total=cart.reduce((s,i)=>s+i.price,0);
-  updateCheckoutSummary();
-  const em=document.getElementById('checkoutEmail');
-  em.value=currentUser.email;em.readOnly=true;em.title='Email привязан к вашему аккаунту — доступ к файлам получит он';
-  const nm=document.getElementById('checkoutName');if(!nm.value)nm.value=currentUser.name||'';
-  const ph=document.getElementById('checkoutPhone');if(!ph.value&&currentUser.phone)ph.value=currentUser.phone;
+  document.getElementById('checkoutSummary').innerHTML=`<h3 style="margin-bottom:12px">Ваш заказ (${cart.length} тов.):</h3>${cart.map(i=>`<div>${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}<div style="margin-top:12px;font-weight:bold;font-size:20px">Итого: ${total}₽</div>`;
   document.getElementById('checkoutModal').classList.add('active')
 }
 function closeCheckout(){document.getElementById('checkoutModal').classList.remove('active')}
 
 document.getElementById('receiptFile').addEventListener('change',e=>{
+  if(!e.target.files[0])return;
   const f=e.target.files[0];
-  if(!f)return;
-  if(f.size>15*1024*1024){alert('⚠️ Файл слишком большой (макс. 15 МБ)');e.target.value='';return}
+  if(f.size>10*1024*1024){alert('⚠️ Файл слишком большой (макс. 10 МБ для чека)');e.target.value='';return}
   const reader=new FileReader();
-  reader.onload=ev=>{
-    const done=data=>{
-      receiptData=data;
-      document.getElementById('receiptPreview').innerHTML=`<img src="${data}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`;
-      document.getElementById('receiptError').textContent='';
-    };
-    if(f.type.startsWith('image/')){compressImage(ev.target.result,1200,done)}else{done(ev.target.result)}
-  };
-  reader.readAsDataURL(f);
+  reader.onload=ev=>{compressReceipt(ev.target.result,data=>{
+    receiptData=data;
+    document.getElementById('receiptPreview').innerHTML=`<img src="${receiptData}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50"><p style="color:#4CAF50;font-size:13px;margin-top:5px">✅ Чек прикреплён</p>`
+  })};
+  reader.readAsDataURL(f)
 });
 
 document.getElementById('checkoutForm').addEventListener('submit',e=>{
@@ -604,23 +618,16 @@ document.getElementById('checkoutForm').addEventListener('submit',e=>{
   const pm=document.getElementById('checkoutPayment').value;
   if(!pm){alert('Выберите способ оплаты');return}
   const hp=cart.some(i=>i.itemType==='physical');
-  if(hp){
-    const ad=document.getElementById('checkoutAddress').value.trim();
-    const dv=document.getElementById('checkoutDelivery').value;
-    if(!ad){alert('Укажите адрес доставки');return}
-    if(!dv){alert('Выберите способ доставки');return}
-  }
-  if(pm!=='При получении'&&!receiptData){
-    alert('📎 Прикрепите чек об оплате — без него админ не сможет подтвердить заказ');
-    document.getElementById('receiptError').textContent='Чек обязателен для оплаты картой или по СБП';
-    document.getElementById('receiptBlock').scrollIntoView({behavior:'smooth',block:'center'});
-    return;
-  }
   const hasReceipt=!!receiptData;
-  const order={id:Date.now(),customerName:document.getElementById('checkoutName').value,email:currentUser.email,phone:document.getElementById('checkoutPhone').value,address:hp?document.getElementById('checkoutAddress').value:'',delivery:hp?document.getElementById('checkoutDelivery').value:'',payment:pm,orderType:hp?'physical':'digital',receipt:receiptData||null,receiptVerified:false,items:cart.map(i=>({name:i.name,price:i.price,category:i.category,folderIndex:i.folderIndex,itemIndex:i.itemIndex,itemType:i.itemType||'digital'})),total:currentTotal(),status:hasReceipt?'pending_receipt':'new',paid:false,date:new Date().toISOString()};
+  const order={id:Date.now(),customerName:document.getElementById('checkoutName').value,email:document.getElementById('checkoutEmail').value,phone:document.getElementById('checkoutPhone').value,address:hp?document.getElementById('checkoutAddress').value:'',delivery:hp?document.getElementById('checkoutDelivery').value:'',payment:pm,orderType:hp?'physical':'digital',receipt:receiptData||null,receiptVerified:false,items:cart.map(i=>({name:i.name,price:i.price,category:i.category,folderIndex:i.folderIndex,itemIndex:i.itemIndex,itemType:i.itemType||'digital'})),total:cart.reduce((s,i)=>s+i.price,0),status:hasReceipt?'pending_receipt':'new',paid:false,date:new Date().toISOString()};
+  const ps=JSON.parse(localStorage.getItem('paymentSettings')||'{}');
+  if(ps.autoApprove&&hasReceipt){
+    order.paid=true;order.status='completed';order.receiptVerified=true;order.autoVerified=true;
+    grantAccessToUser(order)
+  }
   const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
   orders.push(order);
-  localStorage.setItem('ordersData',JSON.stringify(orders));
+  sSet('ordersData',JSON.stringify(orders));
   closeCheckout();closeCart();
   cart=[];receiptData=null;
   document.getElementById('receiptPreview').innerHTML='';
@@ -630,16 +637,6 @@ document.getElementById('checkoutForm').addEventListener('submit',e=>{
   updateCartCount();
   showOrderResult(order,hasReceipt)
 });
-
-function showOrderResult(order,hasReceipt){
-  const pc=document.getElementById('paymentContent');
-  if(hasReceipt){
-    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#1976d2;margin-bottom:20px">📎 Чек отправлен на проверку</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><div style="background:#e3f2fd;padding:20px;border-radius:10px;margin:20px 0;border:2px solid #1976d2"><p style="color:#1976d2;font-weight:600;margin-bottom:10px">⏳ Ожидает проверки администратором</p><p style="color:#666;font-size:14px">После подтверждения файлы станут доступны в "Мои покупки". Если чек не подойдёт — админ отклонит его, и в разделе "📦 Мои заказы" можно будет прикрепить новый.</p></div><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
-  }else{
-    pc.innerHTML=`<div style="text-align:center;padding:25px"><h2 style="color:#ff9800;margin-bottom:20px">⏳ Заказ оформлен</h2><p>Номер: <strong>#${order.id}</strong></p><p>Сумма: <strong>${order.total}₽</strong></p><p style="color:#666;margin-top:15px">Оплата при получении — админ подтвердит заказ после того, как получит деньги. Доступ к файлам откроется после подтверждения.</p><button class="btn" onclick="closePayment()" style="margin-top:20px">Закрыть</button></div>`
-  }
-  document.getElementById('paymentModal').classList.add('active')
-}
 
 function closePayment(){document.getElementById('paymentModal').classList.remove('active')}
 
@@ -714,11 +711,10 @@ function showMyOrders(){
     oc.innerHTML=my.map(o=>{
       let statusHtml='';
       if(o.paid){statusHtml=`<span class="status-badge status-paid">✅ Оплачен</span>`}
-      else if(o.status==='receipt_rejected'){statusHtml=`<span class="status-badge status-rejected">❌ Чек отклонён</span>`}
       else if(o.status==='pending_receipt'){statusHtml=`<span class="status-badge status-pending">📎 Чек на проверке</span>`}
+      else if(o.status==='rejected'){statusHtml=`<span class="status-badge status-rejected">❌ Чек отклонён</span>`}
       else{statusHtml=`<span class="status-badge status-waiting">⏳ Ожидает оплаты</span>`}
-      const rejectBlock=o.status==='receipt_rejected'?`<div style="background:#ffebee;padding:10px;border-radius:8px;margin-top:10px"><strong style="color:#c62828">❌ Чек отклонён админом</strong>${o.rejectReason?`<div style="font-size:13px;color:#c62828;margin-top:5px">Причина: ${esc(o.rejectReason)}</div>`:''}<button class="btn btn-warning" onclick="openReupload(${o.id})" style="margin-top:10px">📎 Прикрепить новый чек</button></div>`:'';
-      return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px"><strong>Заказ #${o.id}</strong>${statusHtml}</div><div style="font-size:12px;color:#666;margin-bottom:5px">${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | ${o.payment}</div><div style="margin-bottom:10px">${o.items.map(i=>`<div style="font-size:13px">${esc(i.name)} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}</div><div style="font-weight:bold;font-size:16px">Итого: ${o.total}₽</div>${o.receipt?'<div style="margin-top:8px;color:#4CAF50;font-size:12px">📎 Чек прикреплён</div>':''}${rejectBlock}</div>`
+      return `<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px"><strong>Заказ #${o.id}</strong>${statusHtml}</div><div style="font-size:12px;color:#666;margin-bottom:5px">${o.orderType==='digital'?'📥 Скачивание':'📦 Доставка'} | ${o.payment}</div><div style="margin-bottom:10px">${o.items.map(i=>`<div style="font-size:13px">${i.name} - ${i.price}₽ ${i.itemType==='physical'?'📦':i.itemType==='video'?'🎬':'📥'}</div>`).join('')}</div><div style="font-weight:bold;font-size:16px">Итого: ${o.total}₽</div>${o.autoVerified?'<div style="margin-top:6px;color:#4CAF50;font-size:12px">⚡ Подтверждён автоматически</div>':''}${o.rejectReason?`<div style="color:#c62828;font-size:12px;margin-top:6px">Причина отклонения: ${o.rejectReason}</div>`:''}${o.status==='rejected'&&!o.paid?`<button class="btn" onclick="resubmitReceipt(${o.id})" style="margin-top:8px;font-size:13px;padding:8px 14px">📎 Прикрепить новый чек</button>`:''}${o.receipt?'<div style="margin-top:8px;color:#4CAF50;font-size:12px">📎 Чек прикреплён</div>':''}</div>`
     }).join('')
   }
   document.getElementById('ordersModal').classList.add('active')
@@ -731,56 +727,10 @@ function showQuestions(){
   const qc=document.getElementById('questionsContent');
   const typeNames={product:'❓ Продукт',download:'⬇️ Скачивание',payment:'💳 Оплата',bug:'🐛 Ошибка',other:'💬 Другое'};
   if(myQuestions.length===0){qc.innerHTML='<p style="text-align:center;color:#999;padding:30px">У вас нет вопросов. Задайте вопрос в разделе Контакты.</p>'}
-  else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${esc(q.product)}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${esc(q.text)}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${esc(q.answer)}</div>`:''}</div>`).join('')}
+  else{qc.innerHTML=myQuestions.slice().reverse().map(q=>`<div style="background:#f9f9f9;padding:15px;border-radius:10px;margin-bottom:10px;border-left:4px solid ${q.answered?'#4CAF50':'#ff9800'}"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><strong>${typeNames[q.type]||q.type}</strong><span style="color:${q.answered?'#4CAF50':'#ff9800'};font-size:12px">${q.answered?'✅ Отвечено':'⏳ Ожидает'}</span></div><div style="font-size:12px;color:#999;margin-bottom:8px">${new Date(q.date).toLocaleString('ru-RU')}</div>${q.product?`<div style="font-size:13px;color:#666;margin-bottom:8px"><strong>Продукт:</strong> ${q.product}</div>`:''}<div style="background:#fff;padding:10px;border-radius:8px;margin-bottom:8px">${q.text}</div>${q.answer?`<div style="background:#e8f5e9;padding:10px;border-radius:8px"><strong style="color:#2e7d32">Ответ:</strong><br>${q.answer}</div>`:''}</div>`).join('')}
   document.getElementById('questionsModal').classList.add('active')
 }
 function closeQuestions(){document.getElementById('questionsModal').classList.remove('active')}
-
-function previewItemAt(category,fi,ii){
-  const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
-  const item=cat[category]&&cat[category][fi]&&cat[category][fi].items?cat[category][fi].items[ii]:null;
-  if(!item||!item.file){alert('Файл не найден');return}
-  const ext=(item.file.name.split('.').pop()||'').toLowerCase();
-  const type=item.file.name.match(/\.(jpg|jpeg|png|gif|webp)$/i)?'image/'+ext:'';
-  previewFile(item.file.data,item.file.name,type);
-}
-
-function openReupload(orderId){
-  editingOrderId=orderId;reuploadData=null;
-  document.getElementById('reuploadFile').value='';
-  document.getElementById('reuploadPreview').innerHTML='';
-  document.getElementById('reuploadModal').classList.add('active');
-}
-function closeReupload(){
-  document.getElementById('reuploadModal').classList.remove('active');
-  editingOrderId=null;reuploadData=null;
-}
-document.getElementById('reuploadFile').addEventListener('change',e=>{
-  const f=e.target.files[0];
-  if(!f)return;
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    const done=data=>{reuploadData=data;document.getElementById('reuploadPreview').innerHTML=`<img src="${data}" style="max-width:200px;border-radius:8px;border:2px solid #4CAF50">`};
-    if(f.type.startsWith('image/')){compressImage(ev.target.result,1200,done)}else{done(ev.target.result)}
-  };
-  reader.readAsDataURL(f);
-});
-function submitReupload(){
-  if(!reuploadData){alert('Прикрепите файл чека');return}
-  const orders=JSON.parse(localStorage.getItem('ordersData')||'[]');
-  const o=orders.find(x=>x.id===editingOrderId);
-  if(!o){alert('Заказ не найден');return}
-  o.receipt=reuploadData;
-  o.status='pending_receipt';
-  o.paid=false;
-  o.resubmitted=true;
-  o.receiptResubmitDate=new Date().toISOString();
-  delete o.rejectReason;
-  localStorage.setItem('ordersData',JSON.stringify(orders));
-  closeReupload();
-  closeOrders();
-  showOrderResult(o,true);
-}
 
 function openSearch(){document.getElementById('searchOverlay').classList.add('active');document.getElementById('searchInput').focus()}
 function closeSearch(){document.getElementById('searchOverlay').classList.remove('active');document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML=''}
@@ -792,7 +742,7 @@ function performSearch(){
   const cat=JSON.parse(localStorage.getItem('catalogData')||'{}');
   let found=[];
   Object.keys(cat).forEach(c=>{(cat[c]||[]).forEach((folder,fi)=>{(folder.items||[]).forEach((item,ii)=>{if(item.name.toLowerCase().includes(q))found.push({...item,category:c,folderIndex:fi,itemIndex:ii})})})});
-  r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найдено</p>':found.map(item=>`<div class="search-result-item" onclick="closeSearch();showCategory('${item.category}')"><strong>${esc(item.name)}</strong> — ${item.price>0?item.price+'₽':'Бесплатно'} ${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</div>`).join('')
+  r.innerHTML=found.length===0?'<p style="color:#999">Ничего не найдено</p>':found.map(item=>`<div class="search-result-item" onclick="closeSearch();showCategory('${item.category}')"><strong>${item.name}</strong> — ${item.price>0?item.price+'₽':'Бесплатно'} ${item.itemType==='physical'?'📦':item.itemType==='video'?'🎬':'📥'}</div>`).join('')
 }
 
 function previewFile(fileData,fileName,fileType){
@@ -841,12 +791,11 @@ function previewFile(fileData,fileName,fileType){
   document.body.appendChild(modal)
 }
 
-document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');messages.push({name:document.getElementById('contactName').value,email:document.getElementById('contactEmail').value,text:document.getElementById('contactMessage').value,date:new Date().toISOString()});localStorage.setItem('messagesData',JSON.stringify(messages));document.getElementById('contactForm').reset();alert('Сообщение отправлено! 🦉')});
+document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();const messages=JSON.parse(localStorage.getItem('messagesData')||'[]');messages.push({name:document.getElementById('contactName').value,email:document.getElementById('contactEmail').value,text:document.getElementById('contactMessage').value,date:new Date().toISOString()});sSet('messagesData',JSON.stringify(messages));document.getElementById('contactForm').reset();alert('Сообщение отправлено! 🦉')});
 
-document.getElementById('questionForm').addEventListener('submit',e=>{e.preventDefault();const question={id:Date.now(),name:document.getElementById('questionName').value,email:document.getElementById('questionEmail').value,type:document.getElementById('questionType').value,product:document.getElementById('questionProduct').value,text:document.getElementById('questionText').value,date:new Date().toISOString(),answered:false,answer:''};const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.push(question);localStorage.setItem('questionsData',JSON.stringify(questions));document.getElementById('questionForm').reset();alert('✅ Вопрос отправлен!')});
+document.getElementById('questionForm').addEventListener('submit',e=>{e.preventDefault();const question={id:Date.now(),name:document.getElementById('questionName').value,email:document.getElementById('questionEmail').value,type:document.getElementById('questionType').value,product:document.getElementById('questionProduct').value,text:document.getElementById('questionText').value,date:new Date().toISOString(),answered:false,answer:''};const questions=JSON.parse(localStorage.getItem('questionsData')||'[]');questions.push(question);sSet('questionsData',JSON.stringify(questions));document.getElementById('questionForm').reset();alert('✅ Вопрос отправлен!')});
 
 init();
 </script>
-<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}</script>
 </body>
 </html>
